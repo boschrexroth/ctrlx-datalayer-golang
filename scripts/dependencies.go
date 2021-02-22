@@ -35,7 +35,7 @@ func main() {
 	var auth string
 	var g github
 
-	b, err := ioutil.ReadFile("../.github")
+	b, err := ioutil.ReadFile(".github")
 	if err == nil {
 		if err := yaml.Unmarshal(b, &g); err == nil {
 			if g.Github.User != "" && g.Github.Token != "" {
@@ -82,7 +82,7 @@ func main() {
 		println(err)
 		return
 	}
-	prefix := "../deps"
+	prefix := "deps"
 	if stat, err := os.Stat(prefix); err == nil && stat.IsDir() {
 		os.RemoveAll(prefix)
 	} else if err == nil && !stat.IsDir() {

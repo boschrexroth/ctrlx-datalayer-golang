@@ -11,7 +11,7 @@ sudo apt-get install libsystemd-dev
 Download ctrlX CORE SDK
 
 ```
-go run scripts/dependencies.go
+go run github.com/boschrexroth/ctrlx-datalayer-golang/scripts/dependencies.go
 ```
 
 ## Development Environment
