@@ -1,0 +1,9 @@
+**/debug
+build/
+artifact.zip
+deps
+/*.so*
+/datalayer
+**/.idea/*
+.idea
+.github

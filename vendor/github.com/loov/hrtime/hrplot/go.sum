@@ -1,0 +1,4 @@
+github.com/loov/hrtime v1.0.1 h1:n6UINiq9nfyTmfNpLvgYN4O8d6Z0tZMoGd4QOolrxyc=
+github.com/loov/hrtime v1.0.1/go.mod h1:yDY3Pwv2izeY4sq7YcPX/dtLwzg5NU1AxWuWxKwd0p0=
+github.com/loov/plot v0.0.0-20200413101321-e09a6f01d2f5 h1:pzQgy0g937iWmXKKEM8uaDRL9oxB2+1hVAfV5hJ+yIA=
+github.com/loov/plot v0.0.0-20200413101321-e09a6f01d2f5/go.mod h1:gSrhfSMoiPGG0CZ9E66kXjaHxFw0fzJhooyicOnz5z4=
