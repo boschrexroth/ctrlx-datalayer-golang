@@ -10,8 +10,8 @@ import (
 )
 
 type environment struct {
-	cflags          string
-	ldflags         string
+	cgo_cflags      string
+	cgo_ldflags     string
 	ld_library_path string
 }
 
@@ -68,6 +68,6 @@ func main() {
 
 	for i := 0; i < env.NumField(); i++ {
 		f := env.Field(i)
-		fmt.Printf("export %s=\"%v\"\n", strings.ToUpper(t.Field(i).Name), f)
+		fmt.Printf("%s=\"%v\"\n", strings.ToUpper(t.Field(i).Name), f)
 	}
 }
