@@ -68,6 +68,6 @@ func main() {
 
 	for i := 0; i < env.NumField(); i++ {
 		f := env.Field(i)
-		fmt.Printf("%s=\"%v\"\n", strings.ToUpper(t.Field(i).Name), f)
+		fmt.Printf("export %s=\"%v\"\n", strings.ToUpper(t.Field(i).Name), f)
 	}
 }
