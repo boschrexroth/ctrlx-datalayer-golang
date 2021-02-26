@@ -3,7 +3,7 @@ package datalayer
 /*
 #cgo linux pkg-config: libsystemd
 #cgo linux,amd64 LDFLAGS: -lcomm_datalayer -lzmq
-#cgo linux,arm64 LDFLAGS: -lcomm_datalayer -lzmq -lgcrypt -lgpg-error
+#cgo linux,arm64 LDFLAGS: -lcomm_datalayer -lzmq
 #cgo windows,amd64 LDFLAGS: -lcomm_datalayer
 #include <stdbool.h>
 #include <stdlib.h>
