@@ -114,8 +114,23 @@ func (rcv *AxsCfg) Units(obj *UnitCfgObj) *UnitCfgObj {
 }
 
 /// general unit configuration of this axis
+/// kinematic properties for axes
+func (rcv *AxsCfg) KinProperties(obj *AxsCfgKinProperties) *AxsCfgKinProperties {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgKinProperties)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// kinematic properties for axes
 func AxsCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func AxsCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -134,6 +149,9 @@ func AxsCfgAddProperties(builder *flatbuffers.Builder, properties flatbuffers.UO
 }
 func AxsCfgAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(units), 0)
+}
+func AxsCfgAddKinProperties(builder *flatbuffers.Builder, kinProperties flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(kinProperties), 0)
 }
 func AxsCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

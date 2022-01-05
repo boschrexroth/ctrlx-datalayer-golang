@@ -1,12 +1,4 @@
 {
   "go.inferGopath": false,
-  "terminal.integrated.env.linux": {
-    "CGO_CFLAGS": "-g -O2 -I${workspaceFolder}/deps/public/include/comm.datalayer/comm/datalayer/c",
-    "CGO_LDFLAGS": "-L${workspaceFolder}/deps/public/bin/comm.datalayer/linux-gcc-x64/release -L${workspaceFolder}/deps/public/bin/zmq/linux-gcc-x64/release",
-    "LD_LIBRARY_PATH": "${workspaceFolder}/deps/public/bin/comm.datalayer/linux-gcc-x64/release;${workspaceFolder}/deps/public/bin/zmq/linux-gcc-x64/release"
-  },
-  "go.toolsEnvVars": {
-    "CGO_CFLAGS": "-g -O2 -I${workspaceFolder}/deps/public/include/comm.datalayer/comm/datalayer/c",
-    "CGO_LDFLAGS": "-L${workspaceFolder}/deps/public/bin/comm.datalayer/linux-gcc-x64/release -L${workspaceFolder}/deps/public/bin/zmq/linux-gcc-x64/release"
-  }
+  "go.testEnvFile": "${workspaceRoot}/.env"
 }

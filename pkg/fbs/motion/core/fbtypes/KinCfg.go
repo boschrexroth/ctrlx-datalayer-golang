@@ -111,8 +111,23 @@ func (rcv *KinCfg) Units(obj *UnitCfgKin) *UnitCfgKin {
 }
 
 /// general unit configuration of this kinematics
+/// preparation limits of a kinematics
+func (rcv *KinCfg) PrepLimits(obj *KinCfgPrepLimits) *KinCfgPrepLimits {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinCfgPrepLimits)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// preparation limits of a kinematics
 func KinCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func KinCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -131,6 +146,9 @@ func KinCfgAddMcs(builder *flatbuffers.Builder, mcs flatbuffers.UOffsetT) {
 }
 func KinCfgAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(units), 0)
+}
+func KinCfgAddPrepLimits(builder *flatbuffers.Builder, prepLimits flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(prepLimits), 0)
 }
 func KinCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

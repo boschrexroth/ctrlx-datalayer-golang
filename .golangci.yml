@@ -1,0 +1,8 @@
+run:
+  skip-dirs:
+    - cmd
+    - test
+    - scripts
+    - vendor
+  skip-files:
+    - ".+_test\\.go$"

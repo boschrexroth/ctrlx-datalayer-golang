@@ -87,8 +87,22 @@ func (rcv *KinCmdMoveData) Lim(obj *DynamicLimits) *DynamicLimits {
 }
 
 /// dynamic limits for the motion of this command
+/// should this be a buffered command?
+func (rcv *KinCmdMoveData) Buffered() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+/// should this be a buffered command?
+func (rcv *KinCmdMoveData) MutateBuffered(n bool) bool {
+	return rcv._tab.MutateBoolSlot(10, n)
+}
+
 func KinCmdMoveDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinCmdMoveDataAddKinPos(builder *flatbuffers.Builder, kinPos flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(kinPos), 0)
@@ -101,6 +115,9 @@ func KinCmdMoveDataAddCoordSys(builder *flatbuffers.Builder, coordSys flatbuffer
 }
 func KinCmdMoveDataAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(lim), 0)
+}
+func KinCmdMoveDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
+	builder.PrependBoolSlot(3, buffered, true)
 }
 func KinCmdMoveDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

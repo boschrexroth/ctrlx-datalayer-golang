@@ -1,154 +1,327 @@
+// MIT License
+//
+// Copyright (c) 2021 Bosch Rexroth AG
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 package datalayer
 
 /*
-#cgo linux pkg-config: libsystemd
-#cgo linux,amd64 LDFLAGS: -lcomm_datalayer -lzmq
-#cgo linux,arm64 LDFLAGS: -lcomm_datalayer -lzmq -lgcrypt -lgpg-error
+#cgo linux pkg-config: libsystemd libzmq
+#cgo CFLAGS: -I./headers -I/usr/include/comm/datalayer/c
+#cgo linux LDFLAGS: -lcomm_datalayer -lzmq
 #cgo windows,amd64 LDFLAGS: -lcomm_datalayer
 #include <stdbool.h>
 #include <stdlib.h>
-#include "client.h"
+#include <client.h>
+#include "wrappers.h"
 */
 import "C"
-import "unsafe"
+import (
+	"unsafe"
 
-// TimeoutSetting enum
+	// import of c-headers
+	_ "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer/headers"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+)
+
+// TimeoutSetting gets the settings of the different timeout values.
 type TimeoutSetting C.enum_DLR_TIMEOUT_SETTING
 
 // TimeoutSetting enum definition
 const (
-	TimeoutSettingIdle TimeoutSetting = C.DLR_TIMEOUT_SETTING_IDLE
-	TimeoutSettingPing TimeoutSetting = C.DLR_TIMEOUT_SETTING_PING
+	TimeoutSettingIdle = C.DLR_TIMEOUT_SETTING_IDLE
+	TimeoutSettingPing = C.DLR_TIMEOUT_SETTING_PING
 )
 
 // ResponseCallback function type
 type ResponseCallback = func(result Result, v *Variant)
 
-// Client class
+type notifyResponseCallback = func(result Result, notifyItems []NotifyItem)
+
+// Client is an interface for the accessing of data from the system.
 type Client struct {
-	this C.DLR_CLIENT
+	this      C.DLR_CLIENT
+	converter *subscriptionPropertiesConverter
 }
 
-// DeleteClient destructor
+// DeleteClient destructs the client.
+// It destroys the client.
 func DeleteClient(c *Client) {
+	if c == nil {
+		return
+	}
 	C.DLR_clientDelete(c.this)
 }
 
-// PingAsync client
-func (c *Client) PingAsync(f ResponseCallback) Result {
-	return Result(C.DLR_clientPingASync(c.this, getResponseCallbackC(), getResponseUserdata(f)))
+// PingAsync pings the next hop. This function is asynchronous. It will return immediately. Callback will be called if function call is finished.
+// Parameter callback is a callback to call when function is finished.
+// Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of hte function call.
+func (c *Client) PingAsync(onResponse ResponseCallback) Result {
+
+	return Result(C.ClientPingASync(c.this, responseRegister(onResponse)))
 }
 
-// CreateAsync client
-func (c *Client) CreateAsync(address string, data *Variant, f ResponseCallback) Result {
+// CreateAsync creates an object. This function is asynchronous. It will return immediately. Callback will be called if function call is finished. Result data may be provided in callback function.
+// Parameter address is an address of the node to create object in.
+// Parameter data is a data of the object.
+// Parameter callback is a callback to call when function is finished.
+// Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) CreateAsync(address string, data *Variant, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientCreateASync(c.this, caddress, data.this, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientCreateASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
 }
 
-// RemoveAsync client
-func (c *Client) RemoveAsync(address string, f ResponseCallback) Result {
+// RemoveAsync removes an object. This function is asynchronous. It will return immediately. Callback will be called if function call is finished. Result data may be provided in callback function.
+// Parameters address is an address of the node to remove.
+// Parameters callback is a callback to call when function is finished.
+// Parameters userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) RemoveAsync(address string, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientRemoveASync(c.this, caddress, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientRemoveASync(c.this, caddress, nil, responseRegister(onResponse)))
 }
 
-// BrowseAsync client
-func (c *Client) BrowseAsync(address string, f ResponseCallback) Result {
+// BrowseAsync searches an object. This function is asynchronous. It will return immediately. Callback will be called if function call is finished. Result data may be provided in callback function.
+// Parameter address is an address of the node to browse.
+// Parameter callback is a callback to call when function is finished.
+// Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) BrowseAsync(address string, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientBrowseASync(c.this, caddress, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientBrowseASync(c.this, caddress, nil, responseRegister(onResponse)))
 }
 
-// ReadAsync client
-func (c *Client) ReadAsync(address string, data *Variant, f ResponseCallback) Result {
+// ReadAsync reads an object. This function is asynchronous. It will return immediately. Callback will be called if function call is finished. Result data may be provided in callback function.
+// Parameter address is an address of the node to read.
+// Parameter callback is a callback to call when function is finished.
+// Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) ReadAsync(address string, data *Variant, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientReadASync(c.this, caddress, data.this, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientReadASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
 }
 
-// WriteAsync client
-func (c *Client) WriteAsync(address string, data *Variant, f ResponseCallback) Result {
+// WriteAsync writes an object. This function is synchronous: It will wait for the answer.
+// Parameter address is an address of the node to read metadata.
+// Parameter data is a data of the object.
+// Parameter callback is a callback to call when function is finished.
+// Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) WriteAsync(address string, data *Variant, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientWriteASync(c.this, caddress, data.this, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientWriteASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
 }
 
-// MetadataAsync client
-func (c *Client) MetadataAsync(address string, f ResponseCallback) Result {
+// CreateSubscription creates a subscription as configured in the subscriptionProperties, which returns value to the onSubscription callback.
+// It returns the status of function call.
+func (c *Client) CreateSubscription(id string, subscriptionProperties SubscriptionProperties, onSubscription OnSubscription) (*Subscription, Result) {
+	data := NewVariant()
+	defer DeleteVariant(data)
+	subscriptionProperties.Id = id
+	jsonBytes, err := subscriptionProperties.BuildJson()
+	if err != nil {
+		return nil, C.DL_INVALID_VALUE
+	}
+	propBytes, err := c.converter.JsonToFlatBuffer(jsonBytes)
+	if err != nil {
+		return nil, C.DL_INVALID_VALUE
+	}
+	data.SetFlatbuffers(propBytes)
+	notifyKey := notifyResponseRegister(func(result Result, notifyItems []NotifyItem) {
+		items := make(map[string]Variant)
+		for _, notifyItem := range notifyItems {
+			info := fbs.GetRootAsNotifyInfo(notifyItem.Info.GetFlatbuffers(), 0)
+			items[string(info.Node())] = notifyItem.Data
+		}
+		onSubscription(result, items)
+	})
+	r := C.ClientCreateSubscriptionSync(c.this, data.this, notifyKey, nil)
+	if r != 0 {
+		return nil, Result(r)
+	}
+	return &Subscription{
+		id:        id,
+		client:    c.this,
+		notifyKey: notifyKey,
+		addresses: make(map[string]struct{}),
+	}, Result(r)
+}
+
+type OnSubscription func(result Result, items map[string]Variant)
+
+// DeleteSubscription deletes a subscription.
+func (c *Client) DeleteSubscription(subscription *Subscription) {
+	cId := C.CString(subscription.id)
+	defer C.free(unsafe.Pointer(cId))
+	notifyResponseUnregister(subscription.notifyKey)
+	C.DLR_clientUnsubscribeAllSync(c.this, cId)
+}
+
+// MetadataAsync reads metadata of an object. This function is asynchronous. It will return immediately. Callback will be called if function call is finished. Result data may be provided in callback function.
+// Parameter address is an address of the node to read metadata.
+// Paremeter callback is a callback to call when function is finished.
+// Parmeter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
+// It returns the status of function call.
+func (c *Client) MetadataAsync(address string, onResponse ResponseCallback) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientMetadataASync(c.this, caddress, nil, getResponseCallbackC(), getResponseUserdata(f)))
+	return Result(C.ClientMetadataASync(c.this, caddress, nil, responseRegister(onResponse)))
 }
 
-// PingSync client
+// PingSync pings the next hop. This function is synchronous.
+// It returns the status of function call.
 func (c *Client) PingSync() Result {
 	return Result(C.DLR_clientPingSync(c.this))
 }
 
-// CreateSync client
+// CreateSync creates an object. This function is synchronous.
+// Parameter address is an address of the node to create object in.
+// Parameter variant is a data of the object.
+// It returns the status of function call or a variant result of write or a tuple (Result, Variant).
 func (c *Client) CreateSync(address string, data *Variant) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.DLR_clientCreateSync(c.this, caddress, data.this, nil))
 }
 
-// RemoveSync client
+// RemoveSync removes an object. This function is synchronous.
+// Parameter address is an address of the node to remove.
+// It returns the status of function call.
 func (c *Client) RemoveSync(address string) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.DLR_clientRemoveSync(c.this, caddress, nil))
 }
 
-// BrowseSync client
-func (c *Client) BrowseSync(address string, data *Variant) Result {
+// BrowseSync searches an object. This function is synchronous.
+// Parameter address is an address of the node to browse.
+// It returns the status of function call or a tuple (Result, Variant).
+// It returns the children of the node. Data will be provided as Variant array of strings.
+func (c *Client) BrowseSync(address string) (Result, *Variant) {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientBrowseSync(c.this, caddress, data.this, nil))
+	data := NewVariant()
+	r := Result(C.DLR_clientBrowseSync(c.this, caddress, data.this, nil))
+	return r, data
 }
 
-// ReadSync client
-func (c *Client) ReadSync(address string, data *Variant) Result {
+// Browse returns all subnodes of address
+func (c *Client) Browse(address string) (Result, []string) {
+	r, d := c.BrowseSync(address)
+	defer DeleteVariant(d)
+	if r != Result(0) {
+		return r, []string{}
+	}
+	v := make([]string, len(d.GetArrayString()))
+	copy(v, d.GetArrayString())
+	return r, v
+}
+
+// ReadSync reads an object. This function is synchronous.
+// Paramater address is an address of the node to read.
+// Parameter args reads arguments data of the node.
+// It returns the status of function call or a data of the node or a tuple (Result, Variant).
+func (c *Client) ReadSyncArgs(address string, args *Variant) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientReadSync(c.this, caddress, data.this, nil))
+	return Result(C.DLR_clientReadSync(c.this, caddress, args.this, nil))
 }
 
-// WriteSync client
+// ReadSync reads an object. This function is synchronous.
+// Parameter address is an address of the node to read.
+// It returns the status of function call or a data of the node or a tuple (Result, Variant).
+func (c *Client) ReadSync(address string) (Result, *Variant) {
+	data := NewVariant()
+	r := c.ReadSyncArgs(address, data)
+	return r, data
+}
+
+// WriteSync writes an object. This function is synchronous.
+// Parameter address an address of the node to write.
+// Parameter variant ia a new data of the node.
+// It returns the status of function call or a result of write or a tuple Result, Variant).
 func (c *Client) WriteSync(address string, data *Variant) Result {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.DLR_clientWriteSync(c.this, caddress, data.this, nil))
 }
 
-// MetadataSync client
-func (c *Client) MetadataSync(address string, data *Variant) Result {
+// MetadataSync reads a metadata of an object. This function is synchronous.
+// Parameter address is an address of the node to read metadata of.
+// It returns the status of function call or tuple (Result, Variant) or a metadata of the node. Data will be provided as Variant flatbuffers with metadata.fbs data type.
+func (c *Client) MetadataSync(address string) (Result, *Variant) {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	return Result(C.DLR_clientMetadataSync(c.this, caddress, data.this, nil))
+	data := NewVariant()
+	r := Result(C.DLR_clientMetadataSync(c.this, caddress, data.this, nil))
+	return r, data
 }
 
-// SetTimeout client
+// Metadata reads metadata of an object. This function is synchronous.
+// Parameter address is an address of the node to read metadata of.
+// It returns the status of function call or a tuple (Result, Variant) or a metadata of the node. Data will be provided as Variant flatbuffers with metadata.fbs data type.
+func (c *Client) Metadata(address string) (Result, *fbs.Metadata) {
+	r, v := c.MetadataSync(address)
+	defer DeleteVariant(v)
+	if r != Result(0) {
+		return r, nil
+	}
+	f := make([]byte, len(v.GetFlatbuffers()))
+	copy(f, v.GetFlatbuffers())
+	m := fbs.GetRootAsMetadata(f, 0)
+	return r, m
+}
+
+// SetTimeout sets a client timeout value.
+// Parameter timeout is a timeout to set.
+// Parameter value is a value to set.
+// It returns the status of function call.
 func (c *Client) SetTimeout(timeout TimeoutSetting, value uint) Result {
 	return Result(C.DLR_clientSetTimeout(c.this, C.DLR_TIMEOUT_SETTING(timeout), C.uint(value)))
 }
 
-// IsConnected client
+// IsConnected returns whether provider is connected.
+// It returns the status of connection as <bool>.
 func (c *Client) IsConnected() bool {
 	return bool(C.DLR_clientIsConnected(c.this))
 }
 
-// SetAuthToken client
+// SetAuthToken sets persistent security access token for authentication as JWT payload.
+// Parameter token is a security access &token for authentication.
 func (c *Client) SetAuthToken(token string) {
 	ctoken := C.CString(token)
 	defer C.free(unsafe.Pointer(ctoken))
 	C.DLR_clientSetAuthToken(c.this, ctoken)
 }
 
-// GetAuthToken client
+// GetAuthToken returns persistent security access token for authentication.
+// It returns the security access token for authentication as <string>.
 func (c *Client) GetAuthToken() string {
 	p := C.DLR_clientGetAuthToken(c.this)
 	s := C.GoString(p)
-	defer C.free(unsafe.Pointer(p))
 	return s
 }

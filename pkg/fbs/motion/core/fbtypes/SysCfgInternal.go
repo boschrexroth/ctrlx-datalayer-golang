@@ -62,14 +62,31 @@ func (rcv *SysCfgInternal) MutateUseIpoIVAJ(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+/// enable time measurement?
+func (rcv *SysCfgInternal) TimeMeasurement() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// enable time measurement?
+func (rcv *SysCfgInternal) MutateTimeMeasurement(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func SysCfgInternalStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func SysCfgInternalAddSave(builder *flatbuffers.Builder, save bool) {
 	builder.PrependBoolSlot(0, save, false)
 }
 func SysCfgInternalAddUseIpoIVAJ(builder *flatbuffers.Builder, useIpoIVAJ bool) {
 	builder.PrependBoolSlot(1, useIpoIVAJ, false)
+}
+func SysCfgInternalAddTimeMeasurement(builder *flatbuffers.Builder, timeMeasurement bool) {
+	builder.PrependBoolSlot(2, timeMeasurement, false)
 }
 func SysCfgInternalEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

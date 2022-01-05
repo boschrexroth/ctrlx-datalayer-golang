@@ -38,7 +38,7 @@ func (rcv *SubscriptionSettings) MinimumPublishInterval() uint32 {
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
 	}
-	return 100
+	return 50
 }
 
 func (rcv *SubscriptionSettings) MutateMinimumPublishInterval(n uint32) bool {
@@ -85,7 +85,7 @@ func SubscriptionSettingsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }
 func SubscriptionSettingsAddMinimumPublishInterval(builder *flatbuffers.Builder, minimumPublishInterval uint32) {
-	builder.PrependUint32Slot(0, minimumPublishInterval, 100)
+	builder.PrependUint32Slot(0, minimumPublishInterval, 50)
 }
 func SubscriptionSettingsAddMinimumSampleInterval(builder *flatbuffers.Builder, minimumSampleInterval uint64) {
 	builder.PrependUint64Slot(1, minimumSampleInterval, 100000)

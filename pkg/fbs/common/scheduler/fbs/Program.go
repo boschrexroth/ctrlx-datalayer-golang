@@ -5,7 +5,7 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__watchdog__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/fbs"
+	common__scheduler__watchdog__fbs "common/scheduler/watchdog/fbs"
 )
 
 type Program struct {

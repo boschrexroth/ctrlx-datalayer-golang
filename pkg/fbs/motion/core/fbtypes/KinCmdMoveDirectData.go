@@ -6,7 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// parameters for the move linear commands for a kinematics
+/// parameters for the move direct commands for a kinematics
 type KinCmdMoveDirectData struct {
 	_tab flatbuffers.Table
 }
@@ -72,8 +72,22 @@ func (rcv *KinCmdMoveDirectData) CoordSys() []byte {
 }
 
 /// coordSys for commanded target position
+/// should this be a buffered command?
+func (rcv *KinCmdMoveDirectData) Buffered() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+/// should this be a buffered command?
+func (rcv *KinCmdMoveDirectData) MutateBuffered(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func KinCmdMoveDirectDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func KinCmdMoveDirectDataAddKinPos(builder *flatbuffers.Builder, kinPos flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(kinPos), 0)
@@ -83,6 +97,9 @@ func KinCmdMoveDirectDataStartKinPosVector(builder *flatbuffers.Builder, numElem
 }
 func KinCmdMoveDirectDataAddCoordSys(builder *flatbuffers.Builder, coordSys flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(coordSys), 0)
+}
+func KinCmdMoveDirectDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
+	builder.PrependBoolSlot(2, buffered, true)
 }
 func KinCmdMoveDirectDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -142,8 +142,48 @@ func (rcv *Metadata) ReferencesLength() int {
 	return 0
 }
 
+func (rcv *Metadata) Descriptions(obj *LocaleText, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Metadata) DescriptionsLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *Metadata) DisplayNames(obj *LocaleText, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Metadata) DisplayNamesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func MetadataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(11)
 }
 func MetadataAddNodeClass(builder *flatbuffers.Builder, nodeClass NodeClass) {
 	builder.PrependInt8Slot(0, int8(nodeClass), 0)
@@ -176,6 +216,18 @@ func MetadataAddReferences(builder *flatbuffers.Builder, references flatbuffers.
 	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(references), 0)
 }
 func MetadataStartReferencesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func MetadataAddDescriptions(builder *flatbuffers.Builder, descriptions flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(descriptions), 0)
+}
+func MetadataStartDescriptionsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func MetadataAddDisplayNames(builder *flatbuffers.Builder, displayNames flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(displayNames), 0)
+}
+func MetadataStartDisplayNamesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func MetadataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

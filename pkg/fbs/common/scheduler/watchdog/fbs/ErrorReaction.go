@@ -5,7 +5,7 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__watchdog__errorreaction__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/errorreaction/fbs"
+	common__scheduler__watchdog__errorreaction__fbs "common/scheduler/watchdog/errorreaction/fbs"
 )
 
 type ErrorReaction struct {

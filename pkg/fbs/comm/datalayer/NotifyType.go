@@ -7,21 +7,24 @@ import "strconv"
 type NotifyType int32
 
 const (
-	NotifyTypeData     NotifyType = 0
-	NotifyTypeBrowse   NotifyType = 1
-	NotifyTypeMetadata NotifyType = 2
+	NotifyTypeData      NotifyType = 0
+	NotifyTypeBrowse    NotifyType = 1
+	NotifyTypeMetadata  NotifyType = 2
+	NotifyTypeKeepalive NotifyType = 3
 )
 
 var EnumNamesNotifyType = map[NotifyType]string{
-	NotifyTypeData:     "Data",
-	NotifyTypeBrowse:   "Browse",
-	NotifyTypeMetadata: "Metadata",
+	NotifyTypeData:      "Data",
+	NotifyTypeBrowse:    "Browse",
+	NotifyTypeMetadata:  "Metadata",
+	NotifyTypeKeepalive: "Keepalive",
 }
 
 var EnumValuesNotifyType = map[string]NotifyType{
-	"Data":     NotifyTypeData,
-	"Browse":   NotifyTypeBrowse,
-	"Metadata": NotifyTypeMetadata,
+	"Data":      NotifyTypeData,
+	"Browse":    NotifyTypeBrowse,
+	"Metadata":  NotifyTypeMetadata,
+	"Keepalive": NotifyTypeKeepalive,
 }
 
 func (v NotifyType) String() string {

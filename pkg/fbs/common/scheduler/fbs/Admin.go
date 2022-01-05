@@ -5,7 +5,7 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__controls__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/controls/fbs"
+	common__scheduler__controls__fbs "common/scheduler/controls/fbs"
 )
 
 type Admin struct {
@@ -104,8 +104,21 @@ func (rcv *Admin) ControlDebug(obj *flatbuffers.Table) bool {
 	return false
 }
 
+func (rcv *Admin) CpuInfo(obj *CpuInfo) *CpuInfo {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(CpuInfo)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
 func AdminStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func AdminAddStartupState(builder *flatbuffers.Builder, startupState CurrentState) {
 	builder.PrependInt8Slot(0, int8(startupState), 0)
@@ -124,6 +137,9 @@ func AdminAddControlDebugType(builder *flatbuffers.Builder, controlDebugType com
 }
 func AdminAddControlDebug(builder *flatbuffers.Builder, controlDebug flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(controlDebug), 0)
+}
+func AdminAddCpuInfo(builder *flatbuffers.Builder, cpuInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(cpuInfo), 0)
 }
 func AdminEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

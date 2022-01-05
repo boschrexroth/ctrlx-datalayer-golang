@@ -81,8 +81,32 @@ func (rcv *RetainStats) MutateBiggestFree(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+func (rcv *RetainStats) SyncCounter() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+func (rcv *RetainStats) MutateSyncCounter(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(12, n)
+}
+
+func (rcv *RetainStats) LastUsed() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+func (rcv *RetainStats) MutateLastUsed(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(14, n)
+}
+
 func RetainStatsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(6)
 }
 func RetainStatsAddTotal(builder *flatbuffers.Builder, total uint32) {
 	builder.PrependUint32Slot(0, total, 0)
@@ -95,6 +119,12 @@ func RetainStatsAddUsed(builder *flatbuffers.Builder, used uint32) {
 }
 func RetainStatsAddBiggestFree(builder *flatbuffers.Builder, biggestFree uint32) {
 	builder.PrependUint32Slot(3, biggestFree, 0)
+}
+func RetainStatsAddSyncCounter(builder *flatbuffers.Builder, syncCounter uint32) {
+	builder.PrependUint32Slot(4, syncCounter, 0)
+}
+func RetainStatsAddLastUsed(builder *flatbuffers.Builder, lastUsed uint32) {
+	builder.PrependUint32Slot(5, lastUsed, 0)
 }
 func RetainStatsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

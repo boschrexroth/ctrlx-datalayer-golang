@@ -1,0 +1,1 @@
+go run -mod=vendor mage.go %*

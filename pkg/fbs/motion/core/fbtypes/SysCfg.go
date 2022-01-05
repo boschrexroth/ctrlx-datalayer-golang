@@ -79,8 +79,23 @@ func (rcv *SysCfg) Internal(obj *SysCfgInternal) *SysCfgInternal {
 }
 
 /// internal system configuration
+/// configuration of the safe and work areas
+func (rcv *SysCfg) SafeAreas(obj *SysCfgSafeAreaAll) *SysCfgSafeAreaAll {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(SysCfgSafeAreaAll)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the safe and work areas
 func SysCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func SysCfgAddPcs(builder *flatbuffers.Builder, pcs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(pcs), 0)
@@ -90,6 +105,9 @@ func SysCfgAddFunction(builder *flatbuffers.Builder, function flatbuffers.UOffse
 }
 func SysCfgAddInternal(builder *flatbuffers.Builder, internal flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(internal), 0)
+}
+func SysCfgAddSafeAreas(builder *flatbuffers.Builder, safeAreas flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(safeAreas), 0)
 }
 func SysCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

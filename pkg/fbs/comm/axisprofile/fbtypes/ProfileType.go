@@ -9,16 +9,19 @@ type ProfileType uint32
 const (
 	ProfileTypeUnknown                  ProfileType = 0
 	ProfileTypeServodrive_over_Ethercat ProfileType = 1
+	ProfileTypeCANopen_over_Ethercat    ProfileType = 2
 )
 
 var EnumNamesProfileType = map[ProfileType]string{
 	ProfileTypeUnknown:                  "Unknown",
 	ProfileTypeServodrive_over_Ethercat: "Servodrive_over_Ethercat",
+	ProfileTypeCANopen_over_Ethercat:    "CANopen_over_Ethercat",
 }
 
 var EnumValuesProfileType = map[string]ProfileType{
 	"Unknown":                  ProfileTypeUnknown,
 	"Servodrive_over_Ethercat": ProfileTypeServodrive_over_Ethercat,
+	"CANopen_over_Ethercat":    ProfileTypeCANopen_over_Ethercat,
 }
 
 func (v ProfileType) String() string {

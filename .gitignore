@@ -1,9 +1,13 @@
 **/debug
-build/
+/build
+/deps
+/node_modules
+/temp
+/testresults
+coverage.out
 artifact.zip
-deps
 /*.so*
-/datalayer
 **/.idea/*
 .idea
 .github
+*-xx.zip

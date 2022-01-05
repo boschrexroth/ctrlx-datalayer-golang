@@ -81,8 +81,20 @@ func (rcv *AllowedOperations) MutateDelete(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
+func (rcv *AllowedOperations) Browse() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+func (rcv *AllowedOperations) MutateBrowse(n bool) bool {
+	return rcv._tab.MutateBoolSlot(12, n)
+}
+
 func AllowedOperationsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func AllowedOperationsAddRead(builder *flatbuffers.Builder, read bool) {
 	builder.PrependBoolSlot(0, read, false)
@@ -95,6 +107,9 @@ func AllowedOperationsAddCreate(builder *flatbuffers.Builder, create bool) {
 }
 func AllowedOperationsAddDelete(builder *flatbuffers.Builder, delete bool) {
 	builder.PrependBoolSlot(3, delete, false)
+}
+func AllowedOperationsAddBrowse(builder *flatbuffers.Builder, browse bool) {
+	builder.PrependBoolSlot(4, browse, true)
 }
 func AllowedOperationsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
