@@ -15,6 +15,9 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Run check
-      run: make all
+      run: |
         uname -a
+        sudo apt-get install -y libsystemd-dev libzmq3-dev
+        make test
+        
       
