@@ -26,9 +26,6 @@ jobs:
         wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.0/ctrlx-datalayer.deb
         sudo apt-get install -y -f ./ctrlx-datalayer.deb
     
-  Go:   
-    runs-on: ubuntu-20.04
-    steps:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
