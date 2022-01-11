@@ -25,7 +25,12 @@ jobs:
         sudo apt-get install -y libsystemd-dev libzmq3-dev
         wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.0/ctrlx-datalayer.deb
         sudo apt-get install -y -f ./ctrlx-datalayer.deb
-        make go-dep
-        make test
-        
+    
+    - name: Run go test
+      run: |
+        ls -lah
+        go mod download
+        go mod vendor
+        go mod 
+        go test -race -short -count=1 -mod=vendor ./test/datalayer
       
