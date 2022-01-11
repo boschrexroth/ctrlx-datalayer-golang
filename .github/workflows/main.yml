@@ -23,6 +23,7 @@ jobs:
         ls -lah
         sudo apt-get update
         sudo apt-get install -y libsystemd-dev libzmq3-dev
+        sudo apt install pkg-config 
         wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.0/ctrlx-datalayer.deb
         sudo apt-get install -y -f ./ctrlx-datalayer.deb
     
