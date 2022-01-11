@@ -31,6 +31,5 @@ jobs:
         ls -lah
         go mod download
         go mod vendor
-        go mod 
         go test -race -short -count=1 -mod=vendor ./test/datalayer
       
