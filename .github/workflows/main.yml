@@ -16,4 +16,5 @@ jobs:
       
     - name: Run check
       run: make all
+        uname -a
       
