@@ -74,12 +74,3 @@ func TestConverter(t *testing.T) {
 		}
 	}
 }
-
-func _TestSubscriptionAPI(t *testing.T) {
-	system := NewSystem("")
-	system.Start(true)
-	client := system.Factory().CreateClient("tcp://boschrexroth:boschrexroth@192.168.178.20:2069")
-	sub, result := client.CreateSubscription("test", DefaultSubscriptionProperties(), nil)
-	assert.Equal(t, Result(0), result)
-	assert.NotNil(t, sub)
-}
