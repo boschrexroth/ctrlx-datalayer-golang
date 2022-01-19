@@ -38,5 +38,6 @@ func TestFactoryProvider(t *testing.T) {
 	f := s.Factory()
 	assert.NotNil(t, f)
 	c := f.CreateProvider("")
+	defer datalayer.DeleteProvider(c)
 	assert.NotNil(t, c)
 }

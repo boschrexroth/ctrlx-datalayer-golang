@@ -303,3 +303,57 @@ func TestRemoveSync(t *testing.T) {
 	r := client.RemoveSync("")
 	a.Equal(t, datalayer.Result(0x80010001), r) //0x80010001 == DL_INVALID_ADDRESS
 }
+
+func TestReadJsonSync(t *testing.T) {
+	if clientAddress == "" {
+		t.Skip("ctrlX device does not exist")
+	}
+	system := datalayer.NewSystem("")
+	defer datalayer.DeleteSystem(system)
+	a.NotNil(t, system)
+
+	a.NotPanics(t, func() { system.Start(false) })
+
+	client := system.Factory().CreateClient(clientAddress)
+	defer datalayer.DeleteClient(client)
+	a.NotNil(t, client)
+
+	a.Equal(t, datalayer.Result(0), client.SetTimeout(datalayer.TimeoutSettingPing, ctrlxClientTimeout()))
+	a.True(t, client.IsConnected())
+
+	cv := system.JSONConverter()
+	a.NotNil(t, cv)
+
+	r, d := client.ReadJsonSync(cv, "scheduler/admin/state", 2)
+	a.Equal(t, datalayer.Result(0), r)
+	a.NotNil(t, d)
+	a.True(t, len(d) != 0)
+}
+
+func TestWriteJsonSync(t *testing.T) {
+	if clientAddress == "" {
+		t.Skip("ctrlX device does not exist")
+	}
+	system := datalayer.NewSystem("")
+	defer datalayer.DeleteSystem(system)
+	a.NotNil(t, system)
+
+	a.NotPanics(t, func() { system.Start(false) })
+
+	client := system.Factory().CreateClient(clientAddress)
+	defer datalayer.DeleteClient(client)
+	a.NotNil(t, client)
+
+	a.Equal(t, datalayer.Result(0), client.SetTimeout(datalayer.TimeoutSettingPing, ctrlxClientTimeout()))
+	a.True(t, client.IsConnected())
+
+	cv := system.JSONConverter()
+	a.NotNil(t, cv)
+
+	r, d := client.ReadJsonSync(cv, "scheduler/admin/state", 2)
+	a.Equal(t, datalayer.Result(0), r)
+
+	r, err := client.WriteJsonSync(cv, "scheduler/admin/state", d)
+	a.Equal(t, datalayer.Result(0), r)
+	a.Nil(t, err)
+}

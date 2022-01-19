@@ -34,6 +34,7 @@ package datalayer
 */
 import "C"
 import (
+	"errors"
 	"unsafe"
 
 	// import of c-headers
@@ -324,4 +325,45 @@ func (c *Client) GetAuthToken() string {
 	p := C.DLR_clientGetAuthToken(c.this)
 	s := C.GoString(p)
 	return s
+}
+
+func (c *Client) readJsonSync(cv *Converter, address string, indentStep int) (Result, *Variant) {
+	caddress := C.CString(address)
+	defer C.free(unsafe.Pointer(caddress))
+	data := NewVariant()
+	r := Result(C.DLR_clientReadJsonSync(c.this, cv.this, caddress, data.this, C.int(indentStep), nil))
+	return r, data
+}
+
+// This function reads a values as a JSON string.
+// Parameter converter is reference to the converter (see System json_converter()).
+// Parameter address is an address of the node to read.
+// Parameter indentStep is an indentation length for json string.
+// It returns the status of function and generated JSON
+func (c *Client) ReadJsonSync(cv *Converter, address string, indentStep int) (Result, []byte) {
+	r, d := c.readJsonSync(cv, address, indentStep)
+	defer DeleteVariant(d)
+	if r != ResultOk {
+		return r, nil
+	}
+	return r, []byte(d.GetString())
+}
+
+// This function writes a JSON value.
+// Parameter converter is a reference to the converter (see System json_converter()).
+// Parameter address is an address of the node to write.
+// Parameter json is a JSON value to write.
+// It returns the status of function and error Error object.
+func (c *Client) WriteJsonSync(cv *Converter, address string, json []byte) (Result, error) {
+	caddress := C.CString(address)
+	defer C.free(unsafe.Pointer(caddress))
+	cjson := C.CString(string(json))
+	defer C.free(unsafe.Pointer(cjson))
+	err := NewVariant()
+	defer DeleteVariant(err)
+	r := Result(C.DLR_clientWriteJsonSync(c.this, cv.this, caddress, cjson, err.this, nil))
+	if r != Result(0) {
+		return r, errors.New(err.GetString())
+	}
+	return r, nil
 }
