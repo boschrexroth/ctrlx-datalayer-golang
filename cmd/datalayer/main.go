@@ -36,8 +36,8 @@ import (
 )
 
 var (
-	connectionClient   = flag.String("client", "tcp://boschrexroth:boschrexroth@192.168.178.20:2069", "connection string for client")
-	connectionProvider = flag.String("provider", "tcp://boschrexroth:boschrexroth@192.168.178.20:2070", "connection string for provider")
+	connectionClient   = flag.String("client", "tcp://boschrexroth:boschrexroth@192.168.1.1:2069", "connection string for client")
+	connectionProvider = flag.String("provider", "tcp://boschrexroth:boschrexroth@192.168.1.1:2070", "connection string for provider")
 )
 
 func main() {
