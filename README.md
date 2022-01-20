@@ -22,16 +22,6 @@ Vet/Test/Build from the commandline can be done simply with make
 
 Run `make help` to get a description of all available targets.
 
-### Windows 
-Vet/Test/Build from the commandline can be done using mage (https://magefile.org/). 
-You can either install mage as described there or run
-```bash
-./mage.sh [vet,build:[amd64,arm64,win64,linux,all],test,testcover]
-```
-to execute distinct build steps.
-
-Run `./mage.sh` without arguments to get a description of all available targets.
-
 ## Tests
 A lot of tests require a connection to a ctrlX device. The ctrlX device IP address you can set with help of the environment variable 
 ```
@@ -55,13 +45,3 @@ can be installed with:
 ```bash
 sudo apt install gcc-aarch64-linux-gnu
 ```
-
-### Windows
-Because this package is heavily using CGO, CGO_LDFLAGS and LD_LIBRARY_PATH need to be set correctly in projects using it as dependency.
-If you build your package using mage, you can use the `magelib` package from this repository by adding
-
-```golang
-import "github.com/boschrexroth/ctrlx-datalayer-golang/magelib"
-```
-to your `magefile.go`. The `magelib` has methods to get CGO_LDFLAGS and LD_LIBRARY_PATH, to build executables and libraries
-importing `pkg/datalayer` and to run go commands like `go vet` or `go test` on your package with the correct environment variables.
