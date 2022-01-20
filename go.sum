@@ -9,8 +9,6 @@ github.com/loov/hrtime/hrplot v1.0.2 h1:y9c7g1ao5AQOLzJxo4PLhAdFG0ehPIIy5eP6g9ym
 github.com/loov/hrtime/hrplot v1.0.2/go.mod h1:9t65xYn4d42ntjv40Wt5lbU72/VC5S0zGDgjC8kD5BU=
 github.com/loov/plot v0.0.0-20200413101321-e09a6f01d2f5 h1:pzQgy0g937iWmXKKEM8uaDRL9oxB2+1hVAfV5hJ+yIA=
 github.com/loov/plot v0.0.0-20200413101321-e09a6f01d2f5/go.mod h1:gSrhfSMoiPGG0CZ9E66kXjaHxFw0fzJhooyicOnz5z4=
-github.com/magefile/mage v1.11.0 h1:C/55Ywp9BpgVVclD3lRnSYCwXTYxmSppIgLeDYlNuls=
-github.com/magefile/mage v1.11.0/go.mod h1:z5UZb/iS3GoOSn0JgWuiw7dxlurVYTu+/jHXqQg881A=
 github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852 h1:Yl0tPBa8QPjGmesFh1D0rDy+q1Twx6FyU7VWHi8wZbI=
 github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852/go.mod h1:eqOVx5Vwu4gd2mmMZvVZsgIqNSaW3xxRThUJ0k/TPk4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
