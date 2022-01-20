@@ -29,7 +29,7 @@ package datalayer
 #cgo windows,amd64 LDFLAGS: -lcomm_datalayer
 #include <stdbool.h>
 #include <stdlib.h>
-#include <client.h>
+#include "client.h"
 #include "wrappers.h"
 */
 import "C"
