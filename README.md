@@ -47,11 +47,12 @@ sudo apt install gcc-aarch64-linux-gnu
 ```
 ## About
 
-Copyright (c) 2022 Bosch Rexroth AG. All rights reserved.
+Copyright © 2022 Bosch Rexroth AG. All rights reserved.
 
 <https://www.boschrexroth.com>
 
-Bosch Rexroth AG
-Bgm.-Dr.-Nebel-Str. 2
-97816 Lohr am Main
+Bosch Rexroth AG  
+Bgm.-Dr.-Nebel-Str. 2  
+97816 Lohr am Main  
 GERMANY
+
