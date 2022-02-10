@@ -22,6 +22,9 @@
 
 package datalayer
 
+//#include <stdbool.h>
+//#include <stdlib.h>
+//#include <system.h>
 import "C"
 
 // Result ulong
@@ -149,4 +152,5 @@ func (r Result) String() string {
 	case ResultSecUnauthorized:
 		return "DL_SEC_UNAUTHORIZED"
 	}
+	return "Result_Unknown"
 }
