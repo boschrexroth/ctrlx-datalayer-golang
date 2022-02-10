@@ -20,164 +20,165 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package datalayer
+package datalayer_test
 
 import (
 	"testing"
 
+	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
 	"github.com/stretchr/testify/assert"
 )
 
 var tcResult = []struct {
-	result         Result
+	result         datalayer.Result
 	expectedString string
 }{
 	{
-		ResultOk,
+		datalayer.ResultOk,
 		"DL_OK",
 	},
 	{
-		ResultFailed,
+		datalayer.ResultFailed,
 		"DL_FAILED",
 	},
 	{
-		ResultInvalidAddress,
+		datalayer.ResultInvalidAddress,
 		"DL_INVALID_ADDRESS",
 	},
 	{
-		ResultUnsupported,
+		datalayer.ResultUnsupported,
 		"DL_UNSUPPORTED",
 	},
 	{
-		ResultOutOfMemory,
+		datalayer.ResultOutOfMemory,
 		"DL_OUT_OF_MEMORY",
 	},
 	{
-		ResultLimitMin,
+		datalayer.ResultLimitMin,
 		"DL_LIMIT_MIN",
 	},
 	{
-		ResultLimitMax,
+		datalayer.ResultLimitMax,
 		"DL_LIMIT_MAX",
 	},
 	{
-		ResultTypeMismatch,
+		datalayer.ResultTypeMismatch,
 		"DL_TYPE_MISMATCH",
 	},
 	{
-		ResultSizeMismatch,
+		datalayer.ResultSizeMismatch,
 		"DL_SIZE_MISMATCH",
 	},
 	{
-		ResultInvalidFloatingpoint,
+		datalayer.ResultInvalidFloatingpoint,
 		"DL_INVALID_FLOATINGPOINT",
 	},
 	{
-		ResultInvalidHandle,
+		datalayer.ResultInvalidHandle,
 		"DL_INVALID_HANDLE",
 	},
 	{
-		ResultInvalidOperationMode,
+		datalayer.ResultInvalidOperationMode,
 		"DL_INVALID_OPERATION_MODE",
 	},
 	{
-		ResultInvalidConfiguration,
+		datalayer.ResultInvalidConfiguration,
 		"DL_INVALID_CONFIGURATION",
 	},
 	{
-		ResultInvalidValue,
+		datalayer.ResultInvalidValue,
 		"DL_INVALID_VALUE",
 	},
 	{
-		ResultSubmoduleFailure,
+		datalayer.ResultSubmoduleFailure,
 		"DL_SUBMODULE_FAILURE",
 	},
 	{
-		ResultTimeout,
+		datalayer.ResultTimeout,
 		"DL_TIMEOUT",
 	},
 	{
-		ResultAlreadyExists,
+		datalayer.ResultAlreadyExists,
 		"DL_ALREADY_EXISTS",
 	},
 	{
-		ResultCreationFailed,
+		datalayer.ResultCreationFailed,
 		"DL_CREATION_FAILED",
 	},
 	{
-		ResultVersionMismatch,
+		datalayer.ResultVersionMismatch,
 		"DL_VERSION_MISMATCH",
 	},
 	{
-		ResultDeprecated,
+		datalayer.ResultDeprecated,
 		"DL_DEPRECATED",
 	},
 	{
-		ResultPermissionDenied,
+		datalayer.ResultPermissionDenied,
 		"DL_PERMISSION_DENIED",
 	},
 	{
-		ResultNotInitialized,
+		datalayer.ResultNotInitialized,
 		"DL_NOT_INITIALIZED",
 	},
 	{
-		ResultCommProtocolError,
+		datalayer.ResultCommProtocolError,
 		"DL_COMM_PROTOCOL_ERROR",
 	},
 	{
-		ResultCommInvalidHeader,
+		datalayer.ResultCommInvalidHeader,
 		"DL_COMM_INVALID_HEADER",
 	},
 	{
-		ResultClientNotConnected,
+		datalayer.ResultClientNotConnected,
 		"DL_CLIENT_NOT_CONNECTED",
 	},
 	{
-		ResultRtNotopen,
+		datalayer.ResultRtNotopen,
 		"DL_RT_NOTOPEN",
 	},
 	{
-		ResultRtInvalidobject,
+		datalayer.ResultRtInvalidobject,
 		"DL_RT_INVALIDOBJECT",
 	},
 	{
-		ResultRtWrongrevison,
+		datalayer.ResultRtWrongrevison,
 		"DL_RT_WRONGREVISON",
 	},
 	{
-		ResultRtNovaliddata,
+		datalayer.ResultRtNovaliddata,
 		"DL_RT_NOVALIDDATA",
 	},
 	{
-		ResultRtMemorylocked,
+		datalayer.ResultRtMemorylocked,
 		"DL_RT_MEMORYLOCKED",
 	},
 	{
-		ResultRtInvalidmemorymap,
+		datalayer.ResultRtInvalidmemorymap,
 		"DL_RT_INVALIDMEMORYMAP",
 	},
 	{
-		ResultRtInvalidRetain,
+		datalayer.ResultRtInvalidRetain,
 		"DL_RT_INVALID_RETAIN",
 	},
 	{
-		ResultRtInternalError,
+		datalayer.ResultRtInternalError,
 		"DL_RT_INTERNAL_ERROR",
 	},
 	{
-		ResultSecNotoken,
+		datalayer.ResultSecNotoken,
 		"DL_SEC_NOTOKEN",
 	},
 	{
-		ResultSecInvalidsession,
+		datalayer.ResultSecInvalidsession,
 		"DL_SEC_INVALIDSESSION",
 	},
 	{
-		ResultSecInvalidtokencontent,
+		datalayer.ResultSecInvalidtokencontent,
 		"DL_SEC_INVALIDTOKENCONTENT",
 	},
 	{
-		ResultSecUnauthorized,
+		datalayer.ResultSecUnauthorized,
 		"DL_SEC_UNAUTHORIZED",
 	},
 }
