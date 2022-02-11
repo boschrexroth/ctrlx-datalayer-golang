@@ -3,6 +3,8 @@
 This project provides ctrlX Data Layer access via Golang.
 It wraps the original Data Layer SDK written in C++.
 
+see [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/)
+
 ## Preparation
 
 ### Installation of necessary libraries:
@@ -10,7 +12,7 @@ It wraps the original Data Layer SDK written in C++.
 sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev:arm64
 ```
 
-### Download and install ctrlX Data Layer deb-package:
+### Download and install ctrlX Data Layer deb package:
 
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example. 
 
@@ -19,39 +21,20 @@ wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12
 sudo dpkg -i ctrlx-datalayer-1.7.5.deb
 ```
 
-
 ## Development Environment
 
-We recommend to use Visual Studio Code for development. The `.vscode/settings.json` already contains environment specific settings that a recommended.
+Install a golang development environment with `sudo apt-get install golang` or with `sudo snap install go`.
 
-### Linux
-Vet/Test/Build from the commandline can be done simply with make
+We recommend to use Visual Studio Code for development. The `.vscode/settings.json` already contains environment specific settings that a recommended. 
 
-Run `make help` to get a description of all available targets.
+It is recommended to install the extension "'Go' Rich Go language support for Visual Studio Code', see the [description](https://marketplace.visualstudio.com/items?itemName=golang.Go). With \<ctrl-shift-p\> and "Go: Install/Update Tools" expand your Golang development environment.
 
-## Tests
-A lot of tests require a connection to a ctrlX device. The ctrlX device IP address you can set with help of the environment variable 
-```
-export CTRLX_ADDRESS=a.b.c.d
-export CTRLX_TIMEOUT=4000               (Default: 2000 ms)
-```
 
-## Use as dependency
+## Install ctrlx Data Layer golang package
 
-### Linux
-To use this package, you need to install the libraries mentioned under [Preparation](#Preparation)
+`go get github.com/boschrexroth/ctrlx-datalayer-golang`
 
-To cross-compile for the ctrlX CORE you will additionally need the `arm64` versions of the libraries:
-```bash
-sudo apt-get install -y libsystemd-dev:arm64 libzmq3-dev:arm64
-```
-The `ctrlx-datalayer.deb` is multi-arch and the `arm64` variant is already installed.
 
-Note that you need to prefix your go build commands with `CGO_ENABLED=1 CC=aarch64-linux-gnu-gcc` to cross compile. The arm compiler
-can be installed with:
-```bash
-sudo apt install gcc-aarch64-linux-gnu
-```
 ## About
 
 Copyright © 2022 Bosch Rexroth AG. All rights reserved.
