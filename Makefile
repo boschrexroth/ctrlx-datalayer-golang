@@ -6,7 +6,9 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
-DATALAYER_DEB_VERSION := 1.12.0
+
+DATALAYER_DEB_VERSION      := 1.12.1
+DATALAYER_DEB_FILE_VERSION := 1.7.5
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 
@@ -19,9 +21,9 @@ go-dep: ## Get go dependencies
 apt-dep: ## Get native dependencies
 	@sudo apt-get update
 	@sudo apt-get install -y libsystemd-dev libzmq3-dev
-	@wget --quiet https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/$(DATALAYER_DEB_VERSION)/ctrlx-datalayer.deb
-	@sudo apt-get install -y -f ./ctrlx-datalayer.deb
-	@rm ctrlx-datalayer.deb
+	@wget --quiet https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/$(DATALAYER_DEB_VERSION)/ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
+	@sudo apt-get install -y -f ./ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
+	@rm ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
 
 lint: ## Lint Golang files
 	@golangci-lint run
