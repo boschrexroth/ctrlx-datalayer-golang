@@ -12,7 +12,7 @@ Documentation and examples you find here [ctrlX Software Development Kit](https:
 sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev:arm64
 ```
 
-### Download and install ctrlX Data Layer deb package:
+### Download and install ctrlX Data Layer debian package:
 
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example. 
 
