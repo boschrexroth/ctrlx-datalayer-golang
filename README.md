@@ -1,17 +1,24 @@
 # Datalayer Client and Provider for golang
 
+This project provides ctrlX Data Layer access via Golang.
+It wraps the original Data Layer SDK written in C++.
+
 ## Preparation
 
-Installation of necessary libraries:
+### Installation of necessary libraries:
 ```bash
 sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev:arm64
 ```
 
-Download and install ctrlX CORE deb-package:
+### Download and install ctrlX Data Layer deb-package:
+
+Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example. 
+
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.0/ctrlx-datalayer.deb
-dpkg -i ctrlx-datalayer.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.1/ctrlx-datalayer-1.7.5.deb
+sudo dpkg -i ctrlx-datalayer-1.7.5.deb
 ```
+
 
 ## Development Environment
 
