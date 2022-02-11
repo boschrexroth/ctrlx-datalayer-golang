@@ -3,7 +3,7 @@
 This project provides ctrlX Data Layer access via Golang.
 It wraps the original Data Layer SDK written in C++.
 
-see [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/)
+Documentation and golang examples you find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/).
 
 ## Preparation
 
