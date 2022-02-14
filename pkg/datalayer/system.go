@@ -35,9 +35,9 @@ type System struct {
 	this C.DLR_SYSTEM
 }
 
-// NewSystem creates a datalayer system.
+// NewSystem creates a ctrlX Data Layer system.
 // Parameter ipcPath is a path for interprocess communication - use null pointer for automatic detection.
-// It returns a datalayer system.
+// It returns a ctrlX Data Layer system.
 func NewSystem(ipcPath string) *System {
 	cpath := C.CString(ipcPath)
 	defer C.free(unsafe.Pointer(cpath))
@@ -45,7 +45,7 @@ func NewSystem(ipcPath string) *System {
 	return &System{this: ptr}
 }
 
-// DeleteSystem removes a datalayer system.
+// DeleteSystem removes a ctrlX Data Layer system.
 // Parameter d is a system.
 func DeleteSystem(d *System) {
 	if d == nil {
@@ -55,22 +55,22 @@ func DeleteSystem(d *System) {
 	C.DLR_systemDelete(d.this)
 }
 
-// Start runs a dalayer system.
-// Parameter boStartBroker uses true to start a local broker. Use false to connect to an existing datalayer system e.g. the integrated datalayer system
+// Start runs a ctrlX Data Layer system.
+// Parameter boStartBroker uses true to start a local broker. Use false to connect to an existing ctrlX Data Layer system e.g. the integrated ctrlX Data Layer system
 // within the Automationcore.
 func (d *System) Start(boStartBroker bool) {
 	C.DLR_systemStart(d.this, C.bool(boStartBroker))
 }
 
-// Stop breaks a dalayer system.
-// Parameter boForceProviderStop forces stop off all created providers for this datalayer system.
+// Stop breaks a ctrlX Data Layer system.
+// Parameter boForceProviderStop forces stop off all created providers for this ctrlX Data Layer system.
 // It returns false if there is a client or provider active.
 func (d *System) Stop(boForceProviderStop bool) {
 	C.DLR_systemStop(d.this, C.bool(boForceProviderStop))
 }
 
 // Factory system.
-// It returns the factory to create clients and provider for the datalayer.
+// It returns the factory to create clients and provider for the ctrlX Data Layer.
 func (d *System) Factory() *Factory {
 	ptr := C.DLR_systemFactory(d.this)
 	return &Factory{this: ptr, system: d}
