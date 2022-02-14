@@ -1,20 +1,21 @@
 # Datalayer Client and Provider for golang
 
 This project provides ctrlX Data Layer access via Golang.
-It wraps the original Data Layer SDK written in C++.
+It wraps the original ctrlX Data Layer written in C++.
 
 Documentation and examples you find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/).
 
 ## Preparation
 
-### Installation of necessary libraries:
+### Prerequisites
+
 ```bash
 sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev:arm64
 ```
 
-### Download and install ctrlX Data Layer debian package:
+### Download and install ctrlX Data Layer debian package
 
-Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example. 
+Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
 wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.1/ctrlx-datalayer-1.7.5.deb
@@ -25,15 +26,13 @@ sudo dpkg -i ctrlx-datalayer-1.7.5.deb
 
 Install a golang development environment with `sudo apt-get install golang` or with `sudo snap install go`.
 
-We recommend to use Visual Studio Code for development. The `.vscode/settings.json` already contains environment specific settings that a recommended. 
+We recommend to use Visual Studio Code for development. The `.vscode/settings.json` already contains environment specific settings that a recommended.
 
 It is recommended to install the extension "'Go' Rich Go language support for Visual Studio Code', see the [description](https://marketplace.visualstudio.com/items?itemName=golang.Go). With \<ctrl-shift-p\> and "Go: Install/Update Tools" expand your Golang development environment.
-
 
 ## Install ctrlx Data Layer golang package
 
 `go get github.com/boschrexroth/ctrlx-datalayer-golang`
-
 
 ## About
 
