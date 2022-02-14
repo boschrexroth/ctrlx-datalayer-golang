@@ -1,4 +1,4 @@
-# Datalayer Client and Provider for golang
+# ctrlX Data Layer client and provider library for golang
 
 This project provides ctrlX Data Layer access via Golang.
 It wraps the original ctrlX Data Layer written in C++.
@@ -9,7 +9,7 @@ Documentation and examples you find here [ctrlX Software Development Kit](https:
 
 ![Make Test](https://github.com/boschrexroth/ctrlx-datalayer-golang/actions/workflows/main.yml/badge.svg)
 
-## Preparation
+## Usage
 
 ### Prerequisites
 
@@ -26,15 +26,9 @@ wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12
 sudo dpkg -i ctrlx-datalayer-1.7.5.deb
 ```
 
-## Development Environment
+### Integrate in you project
 
-Install a golang development environment with `sudo apt-get install golang` or with `sudo snap install go`.
-
-We recommend to use Visual Studio Code for development. The `.vscode/settings.json` already contains environment specific settings that a recommended.
-
-It is recommended to install the extension "'Go' Rich Go language support for Visual Studio Code', see the [description](https://marketplace.visualstudio.com/items?itemName=golang.Go). With \<ctrl-shift-p\> and "Go: Install/Update Tools" expand your Golang development environment.
-
-## Install ctrlx Data Layer golang package
+To integrate this library in your project, simply install it via:
 
 `go get github.com/boschrexroth/ctrlx-datalayer-golang`
 
