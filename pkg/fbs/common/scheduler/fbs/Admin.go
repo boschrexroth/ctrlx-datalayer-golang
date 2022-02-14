@@ -76,7 +76,7 @@ func (rcv *Admin) TriggerSource() CurrentTrigger {
 	if o != 0 {
 		return CurrentTrigger(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 0
+	return 1
 }
 
 func (rcv *Admin) MutateTriggerSource(n CurrentTrigger) bool {
@@ -130,7 +130,7 @@ func AdminAddStartupErrorReaction(builder *flatbuffers.Builder, startupErrorReac
 	builder.PrependInt8Slot(2, int8(startupErrorReaction), 0)
 }
 func AdminAddTriggerSource(builder *flatbuffers.Builder, triggerSource CurrentTrigger) {
-	builder.PrependInt8Slot(3, int8(triggerSource), 0)
+	builder.PrependInt8Slot(3, int8(triggerSource), 1)
 }
 func AdminAddControlDebugType(builder *flatbuffers.Builder, controlDebugType common__scheduler__controls__fbs.Controls) {
 	builder.PrependByteSlot(4, byte(controlDebugType), 0)

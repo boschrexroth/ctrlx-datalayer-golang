@@ -49,6 +49,7 @@ func (rcv *AxsCfgGantry) MutateIsMember(n bool) bool {
 }
 
 /// is moving of this axis allowed, even when it's a gantry member and the gantry connection is not closed?
+/// This value can be read/written when accessing the whole structure, but (file-)loading will always set to FALSE.
 func (rcv *AxsCfgGantry) MoveAllowed() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -58,18 +59,36 @@ func (rcv *AxsCfgGantry) MoveAllowed() bool {
 }
 
 /// is moving of this axis allowed, even when it's a gantry member and the gantry connection is not closed?
+/// This value can be read/written when accessing the whole structure, but (file-)loading will always set to FALSE.
 func (rcv *AxsCfgGantry) MutateMoveAllowed(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+/// is enable the multipe brake dynamic
+func (rcv *AxsCfgGantry) MultiBrakeDyn() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// is enable the multipe brake dynamic
+func (rcv *AxsCfgGantry) MutateMultiBrakeDyn(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func AxsCfgGantryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func AxsCfgGantryAddIsMember(builder *flatbuffers.Builder, isMember bool) {
 	builder.PrependBoolSlot(0, isMember, false)
 }
 func AxsCfgGantryAddMoveAllowed(builder *flatbuffers.Builder, moveAllowed bool) {
 	builder.PrependBoolSlot(1, moveAllowed, false)
+}
+func AxsCfgGantryAddMultiBrakeDyn(builder *flatbuffers.Builder, multiBrakeDyn bool) {
+	builder.PrependBoolSlot(2, multiBrakeDyn, false)
 }
 func AxsCfgGantryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

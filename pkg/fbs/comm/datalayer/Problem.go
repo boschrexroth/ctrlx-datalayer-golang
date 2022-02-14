@@ -130,8 +130,16 @@ func (rcv *Problem) LinksLength() int {
 	return 0
 }
 
+func (rcv *Problem) Entity() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func ProblemStart(builder *flatbuffers.Builder) {
-	builder.StartObject(10)
+	builder.StartObject(11)
 }
 func ProblemAddType(builder *flatbuffers.Builder, type_ flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(type_), 0)
@@ -165,6 +173,9 @@ func ProblemAddLinks(builder *flatbuffers.Builder, links flatbuffers.UOffsetT) {
 }
 func ProblemStartLinksVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func ProblemAddEntity(builder *flatbuffers.Builder, entity flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(entity), 0)
 }
 func ProblemEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

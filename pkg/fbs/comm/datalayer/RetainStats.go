@@ -105,8 +105,16 @@ func (rcv *RetainStats) MutateLastUsed(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+func (rcv *RetainStats) Info() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func RetainStatsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func RetainStatsAddTotal(builder *flatbuffers.Builder, total uint32) {
 	builder.PrependUint32Slot(0, total, 0)
@@ -125,6 +133,9 @@ func RetainStatsAddSyncCounter(builder *flatbuffers.Builder, syncCounter uint32)
 }
 func RetainStatsAddLastUsed(builder *flatbuffers.Builder, lastUsed uint32) {
 	builder.PrependUint32Slot(5, lastUsed, 0)
+}
+func RetainStatsAddInfo(builder *flatbuffers.Builder, info flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(info), 0)
 }
 func RetainStatsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

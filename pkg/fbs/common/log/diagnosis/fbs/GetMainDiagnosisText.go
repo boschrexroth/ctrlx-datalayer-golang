@@ -41,22 +41,11 @@ func (rcv *GetMainDiagnosisText) MainDiagnosisNumber() []byte {
 	return nil
 }
 
-func (rcv *GetMainDiagnosisText) Language() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
-}
-
 func GetMainDiagnosisTextStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(1)
 }
 func GetMainDiagnosisTextAddMainDiagnosisNumber(builder *flatbuffers.Builder, mainDiagnosisNumber flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(mainDiagnosisNumber), 0)
-}
-func GetMainDiagnosisTextAddLanguage(builder *flatbuffers.Builder, language flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(language), 0)
 }
 func GetMainDiagnosisTextEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

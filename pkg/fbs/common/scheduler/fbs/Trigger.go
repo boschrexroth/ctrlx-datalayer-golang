@@ -38,7 +38,7 @@ func (rcv *Trigger) Trigger() CurrentTrigger {
 	if o != 0 {
 		return CurrentTrigger(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 0
+	return 1
 }
 
 func (rcv *Trigger) MutateTrigger(n CurrentTrigger) bool {
@@ -49,7 +49,7 @@ func TriggerStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }
 func TriggerAddTrigger(builder *flatbuffers.Builder, trigger CurrentTrigger) {
-	builder.PrependInt8Slot(0, int8(trigger), 0)
+	builder.PrependInt8Slot(0, int8(trigger), 1)
 }
 func TriggerEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

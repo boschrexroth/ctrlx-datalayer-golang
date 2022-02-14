@@ -129,8 +129,23 @@ func (rcv *AxsCfg) KinProperties(obj *AxsCfgKinProperties) *AxsCfgKinProperties 
 }
 
 /// kinematic properties for axes
+/// device error reation settings
+func (rcv *AxsCfg) DevErrReaction(obj *AxsCfgDeviceErrorReaction) *AxsCfgDeviceErrorReaction {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgDeviceErrorReaction)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// device error reation settings
 func AxsCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func AxsCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -152,6 +167,9 @@ func AxsCfgAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
 }
 func AxsCfgAddKinProperties(builder *flatbuffers.Builder, kinProperties flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(kinProperties), 0)
+}
+func AxsCfgAddDevErrReaction(builder *flatbuffers.Builder, devErrReaction flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(devErrReaction), 0)
 }
 func AxsCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

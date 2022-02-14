@@ -34,7 +34,7 @@ func (rcv *SysCfgSafeArea) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// name of the safe area (required for load/save)
+/// name of the safe area (filled when reading; optional for writing [content is always ignored])
 func (rcv *SysCfgSafeArea) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -43,7 +43,7 @@ func (rcv *SysCfgSafeArea) Name() []byte {
 	return nil
 }
 
-/// name of the safe area (required for load/save)
+/// name of the safe area (filled when reading; optional for writing [content is always ignored])
 /// coordinate system of the safe area (default is "MCS")
 func (rcv *SysCfgSafeArea) CoordSystem() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

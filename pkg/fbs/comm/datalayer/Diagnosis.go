@@ -65,8 +65,16 @@ func (rcv *Diagnosis) DynamicDescription() []byte {
 	return nil
 }
 
+func (rcv *Diagnosis) Entity() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func DiagnosisStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func DiagnosisAddMainDiagnosisCode(builder *flatbuffers.Builder, mainDiagnosisCode uint32) {
 	builder.PrependUint32Slot(0, mainDiagnosisCode, 0)
@@ -76,6 +84,9 @@ func DiagnosisAddDetailedDiagnosisCode(builder *flatbuffers.Builder, detailedDia
 }
 func DiagnosisAddDynamicDescription(builder *flatbuffers.Builder, dynamicDescription flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(dynamicDescription), 0)
+}
+func DiagnosisAddEntity(builder *flatbuffers.Builder, entity flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(entity), 0)
 }
 func DiagnosisEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

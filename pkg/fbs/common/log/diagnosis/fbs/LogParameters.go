@@ -33,28 +33,20 @@ func (rcv *LogParameters) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *LogParameters) MainDiagnosisCode() uint32 {
+func (rcv *LogParameters) MainDiagnosisCode() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return 0
+	return nil
 }
 
-func (rcv *LogParameters) MutateMainDiagnosisCode(n uint32) bool {
-	return rcv._tab.MutateUint32Slot(4, n)
-}
-
-func (rcv *LogParameters) DetailedDiagnosisCode() uint32 {
+func (rcv *LogParameters) DetailedDiagnosisCode() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return 0
-}
-
-func (rcv *LogParameters) MutateDetailedDiagnosisCode(n uint32) bool {
-	return rcv._tab.MutateUint32Slot(6, n)
+	return nil
 }
 
 func (rcv *LogParameters) UserId() []byte {
@@ -128,11 +120,11 @@ func (rcv *LogParameters) DynamicDescription() []byte {
 func LogParametersStart(builder *flatbuffers.Builder) {
 	builder.StartObject(10)
 }
-func LogParametersAddMainDiagnosisCode(builder *flatbuffers.Builder, mainDiagnosisCode uint32) {
-	builder.PrependUint32Slot(0, mainDiagnosisCode, 0)
+func LogParametersAddMainDiagnosisCode(builder *flatbuffers.Builder, mainDiagnosisCode flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(mainDiagnosisCode), 0)
 }
-func LogParametersAddDetailedDiagnosisCode(builder *flatbuffers.Builder, detailedDiagnosisCode uint32) {
-	builder.PrependUint32Slot(1, detailedDiagnosisCode, 0)
+func LogParametersAddDetailedDiagnosisCode(builder *flatbuffers.Builder, detailedDiagnosisCode flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(detailedDiagnosisCode), 0)
 }
 func LogParametersAddUserId(builder *flatbuffers.Builder, userId flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(userId), 0)
