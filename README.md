@@ -5,6 +5,10 @@ It wraps the original ctrlX Data Layer written in C++.
 
 Documentation and examples you find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/).
 
+## Status
+
+![Make Test](https://github.com/boschrexroth/ctrlx-datalayer-golang/actions/workflows/main.yml/badge.svg)
+
 ## Preparation
 
 ### Prerequisites
