@@ -54,6 +54,16 @@ func (p *Provider) RegisterType(address string, pathname string) Result {
 	return Result(C.DLR_providerRegisterType(p.this, caddress, cpath))
 }
 
+// RegisterTypeVariant registers a type to the ctrlX Data Layer.
+// Parameter address is an address of the node to register (no wildcards allowed).
+// Parameter data is a variant which contains the flatbuffer bfbs.
+// It returns the status of function call.
+func (p *Provider) RegisterTypeVariant(address string, data *Variant) Result {
+	caddress := C.CString(address)
+	defer C.free(unsafe.Pointer(caddress))
+	return Result(C.DLR_providerRegisterTypeVariant(p.this, caddress, data.this))
+}
+
 // UnregisterType unregisters a node to the ctrlX Data Layer.
 // Parameter address is an address of the node to unregister (wildcards allowed).
 // It returns the status of function call.
