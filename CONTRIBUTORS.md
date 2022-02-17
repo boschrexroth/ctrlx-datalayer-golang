@@ -4,6 +4,6 @@ in alphabetical order:
 * [Guido Forthofer](https://github.com/guidfort)
 * [Jochen Scheib](https://github.com/mapero), ![Repo Maintainer](https://badgen.net/badge/repo/maintainer/blue "Repo Maintainer")
 * [Johannes Albrecht](https://github.com/albrecht-j), ![Repo Maintainer](https://badgen.net/badge/repo/maintainer/blue "Repo Maintainer")
-* [Philipp Seit](https://github.com/philippseith)
+* [Philipp Seith](https://github.com/philippseith)
 
 
