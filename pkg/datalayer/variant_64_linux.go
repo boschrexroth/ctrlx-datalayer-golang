@@ -186,3 +186,12 @@ func (v *Variant) SetFlatbuffers(data []byte) {
 		C.DLR_variantSetFlatbuffers(v.this, (*C.schar)(unsafe.Pointer(&data[0])), C.ulong(len(data)))
 	}
 }
+
+// SetArrayTimestamp function
+func (v *Variant) SetArrayTimestamp(data []uint64) {
+	if len(data) == 0 {
+		C.DLR_variantSetARRAY_OF_TIMESTAMP(v.this, nil, C.ulong(0))
+	} else {
+		C.DLR_variantSetARRAY_OF_TIMESTAMP(v.this, (*C.ulong)(unsafe.Pointer(&data[0])), C.ulong(len(data)))
+	}
+}

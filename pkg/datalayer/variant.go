@@ -26,39 +26,45 @@ package datalayer
 //#include <stdlib.h>
 //#include <system.h>
 import "C"
-import "unsafe"
+import (
+	"math"
+	"time"
+	"unsafe"
+)
 
 // VariantType enum
 type VariantType C.enum_DLR_VARIANT_TYPE
 
 // VariantType enum definition
 const (
-	VariantTypeUnknown VariantType = C.DLR_VARIANT_TYPE_UNKNOWN
-	VariantTypeBool8   VariantType = C.DLR_VARIANT_TYPE_BOOL8
-	VariantTypeInt8    VariantType = C.DLR_VARIANT_TYPE_INT8
-	VariantTypeUint8   VariantType = C.DLR_VARIANT_TYPE_UINT8
-	VariantTypeInt16   VariantType = C.DLR_VARIANT_TYPE_INT16
-	VariantTypeUint16  VariantType = C.DLR_VARIANT_TYPE_UINT16
-	VariantTypeInt32   VariantType = C.DLR_VARIANT_TYPE_INT32
-	VariantTypeUint32  VariantType = C.DLR_VARIANT_TYPE_UINT32
-	VariantTypeInt64   VariantType = C.DLR_VARIANT_TYPE_INT64
-	VariantTypeUint64  VariantType = C.DLR_VARIANT_TYPE_UINT64
-	VariantTypeFloat32 VariantType = C.DLR_VARIANT_TYPE_FLOAT32
-	VariantTypeFloat64 VariantType = C.DLR_VARIANT_TYPE_FLOAT64
-	VariantTypeString  VariantType = C.DLR_VARIANT_TYPE_STRING
+	VariantTypeUnknown   VariantType = C.DLR_VARIANT_TYPE_UNKNOWN
+	VariantTypeBool8     VariantType = C.DLR_VARIANT_TYPE_BOOL8
+	VariantTypeInt8      VariantType = C.DLR_VARIANT_TYPE_INT8
+	VariantTypeUint8     VariantType = C.DLR_VARIANT_TYPE_UINT8
+	VariantTypeInt16     VariantType = C.DLR_VARIANT_TYPE_INT16
+	VariantTypeUint16    VariantType = C.DLR_VARIANT_TYPE_UINT16
+	VariantTypeInt32     VariantType = C.DLR_VARIANT_TYPE_INT32
+	VariantTypeUint32    VariantType = C.DLR_VARIANT_TYPE_UINT32
+	VariantTypeInt64     VariantType = C.DLR_VARIANT_TYPE_INT64
+	VariantTypeUint64    VariantType = C.DLR_VARIANT_TYPE_UINT64
+	VariantTypeFloat32   VariantType = C.DLR_VARIANT_TYPE_FLOAT32
+	VariantTypeFloat64   VariantType = C.DLR_VARIANT_TYPE_FLOAT64
+	VariantTypeString    VariantType = C.DLR_VARIANT_TYPE_STRING
+	VariantTypeTimestamp VariantType = C.DLR_VARIANT_TIMESTAMP
 
-	VariantTypeArrayBool8   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_BOOL8
-	VariantTypeArrayInt8    VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT8
-	VariantTypeArrayUint8   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT8
-	VariantTypeArrayInt16   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT16
-	VariantTypeArrayUint16  VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT16
-	VariantTypeArrayInt32   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT32
-	VariantTypeArrayUint32  VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT32
-	VariantTypeArrayInt64   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT64
-	VariantTypeArrayUint64  VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT64
-	VariantTypeArrayFloat32 VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_FLOAT32
-	VariantTypeArrayFloat64 VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_FLOAT64
-	VariantTypeArrayString  VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_STRING
+	VariantTypeArrayBool8     VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_BOOL8
+	VariantTypeArrayInt8      VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT8
+	VariantTypeArrayUint8     VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT8
+	VariantTypeArrayInt16     VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT16
+	VariantTypeArrayUint16    VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT16
+	VariantTypeArrayInt32     VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT32
+	VariantTypeArrayUint32    VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT32
+	VariantTypeArrayInt64     VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_INT64
+	VariantTypeArrayUint64    VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_UINT64
+	VariantTypeArrayFloat32   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_FLOAT32
+	VariantTypeArrayFloat64   VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_FLOAT64
+	VariantTypeArrayString    VariantType = C.DLR_VARIANT_TYPE_ARRAY_OF_STRING
+	VariantTypeArrayTimestamp VariantType = C.DLR_VARIANT_ARRAY_OF_TIMESTAMP
 
 	VariantTypeRaw         VariantType = C.DLR_VARIANT_TYPE_RAW
 	VariantTypeFlatbuffers VariantType = C.DLR_VARIANT_TYPE_FLATBUFFERS
@@ -80,12 +86,18 @@ func DeleteVariant(v *Variant) {
 	if v == nil {
 		return
 	}
+	if v.this == nil {
+		return
+	}
 	C.DLR_variantDelete(v.this)
 }
 
 // GetType returns the type of the variant instance.
 // It returns the variant type.
 func (v *Variant) GetType() VariantType {
+	if v.this == nil {
+		return VariantTypeUnknown
+	}
 	t := C.DLR_variantGetType(v.this)
 	ty := VariantType(t)
 	return ty
@@ -94,30 +106,51 @@ func (v *Variant) GetType() VariantType {
 // GetData takes the pointer to the data of the variant instance.
 // It returns the array of bytes.
 func (v *Variant) GetData() unsafe.Pointer {
+	if v.this == nil {
+		return unsafe.Pointer(nil)
+	}
 	return unsafe.Pointer(C.DLR_variantGetData(v.this))
 }
 
 // GetSize gets the size of the type in bytes.
 // It returns the size of the type in bytes.
 func (v *Variant) GetSize() uint64 {
+	if v.this == nil {
+		return uint64(0)
+	}
 	return uint64(C.DLR_variantGetSize(v.this))
 }
 
 // GetCount returns the count of elements in the variant (scalar data types = 1, array = count of elements in array).
 // It returns the count of a type.
 func (v *Variant) GetCount() uint64 {
+	if v.this == nil {
+		return uint64(0)
+	}
 	return uint64(C.DLR_variantGetCount(v.this))
 }
 
 // CheckConvert checks whether the variant can be converted to another type.
 // It returns the status of function call.
 func (v *Variant) CheckConvert(ty VariantType) Result {
+	if v.this == nil {
+		return ResultNotInitialized
+	}
 	return Result(C.DLR_variantCheckConvert(v.this, C.DLR_VARIANT_TYPE(ty)))
 }
 
 // Copy copies the content of a variant to another variant.
 // It returns the status of function call or the copy of variant or a tuple.
 func (v *Variant) Copy(dest *Variant) Result {
+	if dest == nil {
+		return ResultNotInitialized
+	}
+	if dest.this == nil {
+		return ResultNotInitialized
+	}
+	if v.this == nil {
+		return ResultNotInitialized
+	}
 	return Result(C.DLR_variantCopy(dest.this, v.this))
 }
 
@@ -384,4 +417,69 @@ func (v *Variant) SetString(data string) {
 	cdata := C.CString(data)
 	defer C.free(unsafe.Pointer(cdata))
 	C.DLR_variantSetSTRING(v.this, cdata)
+}
+
+// SetTimestamp sets a timestamp value as (FILETIME) 64 bit 100ns since 1.1.1601 (UTC)
+// It returns the status of function call.
+func (v *Variant) SetTimestamp(ft uint64) {
+	C.DLR_variantSetTimestamp(v.this, C.ulong(ft))
+}
+
+func convertUnixTime2FileTime(input int64) int64 {
+	temp := input / 100
+	temp = temp + 116444736000000000
+	return temp
+}
+
+// GetTime returns the value of the variant as a time.Time since January 1, 1970 UTC.
+// It returns >= January 1, 1970 UTC
+func (v *Variant) GetTime() time.Time {
+	t := v.GetUint64()
+	return getTime(int64(t))
+}
+
+// SetTime sets a time.Time value since January 1, 1970 UTC
+// It returns the status of function call.
+func (v *Variant) SetTime(df time.Time) {
+	ns := df.UTC().UnixNano()
+	ft := convertUnixTime2FileTime(ns)
+	v.SetTimestamp(uint64(ft))
+}
+
+// see. https://stackoverflow.com/questions/57901280/calculate-time-time-from-timestamp-starting-from-1601-01-01-in-go
+func getTime(input int64) time.Time {
+	maxd := time.Duration(math.MaxInt64).Truncate(100 * time.Nanosecond)
+	maxdUnits := int64(maxd / 100) // number of 100-ns units
+
+	t := time.Date(1601, 1, 1, 0, 0, 0, 0, time.UTC)
+	for input > maxdUnits {
+		t = t.Add(maxd)
+		input -= maxdUnits
+	}
+	if input != 0 {
+		t = t.Add(time.Duration(input * 100))
+	}
+	return t
+}
+
+// GetArrayTime returns the value of the variant as an array of time.Time since January 1, 1970 UTC.
+// It returns >= January 1, 1970 UTC
+func (v *Variant) GetArrayTime() []time.Time {
+	t := v.GetArrayUint64()
+	vals := []time.Time{}
+	for _, ft := range t {
+		vals = append(vals, getTime(int64(ft)))
+	}
+	return vals
+}
+
+// SetArrayTime sets an array of time.Time value since January 1, 1970 UTC
+// It returns the status of function call.
+func (v *Variant) SetArrayTime(dfs []time.Time) {
+	fts := []uint64{}
+	for _, df := range dfs {
+		ns := df.UTC().UnixNano()
+		fts = append(fts, uint64(convertUnixTime2FileTime(ns)))
+	}
+	v.SetArrayTimestamp(fts)
 }
