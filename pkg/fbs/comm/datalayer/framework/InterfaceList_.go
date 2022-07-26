@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type InterfaceList_T struct {
+	Interfaces []*Interface_T
+}
+
+func (t *InterfaceList_T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	interfacesOffset := flatbuffers.UOffsetT(0)
+	if t.Interfaces != nil {
+		interfacesLength := len(t.Interfaces)
+		interfacesOffsets := make([]flatbuffers.UOffsetT, interfacesLength)
+		for j := 0; j < interfacesLength; j++ {
+			interfacesOffsets[j] = t.Interfaces[j].Pack(builder)
+		}
+		InterfaceList_StartInterfacesVector(builder, interfacesLength)
+		for j := interfacesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(interfacesOffsets[j])
+		}
+		interfacesOffset = builder.EndVector(interfacesLength)
+	}
+	InterfaceList_Start(builder)
+	InterfaceList_AddInterfaces(builder, interfacesOffset)
+	return InterfaceList_End(builder)
+}
+
+func (rcv *InterfaceList_) UnPackTo(t *InterfaceList_T) {
+	interfacesLength := rcv.InterfacesLength()
+	t.Interfaces = make([]*Interface_T, interfacesLength)
+	for j := 0; j < interfacesLength; j++ {
+		x := Interface_{}
+		rcv.Interfaces(&x, j)
+		t.Interfaces[j] = x.UnPack()
+	}
+}
+
+func (rcv *InterfaceList_) UnPack() *InterfaceList_T {
+	if rcv == nil { return nil }
+	t := &InterfaceList_T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type InterfaceList_ struct {
 	_tab flatbuffers.Table
 }

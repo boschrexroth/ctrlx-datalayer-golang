@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type StateT struct {
+	State CurrentState
+}
+
+func (t *StateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	StateStart(builder)
+	StateAddState(builder, t.State)
+	return StateEnd(builder)
+}
+
+func (rcv *State) UnPackTo(t *StateT) {
+	t.State = rcv.State()
+}
+
+func (rcv *State) UnPack() *StateT {
+	if rcv == nil { return nil }
+	t := &StateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type State struct {
 	_tab flatbuffers.Table
 }

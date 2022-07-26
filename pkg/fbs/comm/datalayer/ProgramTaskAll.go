@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ProgramTaskAllT struct {
+	Tasks []*ProgramTaskT
+}
+
+func (t *ProgramTaskAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	TasksOffset := flatbuffers.UOffsetT(0)
+	if t.Tasks != nil {
+		TasksLength := len(t.Tasks)
+		TasksOffsets := make([]flatbuffers.UOffsetT, TasksLength)
+		for j := 0; j < TasksLength; j++ {
+			TasksOffsets[j] = t.Tasks[j].Pack(builder)
+		}
+		ProgramTaskAllStartTasksVector(builder, TasksLength)
+		for j := TasksLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(TasksOffsets[j])
+		}
+		TasksOffset = builder.EndVector(TasksLength)
+	}
+	ProgramTaskAllStart(builder)
+	ProgramTaskAllAddTasks(builder, TasksOffset)
+	return ProgramTaskAllEnd(builder)
+}
+
+func (rcv *ProgramTaskAll) UnPackTo(t *ProgramTaskAllT) {
+	TasksLength := rcv.TasksLength()
+	t.Tasks = make([]*ProgramTaskT, TasksLength)
+	for j := 0; j < TasksLength; j++ {
+		x := ProgramTask{}
+		rcv.Tasks(&x, j)
+		t.Tasks[j] = x.UnPack()
+	}
+}
+
+func (rcv *ProgramTaskAll) UnPack() *ProgramTaskAllT {
+	if rcv == nil { return nil }
+	t := &ProgramTaskAllT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ProgramTaskAll struct {
 	_tab flatbuffers.Table
 }

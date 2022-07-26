@@ -8,14 +8,17 @@ type CurrentType int8
 
 const (
 	CurrentTypeCYCLE CurrentType = 0
+	CurrentTypeNONE  CurrentType = 1
 )
 
 var EnumNamesCurrentType = map[CurrentType]string{
 	CurrentTypeCYCLE: "CYCLE",
+	CurrentTypeNONE:  "NONE",
 }
 
 var EnumValuesCurrentType = map[string]CurrentType{
 	"CYCLE": CurrentTypeCYCLE,
+	"NONE":  CurrentTypeNONE,
 }
 
 func (v CurrentType) String() string {

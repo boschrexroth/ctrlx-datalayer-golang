@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type RetainStatsT struct {
+	Total uint32
+	Free uint32
+	Used uint32
+	BiggestFree uint32
+	SyncCounter uint32
+	LastUsed uint32
+	Info string
+}
+
+func (t *RetainStatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	infoOffset := builder.CreateString(t.Info)
+	RetainStatsStart(builder)
+	RetainStatsAddTotal(builder, t.Total)
+	RetainStatsAddFree(builder, t.Free)
+	RetainStatsAddUsed(builder, t.Used)
+	RetainStatsAddBiggestFree(builder, t.BiggestFree)
+	RetainStatsAddSyncCounter(builder, t.SyncCounter)
+	RetainStatsAddLastUsed(builder, t.LastUsed)
+	RetainStatsAddInfo(builder, infoOffset)
+	return RetainStatsEnd(builder)
+}
+
+func (rcv *RetainStats) UnPackTo(t *RetainStatsT) {
+	t.Total = rcv.Total()
+	t.Free = rcv.Free()
+	t.Used = rcv.Used()
+	t.BiggestFree = rcv.BiggestFree()
+	t.SyncCounter = rcv.SyncCounter()
+	t.LastUsed = rcv.LastUsed()
+	t.Info = string(rcv.Info())
+}
+
+func (rcv *RetainStats) UnPack() *RetainStatsT {
+	if rcv == nil { return nil }
+	t := &RetainStatsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type RetainStats struct {
 	_tab flatbuffers.Table
 }

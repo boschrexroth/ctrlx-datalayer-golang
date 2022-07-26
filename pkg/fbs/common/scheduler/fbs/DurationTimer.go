@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DurationTimerT struct {
+	Timer Timer
+}
+
+func (t *DurationTimerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DurationTimerStart(builder)
+	DurationTimerAddTimer(builder, t.Timer)
+	return DurationTimerEnd(builder)
+}
+
+func (rcv *DurationTimer) UnPackTo(t *DurationTimerT) {
+	t.Timer = rcv.Timer()
+}
+
+func (rcv *DurationTimer) UnPack() *DurationTimerT {
+	if rcv == nil { return nil }
+	t := &DurationTimerT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DurationTimer struct {
 	_tab flatbuffers.Table
 }

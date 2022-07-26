@@ -6,6 +6,57 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SessionConfigurationT struct {
+	UserToken *UserIdentityTokenT
+	MessageSecurityMode *MessageSecurityModeT
+	SecurityPolicy *SecurityPolicyT
+	LocaleIds []string
+}
+
+func (t *SessionConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	userTokenOffset := t.UserToken.Pack(builder)
+	messageSecurityModeOffset := t.MessageSecurityMode.Pack(builder)
+	securityPolicyOffset := t.SecurityPolicy.Pack(builder)
+	localeIdsOffset := flatbuffers.UOffsetT(0)
+	if t.LocaleIds != nil {
+		localeIdsLength := len(t.LocaleIds)
+		localeIdsOffsets := make([]flatbuffers.UOffsetT, localeIdsLength)
+		for j := 0; j < localeIdsLength; j++ {
+			localeIdsOffsets[j] = builder.CreateString(t.LocaleIds[j])
+		}
+		SessionConfigurationStartLocaleIdsVector(builder, localeIdsLength)
+		for j := localeIdsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(localeIdsOffsets[j])
+		}
+		localeIdsOffset = builder.EndVector(localeIdsLength)
+	}
+	SessionConfigurationStart(builder)
+	SessionConfigurationAddUserToken(builder, userTokenOffset)
+	SessionConfigurationAddMessageSecurityMode(builder, messageSecurityModeOffset)
+	SessionConfigurationAddSecurityPolicy(builder, securityPolicyOffset)
+	SessionConfigurationAddLocaleIds(builder, localeIdsOffset)
+	return SessionConfigurationEnd(builder)
+}
+
+func (rcv *SessionConfiguration) UnPackTo(t *SessionConfigurationT) {
+	t.UserToken = rcv.UserToken(nil).UnPack()
+	t.MessageSecurityMode = rcv.MessageSecurityMode(nil).UnPack()
+	t.SecurityPolicy = rcv.SecurityPolicy(nil).UnPack()
+	localeIdsLength := rcv.LocaleIdsLength()
+	t.LocaleIds = make([]string, localeIdsLength)
+	for j := 0; j < localeIdsLength; j++ {
+		t.LocaleIds[j] = string(rcv.LocaleIds(j))
+	}
+}
+
+func (rcv *SessionConfiguration) UnPack() *SessionConfigurationT {
+	if rcv == nil { return nil }
+	t := &SessionConfigurationT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SessionConfiguration struct {
 	_tab flatbuffers.Table
 }

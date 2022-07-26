@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DependencyListT struct {
+	Dependencies []*DependencyT
+}
+
+func (t *DependencyListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dependenciesOffset := flatbuffers.UOffsetT(0)
+	if t.Dependencies != nil {
+		dependenciesLength := len(t.Dependencies)
+		dependenciesOffsets := make([]flatbuffers.UOffsetT, dependenciesLength)
+		for j := 0; j < dependenciesLength; j++ {
+			dependenciesOffsets[j] = t.Dependencies[j].Pack(builder)
+		}
+		DependencyListStartDependenciesVector(builder, dependenciesLength)
+		for j := dependenciesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(dependenciesOffsets[j])
+		}
+		dependenciesOffset = builder.EndVector(dependenciesLength)
+	}
+	DependencyListStart(builder)
+	DependencyListAddDependencies(builder, dependenciesOffset)
+	return DependencyListEnd(builder)
+}
+
+func (rcv *DependencyList) UnPackTo(t *DependencyListT) {
+	dependenciesLength := rcv.DependenciesLength()
+	t.Dependencies = make([]*DependencyT, dependenciesLength)
+	for j := 0; j < dependenciesLength; j++ {
+		x := Dependency{}
+		rcv.Dependencies(&x, j)
+		t.Dependencies[j] = x.UnPack()
+	}
+}
+
+func (rcv *DependencyList) UnPack() *DependencyListT {
+	if rcv == nil { return nil }
+	t := &DependencyListT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DependencyList struct {
 	_tab flatbuffers.Table
 }

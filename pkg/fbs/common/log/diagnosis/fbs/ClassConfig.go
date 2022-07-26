@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ClassConfigT struct {
+	ClassConfig Class
+}
+
+func (t *ClassConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ClassConfigStart(builder)
+	ClassConfigAddClassConfig(builder, t.ClassConfig)
+	return ClassConfigEnd(builder)
+}
+
+func (rcv *ClassConfig) UnPackTo(t *ClassConfigT) {
+	t.ClassConfig = rcv.ClassConfig()
+}
+
+func (rcv *ClassConfig) UnPack() *ClassConfigT {
+	if rcv == nil { return nil }
+	t := &ClassConfigT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ClassConfig struct {
 	_tab flatbuffers.Table
 }

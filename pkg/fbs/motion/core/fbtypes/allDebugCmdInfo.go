@@ -7,6 +7,69 @@ import (
 )
 
 /// get informations of all active commands and commands that were recently executed of a single motion object
+type allDebugCmdInfoT struct {
+	MainCmds []*debugCmdInfoT
+	AddCmds []*debugCmdInfoT
+}
+
+func (t *allDebugCmdInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	mainCmdsOffset := flatbuffers.UOffsetT(0)
+	if t.MainCmds != nil {
+		mainCmdsLength := len(t.MainCmds)
+		mainCmdsOffsets := make([]flatbuffers.UOffsetT, mainCmdsLength)
+		for j := 0; j < mainCmdsLength; j++ {
+			mainCmdsOffsets[j] = t.MainCmds[j].Pack(builder)
+		}
+		allDebugCmdInfoStartMainCmdsVector(builder, mainCmdsLength)
+		for j := mainCmdsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(mainCmdsOffsets[j])
+		}
+		mainCmdsOffset = builder.EndVector(mainCmdsLength)
+	}
+	addCmdsOffset := flatbuffers.UOffsetT(0)
+	if t.AddCmds != nil {
+		addCmdsLength := len(t.AddCmds)
+		addCmdsOffsets := make([]flatbuffers.UOffsetT, addCmdsLength)
+		for j := 0; j < addCmdsLength; j++ {
+			addCmdsOffsets[j] = t.AddCmds[j].Pack(builder)
+		}
+		allDebugCmdInfoStartAddCmdsVector(builder, addCmdsLength)
+		for j := addCmdsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(addCmdsOffsets[j])
+		}
+		addCmdsOffset = builder.EndVector(addCmdsLength)
+	}
+	allDebugCmdInfoStart(builder)
+	allDebugCmdInfoAddMainCmds(builder, mainCmdsOffset)
+	allDebugCmdInfoAddAddCmds(builder, addCmdsOffset)
+	return allDebugCmdInfoEnd(builder)
+}
+
+func (rcv *allDebugCmdInfo) UnPackTo(t *allDebugCmdInfoT) {
+	mainCmdsLength := rcv.MainCmdsLength()
+	t.MainCmds = make([]*debugCmdInfoT, mainCmdsLength)
+	for j := 0; j < mainCmdsLength; j++ {
+		x := debugCmdInfo{}
+		rcv.MainCmds(&x, j)
+		t.MainCmds[j] = x.UnPack()
+	}
+	addCmdsLength := rcv.AddCmdsLength()
+	t.AddCmds = make([]*debugCmdInfoT, addCmdsLength)
+	for j := 0; j < addCmdsLength; j++ {
+		x := debugCmdInfo{}
+		rcv.AddCmds(&x, j)
+		t.AddCmds[j] = x.UnPack()
+	}
+}
+
+func (rcv *allDebugCmdInfo) UnPack() *allDebugCmdInfoT {
+	if rcv == nil { return nil }
+	t := &allDebugCmdInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type allDebugCmdInfo struct {
 	_tab flatbuffers.Table
 }

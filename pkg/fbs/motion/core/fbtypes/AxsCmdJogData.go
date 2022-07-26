@@ -7,6 +7,36 @@ import (
 )
 
 /// parameters of the axis jog commands
+type AxsCmdJogDataT struct {
+	JogDir string
+	JogIncrement float64
+	Lim *DynamicLimitsT
+}
+
+func (t *AxsCmdJogDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	jogDirOffset := builder.CreateString(t.JogDir)
+	limOffset := t.Lim.Pack(builder)
+	AxsCmdJogDataStart(builder)
+	AxsCmdJogDataAddJogDir(builder, jogDirOffset)
+	AxsCmdJogDataAddJogIncrement(builder, t.JogIncrement)
+	AxsCmdJogDataAddLim(builder, limOffset)
+	return AxsCmdJogDataEnd(builder)
+}
+
+func (rcv *AxsCmdJogData) UnPackTo(t *AxsCmdJogDataT) {
+	t.JogDir = string(rcv.JogDir())
+	t.JogIncrement = rcv.JogIncrement()
+	t.Lim = rcv.Lim(nil).UnPack()
+}
+
+func (rcv *AxsCmdJogData) UnPack() *AxsCmdJogDataT {
+	if rcv == nil { return nil }
+	t := &AxsCmdJogDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdJogData struct {
 	_tab flatbuffers.Table
 }

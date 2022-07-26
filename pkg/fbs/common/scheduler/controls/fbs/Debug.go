@@ -6,6 +6,29 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DebugT struct {
+	Machine string
+}
+
+func (t *DebugT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	machineOffset := builder.CreateString(t.Machine)
+	DebugStart(builder)
+	DebugAddMachine(builder, machineOffset)
+	return DebugEnd(builder)
+}
+
+func (rcv *Debug) UnPackTo(t *DebugT) {
+	t.Machine = string(rcv.Machine())
+}
+
+func (rcv *Debug) UnPack() *DebugT {
+	if rcv == nil { return nil }
+	t := &DebugT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Debug struct {
 	_tab flatbuffers.Table
 }

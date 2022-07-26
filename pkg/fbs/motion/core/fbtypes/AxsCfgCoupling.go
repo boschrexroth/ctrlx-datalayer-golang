@@ -7,6 +7,29 @@ import (
 )
 
 /// configuration for coupling functions for a single axis
+type AxsCfgCouplingT struct {
+	Gantry *AxsCfgGantryT
+}
+
+func (t *AxsCfgCouplingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	gantryOffset := t.Gantry.Pack(builder)
+	AxsCfgCouplingStart(builder)
+	AxsCfgCouplingAddGantry(builder, gantryOffset)
+	return AxsCfgCouplingEnd(builder)
+}
+
+func (rcv *AxsCfgCoupling) UnPackTo(t *AxsCfgCouplingT) {
+	t.Gantry = rcv.Gantry(nil).UnPack()
+}
+
+func (rcv *AxsCfgCoupling) UnPack() *AxsCfgCouplingT {
+	if rcv == nil { return nil }
+	t := &AxsCfgCouplingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgCoupling struct {
 	_tab flatbuffers.Table
 }

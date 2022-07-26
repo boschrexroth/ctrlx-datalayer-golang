@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TypeT struct {
+	Type CurrentType
+}
+
+func (t *TypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	TypeStart(builder)
+	TypeAddType(builder, t.Type)
+	return TypeEnd(builder)
+}
+
+func (rcv *Type) UnPackTo(t *TypeT) {
+	t.Type = rcv.Type()
+}
+
+func (rcv *Type) UnPack() *TypeT {
+	if rcv == nil { return nil }
+	t := &TypeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Type struct {
 	_tab flatbuffers.Table
 }

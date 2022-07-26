@@ -6,6 +6,50 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SDORequestT struct {
+	AddressType Addresstype
+	Address uint16
+	ObjectIndex uint16
+	SubIndex byte
+	Flags SDOFlags
+	Data []byte
+	MaxLength uint32
+}
+
+func (t *SDORequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	SDORequestStart(builder)
+	SDORequestAddAddressType(builder, t.AddressType)
+	SDORequestAddAddress(builder, t.Address)
+	SDORequestAddObjectIndex(builder, t.ObjectIndex)
+	SDORequestAddSubIndex(builder, t.SubIndex)
+	SDORequestAddFlags(builder, t.Flags)
+	SDORequestAddData(builder, dataOffset)
+	SDORequestAddMaxLength(builder, t.MaxLength)
+	return SDORequestEnd(builder)
+}
+
+func (rcv *SDORequest) UnPackTo(t *SDORequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.ObjectIndex = rcv.ObjectIndex()
+	t.SubIndex = rcv.SubIndex()
+	t.Flags = rcv.Flags()
+	t.Data = rcv.DataBytes()
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *SDORequest) UnPack() *SDORequestT {
+	if rcv == nil { return nil }
+	t := &SDORequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SDORequest struct {
 	_tab flatbuffers.Table
 }

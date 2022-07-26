@@ -6,6 +6,39 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DependencyT struct {
+	Name string
+	Available bool
+	Required bool
+	Filter string
+}
+
+func (t *DependencyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	filterOffset := builder.CreateString(t.Filter)
+	DependencyStart(builder)
+	DependencyAddName(builder, nameOffset)
+	DependencyAddAvailable(builder, t.Available)
+	DependencyAddRequired(builder, t.Required)
+	DependencyAddFilter(builder, filterOffset)
+	return DependencyEnd(builder)
+}
+
+func (rcv *Dependency) UnPackTo(t *DependencyT) {
+	t.Name = string(rcv.Name())
+	t.Available = rcv.Available()
+	t.Required = rcv.Required()
+	t.Filter = string(rcv.Filter())
+}
+
+func (rcv *Dependency) UnPack() *DependencyT {
+	if rcv == nil { return nil }
+	t := &DependencyT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Dependency struct {
 	_tab flatbuffers.Table
 }

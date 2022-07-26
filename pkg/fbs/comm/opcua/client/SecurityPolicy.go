@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SecurityPolicyT struct {
+	SecurityPolicy EnumSecurityPolicy
+}
+
+func (t *SecurityPolicyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SecurityPolicyStart(builder)
+	SecurityPolicyAddSecurityPolicy(builder, t.SecurityPolicy)
+	return SecurityPolicyEnd(builder)
+}
+
+func (rcv *SecurityPolicy) UnPackTo(t *SecurityPolicyT) {
+	t.SecurityPolicy = rcv.SecurityPolicy()
+}
+
+func (rcv *SecurityPolicy) UnPack() *SecurityPolicyT {
+	if rcv == nil { return nil }
+	t := &SecurityPolicyT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SecurityPolicy struct {
 	_tab flatbuffers.Table
 }

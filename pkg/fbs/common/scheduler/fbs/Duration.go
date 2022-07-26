@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DurationT struct {
+	Minimum uint64
+	Maximum uint64
+	Average uint64
+	Active bool
+}
+
+func (t *DurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DurationStart(builder)
+	DurationAddMinimum(builder, t.Minimum)
+	DurationAddMaximum(builder, t.Maximum)
+	DurationAddAverage(builder, t.Average)
+	DurationAddActive(builder, t.Active)
+	return DurationEnd(builder)
+}
+
+func (rcv *Duration) UnPackTo(t *DurationT) {
+	t.Minimum = rcv.Minimum()
+	t.Maximum = rcv.Maximum()
+	t.Average = rcv.Average()
+	t.Active = rcv.Active()
+}
+
+func (rcv *Duration) UnPack() *DurationT {
+	if rcv == nil { return nil }
+	t := &DurationT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Duration struct {
 	_tab flatbuffers.Table
 }

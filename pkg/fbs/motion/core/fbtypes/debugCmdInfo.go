@@ -7,6 +7,60 @@ import (
 )
 
 /// get informations of a single active command
+type debugCmdInfoT struct {
+	CmdName string
+	JobObjects []string
+	State string
+	CmdID uint64
+	PrepLevel string
+}
+
+func (t *debugCmdInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	cmdNameOffset := builder.CreateString(t.CmdName)
+	jobObjectsOffset := flatbuffers.UOffsetT(0)
+	if t.JobObjects != nil {
+		jobObjectsLength := len(t.JobObjects)
+		jobObjectsOffsets := make([]flatbuffers.UOffsetT, jobObjectsLength)
+		for j := 0; j < jobObjectsLength; j++ {
+			jobObjectsOffsets[j] = builder.CreateString(t.JobObjects[j])
+		}
+		debugCmdInfoStartJobObjectsVector(builder, jobObjectsLength)
+		for j := jobObjectsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(jobObjectsOffsets[j])
+		}
+		jobObjectsOffset = builder.EndVector(jobObjectsLength)
+	}
+	stateOffset := builder.CreateString(t.State)
+	prepLevelOffset := builder.CreateString(t.PrepLevel)
+	debugCmdInfoStart(builder)
+	debugCmdInfoAddCmdName(builder, cmdNameOffset)
+	debugCmdInfoAddJobObjects(builder, jobObjectsOffset)
+	debugCmdInfoAddState(builder, stateOffset)
+	debugCmdInfoAddCmdID(builder, t.CmdID)
+	debugCmdInfoAddPrepLevel(builder, prepLevelOffset)
+	return debugCmdInfoEnd(builder)
+}
+
+func (rcv *debugCmdInfo) UnPackTo(t *debugCmdInfoT) {
+	t.CmdName = string(rcv.CmdName())
+	jobObjectsLength := rcv.JobObjectsLength()
+	t.JobObjects = make([]string, jobObjectsLength)
+	for j := 0; j < jobObjectsLength; j++ {
+		t.JobObjects[j] = string(rcv.JobObjects(j))
+	}
+	t.State = string(rcv.State())
+	t.CmdID = rcv.CmdID()
+	t.PrepLevel = string(rcv.PrepLevel())
+}
+
+func (rcv *debugCmdInfo) UnPack() *debugCmdInfoT {
+	if rcv == nil { return nil }
+	t := &debugCmdInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type debugCmdInfo struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,140 @@ import (
 )
 
 /// configuration of a single set for the product coordiate system of a kinematics
+type SysCfgPcsSetT struct {
+	SetName string
+	OffsetXYZ []float64
+	Orientation []float64
+	OffsetAux []float64
+	RelativeToPCS bool
+	OffsetXYZUnits []string
+	OrientationUnits []string
+	OffsetAuxUnits []string
+}
+
+func (t *SysCfgPcsSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	setNameOffset := builder.CreateString(t.SetName)
+	offsetXYZOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetXYZ != nil {
+		offsetXYZLength := len(t.OffsetXYZ)
+		SysCfgPcsSetStartOffsetXYZVector(builder, offsetXYZLength)
+		for j := offsetXYZLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.OffsetXYZ[j])
+		}
+		offsetXYZOffset = builder.EndVector(offsetXYZLength)
+	}
+	orientationOffset := flatbuffers.UOffsetT(0)
+	if t.Orientation != nil {
+		orientationLength := len(t.Orientation)
+		SysCfgPcsSetStartOrientationVector(builder, orientationLength)
+		for j := orientationLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.Orientation[j])
+		}
+		orientationOffset = builder.EndVector(orientationLength)
+	}
+	offsetAuxOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetAux != nil {
+		offsetAuxLength := len(t.OffsetAux)
+		SysCfgPcsSetStartOffsetAuxVector(builder, offsetAuxLength)
+		for j := offsetAuxLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.OffsetAux[j])
+		}
+		offsetAuxOffset = builder.EndVector(offsetAuxLength)
+	}
+	offsetXYZUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetXYZUnits != nil {
+		offsetXYZUnitsLength := len(t.OffsetXYZUnits)
+		offsetXYZUnitsOffsets := make([]flatbuffers.UOffsetT, offsetXYZUnitsLength)
+		for j := 0; j < offsetXYZUnitsLength; j++ {
+			offsetXYZUnitsOffsets[j] = builder.CreateString(t.OffsetXYZUnits[j])
+		}
+		SysCfgPcsSetStartOffsetXYZUnitsVector(builder, offsetXYZUnitsLength)
+		for j := offsetXYZUnitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(offsetXYZUnitsOffsets[j])
+		}
+		offsetXYZUnitsOffset = builder.EndVector(offsetXYZUnitsLength)
+	}
+	orientationUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.OrientationUnits != nil {
+		orientationUnitsLength := len(t.OrientationUnits)
+		orientationUnitsOffsets := make([]flatbuffers.UOffsetT, orientationUnitsLength)
+		for j := 0; j < orientationUnitsLength; j++ {
+			orientationUnitsOffsets[j] = builder.CreateString(t.OrientationUnits[j])
+		}
+		SysCfgPcsSetStartOrientationUnitsVector(builder, orientationUnitsLength)
+		for j := orientationUnitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(orientationUnitsOffsets[j])
+		}
+		orientationUnitsOffset = builder.EndVector(orientationUnitsLength)
+	}
+	offsetAuxUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetAuxUnits != nil {
+		offsetAuxUnitsLength := len(t.OffsetAuxUnits)
+		offsetAuxUnitsOffsets := make([]flatbuffers.UOffsetT, offsetAuxUnitsLength)
+		for j := 0; j < offsetAuxUnitsLength; j++ {
+			offsetAuxUnitsOffsets[j] = builder.CreateString(t.OffsetAuxUnits[j])
+		}
+		SysCfgPcsSetStartOffsetAuxUnitsVector(builder, offsetAuxUnitsLength)
+		for j := offsetAuxUnitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(offsetAuxUnitsOffsets[j])
+		}
+		offsetAuxUnitsOffset = builder.EndVector(offsetAuxUnitsLength)
+	}
+	SysCfgPcsSetStart(builder)
+	SysCfgPcsSetAddSetName(builder, setNameOffset)
+	SysCfgPcsSetAddOffsetXYZ(builder, offsetXYZOffset)
+	SysCfgPcsSetAddOrientation(builder, orientationOffset)
+	SysCfgPcsSetAddOffsetAux(builder, offsetAuxOffset)
+	SysCfgPcsSetAddRelativeToPCS(builder, t.RelativeToPCS)
+	SysCfgPcsSetAddOffsetXYZUnits(builder, offsetXYZUnitsOffset)
+	SysCfgPcsSetAddOrientationUnits(builder, orientationUnitsOffset)
+	SysCfgPcsSetAddOffsetAuxUnits(builder, offsetAuxUnitsOffset)
+	return SysCfgPcsSetEnd(builder)
+}
+
+func (rcv *SysCfgPcsSet) UnPackTo(t *SysCfgPcsSetT) {
+	t.SetName = string(rcv.SetName())
+	offsetXYZLength := rcv.OffsetXYZLength()
+	t.OffsetXYZ = make([]float64, offsetXYZLength)
+	for j := 0; j < offsetXYZLength; j++ {
+		t.OffsetXYZ[j] = rcv.OffsetXYZ(j)
+	}
+	orientationLength := rcv.OrientationLength()
+	t.Orientation = make([]float64, orientationLength)
+	for j := 0; j < orientationLength; j++ {
+		t.Orientation[j] = rcv.Orientation(j)
+	}
+	offsetAuxLength := rcv.OffsetAuxLength()
+	t.OffsetAux = make([]float64, offsetAuxLength)
+	for j := 0; j < offsetAuxLength; j++ {
+		t.OffsetAux[j] = rcv.OffsetAux(j)
+	}
+	t.RelativeToPCS = rcv.RelativeToPCS()
+	offsetXYZUnitsLength := rcv.OffsetXYZUnitsLength()
+	t.OffsetXYZUnits = make([]string, offsetXYZUnitsLength)
+	for j := 0; j < offsetXYZUnitsLength; j++ {
+		t.OffsetXYZUnits[j] = string(rcv.OffsetXYZUnits(j))
+	}
+	orientationUnitsLength := rcv.OrientationUnitsLength()
+	t.OrientationUnits = make([]string, orientationUnitsLength)
+	for j := 0; j < orientationUnitsLength; j++ {
+		t.OrientationUnits[j] = string(rcv.OrientationUnits(j))
+	}
+	offsetAuxUnitsLength := rcv.OffsetAuxUnitsLength()
+	t.OffsetAuxUnits = make([]string, offsetAuxUnitsLength)
+	for j := 0; j < offsetAuxUnitsLength; j++ {
+		t.OffsetAuxUnits[j] = string(rcv.OffsetAuxUnits(j))
+	}
+}
+
+func (rcv *SysCfgPcsSet) UnPack() *SysCfgPcsSetT {
+	if rcv == nil { return nil }
+	t := &SysCfgPcsSetT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgPcsSet struct {
 	_tab flatbuffers.Table
 }

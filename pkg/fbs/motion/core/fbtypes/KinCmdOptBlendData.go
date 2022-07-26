@@ -7,6 +7,35 @@ import (
 )
 
 /// parameters for the command option blending for kinematics
+type KinCmdOptBlendDataT struct {
+	PermType string
+	Dist1 float64
+	Dist2 float64
+}
+
+func (t *KinCmdOptBlendDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	KinCmdOptBlendDataStart(builder)
+	KinCmdOptBlendDataAddPermType(builder, permTypeOffset)
+	KinCmdOptBlendDataAddDist1(builder, t.Dist1)
+	KinCmdOptBlendDataAddDist2(builder, t.Dist2)
+	return KinCmdOptBlendDataEnd(builder)
+}
+
+func (rcv *KinCmdOptBlendData) UnPackTo(t *KinCmdOptBlendDataT) {
+	t.PermType = string(rcv.PermType())
+	t.Dist1 = rcv.Dist1()
+	t.Dist2 = rcv.Dist2()
+}
+
+func (rcv *KinCmdOptBlendData) UnPack() *KinCmdOptBlendDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptBlendDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptBlendData struct {
 	_tab flatbuffers.Table
 }

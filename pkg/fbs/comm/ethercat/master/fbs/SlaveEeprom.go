@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveEepromT struct {
+	Request *SlaveEepromRequestT
+	Response *SlaveEepromResponseT
+}
+
+func (t *SlaveEepromT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	SlaveEepromStart(builder)
+	SlaveEepromAddRequest(builder, requestOffset)
+	SlaveEepromAddResponse(builder, responseOffset)
+	return SlaveEepromEnd(builder)
+}
+
+func (rcv *SlaveEeprom) UnPackTo(t *SlaveEepromT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *SlaveEeprom) UnPack() *SlaveEepromT {
+	if rcv == nil { return nil }
+	t := &SlaveEepromT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveEeprom struct {
 	_tab flatbuffers.Table
 }

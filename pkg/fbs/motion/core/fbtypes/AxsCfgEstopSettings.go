@@ -7,6 +7,43 @@ import (
 )
 
 /// configuration for axis estop to device error
+type AxsCfgEstopSettingsT struct {
+	EstopToNoDevErr EstopType
+	EstopToNoDeviceInfo EstopType
+	EstopToDevLightErr EstopType
+	EstopToFieldbusErr EstopType
+	EstopToDevCriticalErr EstopType
+	EstopToDevFatalErr EstopType
+}
+
+func (t *AxsCfgEstopSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AxsCfgEstopSettingsStart(builder)
+	AxsCfgEstopSettingsAddEstopToNoDevErr(builder, t.EstopToNoDevErr)
+	AxsCfgEstopSettingsAddEstopToNoDeviceInfo(builder, t.EstopToNoDeviceInfo)
+	AxsCfgEstopSettingsAddEstopToDevLightErr(builder, t.EstopToDevLightErr)
+	AxsCfgEstopSettingsAddEstopToFieldbusErr(builder, t.EstopToFieldbusErr)
+	AxsCfgEstopSettingsAddEstopToDevCriticalErr(builder, t.EstopToDevCriticalErr)
+	AxsCfgEstopSettingsAddEstopToDevFatalErr(builder, t.EstopToDevFatalErr)
+	return AxsCfgEstopSettingsEnd(builder)
+}
+
+func (rcv *AxsCfgEstopSettings) UnPackTo(t *AxsCfgEstopSettingsT) {
+	t.EstopToNoDevErr = rcv.EstopToNoDevErr()
+	t.EstopToNoDeviceInfo = rcv.EstopToNoDeviceInfo()
+	t.EstopToDevLightErr = rcv.EstopToDevLightErr()
+	t.EstopToFieldbusErr = rcv.EstopToFieldbusErr()
+	t.EstopToDevCriticalErr = rcv.EstopToDevCriticalErr()
+	t.EstopToDevFatalErr = rcv.EstopToDevFatalErr()
+}
+
+func (rcv *AxsCfgEstopSettings) UnPack() *AxsCfgEstopSettingsT {
+	if rcv == nil { return nil }
+	t := &AxsCfgEstopSettingsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgEstopSettings struct {
 	_tab flatbuffers.Table
 }

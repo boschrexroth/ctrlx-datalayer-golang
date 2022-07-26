@@ -7,6 +7,51 @@ import (
 )
 
 /// configuration of a single parameter group of an axis transformation
+type KinCfgAxsTrafoParamGroupT struct {
+	Name string
+	Param []*KinCfgAxsTrafoSingleParamT
+}
+
+func (t *KinCfgAxsTrafoParamGroupT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	paramOffset := flatbuffers.UOffsetT(0)
+	if t.Param != nil {
+		paramLength := len(t.Param)
+		paramOffsets := make([]flatbuffers.UOffsetT, paramLength)
+		for j := 0; j < paramLength; j++ {
+			paramOffsets[j] = t.Param[j].Pack(builder)
+		}
+		KinCfgAxsTrafoParamGroupStartParamVector(builder, paramLength)
+		for j := paramLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(paramOffsets[j])
+		}
+		paramOffset = builder.EndVector(paramLength)
+	}
+	KinCfgAxsTrafoParamGroupStart(builder)
+	KinCfgAxsTrafoParamGroupAddName(builder, nameOffset)
+	KinCfgAxsTrafoParamGroupAddParam(builder, paramOffset)
+	return KinCfgAxsTrafoParamGroupEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoParamGroup) UnPackTo(t *KinCfgAxsTrafoParamGroupT) {
+	t.Name = string(rcv.Name())
+	paramLength := rcv.ParamLength()
+	t.Param = make([]*KinCfgAxsTrafoSingleParamT, paramLength)
+	for j := 0; j < paramLength; j++ {
+		x := KinCfgAxsTrafoSingleParam{}
+		rcv.Param(&x, j)
+		t.Param[j] = x.UnPack()
+	}
+}
+
+func (rcv *KinCfgAxsTrafoParamGroup) UnPack() *KinCfgAxsTrafoParamGroupT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoParamGroupT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoParamGroup struct {
 	_tab flatbuffers.Table
 }

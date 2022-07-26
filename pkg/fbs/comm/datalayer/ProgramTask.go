@@ -6,6 +6,43 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ProgramTaskT struct {
+	Id string
+	State ProgramTaskState
+	Progress uint32
+	Result *DiagnosisT
+	ProgressInfo string
+}
+
+func (t *ProgramTaskT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	idOffset := builder.CreateString(t.Id)
+	resultOffset := t.Result.Pack(builder)
+	progressInfoOffset := builder.CreateString(t.ProgressInfo)
+	ProgramTaskStart(builder)
+	ProgramTaskAddId(builder, idOffset)
+	ProgramTaskAddState(builder, t.State)
+	ProgramTaskAddProgress(builder, t.Progress)
+	ProgramTaskAddResult(builder, resultOffset)
+	ProgramTaskAddProgressInfo(builder, progressInfoOffset)
+	return ProgramTaskEnd(builder)
+}
+
+func (rcv *ProgramTask) UnPackTo(t *ProgramTaskT) {
+	t.Id = string(rcv.Id())
+	t.State = rcv.State()
+	t.Progress = rcv.Progress()
+	t.Result = rcv.Result(nil).UnPack()
+	t.ProgressInfo = string(rcv.ProgressInfo())
+}
+
+func (rcv *ProgramTask) UnPack() *ProgramTaskT {
+	if rcv == nil { return nil }
+	t := &ProgramTaskT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ProgramTask struct {
 	_tab flatbuffers.Table
 }
@@ -78,8 +115,16 @@ func (rcv *ProgramTask) Result(obj *Diagnosis) *Diagnosis {
 	return nil
 }
 
+func (rcv *ProgramTask) ProgressInfo() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func ProgramTaskStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func ProgramTaskAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -92,6 +137,9 @@ func ProgramTaskAddProgress(builder *flatbuffers.Builder, progress uint32) {
 }
 func ProgramTaskAddResult(builder *flatbuffers.Builder, result flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(result), 0)
+}
+func ProgramTaskAddProgressInfo(builder *flatbuffers.Builder, progressInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(progressInfo), 0)
 }
 func ProgramTaskEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -7,6 +7,47 @@ import (
 )
 
 /// get informations of all active commands of a single motion object
+type allActCmdJobObjectsT struct {
+	Cmds []*actCmdJobObjectsT
+}
+
+func (t *allActCmdJobObjectsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	cmdsOffset := flatbuffers.UOffsetT(0)
+	if t.Cmds != nil {
+		cmdsLength := len(t.Cmds)
+		cmdsOffsets := make([]flatbuffers.UOffsetT, cmdsLength)
+		for j := 0; j < cmdsLength; j++ {
+			cmdsOffsets[j] = t.Cmds[j].Pack(builder)
+		}
+		allActCmdJobObjectsStartCmdsVector(builder, cmdsLength)
+		for j := cmdsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(cmdsOffsets[j])
+		}
+		cmdsOffset = builder.EndVector(cmdsLength)
+	}
+	allActCmdJobObjectsStart(builder)
+	allActCmdJobObjectsAddCmds(builder, cmdsOffset)
+	return allActCmdJobObjectsEnd(builder)
+}
+
+func (rcv *allActCmdJobObjects) UnPackTo(t *allActCmdJobObjectsT) {
+	cmdsLength := rcv.CmdsLength()
+	t.Cmds = make([]*actCmdJobObjectsT, cmdsLength)
+	for j := 0; j < cmdsLength; j++ {
+		x := actCmdJobObjects{}
+		rcv.Cmds(&x, j)
+		t.Cmds[j] = x.UnPack()
+	}
+}
+
+func (rcv *allActCmdJobObjects) UnPack() *allActCmdJobObjectsT {
+	if rcv == nil { return nil }
+	t := &allActCmdJobObjectsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type allActCmdJobObjects struct {
 	_tab flatbuffers.Table
 }

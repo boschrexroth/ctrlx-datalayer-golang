@@ -7,6 +7,32 @@ import (
 )
 
 /// data of a single axis assignment for an axis transformation
+type KinCfgAxsTrafoSingleAxisAssignmentT struct {
+	AxisName string
+	IndexACS byte
+}
+
+func (t *KinCfgAxsTrafoSingleAxisAssignmentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axisNameOffset := builder.CreateString(t.AxisName)
+	KinCfgAxsTrafoSingleAxisAssignmentStart(builder)
+	KinCfgAxsTrafoSingleAxisAssignmentAddAxisName(builder, axisNameOffset)
+	KinCfgAxsTrafoSingleAxisAssignmentAddIndexACS(builder, t.IndexACS)
+	return KinCfgAxsTrafoSingleAxisAssignmentEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoSingleAxisAssignment) UnPackTo(t *KinCfgAxsTrafoSingleAxisAssignmentT) {
+	t.AxisName = string(rcv.AxisName())
+	t.IndexACS = rcv.IndexACS()
+}
+
+func (rcv *KinCfgAxsTrafoSingleAxisAssignment) UnPack() *KinCfgAxsTrafoSingleAxisAssignmentT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoSingleAxisAssignmentT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoSingleAxisAssignment struct {
 	_tab flatbuffers.Table
 }

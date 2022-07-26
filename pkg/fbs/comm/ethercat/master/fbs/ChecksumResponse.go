@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ChecksumResponseT struct {
+	Checksums []*ChecksumElementT
+}
+
+func (t *ChecksumResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	checksumsOffset := flatbuffers.UOffsetT(0)
+	if t.Checksums != nil {
+		checksumsLength := len(t.Checksums)
+		checksumsOffsets := make([]flatbuffers.UOffsetT, checksumsLength)
+		for j := 0; j < checksumsLength; j++ {
+			checksumsOffsets[j] = t.Checksums[j].Pack(builder)
+		}
+		ChecksumResponseStartChecksumsVector(builder, checksumsLength)
+		for j := checksumsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(checksumsOffsets[j])
+		}
+		checksumsOffset = builder.EndVector(checksumsLength)
+	}
+	ChecksumResponseStart(builder)
+	ChecksumResponseAddChecksums(builder, checksumsOffset)
+	return ChecksumResponseEnd(builder)
+}
+
+func (rcv *ChecksumResponse) UnPackTo(t *ChecksumResponseT) {
+	checksumsLength := rcv.ChecksumsLength()
+	t.Checksums = make([]*ChecksumElementT, checksumsLength)
+	for j := 0; j < checksumsLength; j++ {
+		x := ChecksumElement{}
+		rcv.Checksums(&x, j)
+		t.Checksums[j] = x.UnPack()
+	}
+}
+
+func (rcv *ChecksumResponse) UnPack() *ChecksumResponseT {
+	if rcv == nil { return nil }
+	t := &ChecksumResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ChecksumResponse struct {
 	_tab flatbuffers.Table
 }

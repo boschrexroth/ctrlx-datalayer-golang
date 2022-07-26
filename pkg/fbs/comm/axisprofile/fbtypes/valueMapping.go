@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type valueMappingT struct {
+	Mapping []*mappingEntryT
+}
+
+func (t *valueMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	mappingOffset := flatbuffers.UOffsetT(0)
+	if t.Mapping != nil {
+		mappingLength := len(t.Mapping)
+		mappingOffsets := make([]flatbuffers.UOffsetT, mappingLength)
+		for j := 0; j < mappingLength; j++ {
+			mappingOffsets[j] = t.Mapping[j].Pack(builder)
+		}
+		valueMappingStartMappingVector(builder, mappingLength)
+		for j := mappingLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(mappingOffsets[j])
+		}
+		mappingOffset = builder.EndVector(mappingLength)
+	}
+	valueMappingStart(builder)
+	valueMappingAddMapping(builder, mappingOffset)
+	return valueMappingEnd(builder)
+}
+
+func (rcv *valueMapping) UnPackTo(t *valueMappingT) {
+	mappingLength := rcv.MappingLength()
+	t.Mapping = make([]*mappingEntryT, mappingLength)
+	for j := 0; j < mappingLength; j++ {
+		x := mappingEntry{}
+		rcv.Mapping(&x, j)
+		t.Mapping[j] = x.UnPack()
+	}
+}
+
+func (rcv *valueMapping) UnPack() *valueMappingT {
+	if rcv == nil { return nil }
+	t := &valueMappingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type valueMapping struct {
 	_tab flatbuffers.Table
 }

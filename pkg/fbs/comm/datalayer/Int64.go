@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Int64T struct {
+	Value int64
+}
+
+func (t *Int64T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	Int64Start(builder)
+	Int64AddValue(builder, t.Value)
+	return Int64End(builder)
+}
+
+func (rcv *Int64) UnPackTo(t *Int64T) {
+	t.Value = rcv.Value()
+}
+
+func (rcv *Int64) UnPack() *Int64T {
+	if rcv == nil { return nil }
+	t := &Int64T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Int64 struct {
 	_tab flatbuffers.Table
 }

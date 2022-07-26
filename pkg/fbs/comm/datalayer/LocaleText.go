@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LocaleTextT struct {
+	Id string
+	Text string
+}
+
+func (t *LocaleTextT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	idOffset := builder.CreateString(t.Id)
+	textOffset := builder.CreateString(t.Text)
+	LocaleTextStart(builder)
+	LocaleTextAddId(builder, idOffset)
+	LocaleTextAddText(builder, textOffset)
+	return LocaleTextEnd(builder)
+}
+
+func (rcv *LocaleText) UnPackTo(t *LocaleTextT) {
+	t.Id = string(rcv.Id())
+	t.Text = string(rcv.Text())
+}
+
+func (rcv *LocaleText) UnPack() *LocaleTextT {
+	if rcv == nil { return nil }
+	t := &LocaleTextT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LocaleText struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ArrayOfInt64T struct {
+	Value []int64
+}
+
+func (t *ArrayOfInt64T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != nil {
+		valueLength := len(t.Value)
+		ArrayOfInt64StartValueVector(builder, valueLength)
+		for j := valueLength - 1; j >= 0; j-- {
+			builder.PrependInt64(t.Value[j])
+		}
+		valueOffset = builder.EndVector(valueLength)
+	}
+	ArrayOfInt64Start(builder)
+	ArrayOfInt64AddValue(builder, valueOffset)
+	return ArrayOfInt64End(builder)
+}
+
+func (rcv *ArrayOfInt64) UnPackTo(t *ArrayOfInt64T) {
+	valueLength := rcv.ValueLength()
+	t.Value = make([]int64, valueLength)
+	for j := 0; j < valueLength; j++ {
+		t.Value[j] = rcv.Value(j)
+	}
+}
+
+func (rcv *ArrayOfInt64) UnPack() *ArrayOfInt64T {
+	if rcv == nil { return nil }
+	t := &ArrayOfInt64T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ArrayOfInt64 struct {
 	_tab flatbuffers.Table
 }

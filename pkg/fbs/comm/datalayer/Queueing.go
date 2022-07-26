@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type QueueingT struct {
+	QueueSize uint32
+	Behaviour QueueBehaviour
+}
+
+func (t *QueueingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	QueueingStart(builder)
+	QueueingAddQueueSize(builder, t.QueueSize)
+	QueueingAddBehaviour(builder, t.Behaviour)
+	return QueueingEnd(builder)
+}
+
+func (rcv *Queueing) UnPackTo(t *QueueingT) {
+	t.QueueSize = rcv.QueueSize()
+	t.Behaviour = rcv.Behaviour()
+}
+
+func (rcv *Queueing) UnPack() *QueueingT {
+	if rcv == nil { return nil }
+	t := &QueueingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Queueing struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,117 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ScopeT struct {
+	Identifier string
+	Name string
+	Description string
+	PermissionsR []string
+	PermissionsRW []string
+	PermissionsX []string
+	PermissionsRWX []string
+}
+
+func (t *ScopeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	identifierOffset := builder.CreateString(t.Identifier)
+	nameOffset := builder.CreateString(t.Name)
+	descriptionOffset := builder.CreateString(t.Description)
+	permissionsROffset := flatbuffers.UOffsetT(0)
+	if t.PermissionsR != nil {
+		permissionsRLength := len(t.PermissionsR)
+		permissionsROffsets := make([]flatbuffers.UOffsetT, permissionsRLength)
+		for j := 0; j < permissionsRLength; j++ {
+			permissionsROffsets[j] = builder.CreateString(t.PermissionsR[j])
+		}
+		ScopeStartPermissionsRVector(builder, permissionsRLength)
+		for j := permissionsRLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(permissionsROffsets[j])
+		}
+		permissionsROffset = builder.EndVector(permissionsRLength)
+	}
+	permissionsRWOffset := flatbuffers.UOffsetT(0)
+	if t.PermissionsRW != nil {
+		permissionsRWLength := len(t.PermissionsRW)
+		permissionsRWOffsets := make([]flatbuffers.UOffsetT, permissionsRWLength)
+		for j := 0; j < permissionsRWLength; j++ {
+			permissionsRWOffsets[j] = builder.CreateString(t.PermissionsRW[j])
+		}
+		ScopeStartPermissionsRWVector(builder, permissionsRWLength)
+		for j := permissionsRWLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(permissionsRWOffsets[j])
+		}
+		permissionsRWOffset = builder.EndVector(permissionsRWLength)
+	}
+	permissionsXOffset := flatbuffers.UOffsetT(0)
+	if t.PermissionsX != nil {
+		permissionsXLength := len(t.PermissionsX)
+		permissionsXOffsets := make([]flatbuffers.UOffsetT, permissionsXLength)
+		for j := 0; j < permissionsXLength; j++ {
+			permissionsXOffsets[j] = builder.CreateString(t.PermissionsX[j])
+		}
+		ScopeStartPermissionsXVector(builder, permissionsXLength)
+		for j := permissionsXLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(permissionsXOffsets[j])
+		}
+		permissionsXOffset = builder.EndVector(permissionsXLength)
+	}
+	permissionsRWXOffset := flatbuffers.UOffsetT(0)
+	if t.PermissionsRWX != nil {
+		permissionsRWXLength := len(t.PermissionsRWX)
+		permissionsRWXOffsets := make([]flatbuffers.UOffsetT, permissionsRWXLength)
+		for j := 0; j < permissionsRWXLength; j++ {
+			permissionsRWXOffsets[j] = builder.CreateString(t.PermissionsRWX[j])
+		}
+		ScopeStartPermissionsRWXVector(builder, permissionsRWXLength)
+		for j := permissionsRWXLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(permissionsRWXOffsets[j])
+		}
+		permissionsRWXOffset = builder.EndVector(permissionsRWXLength)
+	}
+	ScopeStart(builder)
+	ScopeAddIdentifier(builder, identifierOffset)
+	ScopeAddName(builder, nameOffset)
+	ScopeAddDescription(builder, descriptionOffset)
+	ScopeAddPermissionsR(builder, permissionsROffset)
+	ScopeAddPermissionsRW(builder, permissionsRWOffset)
+	ScopeAddPermissionsX(builder, permissionsXOffset)
+	ScopeAddPermissionsRWX(builder, permissionsRWXOffset)
+	return ScopeEnd(builder)
+}
+
+func (rcv *Scope) UnPackTo(t *ScopeT) {
+	t.Identifier = string(rcv.Identifier())
+	t.Name = string(rcv.Name())
+	t.Description = string(rcv.Description())
+	permissionsRLength := rcv.PermissionsRLength()
+	t.PermissionsR = make([]string, permissionsRLength)
+	for j := 0; j < permissionsRLength; j++ {
+		t.PermissionsR[j] = string(rcv.PermissionsR(j))
+	}
+	permissionsRWLength := rcv.PermissionsRWLength()
+	t.PermissionsRW = make([]string, permissionsRWLength)
+	for j := 0; j < permissionsRWLength; j++ {
+		t.PermissionsRW[j] = string(rcv.PermissionsRW(j))
+	}
+	permissionsXLength := rcv.PermissionsXLength()
+	t.PermissionsX = make([]string, permissionsXLength)
+	for j := 0; j < permissionsXLength; j++ {
+		t.PermissionsX[j] = string(rcv.PermissionsX(j))
+	}
+	permissionsRWXLength := rcv.PermissionsRWXLength()
+	t.PermissionsRWX = make([]string, permissionsRWXLength)
+	for j := 0; j < permissionsRWXLength; j++ {
+		t.PermissionsRWX[j] = string(rcv.PermissionsRWX(j))
+	}
+}
+
+func (rcv *Scope) UnPack() *ScopeT {
+	if rcv == nil { return nil }
+	t := &ScopeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Scope struct {
 	_tab flatbuffers.Table
 }
@@ -57,7 +168,7 @@ func (rcv *Scope) Description() []byte {
 	return nil
 }
 
-func (rcv *Scope) PermissionStrings(j int) []byte {
+func (rcv *Scope) PermissionsR(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -66,7 +177,7 @@ func (rcv *Scope) PermissionStrings(j int) []byte {
 	return nil
 }
 
-func (rcv *Scope) PermissionStringsLength() int {
+func (rcv *Scope) PermissionsRLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -74,8 +185,59 @@ func (rcv *Scope) PermissionStringsLength() int {
 	return 0
 }
 
+func (rcv *Scope) PermissionsRW(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Scope) PermissionsRWLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *Scope) PermissionsX(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Scope) PermissionsXLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *Scope) PermissionsRWX(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Scope) PermissionsRWXLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func ScopeStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(7)
 }
 func ScopeAddIdentifier(builder *flatbuffers.Builder, identifier flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(identifier), 0)
@@ -86,10 +248,28 @@ func ScopeAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 func ScopeAddDescription(builder *flatbuffers.Builder, description flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(description), 0)
 }
-func ScopeAddPermissionStrings(builder *flatbuffers.Builder, permissionStrings flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(permissionStrings), 0)
+func ScopeAddPermissionsR(builder *flatbuffers.Builder, permissionsR flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(permissionsR), 0)
 }
-func ScopeStartPermissionStringsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func ScopeStartPermissionsRVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func ScopeAddPermissionsRW(builder *flatbuffers.Builder, permissionsRW flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(permissionsRW), 0)
+}
+func ScopeStartPermissionsRWVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func ScopeAddPermissionsX(builder *flatbuffers.Builder, permissionsX flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(permissionsX), 0)
+}
+func ScopeStartPermissionsXVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func ScopeAddPermissionsRWX(builder *flatbuffers.Builder, permissionsRWX flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(permissionsRWX), 0)
+}
+func ScopeStartPermissionsRWXVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func ScopeEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

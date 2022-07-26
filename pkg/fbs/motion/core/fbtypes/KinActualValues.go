@@ -7,6 +7,82 @@ import (
 )
 
 /// actual values of the kinematics
+type KinActualValuesT struct {
+	ActualPos []float64
+	ActualVel float64
+	ActualAcc float64
+	ActualJerk float64
+	ActualPosUnit []string
+	ActualVelUnit string
+	ActualAccUnit string
+	ActualJerkUnit string
+}
+
+func (t *KinActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	actualPosOffset := flatbuffers.UOffsetT(0)
+	if t.ActualPos != nil {
+		actualPosLength := len(t.ActualPos)
+		KinActualValuesStartActualPosVector(builder, actualPosLength)
+		for j := actualPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.ActualPos[j])
+		}
+		actualPosOffset = builder.EndVector(actualPosLength)
+	}
+	actualPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualPosUnit != nil {
+		actualPosUnitLength := len(t.ActualPosUnit)
+		actualPosUnitOffsets := make([]flatbuffers.UOffsetT, actualPosUnitLength)
+		for j := 0; j < actualPosUnitLength; j++ {
+			actualPosUnitOffsets[j] = builder.CreateString(t.ActualPosUnit[j])
+		}
+		KinActualValuesStartActualPosUnitVector(builder, actualPosUnitLength)
+		for j := actualPosUnitLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(actualPosUnitOffsets[j])
+		}
+		actualPosUnitOffset = builder.EndVector(actualPosUnitLength)
+	}
+	actualVelUnitOffset := builder.CreateString(t.ActualVelUnit)
+	actualAccUnitOffset := builder.CreateString(t.ActualAccUnit)
+	actualJerkUnitOffset := builder.CreateString(t.ActualJerkUnit)
+	KinActualValuesStart(builder)
+	KinActualValuesAddActualPos(builder, actualPosOffset)
+	KinActualValuesAddActualVel(builder, t.ActualVel)
+	KinActualValuesAddActualAcc(builder, t.ActualAcc)
+	KinActualValuesAddActualJerk(builder, t.ActualJerk)
+	KinActualValuesAddActualPosUnit(builder, actualPosUnitOffset)
+	KinActualValuesAddActualVelUnit(builder, actualVelUnitOffset)
+	KinActualValuesAddActualAccUnit(builder, actualAccUnitOffset)
+	KinActualValuesAddActualJerkUnit(builder, actualJerkUnitOffset)
+	return KinActualValuesEnd(builder)
+}
+
+func (rcv *KinActualValues) UnPackTo(t *KinActualValuesT) {
+	actualPosLength := rcv.ActualPosLength()
+	t.ActualPos = make([]float64, actualPosLength)
+	for j := 0; j < actualPosLength; j++ {
+		t.ActualPos[j] = rcv.ActualPos(j)
+	}
+	t.ActualVel = rcv.ActualVel()
+	t.ActualAcc = rcv.ActualAcc()
+	t.ActualJerk = rcv.ActualJerk()
+	actualPosUnitLength := rcv.ActualPosUnitLength()
+	t.ActualPosUnit = make([]string, actualPosUnitLength)
+	for j := 0; j < actualPosUnitLength; j++ {
+		t.ActualPosUnit[j] = string(rcv.ActualPosUnit(j))
+	}
+	t.ActualVelUnit = string(rcv.ActualVelUnit())
+	t.ActualAccUnit = string(rcv.ActualAccUnit())
+	t.ActualJerkUnit = string(rcv.ActualJerkUnit())
+}
+
+func (rcv *KinActualValues) UnPack() *KinActualValuesT {
+	if rcv == nil { return nil }
+	t := &KinActualValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinActualValues struct {
 	_tab flatbuffers.Table
 }

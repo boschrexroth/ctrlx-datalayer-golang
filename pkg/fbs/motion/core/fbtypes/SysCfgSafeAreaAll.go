@@ -7,6 +7,47 @@ import (
 )
 
 /// configuration of all safe areas and work areas for the whole motion system
+type SysCfgSafeAreaAllT struct {
+	SafeAreas []*SysCfgSafeAreaT
+}
+
+func (t *SysCfgSafeAreaAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	safeAreasOffset := flatbuffers.UOffsetT(0)
+	if t.SafeAreas != nil {
+		safeAreasLength := len(t.SafeAreas)
+		safeAreasOffsets := make([]flatbuffers.UOffsetT, safeAreasLength)
+		for j := 0; j < safeAreasLength; j++ {
+			safeAreasOffsets[j] = t.SafeAreas[j].Pack(builder)
+		}
+		SysCfgSafeAreaAllStartSafeAreasVector(builder, safeAreasLength)
+		for j := safeAreasLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(safeAreasOffsets[j])
+		}
+		safeAreasOffset = builder.EndVector(safeAreasLength)
+	}
+	SysCfgSafeAreaAllStart(builder)
+	SysCfgSafeAreaAllAddSafeAreas(builder, safeAreasOffset)
+	return SysCfgSafeAreaAllEnd(builder)
+}
+
+func (rcv *SysCfgSafeAreaAll) UnPackTo(t *SysCfgSafeAreaAllT) {
+	safeAreasLength := rcv.SafeAreasLength()
+	t.SafeAreas = make([]*SysCfgSafeAreaT, safeAreasLength)
+	for j := 0; j < safeAreasLength; j++ {
+		x := SysCfgSafeArea{}
+		rcv.SafeAreas(&x, j)
+		t.SafeAreas[j] = x.UnPack()
+	}
+}
+
+func (rcv *SysCfgSafeAreaAll) UnPack() *SysCfgSafeAreaAllT {
+	if rcv == nil { return nil }
+	t := &SysCfgSafeAreaAllT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgSafeAreaAll struct {
 	_tab flatbuffers.Table
 }

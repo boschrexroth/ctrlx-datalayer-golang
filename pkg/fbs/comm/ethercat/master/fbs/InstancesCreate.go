@@ -6,6 +6,29 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type InstancesCreateT struct {
+	Request *InstancesCreateRequestT
+}
+
+func (t *InstancesCreateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	InstancesCreateStart(builder)
+	InstancesCreateAddRequest(builder, requestOffset)
+	return InstancesCreateEnd(builder)
+}
+
+func (rcv *InstancesCreate) UnPackTo(t *InstancesCreateT) {
+	t.Request = rcv.Request(nil).UnPack()
+}
+
+func (rcv *InstancesCreate) UnPack() *InstancesCreateT {
+	if rcv == nil { return nil }
+	t := &InstancesCreateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type InstancesCreate struct {
 	_tab flatbuffers.Table
 }

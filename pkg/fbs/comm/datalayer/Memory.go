@@ -6,6 +6,38 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MemoryT struct {
+	Type MemoryType
+	Id string
+	SizeBytes uint32
+	AccessType AccessType
+}
+
+func (t *MemoryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	idOffset := builder.CreateString(t.Id)
+	MemoryStart(builder)
+	MemoryAddType(builder, t.Type)
+	MemoryAddId(builder, idOffset)
+	MemoryAddSizeBytes(builder, t.SizeBytes)
+	MemoryAddAccessType(builder, t.AccessType)
+	return MemoryEnd(builder)
+}
+
+func (rcv *Memory) UnPackTo(t *MemoryT) {
+	t.Type = rcv.Type()
+	t.Id = string(rcv.Id())
+	t.SizeBytes = rcv.SizeBytes()
+	t.AccessType = rcv.AccessType()
+}
+
+func (rcv *Memory) UnPack() *MemoryT {
+	if rcv == nil { return nil }
+	t := &MemoryT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Memory struct {
 	_tab flatbuffers.Table
 }
@@ -65,8 +97,20 @@ func (rcv *Memory) MutateSizeBytes(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+func (rcv *Memory) AccessType() AccessType {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return AccessType(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+func (rcv *Memory) MutateAccessType(n AccessType) bool {
+	return rcv._tab.MutateInt8Slot(10, int8(n))
+}
+
 func MemoryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func MemoryAddType(builder *flatbuffers.Builder, type_ MemoryType) {
 	builder.PrependInt8Slot(0, int8(type_), 0)
@@ -76,6 +120,9 @@ func MemoryAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 }
 func MemoryAddSizeBytes(builder *flatbuffers.Builder, sizeBytes uint32) {
 	builder.PrependUint32Slot(2, sizeBytes, 0)
+}
+func MemoryAddAccessType(builder *flatbuffers.Builder, accessType AccessType) {
+	builder.PrependInt8Slot(3, int8(accessType), 0)
 }
 func MemoryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

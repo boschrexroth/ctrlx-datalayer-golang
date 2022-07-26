@@ -6,6 +6,38 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DurationT struct {
+	Time uint32
+	ErrorCount uint32
+	Reset bool
+	ErrorReaction *ErrorReactionT
+}
+
+func (t *DurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	errorReactionOffset := t.ErrorReaction.Pack(builder)
+	DurationStart(builder)
+	DurationAddTime(builder, t.Time)
+	DurationAddErrorCount(builder, t.ErrorCount)
+	DurationAddReset(builder, t.Reset)
+	DurationAddErrorReaction(builder, errorReactionOffset)
+	return DurationEnd(builder)
+}
+
+func (rcv *Duration) UnPackTo(t *DurationT) {
+	t.Time = rcv.Time()
+	t.ErrorCount = rcv.ErrorCount()
+	t.Reset = rcv.Reset()
+	t.ErrorReaction = rcv.ErrorReaction(nil).UnPack()
+}
+
+func (rcv *Duration) UnPack() *DurationT {
+	if rcv == nil { return nil }
+	t := &DurationT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Duration struct {
 	_tab flatbuffers.Table
 }

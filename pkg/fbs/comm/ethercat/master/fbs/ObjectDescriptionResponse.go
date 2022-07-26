@@ -6,6 +6,32 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ObjectDescriptionResponseT struct {
+	Data []byte
+}
+
+func (t *ObjectDescriptionResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	ObjectDescriptionResponseStart(builder)
+	ObjectDescriptionResponseAddData(builder, dataOffset)
+	return ObjectDescriptionResponseEnd(builder)
+}
+
+func (rcv *ObjectDescriptionResponse) UnPackTo(t *ObjectDescriptionResponseT) {
+	t.Data = rcv.DataBytes()
+}
+
+func (rcv *ObjectDescriptionResponse) UnPack() *ObjectDescriptionResponseT {
+	if rcv == nil { return nil }
+	t := &ObjectDescriptionResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ObjectDescriptionResponse struct {
 	_tab flatbuffers.Table
 }

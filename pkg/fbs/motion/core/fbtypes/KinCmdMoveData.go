@@ -7,6 +7,52 @@ import (
 )
 
 /// parameters for the move linear commands for a kinematics
+type KinCmdMoveDataT struct {
+	KinPos []float64
+	CoordSys string
+	Lim *DynamicLimitsT
+	Buffered bool
+}
+
+func (t *KinCmdMoveDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	kinPosOffset := flatbuffers.UOffsetT(0)
+	if t.KinPos != nil {
+		kinPosLength := len(t.KinPos)
+		KinCmdMoveDataStartKinPosVector(builder, kinPosLength)
+		for j := kinPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.KinPos[j])
+		}
+		kinPosOffset = builder.EndVector(kinPosLength)
+	}
+	coordSysOffset := builder.CreateString(t.CoordSys)
+	limOffset := t.Lim.Pack(builder)
+	KinCmdMoveDataStart(builder)
+	KinCmdMoveDataAddKinPos(builder, kinPosOffset)
+	KinCmdMoveDataAddCoordSys(builder, coordSysOffset)
+	KinCmdMoveDataAddLim(builder, limOffset)
+	KinCmdMoveDataAddBuffered(builder, t.Buffered)
+	return KinCmdMoveDataEnd(builder)
+}
+
+func (rcv *KinCmdMoveData) UnPackTo(t *KinCmdMoveDataT) {
+	kinPosLength := rcv.KinPosLength()
+	t.KinPos = make([]float64, kinPosLength)
+	for j := 0; j < kinPosLength; j++ {
+		t.KinPos[j] = rcv.KinPos(j)
+	}
+	t.CoordSys = string(rcv.CoordSys())
+	t.Lim = rcv.Lim(nil).UnPack()
+	t.Buffered = rcv.Buffered()
+}
+
+func (rcv *KinCmdMoveData) UnPack() *KinCmdMoveDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdMoveDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdMoveData struct {
 	_tab flatbuffers.Table
 }

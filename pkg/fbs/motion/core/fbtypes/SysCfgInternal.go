@@ -7,6 +7,34 @@ import (
 )
 
 /// internal system configuration items
+type SysCfgInternalT struct {
+	Save bool
+	UseIpoIVAJ bool
+	TimeMeasurement bool
+}
+
+func (t *SysCfgInternalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SysCfgInternalStart(builder)
+	SysCfgInternalAddSave(builder, t.Save)
+	SysCfgInternalAddUseIpoIVAJ(builder, t.UseIpoIVAJ)
+	SysCfgInternalAddTimeMeasurement(builder, t.TimeMeasurement)
+	return SysCfgInternalEnd(builder)
+}
+
+func (rcv *SysCfgInternal) UnPackTo(t *SysCfgInternalT) {
+	t.Save = rcv.Save()
+	t.UseIpoIVAJ = rcv.UseIpoIVAJ()
+	t.TimeMeasurement = rcv.TimeMeasurement()
+}
+
+func (rcv *SysCfgInternal) UnPack() *SysCfgInternalT {
+	if rcv == nil { return nil }
+	t := &SysCfgInternalT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgInternal struct {
 	_tab flatbuffers.Table
 }

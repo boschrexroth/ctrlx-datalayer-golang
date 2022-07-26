@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EventType2T struct {
+	EventCounter uint64
+}
+
+func (t *EventType2T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	EventType2Start(builder)
+	EventType2AddEventCounter(builder, t.EventCounter)
+	return EventType2End(builder)
+}
+
+func (rcv *EventType2) UnPackTo(t *EventType2T) {
+	t.EventCounter = rcv.EventCounter()
+}
+
+func (rcv *EventType2) UnPack() *EventType2T {
+	if rcv == nil { return nil }
+	t := &EventType2T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EventType2 struct {
 	_tab flatbuffers.Table
 }

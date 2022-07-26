@@ -5,10 +5,68 @@ package fbtypes
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	motion__core__fbtypes "motion/core/fbtypes"
+	motion__core__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/core/fbtypes"
 )
 
 /// just for test of additional bundle (motion extension API)
+type KinCmdCircularDataT struct {
+	CmdPos []float64
+	CenterPos []float64
+	Direction bool
+	Limits *motion__core__fbtypes.DynamicLimitsT
+}
+
+func (t *KinCmdCircularDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	cmdPosOffset := flatbuffers.UOffsetT(0)
+	if t.CmdPos != nil {
+		cmdPosLength := len(t.CmdPos)
+		KinCmdCircularDataStartCmdPosVector(builder, cmdPosLength)
+		for j := cmdPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.CmdPos[j])
+		}
+		cmdPosOffset = builder.EndVector(cmdPosLength)
+	}
+	centerPosOffset := flatbuffers.UOffsetT(0)
+	if t.CenterPos != nil {
+		centerPosLength := len(t.CenterPos)
+		KinCmdCircularDataStartCenterPosVector(builder, centerPosLength)
+		for j := centerPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.CenterPos[j])
+		}
+		centerPosOffset = builder.EndVector(centerPosLength)
+	}
+	limitsOffset := t.Limits.Pack(builder)
+	KinCmdCircularDataStart(builder)
+	KinCmdCircularDataAddCmdPos(builder, cmdPosOffset)
+	KinCmdCircularDataAddCenterPos(builder, centerPosOffset)
+	KinCmdCircularDataAddDirection(builder, t.Direction)
+	KinCmdCircularDataAddLimits(builder, limitsOffset)
+	return KinCmdCircularDataEnd(builder)
+}
+
+func (rcv *KinCmdCircularData) UnPackTo(t *KinCmdCircularDataT) {
+	cmdPosLength := rcv.CmdPosLength()
+	t.CmdPos = make([]float64, cmdPosLength)
+	for j := 0; j < cmdPosLength; j++ {
+		t.CmdPos[j] = rcv.CmdPos(j)
+	}
+	centerPosLength := rcv.CenterPosLength()
+	t.CenterPos = make([]float64, centerPosLength)
+	for j := 0; j < centerPosLength; j++ {
+		t.CenterPos[j] = rcv.CenterPos(j)
+	}
+	t.Direction = rcv.Direction()
+	t.Limits = rcv.Limits(nil).UnPack()
+}
+
+func (rcv *KinCmdCircularData) UnPack() *KinCmdCircularDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdCircularDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdCircularData struct {
 	_tab flatbuffers.Table
 }

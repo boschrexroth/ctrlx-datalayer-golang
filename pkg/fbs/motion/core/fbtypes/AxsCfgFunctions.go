@@ -4,9 +4,56 @@ package fbtypes
 
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
+
+	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/sync/fbtypes"
 )
 
 /// configuration for specific functions of this axis
+type AxsCfgFunctionsT struct {
+	Coupling *AxsCfgCouplingT
+	CalculationPipelines []*motion__sync__fbtypes.CalcPipelineCfgT
+}
+
+func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	couplingOffset := t.Coupling.Pack(builder)
+	calculationPipelinesOffset := flatbuffers.UOffsetT(0)
+	if t.CalculationPipelines != nil {
+		calculationPipelinesLength := len(t.CalculationPipelines)
+		calculationPipelinesOffsets := make([]flatbuffers.UOffsetT, calculationPipelinesLength)
+		for j := 0; j < calculationPipelinesLength; j++ {
+			calculationPipelinesOffsets[j] = t.CalculationPipelines[j].Pack(builder)
+		}
+		AxsCfgFunctionsStartCalculationPipelinesVector(builder, calculationPipelinesLength)
+		for j := calculationPipelinesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(calculationPipelinesOffsets[j])
+		}
+		calculationPipelinesOffset = builder.EndVector(calculationPipelinesLength)
+	}
+	AxsCfgFunctionsStart(builder)
+	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
+	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
+	return AxsCfgFunctionsEnd(builder)
+}
+
+func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
+	t.Coupling = rcv.Coupling(nil).UnPack()
+	calculationPipelinesLength := rcv.CalculationPipelinesLength()
+	t.CalculationPipelines = make([]*motion__sync__fbtypes.CalcPipelineCfgT, calculationPipelinesLength)
+	for j := 0; j < calculationPipelinesLength; j++ {
+		x := motion__sync__fbtypes.CalcPipelineCfg{}
+		rcv.CalculationPipelines(&x, j)
+		t.CalculationPipelines[j] = x.UnPack()
+	}
+}
+
+func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
+	if rcv == nil { return nil }
+	t := &AxsCfgFunctionsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgFunctions struct {
 	_tab flatbuffers.Table
 }
@@ -49,11 +96,39 @@ func (rcv *AxsCfgFunctions) Coupling(obj *AxsCfgCoupling) *AxsCfgCoupling {
 }
 
 /// configuration for coupling functions for a single axis
+/// configuration for calculation pipelines for a single axis
+func (rcv *AxsCfgFunctions) CalculationPipelines(obj *motion__sync__fbtypes.CalcPipelineCfg, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *AxsCfgFunctions) CalculationPipelinesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// configuration for calculation pipelines for a single axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
+}
+func AxsCfgFunctionsAddCalculationPipelines(builder *flatbuffers.Builder, calculationPipelines flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(calculationPipelines), 0)
+}
+func AxsCfgFunctionsStartCalculationPipelinesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

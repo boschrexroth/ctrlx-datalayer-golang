@@ -6,6 +6,39 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DlResultToUaStatusCodeT struct {
+	DlResult uint32
+	UaStatusCode uint32
+	UaStatusCodeName string
+	UaStatusCodeDescr string
+}
+
+func (t *DlResultToUaStatusCodeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	uaStatusCodeNameOffset := builder.CreateString(t.UaStatusCodeName)
+	uaStatusCodeDescrOffset := builder.CreateString(t.UaStatusCodeDescr)
+	DlResultToUaStatusCodeStart(builder)
+	DlResultToUaStatusCodeAddDlResult(builder, t.DlResult)
+	DlResultToUaStatusCodeAddUaStatusCode(builder, t.UaStatusCode)
+	DlResultToUaStatusCodeAddUaStatusCodeName(builder, uaStatusCodeNameOffset)
+	DlResultToUaStatusCodeAddUaStatusCodeDescr(builder, uaStatusCodeDescrOffset)
+	return DlResultToUaStatusCodeEnd(builder)
+}
+
+func (rcv *DlResultToUaStatusCode) UnPackTo(t *DlResultToUaStatusCodeT) {
+	t.DlResult = rcv.DlResult()
+	t.UaStatusCode = rcv.UaStatusCode()
+	t.UaStatusCodeName = string(rcv.UaStatusCodeName())
+	t.UaStatusCodeDescr = string(rcv.UaStatusCodeDescr())
+}
+
+func (rcv *DlResultToUaStatusCode) UnPack() *DlResultToUaStatusCodeT {
+	if rcv == nil { return nil }
+	t := &DlResultToUaStatusCodeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DlResultToUaStatusCode struct {
 	_tab flatbuffers.Table
 }

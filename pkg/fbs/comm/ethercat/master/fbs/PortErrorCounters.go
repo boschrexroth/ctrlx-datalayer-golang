@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type PortErrorCountersT struct {
+	InvalidFrameCounter byte
+	RxErrorCounter byte
+	FwdRxErrorCounter byte
+	LostLinkCounter byte
+}
+
+func (t *PortErrorCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	return CreatePortErrorCounters(builder, t.InvalidFrameCounter, t.RxErrorCounter, t.FwdRxErrorCounter, t.LostLinkCounter)
+}
+func (rcv *PortErrorCounters) UnPackTo(t *PortErrorCountersT) {
+	t.InvalidFrameCounter = rcv.InvalidFrameCounter()
+	t.RxErrorCounter = rcv.RxErrorCounter()
+	t.FwdRxErrorCounter = rcv.FwdRxErrorCounter()
+	t.LostLinkCounter = rcv.LostLinkCounter()
+}
+
+func (rcv *PortErrorCounters) UnPack() *PortErrorCountersT {
+	if rcv == nil { return nil }
+	t := &PortErrorCountersT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type PortErrorCounters struct {
 	_tab flatbuffers.Struct
 }

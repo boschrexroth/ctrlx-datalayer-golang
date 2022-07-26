@@ -7,6 +7,57 @@ import (
 )
 
 /// parameters and data of the active command
+type AxsCmdValuesT struct {
+	TargetPos float64
+	TargetVel float64
+	TargetTrq float64
+	Lim *DynamicLimitsStateT
+	CmdId uint64
+	Src *CmdSourceT
+	TargetPosUnit string
+	TargetVelUnit string
+	TargetTrqUnit string
+}
+
+func (t *AxsCmdValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	limOffset := t.Lim.Pack(builder)
+	srcOffset := t.Src.Pack(builder)
+	targetPosUnitOffset := builder.CreateString(t.TargetPosUnit)
+	targetVelUnitOffset := builder.CreateString(t.TargetVelUnit)
+	targetTrqUnitOffset := builder.CreateString(t.TargetTrqUnit)
+	AxsCmdValuesStart(builder)
+	AxsCmdValuesAddTargetPos(builder, t.TargetPos)
+	AxsCmdValuesAddTargetVel(builder, t.TargetVel)
+	AxsCmdValuesAddTargetTrq(builder, t.TargetTrq)
+	AxsCmdValuesAddLim(builder, limOffset)
+	AxsCmdValuesAddCmdId(builder, t.CmdId)
+	AxsCmdValuesAddSrc(builder, srcOffset)
+	AxsCmdValuesAddTargetPosUnit(builder, targetPosUnitOffset)
+	AxsCmdValuesAddTargetVelUnit(builder, targetVelUnitOffset)
+	AxsCmdValuesAddTargetTrqUnit(builder, targetTrqUnitOffset)
+	return AxsCmdValuesEnd(builder)
+}
+
+func (rcv *AxsCmdValues) UnPackTo(t *AxsCmdValuesT) {
+	t.TargetPos = rcv.TargetPos()
+	t.TargetVel = rcv.TargetVel()
+	t.TargetTrq = rcv.TargetTrq()
+	t.Lim = rcv.Lim(nil).UnPack()
+	t.CmdId = rcv.CmdId()
+	t.Src = rcv.Src(nil).UnPack()
+	t.TargetPosUnit = string(rcv.TargetPosUnit())
+	t.TargetVelUnit = string(rcv.TargetVelUnit())
+	t.TargetTrqUnit = string(rcv.TargetTrqUnit())
+}
+
+func (rcv *AxsCmdValues) UnPack() *AxsCmdValuesT {
+	if rcv == nil { return nil }
+	t := &AxsCmdValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdValues struct {
 	_tab flatbuffers.Table
 }

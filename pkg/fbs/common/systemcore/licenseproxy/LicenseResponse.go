@@ -6,6 +6,51 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LicenseResponseT struct {
+	Name string
+	Version string
+	Id string
+	IsPermanent bool
+	StartDate string
+	EndDate string
+	Tampered bool
+}
+
+func (t *LicenseResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	idOffset := builder.CreateString(t.Id)
+	startDateOffset := builder.CreateString(t.StartDate)
+	endDateOffset := builder.CreateString(t.EndDate)
+	LicenseResponseStart(builder)
+	LicenseResponseAddName(builder, nameOffset)
+	LicenseResponseAddVersion(builder, versionOffset)
+	LicenseResponseAddId(builder, idOffset)
+	LicenseResponseAddIsPermanent(builder, t.IsPermanent)
+	LicenseResponseAddStartDate(builder, startDateOffset)
+	LicenseResponseAddEndDate(builder, endDateOffset)
+	LicenseResponseAddTampered(builder, t.Tampered)
+	return LicenseResponseEnd(builder)
+}
+
+func (rcv *LicenseResponse) UnPackTo(t *LicenseResponseT) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+	t.Id = string(rcv.Id())
+	t.IsPermanent = rcv.IsPermanent()
+	t.StartDate = string(rcv.StartDate())
+	t.EndDate = string(rcv.EndDate())
+	t.Tampered = rcv.Tampered()
+}
+
+func (rcv *LicenseResponse) UnPack() *LicenseResponseT {
+	if rcv == nil { return nil }
+	t := &LicenseResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LicenseResponse struct {
 	_tab flatbuffers.Table
 }

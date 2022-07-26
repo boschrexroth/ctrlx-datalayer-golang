@@ -7,6 +7,49 @@ import (
 )
 
 /// configuration of a single group of sets for a product coordinate system
+type SysCfgPcsGroupT struct {
+	GroupName string
+	Sets []string
+}
+
+func (t *SysCfgPcsGroupT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	groupNameOffset := builder.CreateString(t.GroupName)
+	setsOffset := flatbuffers.UOffsetT(0)
+	if t.Sets != nil {
+		setsLength := len(t.Sets)
+		setsOffsets := make([]flatbuffers.UOffsetT, setsLength)
+		for j := 0; j < setsLength; j++ {
+			setsOffsets[j] = builder.CreateString(t.Sets[j])
+		}
+		SysCfgPcsGroupStartSetsVector(builder, setsLength)
+		for j := setsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(setsOffsets[j])
+		}
+		setsOffset = builder.EndVector(setsLength)
+	}
+	SysCfgPcsGroupStart(builder)
+	SysCfgPcsGroupAddGroupName(builder, groupNameOffset)
+	SysCfgPcsGroupAddSets(builder, setsOffset)
+	return SysCfgPcsGroupEnd(builder)
+}
+
+func (rcv *SysCfgPcsGroup) UnPackTo(t *SysCfgPcsGroupT) {
+	t.GroupName = string(rcv.GroupName())
+	setsLength := rcv.SetsLength()
+	t.Sets = make([]string, setsLength)
+	for j := 0; j < setsLength; j++ {
+		t.Sets[j] = string(rcv.Sets(j))
+	}
+}
+
+func (rcv *SysCfgPcsGroup) UnPack() *SysCfgPcsGroupT {
+	if rcv == nil { return nil }
+	t := &SysCfgPcsGroupT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgPcsGroup struct {
 	_tab flatbuffers.Table
 }

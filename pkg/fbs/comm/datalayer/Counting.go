@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CountingT struct {
+	CountSubscriptions bool
+}
+
+func (t *CountingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	CountingStart(builder)
+	CountingAddCountSubscriptions(builder, t.CountSubscriptions)
+	return CountingEnd(builder)
+}
+
+func (rcv *Counting) UnPackTo(t *CountingT) {
+	t.CountSubscriptions = rcv.CountSubscriptions()
+}
+
+func (rcv *Counting) UnPack() *CountingT {
+	if rcv == nil { return nil }
+	t := &CountingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Counting struct {
 	_tab flatbuffers.Table
 }

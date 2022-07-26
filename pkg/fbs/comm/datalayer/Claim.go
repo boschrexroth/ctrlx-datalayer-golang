@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ClaimT struct {
+	Claim string
+	Value string
+}
+
+func (t *ClaimT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	claimOffset := builder.CreateString(t.Claim)
+	valueOffset := builder.CreateString(t.Value)
+	ClaimStart(builder)
+	ClaimAddClaim(builder, claimOffset)
+	ClaimAddValue(builder, valueOffset)
+	return ClaimEnd(builder)
+}
+
+func (rcv *Claim) UnPackTo(t *ClaimT) {
+	t.Claim = string(rcv.Claim())
+	t.Value = string(rcv.Value())
+}
+
+func (rcv *Claim) UnPack() *ClaimT {
+	if rcv == nil { return nil }
+	t := &ClaimT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Claim struct {
 	_tab flatbuffers.Table
 }

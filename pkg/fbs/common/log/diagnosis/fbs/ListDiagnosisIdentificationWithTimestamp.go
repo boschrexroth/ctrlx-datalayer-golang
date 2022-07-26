@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ListDiagnosisIdentificationWithTimestampT struct {
+	ListDiagnosisIdentificationWithTimestamp []*DiagnosisIdentificationWithTimestampT
+}
+
+func (t *ListDiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	listDiagnosisIdentificationWithTimestampOffset := flatbuffers.UOffsetT(0)
+	if t.ListDiagnosisIdentificationWithTimestamp != nil {
+		listDiagnosisIdentificationWithTimestampLength := len(t.ListDiagnosisIdentificationWithTimestamp)
+		listDiagnosisIdentificationWithTimestampOffsets := make([]flatbuffers.UOffsetT, listDiagnosisIdentificationWithTimestampLength)
+		for j := 0; j < listDiagnosisIdentificationWithTimestampLength; j++ {
+			listDiagnosisIdentificationWithTimestampOffsets[j] = t.ListDiagnosisIdentificationWithTimestamp[j].Pack(builder)
+		}
+		ListDiagnosisIdentificationWithTimestampStartListDiagnosisIdentificationWithTimestampVector(builder, listDiagnosisIdentificationWithTimestampLength)
+		for j := listDiagnosisIdentificationWithTimestampLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(listDiagnosisIdentificationWithTimestampOffsets[j])
+		}
+		listDiagnosisIdentificationWithTimestampOffset = builder.EndVector(listDiagnosisIdentificationWithTimestampLength)
+	}
+	ListDiagnosisIdentificationWithTimestampStart(builder)
+	ListDiagnosisIdentificationWithTimestampAddListDiagnosisIdentificationWithTimestamp(builder, listDiagnosisIdentificationWithTimestampOffset)
+	return ListDiagnosisIdentificationWithTimestampEnd(builder)
+}
+
+func (rcv *ListDiagnosisIdentificationWithTimestamp) UnPackTo(t *ListDiagnosisIdentificationWithTimestampT) {
+	listDiagnosisIdentificationWithTimestampLength := rcv.ListDiagnosisIdentificationWithTimestampLength()
+	t.ListDiagnosisIdentificationWithTimestamp = make([]*DiagnosisIdentificationWithTimestampT, listDiagnosisIdentificationWithTimestampLength)
+	for j := 0; j < listDiagnosisIdentificationWithTimestampLength; j++ {
+		x := DiagnosisIdentificationWithTimestamp{}
+		rcv.ListDiagnosisIdentificationWithTimestamp(&x, j)
+		t.ListDiagnosisIdentificationWithTimestamp[j] = x.UnPack()
+	}
+}
+
+func (rcv *ListDiagnosisIdentificationWithTimestamp) UnPack() *ListDiagnosisIdentificationWithTimestampT {
+	if rcv == nil { return nil }
+	t := &ListDiagnosisIdentificationWithTimestampT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ListDiagnosisIdentificationWithTimestamp struct {
 	_tab flatbuffers.Table
 }

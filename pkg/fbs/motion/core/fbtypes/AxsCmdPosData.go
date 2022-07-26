@@ -7,6 +7,35 @@ import (
 )
 
 /// parameters of the axis position commands
+type AxsCmdPosDataT struct {
+	AxsPos float64
+	Buffered bool
+	Lim *DynamicLimitsT
+}
+
+func (t *AxsCmdPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	limOffset := t.Lim.Pack(builder)
+	AxsCmdPosDataStart(builder)
+	AxsCmdPosDataAddAxsPos(builder, t.AxsPos)
+	AxsCmdPosDataAddBuffered(builder, t.Buffered)
+	AxsCmdPosDataAddLim(builder, limOffset)
+	return AxsCmdPosDataEnd(builder)
+}
+
+func (rcv *AxsCmdPosData) UnPackTo(t *AxsCmdPosDataT) {
+	t.AxsPos = rcv.AxsPos()
+	t.Buffered = rcv.Buffered()
+	t.Lim = rcv.Lim(nil).UnPack()
+}
+
+func (rcv *AxsCmdPosData) UnPack() *AxsCmdPosDataT {
+	if rcv == nil { return nil }
+	t := &AxsCmdPosDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdPosData struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,52 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveStatisticCountersResponseT struct {
+	AlStatusCode uint16
+	ProcUnitErrorCounter byte
+	PdiErrorCounter byte
+	PortErrorCounters []*PortErrorCountersT
+}
+
+func (t *SlaveStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	portErrorCountersOffset := flatbuffers.UOffsetT(0)
+	if t.PortErrorCounters != nil {
+		portErrorCountersLength := len(t.PortErrorCounters)
+		SlaveStatisticCountersResponseStartPortErrorCountersVector(builder, portErrorCountersLength)
+		for j := portErrorCountersLength - 1; j >= 0; j-- {
+			t.PortErrorCounters[j].Pack(builder)
+		}
+		portErrorCountersOffset = builder.EndVector(portErrorCountersLength)
+	}
+	SlaveStatisticCountersResponseStart(builder)
+	SlaveStatisticCountersResponseAddAlStatusCode(builder, t.AlStatusCode)
+	SlaveStatisticCountersResponseAddProcUnitErrorCounter(builder, t.ProcUnitErrorCounter)
+	SlaveStatisticCountersResponseAddPdiErrorCounter(builder, t.PdiErrorCounter)
+	SlaveStatisticCountersResponseAddPortErrorCounters(builder, portErrorCountersOffset)
+	return SlaveStatisticCountersResponseEnd(builder)
+}
+
+func (rcv *SlaveStatisticCountersResponse) UnPackTo(t *SlaveStatisticCountersResponseT) {
+	t.AlStatusCode = rcv.AlStatusCode()
+	t.ProcUnitErrorCounter = rcv.ProcUnitErrorCounter()
+	t.PdiErrorCounter = rcv.PdiErrorCounter()
+	portErrorCountersLength := rcv.PortErrorCountersLength()
+	t.PortErrorCounters = make([]*PortErrorCountersT, portErrorCountersLength)
+	for j := 0; j < portErrorCountersLength; j++ {
+		x := PortErrorCounters{}
+		rcv.PortErrorCounters(&x, j)
+		t.PortErrorCounters[j] = x.UnPack()
+	}
+}
+
+func (rcv *SlaveStatisticCountersResponse) UnPack() *SlaveStatisticCountersResponseT {
+	if rcv == nil { return nil }
+	t := &SlaveStatisticCountersResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveStatisticCountersResponse struct {
 	_tab flatbuffers.Table
 }

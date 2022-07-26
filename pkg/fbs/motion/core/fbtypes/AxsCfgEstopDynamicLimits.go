@@ -7,6 +7,39 @@ import (
 )
 
 /// configuration for E-Stop dynamic limitation
+type AxsCfgEstopDynamicLimitsT struct {
+	Dec float64
+	JrkDec float64
+	DecUnit string
+	JrkDecUnit string
+}
+
+func (t *AxsCfgEstopDynamicLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	decUnitOffset := builder.CreateString(t.DecUnit)
+	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	AxsCfgEstopDynamicLimitsStart(builder)
+	AxsCfgEstopDynamicLimitsAddDec(builder, t.Dec)
+	AxsCfgEstopDynamicLimitsAddJrkDec(builder, t.JrkDec)
+	AxsCfgEstopDynamicLimitsAddDecUnit(builder, decUnitOffset)
+	AxsCfgEstopDynamicLimitsAddJrkDecUnit(builder, jrkDecUnitOffset)
+	return AxsCfgEstopDynamicLimitsEnd(builder)
+}
+
+func (rcv *AxsCfgEstopDynamicLimits) UnPackTo(t *AxsCfgEstopDynamicLimitsT) {
+	t.Dec = rcv.Dec()
+	t.JrkDec = rcv.JrkDec()
+	t.DecUnit = string(rcv.DecUnit())
+	t.JrkDecUnit = string(rcv.JrkDecUnit())
+}
+
+func (rcv *AxsCfgEstopDynamicLimits) UnPack() *AxsCfgEstopDynamicLimitsT {
+	if rcv == nil { return nil }
+	t := &AxsCfgEstopDynamicLimitsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgEstopDynamicLimits struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SubscriptionSettingsT struct {
+	MinimumPublishInterval uint32
+	MinimumSampleInterval uint64
+	MaximumBufferSize uint32
+	MinimumErrorInterval uint32
+}
+
+func (t *SubscriptionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SubscriptionSettingsStart(builder)
+	SubscriptionSettingsAddMinimumPublishInterval(builder, t.MinimumPublishInterval)
+	SubscriptionSettingsAddMinimumSampleInterval(builder, t.MinimumSampleInterval)
+	SubscriptionSettingsAddMaximumBufferSize(builder, t.MaximumBufferSize)
+	SubscriptionSettingsAddMinimumErrorInterval(builder, t.MinimumErrorInterval)
+	return SubscriptionSettingsEnd(builder)
+}
+
+func (rcv *SubscriptionSettings) UnPackTo(t *SubscriptionSettingsT) {
+	t.MinimumPublishInterval = rcv.MinimumPublishInterval()
+	t.MinimumSampleInterval = rcv.MinimumSampleInterval()
+	t.MaximumBufferSize = rcv.MaximumBufferSize()
+	t.MinimumErrorInterval = rcv.MinimumErrorInterval()
+}
+
+func (rcv *SubscriptionSettings) UnPack() *SubscriptionSettingsT {
+	if rcv == nil { return nil }
+	t := &SubscriptionSettingsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SubscriptionSettings struct {
 	_tab flatbuffers.Table
 }

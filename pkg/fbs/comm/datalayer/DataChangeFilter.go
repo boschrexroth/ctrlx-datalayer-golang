@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DataChangeFilterT struct {
+	DeadBandValue float32
+}
+
+func (t *DataChangeFilterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DataChangeFilterStart(builder)
+	DataChangeFilterAddDeadBandValue(builder, t.DeadBandValue)
+	return DataChangeFilterEnd(builder)
+}
+
+func (rcv *DataChangeFilter) UnPackTo(t *DataChangeFilterT) {
+	t.DeadBandValue = rcv.DeadBandValue()
+}
+
+func (rcv *DataChangeFilter) UnPack() *DataChangeFilterT {
+	if rcv == nil { return nil }
+	t := &DataChangeFilterT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DataChangeFilter struct {
 	_tab flatbuffers.Table
 }

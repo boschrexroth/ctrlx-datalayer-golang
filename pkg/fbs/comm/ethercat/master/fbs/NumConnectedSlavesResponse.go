@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type NumConnectedSlavesResponseT struct {
+	NumSlaves uint32
+}
+
+func (t *NumConnectedSlavesResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	NumConnectedSlavesResponseStart(builder)
+	NumConnectedSlavesResponseAddNumSlaves(builder, t.NumSlaves)
+	return NumConnectedSlavesResponseEnd(builder)
+}
+
+func (rcv *NumConnectedSlavesResponse) UnPackTo(t *NumConnectedSlavesResponseT) {
+	t.NumSlaves = rcv.NumSlaves()
+}
+
+func (rcv *NumConnectedSlavesResponse) UnPack() *NumConnectedSlavesResponseT {
+	if rcv == nil { return nil }
+	t := &NumConnectedSlavesResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type NumConnectedSlavesResponse struct {
 	_tab flatbuffers.Table
 }

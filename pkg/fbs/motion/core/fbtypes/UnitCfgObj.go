@@ -7,6 +7,47 @@ import (
 )
 
 /// General unit configuration for a motion object
+type UnitCfgObjT struct {
+	Default []*UnitCfgObjSingleT
+}
+
+func (t *UnitCfgObjT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	defaultOffset := flatbuffers.UOffsetT(0)
+	if t.Default != nil {
+		defaultLength := len(t.Default)
+		defaultOffsets := make([]flatbuffers.UOffsetT, defaultLength)
+		for j := 0; j < defaultLength; j++ {
+			defaultOffsets[j] = t.Default[j].Pack(builder)
+		}
+		UnitCfgObjStartDefaultVector(builder, defaultLength)
+		for j := defaultLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(defaultOffsets[j])
+		}
+		defaultOffset = builder.EndVector(defaultLength)
+	}
+	UnitCfgObjStart(builder)
+	UnitCfgObjAddDefault(builder, defaultOffset)
+	return UnitCfgObjEnd(builder)
+}
+
+func (rcv *UnitCfgObj) UnPackTo(t *UnitCfgObjT) {
+	defaultLength := rcv.DefaultLength()
+	t.Default = make([]*UnitCfgObjSingleT, defaultLength)
+	for j := 0; j < defaultLength; j++ {
+		x := UnitCfgObjSingle{}
+		rcv.Default(&x, j)
+		t.Default[j] = x.UnPack()
+	}
+}
+
+func (rcv *UnitCfgObj) UnPack() *UnitCfgObjT {
+	if rcv == nil { return nil }
+	t := &UnitCfgObjT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UnitCfgObj struct {
 	_tab flatbuffers.Table
 }

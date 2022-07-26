@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type StartupErrorReactionT struct {
+	ErrorReaction CurrentErrorReaction
+}
+
+func (t *StartupErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	StartupErrorReactionStart(builder)
+	StartupErrorReactionAddErrorReaction(builder, t.ErrorReaction)
+	return StartupErrorReactionEnd(builder)
+}
+
+func (rcv *StartupErrorReaction) UnPackTo(t *StartupErrorReactionT) {
+	t.ErrorReaction = rcv.ErrorReaction()
+}
+
+func (rcv *StartupErrorReaction) UnPack() *StartupErrorReactionT {
+	if rcv == nil { return nil }
+	t := &StartupErrorReactionT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type StartupErrorReaction struct {
 	_tab flatbuffers.Table
 }

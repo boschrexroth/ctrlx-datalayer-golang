@@ -6,6 +6,45 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ArrayOfStringT struct {
+	Value []string
+}
+
+func (t *ArrayOfStringT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != nil {
+		valueLength := len(t.Value)
+		valueOffsets := make([]flatbuffers.UOffsetT, valueLength)
+		for j := 0; j < valueLength; j++ {
+			valueOffsets[j] = builder.CreateString(t.Value[j])
+		}
+		ArrayOfStringStartValueVector(builder, valueLength)
+		for j := valueLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(valueOffsets[j])
+		}
+		valueOffset = builder.EndVector(valueLength)
+	}
+	ArrayOfStringStart(builder)
+	ArrayOfStringAddValue(builder, valueOffset)
+	return ArrayOfStringEnd(builder)
+}
+
+func (rcv *ArrayOfString) UnPackTo(t *ArrayOfStringT) {
+	valueLength := rcv.ValueLength()
+	t.Value = make([]string, valueLength)
+	for j := 0; j < valueLength; j++ {
+		t.Value[j] = string(rcv.Value(j))
+	}
+}
+
+func (rcv *ArrayOfString) UnPack() *ArrayOfStringT {
+	if rcv == nil { return nil }
+	t := &ArrayOfStringT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ArrayOfString struct {
 	_tab flatbuffers.Table
 }

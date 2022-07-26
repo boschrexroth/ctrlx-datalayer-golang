@@ -7,6 +7,60 @@ import (
 )
 
 /// all configured limits of this kinematics
+type KinCfgLimitsT struct {
+	Vel float64
+	Acc float64
+	Dec float64
+	JrkAcc float64
+	JrkDec float64
+	VelUnit string
+	AccUnit string
+	DecUnit string
+	JrkAccUnit string
+	JrkDecUnit string
+}
+
+func (t *KinCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	velUnitOffset := builder.CreateString(t.VelUnit)
+	accUnitOffset := builder.CreateString(t.AccUnit)
+	decUnitOffset := builder.CreateString(t.DecUnit)
+	jrkAccUnitOffset := builder.CreateString(t.JrkAccUnit)
+	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	KinCfgLimitsStart(builder)
+	KinCfgLimitsAddVel(builder, t.Vel)
+	KinCfgLimitsAddAcc(builder, t.Acc)
+	KinCfgLimitsAddDec(builder, t.Dec)
+	KinCfgLimitsAddJrkAcc(builder, t.JrkAcc)
+	KinCfgLimitsAddJrkDec(builder, t.JrkDec)
+	KinCfgLimitsAddVelUnit(builder, velUnitOffset)
+	KinCfgLimitsAddAccUnit(builder, accUnitOffset)
+	KinCfgLimitsAddDecUnit(builder, decUnitOffset)
+	KinCfgLimitsAddJrkAccUnit(builder, jrkAccUnitOffset)
+	KinCfgLimitsAddJrkDecUnit(builder, jrkDecUnitOffset)
+	return KinCfgLimitsEnd(builder)
+}
+
+func (rcv *KinCfgLimits) UnPackTo(t *KinCfgLimitsT) {
+	t.Vel = rcv.Vel()
+	t.Acc = rcv.Acc()
+	t.Dec = rcv.Dec()
+	t.JrkAcc = rcv.JrkAcc()
+	t.JrkDec = rcv.JrkDec()
+	t.VelUnit = string(rcv.VelUnit())
+	t.AccUnit = string(rcv.AccUnit())
+	t.DecUnit = string(rcv.DecUnit())
+	t.JrkAccUnit = string(rcv.JrkAccUnit())
+	t.JrkDecUnit = string(rcv.JrkDecUnit())
+}
+
+func (rcv *KinCfgLimits) UnPack() *KinCfgLimitsT {
+	if rcv == nil { return nil }
+	t := &KinCfgLimitsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgLimits struct {
 	_tab flatbuffers.Table
 }

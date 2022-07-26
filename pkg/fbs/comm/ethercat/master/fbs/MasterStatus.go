@@ -6,6 +6,29 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MasterStatusT struct {
+	Response *MasterStatusResponseT
+}
+
+func (t *MasterStatusT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	responseOffset := t.Response.Pack(builder)
+	MasterStatusStart(builder)
+	MasterStatusAddResponse(builder, responseOffset)
+	return MasterStatusEnd(builder)
+}
+
+func (rcv *MasterStatus) UnPackTo(t *MasterStatusT) {
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *MasterStatus) UnPack() *MasterStatusT {
+	if rcv == nil { return nil }
+	t := &MasterStatusT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MasterStatus struct {
 	_tab flatbuffers.Table
 }

@@ -13,6 +13,7 @@ const (
 	TimerOTHER        Timer = 3
 	TimerEQUIDISTANCE Timer = 4
 	TimerDEVIATION    Timer = 5
+	TimerREMAINING    Timer = 6
 )
 
 var EnumNamesTimer = map[Timer]string{
@@ -22,6 +23,7 @@ var EnumNamesTimer = map[Timer]string{
 	TimerOTHER:        "OTHER",
 	TimerEQUIDISTANCE: "EQUIDISTANCE",
 	TimerDEVIATION:    "DEVIATION",
+	TimerREMAINING:    "REMAINING",
 }
 
 var EnumValuesTimer = map[string]Timer{
@@ -31,6 +33,7 @@ var EnumValuesTimer = map[string]Timer{
 	"OTHER":        TimerOTHER,
 	"EQUIDISTANCE": TimerEQUIDISTANCE,
 	"DEVIATION":    TimerDEVIATION,
+	"REMAINING":    TimerREMAINING,
 }
 
 func (v Timer) String() string {

@@ -2,7 +2,11 @@
 
 package client
 
-import "strconv"
+import (
+	"strconv"
+
+	flatbuffers "github.com/google/flatbuffers/go"
+)
 
 type UserIdentityTokenUnion byte
 
@@ -32,4 +36,39 @@ func (v UserIdentityTokenUnion) String() string {
 		return s
 	}
 	return "UserIdentityTokenUnion(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
+type UserIdentityTokenUnionT struct {
+	Type UserIdentityTokenUnion
+	Value interface{}
+}
+
+func (t *UserIdentityTokenUnionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil {
+		return 0
+	}
+	switch t.Type {
+	case UserIdentityTokenUnionTokenAnonymous:
+		return t.Value.(*TokenAnonymousT).Pack(builder)
+	case UserIdentityTokenUnionTokenUserPassword:
+		return t.Value.(*TokenUserPasswordT).Pack(builder)
+	case UserIdentityTokenUnionTokenCert:
+		return t.Value.(*TokenCertT).Pack(builder)
+	}
+	return 0
+}
+
+func (rcv UserIdentityTokenUnion) UnPack(table flatbuffers.Table) *UserIdentityTokenUnionT {
+	switch rcv {
+	case UserIdentityTokenUnionTokenAnonymous:
+		x := TokenAnonymous{_tab: table}
+		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenAnonymous, Value: x.UnPack() }
+	case UserIdentityTokenUnionTokenUserPassword:
+		x := TokenUserPassword{_tab: table}
+		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenUserPassword, Value: x.UnPack() }
+	case UserIdentityTokenUnionTokenCert:
+		x := TokenCert{_tab: table}
+		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenCert, Value: x.UnPack() }
+	}
+	return nil
 }

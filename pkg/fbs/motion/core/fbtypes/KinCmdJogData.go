@@ -7,6 +7,52 @@ import (
 )
 
 /// parameters for the jog commands for a kinematics
+type KinCmdJogDataT struct {
+	JogDir []float64
+	CoordSys string
+	JogIncrement float64
+	Lim *DynamicLimitsT
+}
+
+func (t *KinCmdJogDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	jogDirOffset := flatbuffers.UOffsetT(0)
+	if t.JogDir != nil {
+		jogDirLength := len(t.JogDir)
+		KinCmdJogDataStartJogDirVector(builder, jogDirLength)
+		for j := jogDirLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.JogDir[j])
+		}
+		jogDirOffset = builder.EndVector(jogDirLength)
+	}
+	coordSysOffset := builder.CreateString(t.CoordSys)
+	limOffset := t.Lim.Pack(builder)
+	KinCmdJogDataStart(builder)
+	KinCmdJogDataAddJogDir(builder, jogDirOffset)
+	KinCmdJogDataAddCoordSys(builder, coordSysOffset)
+	KinCmdJogDataAddJogIncrement(builder, t.JogIncrement)
+	KinCmdJogDataAddLim(builder, limOffset)
+	return KinCmdJogDataEnd(builder)
+}
+
+func (rcv *KinCmdJogData) UnPackTo(t *KinCmdJogDataT) {
+	jogDirLength := rcv.JogDirLength()
+	t.JogDir = make([]float64, jogDirLength)
+	for j := 0; j < jogDirLength; j++ {
+		t.JogDir[j] = rcv.JogDir(j)
+	}
+	t.CoordSys = string(rcv.CoordSys())
+	t.JogIncrement = rcv.JogIncrement()
+	t.Lim = rcv.Lim(nil).UnPack()
+}
+
+func (rcv *KinCmdJogData) UnPack() *KinCmdJogDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdJogDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdJogData struct {
 	_tab flatbuffers.Table
 }

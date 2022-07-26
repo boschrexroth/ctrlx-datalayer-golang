@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Cmd_BaseT struct {
+	Name string
+	Source string
+	Line uint64
+}
+
+func (t *Cmd_BaseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	sourceOffset := builder.CreateString(t.Source)
+	Cmd_BaseStart(builder)
+	Cmd_BaseAddName(builder, nameOffset)
+	Cmd_BaseAddSource(builder, sourceOffset)
+	Cmd_BaseAddLine(builder, t.Line)
+	return Cmd_BaseEnd(builder)
+}
+
+func (rcv *Cmd_Base) UnPackTo(t *Cmd_BaseT) {
+	t.Name = string(rcv.Name())
+	t.Source = string(rcv.Source())
+	t.Line = rcv.Line()
+}
+
+func (rcv *Cmd_Base) UnPack() *Cmd_BaseT {
+	if rcv == nil { return nil }
+	t := &Cmd_BaseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Cmd_Base struct {
 	_tab flatbuffers.Table
 }

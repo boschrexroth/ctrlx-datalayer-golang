@@ -6,6 +6,44 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveRegisterRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	RegisterOffset uint16
+	Data []byte
+	MaxLength uint32
+}
+
+func (t *SlaveRegisterRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	SlaveRegisterRequestStart(builder)
+	SlaveRegisterRequestAddAddressType(builder, t.AddressType)
+	SlaveRegisterRequestAddAddress(builder, t.Address)
+	SlaveRegisterRequestAddRegisterOffset(builder, t.RegisterOffset)
+	SlaveRegisterRequestAddData(builder, dataOffset)
+	SlaveRegisterRequestAddMaxLength(builder, t.MaxLength)
+	return SlaveRegisterRequestEnd(builder)
+}
+
+func (rcv *SlaveRegisterRequest) UnPackTo(t *SlaveRegisterRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.RegisterOffset = rcv.RegisterOffset()
+	t.Data = rcv.DataBytes()
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *SlaveRegisterRequest) UnPack() *SlaveRegisterRequestT {
+	if rcv == nil { return nil }
+	t := &SlaveRegisterRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveRegisterRequest struct {
 	_tab flatbuffers.Table
 }

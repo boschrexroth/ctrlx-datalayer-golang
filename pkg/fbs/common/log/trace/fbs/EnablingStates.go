@@ -6,6 +6,51 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EnablingStatesT struct {
+	EnablingStates []*EnablingStateT
+	MachineIdentification string
+}
+
+func (t *EnablingStatesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	enablingStatesOffset := flatbuffers.UOffsetT(0)
+	if t.EnablingStates != nil {
+		enablingStatesLength := len(t.EnablingStates)
+		enablingStatesOffsets := make([]flatbuffers.UOffsetT, enablingStatesLength)
+		for j := 0; j < enablingStatesLength; j++ {
+			enablingStatesOffsets[j] = t.EnablingStates[j].Pack(builder)
+		}
+		EnablingStatesStartEnablingStatesVector(builder, enablingStatesLength)
+		for j := enablingStatesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(enablingStatesOffsets[j])
+		}
+		enablingStatesOffset = builder.EndVector(enablingStatesLength)
+	}
+	machineIdentificationOffset := builder.CreateString(t.MachineIdentification)
+	EnablingStatesStart(builder)
+	EnablingStatesAddEnablingStates(builder, enablingStatesOffset)
+	EnablingStatesAddMachineIdentification(builder, machineIdentificationOffset)
+	return EnablingStatesEnd(builder)
+}
+
+func (rcv *EnablingStates) UnPackTo(t *EnablingStatesT) {
+	enablingStatesLength := rcv.EnablingStatesLength()
+	t.EnablingStates = make([]*EnablingStateT, enablingStatesLength)
+	for j := 0; j < enablingStatesLength; j++ {
+		x := EnablingState{}
+		rcv.EnablingStates(&x, j)
+		t.EnablingStates[j] = x.UnPack()
+	}
+	t.MachineIdentification = string(rcv.MachineIdentification())
+}
+
+func (rcv *EnablingStates) UnPack() *EnablingStatesT {
+	if rcv == nil { return nil }
+	t := &EnablingStatesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EnablingStates struct {
 	_tab flatbuffers.Table
 }

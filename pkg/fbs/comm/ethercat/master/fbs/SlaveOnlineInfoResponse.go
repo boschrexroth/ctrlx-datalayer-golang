@@ -6,6 +6,133 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveOnlineInfoResponseT struct {
+	AutoIncAddr uint16
+	EthercatAddr uint16
+	StationAlias uint16
+	IdentifyValue uint16
+	SlaveHandle uint32
+	PortSlaveHandles []uint32
+	SlaveIdentity *EthercatIdentityInfoT
+	EscType byte
+	EscRevision byte
+	EscBuild uint16
+	EscFeatures uint16
+	PortDescriptor byte
+	Reserved01 byte
+	AlStatus uint16
+	AlStatusCode uint16
+	MbxProtocols uint16
+	DlStatus uint16
+	PortState uint16
+	PreviousPort uint16
+	SystemTimeDifference uint32
+	SlaveDelay uint32
+	PropagationDelay uint32
+	Reserved02 []uint32
+	DcSupport bool
+	Dc64Support bool
+	IsRefClock bool
+	LineCrossed bool
+}
+
+func (t *SlaveOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	portSlaveHandlesOffset := flatbuffers.UOffsetT(0)
+	if t.PortSlaveHandles != nil {
+		portSlaveHandlesLength := len(t.PortSlaveHandles)
+		SlaveOnlineInfoResponseStartPortSlaveHandlesVector(builder, portSlaveHandlesLength)
+		for j := portSlaveHandlesLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.PortSlaveHandles[j])
+		}
+		portSlaveHandlesOffset = builder.EndVector(portSlaveHandlesLength)
+	}
+	reserved02Offset := flatbuffers.UOffsetT(0)
+	if t.Reserved02 != nil {
+		reserved02Length := len(t.Reserved02)
+		SlaveOnlineInfoResponseStartReserved02Vector(builder, reserved02Length)
+		for j := reserved02Length - 1; j >= 0; j-- {
+			builder.PrependUint32(t.Reserved02[j])
+		}
+		reserved02Offset = builder.EndVector(reserved02Length)
+	}
+	SlaveOnlineInfoResponseStart(builder)
+	SlaveOnlineInfoResponseAddAutoIncAddr(builder, t.AutoIncAddr)
+	SlaveOnlineInfoResponseAddEthercatAddr(builder, t.EthercatAddr)
+	SlaveOnlineInfoResponseAddStationAlias(builder, t.StationAlias)
+	SlaveOnlineInfoResponseAddIdentifyValue(builder, t.IdentifyValue)
+	SlaveOnlineInfoResponseAddSlaveHandle(builder, t.SlaveHandle)
+	SlaveOnlineInfoResponseAddPortSlaveHandles(builder, portSlaveHandlesOffset)
+	slaveIdentityOffset := t.SlaveIdentity.Pack(builder)
+	SlaveOnlineInfoResponseAddSlaveIdentity(builder, slaveIdentityOffset)
+	SlaveOnlineInfoResponseAddEscType(builder, t.EscType)
+	SlaveOnlineInfoResponseAddEscRevision(builder, t.EscRevision)
+	SlaveOnlineInfoResponseAddEscBuild(builder, t.EscBuild)
+	SlaveOnlineInfoResponseAddEscFeatures(builder, t.EscFeatures)
+	SlaveOnlineInfoResponseAddPortDescriptor(builder, t.PortDescriptor)
+	SlaveOnlineInfoResponseAddReserved01(builder, t.Reserved01)
+	SlaveOnlineInfoResponseAddAlStatus(builder, t.AlStatus)
+	SlaveOnlineInfoResponseAddAlStatusCode(builder, t.AlStatusCode)
+	SlaveOnlineInfoResponseAddMbxProtocols(builder, t.MbxProtocols)
+	SlaveOnlineInfoResponseAddDlStatus(builder, t.DlStatus)
+	SlaveOnlineInfoResponseAddPortState(builder, t.PortState)
+	SlaveOnlineInfoResponseAddPreviousPort(builder, t.PreviousPort)
+	SlaveOnlineInfoResponseAddSystemTimeDifference(builder, t.SystemTimeDifference)
+	SlaveOnlineInfoResponseAddSlaveDelay(builder, t.SlaveDelay)
+	SlaveOnlineInfoResponseAddPropagationDelay(builder, t.PropagationDelay)
+	SlaveOnlineInfoResponseAddReserved02(builder, reserved02Offset)
+	SlaveOnlineInfoResponseAddDcSupport(builder, t.DcSupport)
+	SlaveOnlineInfoResponseAddDc64Support(builder, t.Dc64Support)
+	SlaveOnlineInfoResponseAddIsRefClock(builder, t.IsRefClock)
+	SlaveOnlineInfoResponseAddLineCrossed(builder, t.LineCrossed)
+	return SlaveOnlineInfoResponseEnd(builder)
+}
+
+func (rcv *SlaveOnlineInfoResponse) UnPackTo(t *SlaveOnlineInfoResponseT) {
+	t.AutoIncAddr = rcv.AutoIncAddr()
+	t.EthercatAddr = rcv.EthercatAddr()
+	t.StationAlias = rcv.StationAlias()
+	t.IdentifyValue = rcv.IdentifyValue()
+	t.SlaveHandle = rcv.SlaveHandle()
+	portSlaveHandlesLength := rcv.PortSlaveHandlesLength()
+	t.PortSlaveHandles = make([]uint32, portSlaveHandlesLength)
+	for j := 0; j < portSlaveHandlesLength; j++ {
+		t.PortSlaveHandles[j] = rcv.PortSlaveHandles(j)
+	}
+	t.SlaveIdentity = rcv.SlaveIdentity(nil).UnPack()
+	t.EscType = rcv.EscType()
+	t.EscRevision = rcv.EscRevision()
+	t.EscBuild = rcv.EscBuild()
+	t.EscFeatures = rcv.EscFeatures()
+	t.PortDescriptor = rcv.PortDescriptor()
+	t.Reserved01 = rcv.Reserved01()
+	t.AlStatus = rcv.AlStatus()
+	t.AlStatusCode = rcv.AlStatusCode()
+	t.MbxProtocols = rcv.MbxProtocols()
+	t.DlStatus = rcv.DlStatus()
+	t.PortState = rcv.PortState()
+	t.PreviousPort = rcv.PreviousPort()
+	t.SystemTimeDifference = rcv.SystemTimeDifference()
+	t.SlaveDelay = rcv.SlaveDelay()
+	t.PropagationDelay = rcv.PropagationDelay()
+	reserved02Length := rcv.Reserved02Length()
+	t.Reserved02 = make([]uint32, reserved02Length)
+	for j := 0; j < reserved02Length; j++ {
+		t.Reserved02[j] = rcv.Reserved02(j)
+	}
+	t.DcSupport = rcv.DcSupport()
+	t.Dc64Support = rcv.Dc64Support()
+	t.IsRefClock = rcv.IsRefClock()
+	t.LineCrossed = rcv.LineCrossed()
+}
+
+func (rcv *SlaveOnlineInfoResponse) UnPack() *SlaveOnlineInfoResponseT {
+	if rcv == nil { return nil }
+	t := &SlaveOnlineInfoResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveOnlineInfoResponse struct {
 	_tab flatbuffers.Table
 }

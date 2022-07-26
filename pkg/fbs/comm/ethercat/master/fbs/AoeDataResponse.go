@@ -6,6 +6,38 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AoeDataResponseT struct {
+	Data []byte
+	ErrorCode uint32
+	CmdResult uint32
+}
+
+func (t *AoeDataResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	AoeDataResponseStart(builder)
+	AoeDataResponseAddData(builder, dataOffset)
+	AoeDataResponseAddErrorCode(builder, t.ErrorCode)
+	AoeDataResponseAddCmdResult(builder, t.CmdResult)
+	return AoeDataResponseEnd(builder)
+}
+
+func (rcv *AoeDataResponse) UnPackTo(t *AoeDataResponseT) {
+	t.Data = rcv.DataBytes()
+	t.ErrorCode = rcv.ErrorCode()
+	t.CmdResult = rcv.CmdResult()
+}
+
+func (rcv *AoeDataResponse) UnPack() *AoeDataResponseT {
+	if rcv == nil { return nil }
+	t := &AoeDataResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AoeDataResponse struct {
 	_tab flatbuffers.Table
 }

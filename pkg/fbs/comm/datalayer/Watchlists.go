@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type WatchlistsT struct {
+	Watchlists []*WatchlistT
+}
+
+func (t *WatchlistsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	watchlistsOffset := flatbuffers.UOffsetT(0)
+	if t.Watchlists != nil {
+		watchlistsLength := len(t.Watchlists)
+		watchlistsOffsets := make([]flatbuffers.UOffsetT, watchlistsLength)
+		for j := 0; j < watchlistsLength; j++ {
+			watchlistsOffsets[j] = t.Watchlists[j].Pack(builder)
+		}
+		WatchlistsStartWatchlistsVector(builder, watchlistsLength)
+		for j := watchlistsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(watchlistsOffsets[j])
+		}
+		watchlistsOffset = builder.EndVector(watchlistsLength)
+	}
+	WatchlistsStart(builder)
+	WatchlistsAddWatchlists(builder, watchlistsOffset)
+	return WatchlistsEnd(builder)
+}
+
+func (rcv *Watchlists) UnPackTo(t *WatchlistsT) {
+	watchlistsLength := rcv.WatchlistsLength()
+	t.Watchlists = make([]*WatchlistT, watchlistsLength)
+	for j := 0; j < watchlistsLength; j++ {
+		x := Watchlist{}
+		rcv.Watchlists(&x, j)
+		t.Watchlists[j] = x.UnPack()
+	}
+}
+
+func (rcv *Watchlists) UnPack() *WatchlistsT {
+	if rcv == nil { return nil }
+	t := &WatchlistsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Watchlists struct {
 	_tab flatbuffers.Table
 }

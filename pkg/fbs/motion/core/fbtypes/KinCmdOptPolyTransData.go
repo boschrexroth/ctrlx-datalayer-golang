@@ -7,6 +7,38 @@ import (
 )
 
 /// parameters for the command option PolyTrans (inserting polynomial commands between successively move commands) for kinematics
+type KinCmdOptPolyTransDataT struct {
+	PermType string
+	Dist1 float64
+	Dist2 float64
+	Eps float64
+}
+
+func (t *KinCmdOptPolyTransDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	KinCmdOptPolyTransDataStart(builder)
+	KinCmdOptPolyTransDataAddPermType(builder, permTypeOffset)
+	KinCmdOptPolyTransDataAddDist1(builder, t.Dist1)
+	KinCmdOptPolyTransDataAddDist2(builder, t.Dist2)
+	KinCmdOptPolyTransDataAddEps(builder, t.Eps)
+	return KinCmdOptPolyTransDataEnd(builder)
+}
+
+func (rcv *KinCmdOptPolyTransData) UnPackTo(t *KinCmdOptPolyTransDataT) {
+	t.PermType = string(rcv.PermType())
+	t.Dist1 = rcv.Dist1()
+	t.Dist2 = rcv.Dist2()
+	t.Eps = rcv.Eps()
+}
+
+func (rcv *KinCmdOptPolyTransData) UnPack() *KinCmdOptPolyTransDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptPolyTransDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptPolyTransData struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,61 @@ import (
 )
 
 /// position of a kinematics
+type KinPosValuesT struct {
+	Pos []float64
+	Units []string
+}
+
+func (t *KinPosValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	posOffset := flatbuffers.UOffsetT(0)
+	if t.Pos != nil {
+		posLength := len(t.Pos)
+		KinPosValuesStartPosVector(builder, posLength)
+		for j := posLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.Pos[j])
+		}
+		posOffset = builder.EndVector(posLength)
+	}
+	unitsOffset := flatbuffers.UOffsetT(0)
+	if t.Units != nil {
+		unitsLength := len(t.Units)
+		unitsOffsets := make([]flatbuffers.UOffsetT, unitsLength)
+		for j := 0; j < unitsLength; j++ {
+			unitsOffsets[j] = builder.CreateString(t.Units[j])
+		}
+		KinPosValuesStartUnitsVector(builder, unitsLength)
+		for j := unitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(unitsOffsets[j])
+		}
+		unitsOffset = builder.EndVector(unitsLength)
+	}
+	KinPosValuesStart(builder)
+	KinPosValuesAddPos(builder, posOffset)
+	KinPosValuesAddUnits(builder, unitsOffset)
+	return KinPosValuesEnd(builder)
+}
+
+func (rcv *KinPosValues) UnPackTo(t *KinPosValuesT) {
+	posLength := rcv.PosLength()
+	t.Pos = make([]float64, posLength)
+	for j := 0; j < posLength; j++ {
+		t.Pos[j] = rcv.Pos(j)
+	}
+	unitsLength := rcv.UnitsLength()
+	t.Units = make([]string, unitsLength)
+	for j := 0; j < unitsLength; j++ {
+		t.Units[j] = string(rcv.Units(j))
+	}
+}
+
+func (rcv *KinPosValues) UnPack() *KinPosValuesT {
+	if rcv == nil { return nil }
+	t := &KinPosValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinPosValues struct {
 	_tab flatbuffers.Table
 }

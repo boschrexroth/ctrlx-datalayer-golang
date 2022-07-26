@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ScopesT struct {
+	Scopes []*ScopeT
+}
+
+func (t *ScopesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	scopesOffset := flatbuffers.UOffsetT(0)
+	if t.Scopes != nil {
+		scopesLength := len(t.Scopes)
+		scopesOffsets := make([]flatbuffers.UOffsetT, scopesLength)
+		for j := 0; j < scopesLength; j++ {
+			scopesOffsets[j] = t.Scopes[j].Pack(builder)
+		}
+		ScopesStartScopesVector(builder, scopesLength)
+		for j := scopesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(scopesOffsets[j])
+		}
+		scopesOffset = builder.EndVector(scopesLength)
+	}
+	ScopesStart(builder)
+	ScopesAddScopes(builder, scopesOffset)
+	return ScopesEnd(builder)
+}
+
+func (rcv *Scopes) UnPackTo(t *ScopesT) {
+	scopesLength := rcv.ScopesLength()
+	t.Scopes = make([]*ScopeT, scopesLength)
+	for j := 0; j < scopesLength; j++ {
+		x := Scope{}
+		rcv.Scopes(&x, j)
+		t.Scopes[j] = x.UnPack()
+	}
+}
+
+func (rcv *Scopes) UnPack() *ScopesT {
+	if rcv == nil { return nil }
+	t := &ScopesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Scopes struct {
 	_tab flatbuffers.Table
 }

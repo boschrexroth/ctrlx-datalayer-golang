@@ -7,6 +7,45 @@ import (
 )
 
 /// general system configuration
+type SysCfgT struct {
+	Pcs *SysCfgPcsAllT
+	Function *SysCfgFunctionT
+	Internal *SysCfgInternalT
+	SafeAreas *SysCfgSafeAreaAllT
+	RtInputs *RTInputsCfgT
+}
+
+func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	pcsOffset := t.Pcs.Pack(builder)
+	functionOffset := t.Function.Pack(builder)
+	internalOffset := t.Internal.Pack(builder)
+	safeAreasOffset := t.SafeAreas.Pack(builder)
+	rtInputsOffset := t.RtInputs.Pack(builder)
+	SysCfgStart(builder)
+	SysCfgAddPcs(builder, pcsOffset)
+	SysCfgAddFunction(builder, functionOffset)
+	SysCfgAddInternal(builder, internalOffset)
+	SysCfgAddSafeAreas(builder, safeAreasOffset)
+	SysCfgAddRtInputs(builder, rtInputsOffset)
+	return SysCfgEnd(builder)
+}
+
+func (rcv *SysCfg) UnPackTo(t *SysCfgT) {
+	t.Pcs = rcv.Pcs(nil).UnPack()
+	t.Function = rcv.Function(nil).UnPack()
+	t.Internal = rcv.Internal(nil).UnPack()
+	t.SafeAreas = rcv.SafeAreas(nil).UnPack()
+	t.RtInputs = rcv.RtInputs(nil).UnPack()
+}
+
+func (rcv *SysCfg) UnPack() *SysCfgT {
+	if rcv == nil { return nil }
+	t := &SysCfgT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfg struct {
 	_tab flatbuffers.Table
 }
@@ -94,8 +133,23 @@ func (rcv *SysCfg) SafeAreas(obj *SysCfgSafeAreaAll) *SysCfgSafeAreaAll {
 }
 
 /// configuration of the safe and work areas
+/// configuration of the real-time inputs of the kinematics
+func (rcv *SysCfg) RtInputs(obj *RTInputsCfg) *RTInputsCfg {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(RTInputsCfg)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the real-time inputs of the kinematics
 func SysCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func SysCfgAddPcs(builder *flatbuffers.Builder, pcs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(pcs), 0)
@@ -108,6 +162,9 @@ func SysCfgAddInternal(builder *flatbuffers.Builder, internal flatbuffers.UOffse
 }
 func SysCfgAddSafeAreas(builder *flatbuffers.Builder, safeAreas flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(safeAreas), 0)
+}
+func SysCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(rtInputs), 0)
 }
 func SysCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

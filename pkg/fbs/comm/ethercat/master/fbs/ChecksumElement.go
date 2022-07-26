@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ChecksumElementT struct {
+	Id string
+	Checksum []byte
+}
+
+func (t *ChecksumElementT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	idOffset := builder.CreateString(t.Id)
+	checksumOffset := flatbuffers.UOffsetT(0)
+	if t.Checksum != nil {
+		checksumOffset = builder.CreateByteString(t.Checksum)
+	}
+	ChecksumElementStart(builder)
+	ChecksumElementAddId(builder, idOffset)
+	ChecksumElementAddChecksum(builder, checksumOffset)
+	return ChecksumElementEnd(builder)
+}
+
+func (rcv *ChecksumElement) UnPackTo(t *ChecksumElementT) {
+	t.Id = string(rcv.Id())
+	t.Checksum = rcv.ChecksumBytes()
+}
+
+func (rcv *ChecksumElement) UnPack() *ChecksumElementT {
+	if rcv == nil { return nil }
+	t := &ChecksumElementT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ChecksumElement struct {
 	_tab flatbuffers.Table
 }

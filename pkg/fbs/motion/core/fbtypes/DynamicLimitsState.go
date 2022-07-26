@@ -7,6 +7,60 @@ import (
 )
 
 /// set of dynamic limits (for reading them in states)
+type DynamicLimitsStateT struct {
+	Vel float64
+	Acc float64
+	Dec float64
+	JrkAcc float64
+	JrkDec float64
+	VelUnit string
+	AccUnit string
+	DecUnit string
+	JrkAccUnit string
+	JrkDecUnit string
+}
+
+func (t *DynamicLimitsStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	velUnitOffset := builder.CreateString(t.VelUnit)
+	accUnitOffset := builder.CreateString(t.AccUnit)
+	decUnitOffset := builder.CreateString(t.DecUnit)
+	jrkAccUnitOffset := builder.CreateString(t.JrkAccUnit)
+	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	DynamicLimitsStateStart(builder)
+	DynamicLimitsStateAddVel(builder, t.Vel)
+	DynamicLimitsStateAddAcc(builder, t.Acc)
+	DynamicLimitsStateAddDec(builder, t.Dec)
+	DynamicLimitsStateAddJrkAcc(builder, t.JrkAcc)
+	DynamicLimitsStateAddJrkDec(builder, t.JrkDec)
+	DynamicLimitsStateAddVelUnit(builder, velUnitOffset)
+	DynamicLimitsStateAddAccUnit(builder, accUnitOffset)
+	DynamicLimitsStateAddDecUnit(builder, decUnitOffset)
+	DynamicLimitsStateAddJrkAccUnit(builder, jrkAccUnitOffset)
+	DynamicLimitsStateAddJrkDecUnit(builder, jrkDecUnitOffset)
+	return DynamicLimitsStateEnd(builder)
+}
+
+func (rcv *DynamicLimitsState) UnPackTo(t *DynamicLimitsStateT) {
+	t.Vel = rcv.Vel()
+	t.Acc = rcv.Acc()
+	t.Dec = rcv.Dec()
+	t.JrkAcc = rcv.JrkAcc()
+	t.JrkDec = rcv.JrkDec()
+	t.VelUnit = string(rcv.VelUnit())
+	t.AccUnit = string(rcv.AccUnit())
+	t.DecUnit = string(rcv.DecUnit())
+	t.JrkAccUnit = string(rcv.JrkAccUnit())
+	t.JrkDecUnit = string(rcv.JrkDecUnit())
+}
+
+func (rcv *DynamicLimitsState) UnPack() *DynamicLimitsStateT {
+	if rcv == nil { return nil }
+	t := &DynamicLimitsStateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DynamicLimitsState struct {
 	_tab flatbuffers.Table
 }

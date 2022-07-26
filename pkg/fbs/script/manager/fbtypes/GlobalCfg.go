@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type GlobalCfgT struct {
+	InitScript string
+	InitScriptParam []string
+}
+
+func (t *GlobalCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	initScriptOffset := builder.CreateString(t.InitScript)
+	initScriptParamOffset := flatbuffers.UOffsetT(0)
+	if t.InitScriptParam != nil {
+		initScriptParamLength := len(t.InitScriptParam)
+		initScriptParamOffsets := make([]flatbuffers.UOffsetT, initScriptParamLength)
+		for j := 0; j < initScriptParamLength; j++ {
+			initScriptParamOffsets[j] = builder.CreateString(t.InitScriptParam[j])
+		}
+		GlobalCfgStartInitScriptParamVector(builder, initScriptParamLength)
+		for j := initScriptParamLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(initScriptParamOffsets[j])
+		}
+		initScriptParamOffset = builder.EndVector(initScriptParamLength)
+	}
+	GlobalCfgStart(builder)
+	GlobalCfgAddInitScript(builder, initScriptOffset)
+	GlobalCfgAddInitScriptParam(builder, initScriptParamOffset)
+	return GlobalCfgEnd(builder)
+}
+
+func (rcv *GlobalCfg) UnPackTo(t *GlobalCfgT) {
+	t.InitScript = string(rcv.InitScript())
+	initScriptParamLength := rcv.InitScriptParamLength()
+	t.InitScriptParam = make([]string, initScriptParamLength)
+	for j := 0; j < initScriptParamLength; j++ {
+		t.InitScriptParam[j] = string(rcv.InitScriptParam(j))
+	}
+}
+
+func (rcv *GlobalCfg) UnPack() *GlobalCfgT {
+	if rcv == nil { return nil }
+	t := &GlobalCfgT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type GlobalCfg struct {
 	_tab flatbuffers.Table
 }

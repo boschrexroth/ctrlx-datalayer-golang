@@ -6,7 +6,53 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// data of a single registered axis transformation
+/// data of a single registered axis transformation when reading all data of an implemented axis transformation
+type KinCfgAxsTrafoDataSingleT struct {
+	Name string
+	Description string
+	Image string
+	DocRef string
+	Version string
+	Pow POWType
+	Parameters *KinCfgAxsTrafoDataAllParamT
+}
+
+func (t *KinCfgAxsTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	descriptionOffset := builder.CreateString(t.Description)
+	imageOffset := builder.CreateString(t.Image)
+	docRefOffset := builder.CreateString(t.DocRef)
+	versionOffset := builder.CreateString(t.Version)
+	parametersOffset := t.Parameters.Pack(builder)
+	KinCfgAxsTrafoDataSingleStart(builder)
+	KinCfgAxsTrafoDataSingleAddName(builder, nameOffset)
+	KinCfgAxsTrafoDataSingleAddDescription(builder, descriptionOffset)
+	KinCfgAxsTrafoDataSingleAddImage(builder, imageOffset)
+	KinCfgAxsTrafoDataSingleAddDocRef(builder, docRefOffset)
+	KinCfgAxsTrafoDataSingleAddVersion(builder, versionOffset)
+	KinCfgAxsTrafoDataSingleAddPow(builder, t.Pow)
+	KinCfgAxsTrafoDataSingleAddParameters(builder, parametersOffset)
+	return KinCfgAxsTrafoDataSingleEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoDataSingle) UnPackTo(t *KinCfgAxsTrafoDataSingleT) {
+	t.Name = string(rcv.Name())
+	t.Description = string(rcv.Description())
+	t.Image = string(rcv.Image())
+	t.DocRef = string(rcv.DocRef())
+	t.Version = string(rcv.Version())
+	t.Pow = rcv.Pow()
+	t.Parameters = rcv.Parameters(nil).UnPack()
+}
+
+func (rcv *KinCfgAxsTrafoDataSingle) UnPack() *KinCfgAxsTrafoDataSingleT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoDataSingleT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoDataSingle struct {
 	_tab flatbuffers.Table
 }
@@ -99,12 +145,12 @@ func (rcv *KinCfgAxsTrafoDataSingle) MutatePow(n POWType) bool {
 }
 
 /// All configuration parameters of the axis transformation
-func (rcv *KinCfgAxsTrafoDataSingle) Parameters(obj *KinCfgAxsTrafoAllParam) *KinCfgAxsTrafoAllParam {
+func (rcv *KinCfgAxsTrafoDataSingle) Parameters(obj *KinCfgAxsTrafoDataAllParam) *KinCfgAxsTrafoDataAllParam {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(KinCfgAxsTrafoAllParam)
+			obj = new(KinCfgAxsTrafoDataAllParam)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj

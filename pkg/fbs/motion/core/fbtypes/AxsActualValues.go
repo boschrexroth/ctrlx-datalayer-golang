@@ -7,6 +7,60 @@ import (
 )
 
 /// actual values from the drives
+type AxsActualValuesT struct {
+	ActualPos float64
+	ActualVel float64
+	ActualAcc float64
+	ActualTorque float64
+	DistLeft float64
+	ActualPosUnit string
+	ActualVelUnit string
+	ActualAccUnit string
+	ActualTorqueUnit string
+	DistLeftUnit string
+}
+
+func (t *AxsActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	actualPosUnitOffset := builder.CreateString(t.ActualPosUnit)
+	actualVelUnitOffset := builder.CreateString(t.ActualVelUnit)
+	actualAccUnitOffset := builder.CreateString(t.ActualAccUnit)
+	actualTorqueUnitOffset := builder.CreateString(t.ActualTorqueUnit)
+	distLeftUnitOffset := builder.CreateString(t.DistLeftUnit)
+	AxsActualValuesStart(builder)
+	AxsActualValuesAddActualPos(builder, t.ActualPos)
+	AxsActualValuesAddActualVel(builder, t.ActualVel)
+	AxsActualValuesAddActualAcc(builder, t.ActualAcc)
+	AxsActualValuesAddActualTorque(builder, t.ActualTorque)
+	AxsActualValuesAddDistLeft(builder, t.DistLeft)
+	AxsActualValuesAddActualPosUnit(builder, actualPosUnitOffset)
+	AxsActualValuesAddActualVelUnit(builder, actualVelUnitOffset)
+	AxsActualValuesAddActualAccUnit(builder, actualAccUnitOffset)
+	AxsActualValuesAddActualTorqueUnit(builder, actualTorqueUnitOffset)
+	AxsActualValuesAddDistLeftUnit(builder, distLeftUnitOffset)
+	return AxsActualValuesEnd(builder)
+}
+
+func (rcv *AxsActualValues) UnPackTo(t *AxsActualValuesT) {
+	t.ActualPos = rcv.ActualPos()
+	t.ActualVel = rcv.ActualVel()
+	t.ActualAcc = rcv.ActualAcc()
+	t.ActualTorque = rcv.ActualTorque()
+	t.DistLeft = rcv.DistLeft()
+	t.ActualPosUnit = string(rcv.ActualPosUnit())
+	t.ActualVelUnit = string(rcv.ActualVelUnit())
+	t.ActualAccUnit = string(rcv.ActualAccUnit())
+	t.ActualTorqueUnit = string(rcv.ActualTorqueUnit())
+	t.DistLeftUnit = string(rcv.DistLeftUnit())
+}
+
+func (rcv *AxsActualValues) UnPack() *AxsActualValuesT {
+	if rcv == nil { return nil }
+	t := &AxsActualValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsActualValues struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AdminControlsT struct {
+	Control *ControlsT
+}
+
+func (t *AdminControlsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	controlOffset := t.Control.Pack(builder)
+	
+	AdminControlsStart(builder)
+	if t.Control != nil {
+		AdminControlsAddControlType(builder, t.Control.Type)
+	}
+	AdminControlsAddControl(builder, controlOffset)
+	return AdminControlsEnd(builder)
+}
+
+func (rcv *AdminControls) UnPackTo(t *AdminControlsT) {
+	controlTable := flatbuffers.Table{}
+	if rcv.Control(&controlTable) {
+		t.Control = rcv.ControlType().UnPack(controlTable)
+	}
+}
+
+func (rcv *AdminControls) UnPack() *AdminControlsT {
+	if rcv == nil { return nil }
+	t := &AdminControlsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AdminControls struct {
 	_tab flatbuffers.Table
 }

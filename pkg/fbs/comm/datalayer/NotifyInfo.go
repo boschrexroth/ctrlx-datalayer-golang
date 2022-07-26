@@ -6,6 +6,35 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type NotifyInfoT struct {
+	Node string
+	Timestamp uint64
+	NotifyType NotifyType
+}
+
+func (t *NotifyInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nodeOffset := builder.CreateString(t.Node)
+	NotifyInfoStart(builder)
+	NotifyInfoAddNode(builder, nodeOffset)
+	NotifyInfoAddTimestamp(builder, t.Timestamp)
+	NotifyInfoAddNotifyType(builder, t.NotifyType)
+	return NotifyInfoEnd(builder)
+}
+
+func (rcv *NotifyInfo) UnPackTo(t *NotifyInfoT) {
+	t.Node = string(rcv.Node())
+	t.Timestamp = rcv.Timestamp()
+	t.NotifyType = rcv.NotifyType()
+}
+
+func (rcv *NotifyInfo) UnPack() *NotifyInfoT {
+	if rcv == nil { return nil }
+	t := &NotifyInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type NotifyInfo struct {
 	_tab flatbuffers.Table
 }

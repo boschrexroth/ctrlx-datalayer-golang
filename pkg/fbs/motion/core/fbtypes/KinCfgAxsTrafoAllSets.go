@@ -7,6 +7,47 @@ import (
 )
 
 /// configuration values of all axis transformation sets
+type KinCfgAxsTrafoAllSetsT struct {
+	AxsTrafoSets []*KinCfgAxsTrafoSetT
+}
+
+func (t *KinCfgAxsTrafoAllSetsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axsTrafoSetsOffset := flatbuffers.UOffsetT(0)
+	if t.AxsTrafoSets != nil {
+		axsTrafoSetsLength := len(t.AxsTrafoSets)
+		axsTrafoSetsOffsets := make([]flatbuffers.UOffsetT, axsTrafoSetsLength)
+		for j := 0; j < axsTrafoSetsLength; j++ {
+			axsTrafoSetsOffsets[j] = t.AxsTrafoSets[j].Pack(builder)
+		}
+		KinCfgAxsTrafoAllSetsStartAxsTrafoSetsVector(builder, axsTrafoSetsLength)
+		for j := axsTrafoSetsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(axsTrafoSetsOffsets[j])
+		}
+		axsTrafoSetsOffset = builder.EndVector(axsTrafoSetsLength)
+	}
+	KinCfgAxsTrafoAllSetsStart(builder)
+	KinCfgAxsTrafoAllSetsAddAxsTrafoSets(builder, axsTrafoSetsOffset)
+	return KinCfgAxsTrafoAllSetsEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoAllSets) UnPackTo(t *KinCfgAxsTrafoAllSetsT) {
+	axsTrafoSetsLength := rcv.AxsTrafoSetsLength()
+	t.AxsTrafoSets = make([]*KinCfgAxsTrafoSetT, axsTrafoSetsLength)
+	for j := 0; j < axsTrafoSetsLength; j++ {
+		x := KinCfgAxsTrafoSet{}
+		rcv.AxsTrafoSets(&x, j)
+		t.AxsTrafoSets[j] = x.UnPack()
+	}
+}
+
+func (rcv *KinCfgAxsTrafoAllSets) UnPack() *KinCfgAxsTrafoAllSetsT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoAllSetsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoAllSets struct {
 	_tab flatbuffers.Table
 }

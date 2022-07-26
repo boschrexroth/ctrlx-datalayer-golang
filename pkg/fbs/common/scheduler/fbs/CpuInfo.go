@@ -6,6 +6,123 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CpuInfoT struct {
+	CpuCoresTotal []uint32
+	CpuCoresActive []uint32
+	CpuCoresRealtime []uint32
+	CpuCoresNonRealtime []uint32
+	CpuCoreRealtimeMax int32
+	CpuCoreRealtimeMin int32
+	CpuCoreRealtimeDefault int32
+	CpuCoreNonRealtimeMax int32
+	CpuCoreNonRealtimeMin int32
+	CpuCoreNonRealtimeDefault int32
+	VariationId string
+	CpuCoreHwWdg uint32
+	CpuCorePtpTimer uint32
+	CpuCoreScheduler uint32
+	CpuCoreAutomation uint32
+}
+
+func (t *CpuInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	cpuCoresTotalOffset := flatbuffers.UOffsetT(0)
+	if t.CpuCoresTotal != nil {
+		cpuCoresTotalLength := len(t.CpuCoresTotal)
+		CpuInfoStartCpuCoresTotalVector(builder, cpuCoresTotalLength)
+		for j := cpuCoresTotalLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.CpuCoresTotal[j])
+		}
+		cpuCoresTotalOffset = builder.EndVector(cpuCoresTotalLength)
+	}
+	cpuCoresActiveOffset := flatbuffers.UOffsetT(0)
+	if t.CpuCoresActive != nil {
+		cpuCoresActiveLength := len(t.CpuCoresActive)
+		CpuInfoStartCpuCoresActiveVector(builder, cpuCoresActiveLength)
+		for j := cpuCoresActiveLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.CpuCoresActive[j])
+		}
+		cpuCoresActiveOffset = builder.EndVector(cpuCoresActiveLength)
+	}
+	cpuCoresRealtimeOffset := flatbuffers.UOffsetT(0)
+	if t.CpuCoresRealtime != nil {
+		cpuCoresRealtimeLength := len(t.CpuCoresRealtime)
+		CpuInfoStartCpuCoresRealtimeVector(builder, cpuCoresRealtimeLength)
+		for j := cpuCoresRealtimeLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.CpuCoresRealtime[j])
+		}
+		cpuCoresRealtimeOffset = builder.EndVector(cpuCoresRealtimeLength)
+	}
+	cpuCoresNonRealtimeOffset := flatbuffers.UOffsetT(0)
+	if t.CpuCoresNonRealtime != nil {
+		cpuCoresNonRealtimeLength := len(t.CpuCoresNonRealtime)
+		CpuInfoStartCpuCoresNonRealtimeVector(builder, cpuCoresNonRealtimeLength)
+		for j := cpuCoresNonRealtimeLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.CpuCoresNonRealtime[j])
+		}
+		cpuCoresNonRealtimeOffset = builder.EndVector(cpuCoresNonRealtimeLength)
+	}
+	variationIdOffset := builder.CreateString(t.VariationId)
+	CpuInfoStart(builder)
+	CpuInfoAddCpuCoresTotal(builder, cpuCoresTotalOffset)
+	CpuInfoAddCpuCoresActive(builder, cpuCoresActiveOffset)
+	CpuInfoAddCpuCoresRealtime(builder, cpuCoresRealtimeOffset)
+	CpuInfoAddCpuCoresNonRealtime(builder, cpuCoresNonRealtimeOffset)
+	CpuInfoAddCpuCoreRealtimeMax(builder, t.CpuCoreRealtimeMax)
+	CpuInfoAddCpuCoreRealtimeMin(builder, t.CpuCoreRealtimeMin)
+	CpuInfoAddCpuCoreRealtimeDefault(builder, t.CpuCoreRealtimeDefault)
+	CpuInfoAddCpuCoreNonRealtimeMax(builder, t.CpuCoreNonRealtimeMax)
+	CpuInfoAddCpuCoreNonRealtimeMin(builder, t.CpuCoreNonRealtimeMin)
+	CpuInfoAddCpuCoreNonRealtimeDefault(builder, t.CpuCoreNonRealtimeDefault)
+	CpuInfoAddVariationId(builder, variationIdOffset)
+	CpuInfoAddCpuCoreHwWdg(builder, t.CpuCoreHwWdg)
+	CpuInfoAddCpuCorePtpTimer(builder, t.CpuCorePtpTimer)
+	CpuInfoAddCpuCoreScheduler(builder, t.CpuCoreScheduler)
+	CpuInfoAddCpuCoreAutomation(builder, t.CpuCoreAutomation)
+	return CpuInfoEnd(builder)
+}
+
+func (rcv *CpuInfo) UnPackTo(t *CpuInfoT) {
+	cpuCoresTotalLength := rcv.CpuCoresTotalLength()
+	t.CpuCoresTotal = make([]uint32, cpuCoresTotalLength)
+	for j := 0; j < cpuCoresTotalLength; j++ {
+		t.CpuCoresTotal[j] = rcv.CpuCoresTotal(j)
+	}
+	cpuCoresActiveLength := rcv.CpuCoresActiveLength()
+	t.CpuCoresActive = make([]uint32, cpuCoresActiveLength)
+	for j := 0; j < cpuCoresActiveLength; j++ {
+		t.CpuCoresActive[j] = rcv.CpuCoresActive(j)
+	}
+	cpuCoresRealtimeLength := rcv.CpuCoresRealtimeLength()
+	t.CpuCoresRealtime = make([]uint32, cpuCoresRealtimeLength)
+	for j := 0; j < cpuCoresRealtimeLength; j++ {
+		t.CpuCoresRealtime[j] = rcv.CpuCoresRealtime(j)
+	}
+	cpuCoresNonRealtimeLength := rcv.CpuCoresNonRealtimeLength()
+	t.CpuCoresNonRealtime = make([]uint32, cpuCoresNonRealtimeLength)
+	for j := 0; j < cpuCoresNonRealtimeLength; j++ {
+		t.CpuCoresNonRealtime[j] = rcv.CpuCoresNonRealtime(j)
+	}
+	t.CpuCoreRealtimeMax = rcv.CpuCoreRealtimeMax()
+	t.CpuCoreRealtimeMin = rcv.CpuCoreRealtimeMin()
+	t.CpuCoreRealtimeDefault = rcv.CpuCoreRealtimeDefault()
+	t.CpuCoreNonRealtimeMax = rcv.CpuCoreNonRealtimeMax()
+	t.CpuCoreNonRealtimeMin = rcv.CpuCoreNonRealtimeMin()
+	t.CpuCoreNonRealtimeDefault = rcv.CpuCoreNonRealtimeDefault()
+	t.VariationId = string(rcv.VariationId())
+	t.CpuCoreHwWdg = rcv.CpuCoreHwWdg()
+	t.CpuCorePtpTimer = rcv.CpuCorePtpTimer()
+	t.CpuCoreScheduler = rcv.CpuCoreScheduler()
+	t.CpuCoreAutomation = rcv.CpuCoreAutomation()
+}
+
+func (rcv *CpuInfo) UnPack() *CpuInfoT {
+	if rcv == nil { return nil }
+	t := &CpuInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CpuInfo struct {
 	_tab flatbuffers.Table
 }

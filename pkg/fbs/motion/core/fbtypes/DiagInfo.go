@@ -7,6 +7,61 @@ import (
 )
 
 /// informations on the last diagnosis message of this motion object or of the system
+type DiagInfoT struct {
+	MainDiagCode uint32
+	DetailedDiagCode uint32
+	ObjName string
+	ObjURI string
+	Source string
+	AddInfo string
+	FirstMainDiagCode uint32
+	FirstDetailedDiagCode uint32
+	FirstSource string
+	FirstAddInfo string
+}
+
+func (t *DiagInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	objNameOffset := builder.CreateString(t.ObjName)
+	objURIOffset := builder.CreateString(t.ObjURI)
+	sourceOffset := builder.CreateString(t.Source)
+	addInfoOffset := builder.CreateString(t.AddInfo)
+	firstSourceOffset := builder.CreateString(t.FirstSource)
+	firstAddInfoOffset := builder.CreateString(t.FirstAddInfo)
+	DiagInfoStart(builder)
+	DiagInfoAddMainDiagCode(builder, t.MainDiagCode)
+	DiagInfoAddDetailedDiagCode(builder, t.DetailedDiagCode)
+	DiagInfoAddObjName(builder, objNameOffset)
+	DiagInfoAddObjURI(builder, objURIOffset)
+	DiagInfoAddSource(builder, sourceOffset)
+	DiagInfoAddAddInfo(builder, addInfoOffset)
+	DiagInfoAddFirstMainDiagCode(builder, t.FirstMainDiagCode)
+	DiagInfoAddFirstDetailedDiagCode(builder, t.FirstDetailedDiagCode)
+	DiagInfoAddFirstSource(builder, firstSourceOffset)
+	DiagInfoAddFirstAddInfo(builder, firstAddInfoOffset)
+	return DiagInfoEnd(builder)
+}
+
+func (rcv *DiagInfo) UnPackTo(t *DiagInfoT) {
+	t.MainDiagCode = rcv.MainDiagCode()
+	t.DetailedDiagCode = rcv.DetailedDiagCode()
+	t.ObjName = string(rcv.ObjName())
+	t.ObjURI = string(rcv.ObjURI())
+	t.Source = string(rcv.Source())
+	t.AddInfo = string(rcv.AddInfo())
+	t.FirstMainDiagCode = rcv.FirstMainDiagCode()
+	t.FirstDetailedDiagCode = rcv.FirstDetailedDiagCode()
+	t.FirstSource = string(rcv.FirstSource())
+	t.FirstAddInfo = string(rcv.FirstAddInfo())
+}
+
+func (rcv *DiagInfo) UnPack() *DiagInfoT {
+	if rcv == nil { return nil }
+	t := &DiagInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DiagInfo struct {
 	_tab flatbuffers.Table
 }

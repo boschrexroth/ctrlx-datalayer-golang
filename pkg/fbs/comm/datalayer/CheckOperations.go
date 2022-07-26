@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CheckOperationsT struct {
+	Address string
+	Token string
+}
+
+func (t *CheckOperationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	addressOffset := builder.CreateString(t.Address)
+	tokenOffset := builder.CreateString(t.Token)
+	CheckOperationsStart(builder)
+	CheckOperationsAddAddress(builder, addressOffset)
+	CheckOperationsAddToken(builder, tokenOffset)
+	return CheckOperationsEnd(builder)
+}
+
+func (rcv *CheckOperations) UnPackTo(t *CheckOperationsT) {
+	t.Address = string(rcv.Address())
+	t.Token = string(rcv.Token())
+}
+
+func (rcv *CheckOperations) UnPack() *CheckOperationsT {
+	if rcv == nil { return nil }
+	t := &CheckOperationsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CheckOperations struct {
 	_tab flatbuffers.Table
 }

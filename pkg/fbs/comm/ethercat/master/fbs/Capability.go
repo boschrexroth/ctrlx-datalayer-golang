@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CapabilityT struct {
+	Name string
+	Value string
+}
+
+func (t *CapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	valueOffset := builder.CreateString(t.Value)
+	CapabilityStart(builder)
+	CapabilityAddName(builder, nameOffset)
+	CapabilityAddValue(builder, valueOffset)
+	return CapabilityEnd(builder)
+}
+
+func (rcv *Capability) UnPackTo(t *CapabilityT) {
+	t.Name = string(rcv.Name())
+	t.Value = string(rcv.Value())
+}
+
+func (rcv *Capability) UnPack() *CapabilityT {
+	if rcv == nil { return nil }
+	t := &CapabilityT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Capability struct {
 	_tab flatbuffers.Table
 }

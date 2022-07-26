@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SamplingT struct {
+	SamplingInterval uint64
+}
+
+func (t *SamplingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SamplingStart(builder)
+	SamplingAddSamplingInterval(builder, t.SamplingInterval)
+	return SamplingEnd(builder)
+}
+
+func (rcv *Sampling) UnPackTo(t *SamplingT) {
+	t.SamplingInterval = rcv.SamplingInterval()
+}
+
+func (rcv *Sampling) UnPack() *SamplingT {
+	if rcv == nil { return nil }
+	t := &SamplingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Sampling struct {
 	_tab flatbuffers.Table
 }

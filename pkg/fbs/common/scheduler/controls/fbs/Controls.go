@@ -2,7 +2,11 @@
 
 package fbs
 
-import "strconv"
+import (
+	"strconv"
+
+	flatbuffers "github.com/google/flatbuffers/go"
+)
 
 type Controls byte
 
@@ -26,4 +30,29 @@ func (v Controls) String() string {
 		return s
 	}
 	return "Controls(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
+type ControlsT struct {
+	Type Controls
+	Value interface{}
+}
+
+func (t *ControlsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil {
+		return 0
+	}
+	switch t.Type {
+	case ControlsDebug:
+		return t.Value.(*DebugT).Pack(builder)
+	}
+	return 0
+}
+
+func (rcv Controls) UnPack(table flatbuffers.Table) *ControlsT {
+	switch rcv {
+	case ControlsDebug:
+		x := Debug{_tab: table}
+		return &ControlsT{ Type: ControlsDebug, Value: x.UnPack() }
+	}
+	return nil
 }

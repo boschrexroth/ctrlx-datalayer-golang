@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Task_RunScriptT struct {
+	Name string
+	Param []string
+}
+
+func (t *Task_RunScriptT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	paramOffset := flatbuffers.UOffsetT(0)
+	if t.Param != nil {
+		paramLength := len(t.Param)
+		paramOffsets := make([]flatbuffers.UOffsetT, paramLength)
+		for j := 0; j < paramLength; j++ {
+			paramOffsets[j] = builder.CreateString(t.Param[j])
+		}
+		Task_RunScriptStartParamVector(builder, paramLength)
+		for j := paramLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(paramOffsets[j])
+		}
+		paramOffset = builder.EndVector(paramLength)
+	}
+	Task_RunScriptStart(builder)
+	Task_RunScriptAddName(builder, nameOffset)
+	Task_RunScriptAddParam(builder, paramOffset)
+	return Task_RunScriptEnd(builder)
+}
+
+func (rcv *Task_RunScript) UnPackTo(t *Task_RunScriptT) {
+	t.Name = string(rcv.Name())
+	paramLength := rcv.ParamLength()
+	t.Param = make([]string, paramLength)
+	for j := 0; j < paramLength; j++ {
+		t.Param[j] = string(rcv.Param(j))
+	}
+}
+
+func (rcv *Task_RunScript) UnPack() *Task_RunScriptT {
+	if rcv == nil { return nil }
+	t := &Task_RunScriptT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Task_RunScript struct {
 	_tab flatbuffers.Table
 }

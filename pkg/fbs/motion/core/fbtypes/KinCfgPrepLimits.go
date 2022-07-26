@@ -7,6 +7,28 @@ import (
 )
 
 /// preparation limits for kinematics
+type KinCfgPrepLimitsT struct {
+	MaxCmdsInBuffer uint64
+}
+
+func (t *KinCfgPrepLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	KinCfgPrepLimitsStart(builder)
+	KinCfgPrepLimitsAddMaxCmdsInBuffer(builder, t.MaxCmdsInBuffer)
+	return KinCfgPrepLimitsEnd(builder)
+}
+
+func (rcv *KinCfgPrepLimits) UnPackTo(t *KinCfgPrepLimitsT) {
+	t.MaxCmdsInBuffer = rcv.MaxCmdsInBuffer()
+}
+
+func (rcv *KinCfgPrepLimits) UnPack() *KinCfgPrepLimitsT {
+	if rcv == nil { return nil }
+	t := &KinCfgPrepLimitsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgPrepLimits struct {
 	_tab flatbuffers.Table
 }

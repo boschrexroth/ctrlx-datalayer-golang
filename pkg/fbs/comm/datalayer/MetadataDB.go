@@ -6,6 +6,59 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MetadataDBT struct {
+	Address string
+	Childs []*MetadataDBT
+	Asterisk *MetadataDBT
+	Metadata *MetadataT
+}
+
+func (t *MetadataDBT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	addressOffset := builder.CreateString(t.Address)
+	childsOffset := flatbuffers.UOffsetT(0)
+	if t.Childs != nil {
+		childsLength := len(t.Childs)
+		childsOffsets := make([]flatbuffers.UOffsetT, childsLength)
+		for j := 0; j < childsLength; j++ {
+			childsOffsets[j] = t.Childs[j].Pack(builder)
+		}
+		MetadataDBStartChildsVector(builder, childsLength)
+		for j := childsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(childsOffsets[j])
+		}
+		childsOffset = builder.EndVector(childsLength)
+	}
+	asteriskOffset := t.Asterisk.Pack(builder)
+	metadataOffset := t.Metadata.Pack(builder)
+	MetadataDBStart(builder)
+	MetadataDBAddAddress(builder, addressOffset)
+	MetadataDBAddChilds(builder, childsOffset)
+	MetadataDBAddAsterisk(builder, asteriskOffset)
+	MetadataDBAddMetadata(builder, metadataOffset)
+	return MetadataDBEnd(builder)
+}
+
+func (rcv *MetadataDB) UnPackTo(t *MetadataDBT) {
+	t.Address = string(rcv.Address())
+	childsLength := rcv.ChildsLength()
+	t.Childs = make([]*MetadataDBT, childsLength)
+	for j := 0; j < childsLength; j++ {
+		x := MetadataDB{}
+		rcv.Childs(&x, j)
+		t.Childs[j] = x.UnPack()
+	}
+	t.Asterisk = rcv.Asterisk(nil).UnPack()
+	t.Metadata = rcv.Metadata(nil).UnPack()
+}
+
+func (rcv *MetadataDB) UnPack() *MetadataDBT {
+	if rcv == nil { return nil }
+	t := &MetadataDBT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MetadataDB struct {
 	_tab flatbuffers.Table
 }

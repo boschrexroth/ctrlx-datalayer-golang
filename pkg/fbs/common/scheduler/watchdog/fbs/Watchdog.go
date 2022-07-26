@@ -6,6 +6,44 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type WatchdogT struct {
+	Name string
+	Type *TypeT
+	Variant *WatchdogVariantT
+}
+
+func (t *WatchdogT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	typeOffset := t.Type.Pack(builder)
+	variantOffset := t.Variant.Pack(builder)
+	
+	WatchdogStart(builder)
+	WatchdogAddName(builder, nameOffset)
+	WatchdogAddType(builder, typeOffset)
+	if t.Variant != nil {
+		WatchdogAddVariantType(builder, t.Variant.Type)
+	}
+	WatchdogAddVariant(builder, variantOffset)
+	return WatchdogEnd(builder)
+}
+
+func (rcv *Watchdog) UnPackTo(t *WatchdogT) {
+	t.Name = string(rcv.Name())
+	t.Type = rcv.Type(nil).UnPack()
+	variantTable := flatbuffers.Table{}
+	if rcv.Variant(&variantTable) {
+		t.Variant = rcv.VariantType().UnPack(variantTable)
+	}
+}
+
+func (rcv *Watchdog) UnPack() *WatchdogT {
+	if rcv == nil { return nil }
+	t := &WatchdogT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Watchdog struct {
 	_tab flatbuffers.Table
 }

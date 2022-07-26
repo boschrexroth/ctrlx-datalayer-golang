@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ConfigItemT struct {
+	Name string
+	Address string
+}
+
+func (t *ConfigItemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	addressOffset := builder.CreateString(t.Address)
+	ConfigItemStart(builder)
+	ConfigItemAddName(builder, nameOffset)
+	ConfigItemAddAddress(builder, addressOffset)
+	return ConfigItemEnd(builder)
+}
+
+func (rcv *ConfigItem) UnPackTo(t *ConfigItemT) {
+	t.Name = string(rcv.Name())
+	t.Address = string(rcv.Address())
+}
+
+func (rcv *ConfigItem) UnPack() *ConfigItemT {
+	if rcv == nil { return nil }
+	t := &ConfigItemT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ConfigItem struct {
 	_tab flatbuffers.Table
 }

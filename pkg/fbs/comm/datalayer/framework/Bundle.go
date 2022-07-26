@@ -6,6 +6,72 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type BundleT struct {
+	Name string
+	Version string
+	Location string
+	Id int64
+	Components []*ComponentT
+	State string
+	Active bool
+	Installed bool
+}
+
+func (t *BundleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	locationOffset := builder.CreateString(t.Location)
+	componentsOffset := flatbuffers.UOffsetT(0)
+	if t.Components != nil {
+		componentsLength := len(t.Components)
+		componentsOffsets := make([]flatbuffers.UOffsetT, componentsLength)
+		for j := 0; j < componentsLength; j++ {
+			componentsOffsets[j] = t.Components[j].Pack(builder)
+		}
+		BundleStartComponentsVector(builder, componentsLength)
+		for j := componentsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(componentsOffsets[j])
+		}
+		componentsOffset = builder.EndVector(componentsLength)
+	}
+	stateOffset := builder.CreateString(t.State)
+	BundleStart(builder)
+	BundleAddName(builder, nameOffset)
+	BundleAddVersion(builder, versionOffset)
+	BundleAddLocation(builder, locationOffset)
+	BundleAddId(builder, t.Id)
+	BundleAddComponents(builder, componentsOffset)
+	BundleAddState(builder, stateOffset)
+	BundleAddActive(builder, t.Active)
+	BundleAddInstalled(builder, t.Installed)
+	return BundleEnd(builder)
+}
+
+func (rcv *Bundle) UnPackTo(t *BundleT) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+	t.Location = string(rcv.Location())
+	t.Id = rcv.Id()
+	componentsLength := rcv.ComponentsLength()
+	t.Components = make([]*ComponentT, componentsLength)
+	for j := 0; j < componentsLength; j++ {
+		x := Component{}
+		rcv.Components(&x, j)
+		t.Components[j] = x.UnPack()
+	}
+	t.State = string(rcv.State())
+	t.Active = rcv.Active()
+	t.Installed = rcv.Installed()
+}
+
+func (rcv *Bundle) UnPack() *BundleT {
+	if rcv == nil { return nil }
+	t := &BundleT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Bundle struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,53 @@ import (
 )
 
 /// currently interpolated values
+type AxsIpoValuesT struct {
+	IpoPos float64
+	IpoVel float64
+	IpoAcc float64
+	IpoJrk float64
+	IpoPosUnit string
+	IpoVelUnit string
+	IpoAccUnit string
+	IpoJrkUnit string
+}
+
+func (t *AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ipoPosUnitOffset := builder.CreateString(t.IpoPosUnit)
+	ipoVelUnitOffset := builder.CreateString(t.IpoVelUnit)
+	ipoAccUnitOffset := builder.CreateString(t.IpoAccUnit)
+	ipoJrkUnitOffset := builder.CreateString(t.IpoJrkUnit)
+	AxsIpoValuesStart(builder)
+	AxsIpoValuesAddIpoPos(builder, t.IpoPos)
+	AxsIpoValuesAddIpoVel(builder, t.IpoVel)
+	AxsIpoValuesAddIpoAcc(builder, t.IpoAcc)
+	AxsIpoValuesAddIpoJrk(builder, t.IpoJrk)
+	AxsIpoValuesAddIpoPosUnit(builder, ipoPosUnitOffset)
+	AxsIpoValuesAddIpoVelUnit(builder, ipoVelUnitOffset)
+	AxsIpoValuesAddIpoAccUnit(builder, ipoAccUnitOffset)
+	AxsIpoValuesAddIpoJrkUnit(builder, ipoJrkUnitOffset)
+	return AxsIpoValuesEnd(builder)
+}
+
+func (rcv *AxsIpoValues) UnPackTo(t *AxsIpoValuesT) {
+	t.IpoPos = rcv.IpoPos()
+	t.IpoVel = rcv.IpoVel()
+	t.IpoAcc = rcv.IpoAcc()
+	t.IpoJrk = rcv.IpoJrk()
+	t.IpoPosUnit = string(rcv.IpoPosUnit())
+	t.IpoVelUnit = string(rcv.IpoVelUnit())
+	t.IpoAccUnit = string(rcv.IpoAccUnit())
+	t.IpoJrkUnit = string(rcv.IpoJrkUnit())
+}
+
+func (rcv *AxsIpoValues) UnPack() *AxsIpoValuesT {
+	if rcv == nil { return nil }
+	t := &AxsIpoValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsIpoValues struct {
 	_tab flatbuffers.Table
 }

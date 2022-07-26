@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MessageSecurityModeT struct {
+	MessageSecurityMode EnumMessageSecurityMode
+}
+
+func (t *MessageSecurityModeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	MessageSecurityModeStart(builder)
+	MessageSecurityModeAddMessageSecurityMode(builder, t.MessageSecurityMode)
+	return MessageSecurityModeEnd(builder)
+}
+
+func (rcv *MessageSecurityMode) UnPackTo(t *MessageSecurityModeT) {
+	t.MessageSecurityMode = rcv.MessageSecurityMode()
+}
+
+func (rcv *MessageSecurityMode) UnPack() *MessageSecurityModeT {
+	if rcv == nil { return nil }
+	t := &MessageSecurityModeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MessageSecurityMode struct {
 	_tab flatbuffers.Table
 }

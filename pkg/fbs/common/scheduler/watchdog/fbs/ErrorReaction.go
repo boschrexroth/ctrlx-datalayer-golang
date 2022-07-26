@@ -5,8 +5,38 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__watchdog__errorreaction__fbs "common/scheduler/watchdog/errorreaction/fbs"
+	common__scheduler__watchdog__errorreaction__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/errorreaction/fbs"
 )
+
+type ErrorReactionT struct {
+	Class *common__scheduler__watchdog__errorreaction__fbs.ClassT
+	Configuration *common__scheduler__watchdog__errorreaction__fbs.ConfigurationT
+	MaxConsecutiveErrors uint32
+}
+
+func (t *ErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	classOffset := t.Class.Pack(builder)
+	configurationOffset := t.Configuration.Pack(builder)
+	ErrorReactionStart(builder)
+	ErrorReactionAddClass(builder, classOffset)
+	ErrorReactionAddConfiguration(builder, configurationOffset)
+	ErrorReactionAddMaxConsecutiveErrors(builder, t.MaxConsecutiveErrors)
+	return ErrorReactionEnd(builder)
+}
+
+func (rcv *ErrorReaction) UnPackTo(t *ErrorReactionT) {
+	t.Class = rcv.Class(nil).UnPack()
+	t.Configuration = rcv.Configuration(nil).UnPack()
+	t.MaxConsecutiveErrors = rcv.MaxConsecutiveErrors()
+}
+
+func (rcv *ErrorReaction) UnPack() *ErrorReactionT {
+	if rcv == nil { return nil }
+	t := &ErrorReactionT{}
+	rcv.UnPackTo(t)
+	return t
+}
 
 type ErrorReaction struct {
 	_tab flatbuffers.Table

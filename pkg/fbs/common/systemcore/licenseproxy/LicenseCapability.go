@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LicenseCapabilityT struct {
+	Name string
+	Version string
+	Count int32
+	IsPermanent bool
+	StartDate string
+	FinalExpirationDate string
+}
+
+func (t *LicenseCapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	startDateOffset := builder.CreateString(t.StartDate)
+	finalExpirationDateOffset := builder.CreateString(t.FinalExpirationDate)
+	LicenseCapabilityStart(builder)
+	LicenseCapabilityAddName(builder, nameOffset)
+	LicenseCapabilityAddVersion(builder, versionOffset)
+	LicenseCapabilityAddCount(builder, t.Count)
+	LicenseCapabilityAddIsPermanent(builder, t.IsPermanent)
+	LicenseCapabilityAddStartDate(builder, startDateOffset)
+	LicenseCapabilityAddFinalExpirationDate(builder, finalExpirationDateOffset)
+	return LicenseCapabilityEnd(builder)
+}
+
+func (rcv *LicenseCapability) UnPackTo(t *LicenseCapabilityT) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+	t.Count = rcv.Count()
+	t.IsPermanent = rcv.IsPermanent()
+	t.StartDate = string(rcv.StartDate())
+	t.FinalExpirationDate = string(rcv.FinalExpirationDate())
+}
+
+func (rcv *LicenseCapability) UnPack() *LicenseCapabilityT {
+	if rcv == nil { return nil }
+	t := &LicenseCapabilityT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LicenseCapability struct {
 	_tab flatbuffers.Table
 }

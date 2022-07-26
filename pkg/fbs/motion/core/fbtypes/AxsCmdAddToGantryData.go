@@ -7,6 +7,32 @@ import (
 )
 
 /// parameters of the axis command add-to-gantry
+type AxsCmdAddToGantryDataT struct {
+	MasterName string
+	Buffered bool
+}
+
+func (t *AxsCmdAddToGantryDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	masterNameOffset := builder.CreateString(t.MasterName)
+	AxsCmdAddToGantryDataStart(builder)
+	AxsCmdAddToGantryDataAddMasterName(builder, masterNameOffset)
+	AxsCmdAddToGantryDataAddBuffered(builder, t.Buffered)
+	return AxsCmdAddToGantryDataEnd(builder)
+}
+
+func (rcv *AxsCmdAddToGantryData) UnPackTo(t *AxsCmdAddToGantryDataT) {
+	t.MasterName = string(rcv.MasterName())
+	t.Buffered = rcv.Buffered()
+}
+
+func (rcv *AxsCmdAddToGantryData) UnPack() *AxsCmdAddToGantryDataT {
+	if rcv == nil { return nil }
+	t := &AxsCmdAddToGantryDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdAddToGantryData struct {
 	_tab flatbuffers.Table
 }

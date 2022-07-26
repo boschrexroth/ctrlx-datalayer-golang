@@ -6,6 +6,39 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type VariableT struct {
+	Name string
+	Bitoffset uint32
+	Bitsize uint32
+	Type string
+}
+
+func (t *VariableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	typeOffset := builder.CreateString(t.Type)
+	VariableStart(builder)
+	VariableAddName(builder, nameOffset)
+	VariableAddBitoffset(builder, t.Bitoffset)
+	VariableAddBitsize(builder, t.Bitsize)
+	VariableAddType(builder, typeOffset)
+	return VariableEnd(builder)
+}
+
+func (rcv *Variable) UnPackTo(t *VariableT) {
+	t.Name = string(rcv.Name())
+	t.Bitoffset = rcv.Bitoffset()
+	t.Bitsize = rcv.Bitsize()
+	t.Type = string(rcv.Type())
+}
+
+func (rcv *Variable) UnPack() *VariableT {
+	if rcv == nil { return nil }
+	t := &VariableT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Variable struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ReferenceT struct {
+	Type string
+	TargetAddress string
+}
+
+func (t *ReferenceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	typeOffset := builder.CreateString(t.Type)
+	targetAddressOffset := builder.CreateString(t.TargetAddress)
+	ReferenceStart(builder)
+	ReferenceAddType(builder, typeOffset)
+	ReferenceAddTargetAddress(builder, targetAddressOffset)
+	return ReferenceEnd(builder)
+}
+
+func (rcv *Reference) UnPackTo(t *ReferenceT) {
+	t.Type = string(rcv.Type())
+	t.TargetAddress = string(rcv.TargetAddress())
+}
+
+func (rcv *Reference) UnPack() *ReferenceT {
+	if rcv == nil { return nil }
+	t := &ReferenceT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Reference struct {
 	_tab flatbuffers.Table
 }

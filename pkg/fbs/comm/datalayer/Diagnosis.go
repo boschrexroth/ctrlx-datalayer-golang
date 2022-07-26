@@ -6,6 +6,83 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DiagnosisT struct {
+	MainDiagnosisCode uint32
+	DetailedDiagnosisCode uint32
+	DynamicDescription string
+	Entity string
+	MoreInfo []*DiagMoreInfoT
+	Cause []*DiagnosisT
+}
+
+func (t *DiagnosisT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	entityOffset := builder.CreateString(t.Entity)
+	moreInfoOffset := flatbuffers.UOffsetT(0)
+	if t.MoreInfo != nil {
+		moreInfoLength := len(t.MoreInfo)
+		moreInfoOffsets := make([]flatbuffers.UOffsetT, moreInfoLength)
+		for j := 0; j < moreInfoLength; j++ {
+			moreInfoOffsets[j] = t.MoreInfo[j].Pack(builder)
+		}
+		DiagnosisStartMoreInfoVector(builder, moreInfoLength)
+		for j := moreInfoLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(moreInfoOffsets[j])
+		}
+		moreInfoOffset = builder.EndVector(moreInfoLength)
+	}
+	causeOffset := flatbuffers.UOffsetT(0)
+	if t.Cause != nil {
+		causeLength := len(t.Cause)
+		causeOffsets := make([]flatbuffers.UOffsetT, causeLength)
+		for j := 0; j < causeLength; j++ {
+			causeOffsets[j] = t.Cause[j].Pack(builder)
+		}
+		DiagnosisStartCauseVector(builder, causeLength)
+		for j := causeLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(causeOffsets[j])
+		}
+		causeOffset = builder.EndVector(causeLength)
+	}
+	DiagnosisStart(builder)
+	DiagnosisAddMainDiagnosisCode(builder, t.MainDiagnosisCode)
+	DiagnosisAddDetailedDiagnosisCode(builder, t.DetailedDiagnosisCode)
+	DiagnosisAddDynamicDescription(builder, dynamicDescriptionOffset)
+	DiagnosisAddEntity(builder, entityOffset)
+	DiagnosisAddMoreInfo(builder, moreInfoOffset)
+	DiagnosisAddCause(builder, causeOffset)
+	return DiagnosisEnd(builder)
+}
+
+func (rcv *Diagnosis) UnPackTo(t *DiagnosisT) {
+	t.MainDiagnosisCode = rcv.MainDiagnosisCode()
+	t.DetailedDiagnosisCode = rcv.DetailedDiagnosisCode()
+	t.DynamicDescription = string(rcv.DynamicDescription())
+	t.Entity = string(rcv.Entity())
+	moreInfoLength := rcv.MoreInfoLength()
+	t.MoreInfo = make([]*DiagMoreInfoT, moreInfoLength)
+	for j := 0; j < moreInfoLength; j++ {
+		x := DiagMoreInfo{}
+		rcv.MoreInfo(&x, j)
+		t.MoreInfo[j] = x.UnPack()
+	}
+	causeLength := rcv.CauseLength()
+	t.Cause = make([]*DiagnosisT, causeLength)
+	for j := 0; j < causeLength; j++ {
+		x := Diagnosis{}
+		rcv.Cause(&x, j)
+		t.Cause[j] = x.UnPack()
+	}
+}
+
+func (rcv *Diagnosis) UnPack() *DiagnosisT {
+	if rcv == nil { return nil }
+	t := &DiagnosisT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Diagnosis struct {
 	_tab flatbuffers.Table
 }
@@ -73,8 +150,48 @@ func (rcv *Diagnosis) Entity() []byte {
 	return nil
 }
 
+func (rcv *Diagnosis) MoreInfo(obj *DiagMoreInfo, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Diagnosis) MoreInfoLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *Diagnosis) Cause(obj *Diagnosis, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Diagnosis) CauseLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func DiagnosisStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(6)
 }
 func DiagnosisAddMainDiagnosisCode(builder *flatbuffers.Builder, mainDiagnosisCode uint32) {
 	builder.PrependUint32Slot(0, mainDiagnosisCode, 0)
@@ -87,6 +204,18 @@ func DiagnosisAddDynamicDescription(builder *flatbuffers.Builder, dynamicDescrip
 }
 func DiagnosisAddEntity(builder *flatbuffers.Builder, entity flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(entity), 0)
+}
+func DiagnosisAddMoreInfo(builder *flatbuffers.Builder, moreInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(moreInfo), 0)
+}
+func DiagnosisStartMoreInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func DiagnosisAddCause(builder *flatbuffers.Builder, cause flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(cause), 0)
+}
+func DiagnosisStartCauseVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func DiagnosisEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

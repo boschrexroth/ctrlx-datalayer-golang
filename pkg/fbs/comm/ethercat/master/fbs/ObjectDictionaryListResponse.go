@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ObjectDictionaryListResponseT struct {
+	Indices []uint16
+}
+
+func (t *ObjectDictionaryListResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	indicesOffset := flatbuffers.UOffsetT(0)
+	if t.Indices != nil {
+		indicesLength := len(t.Indices)
+		ObjectDictionaryListResponseStartIndicesVector(builder, indicesLength)
+		for j := indicesLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.Indices[j])
+		}
+		indicesOffset = builder.EndVector(indicesLength)
+	}
+	ObjectDictionaryListResponseStart(builder)
+	ObjectDictionaryListResponseAddIndices(builder, indicesOffset)
+	return ObjectDictionaryListResponseEnd(builder)
+}
+
+func (rcv *ObjectDictionaryListResponse) UnPackTo(t *ObjectDictionaryListResponseT) {
+	indicesLength := rcv.IndicesLength()
+	t.Indices = make([]uint16, indicesLength)
+	for j := 0; j < indicesLength; j++ {
+		t.Indices[j] = rcv.Indices(j)
+	}
+}
+
+func (rcv *ObjectDictionaryListResponse) UnPack() *ObjectDictionaryListResponseT {
+	if rcv == nil { return nil }
+	t := &ObjectDictionaryListResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ObjectDictionaryListResponse struct {
 	_tab flatbuffers.Table
 }

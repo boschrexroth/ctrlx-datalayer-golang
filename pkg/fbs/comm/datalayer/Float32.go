@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Float32T struct {
+	Value float32
+}
+
+func (t *Float32T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	Float32Start(builder)
+	Float32AddValue(builder, t.Value)
+	return Float32End(builder)
+}
+
+func (rcv *Float32) UnPackTo(t *Float32T) {
+	t.Value = rcv.Value()
+}
+
+func (rcv *Float32) UnPack() *Float32T {
+	if rcv == nil { return nil }
+	t := &Float32T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Float32 struct {
 	_tab flatbuffers.Table
 }

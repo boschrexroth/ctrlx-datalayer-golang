@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ComponentListT struct {
+	Components []*ComponentT
+}
+
+func (t *ComponentListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	componentsOffset := flatbuffers.UOffsetT(0)
+	if t.Components != nil {
+		componentsLength := len(t.Components)
+		componentsOffsets := make([]flatbuffers.UOffsetT, componentsLength)
+		for j := 0; j < componentsLength; j++ {
+			componentsOffsets[j] = t.Components[j].Pack(builder)
+		}
+		ComponentListStartComponentsVector(builder, componentsLength)
+		for j := componentsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(componentsOffsets[j])
+		}
+		componentsOffset = builder.EndVector(componentsLength)
+	}
+	ComponentListStart(builder)
+	ComponentListAddComponents(builder, componentsOffset)
+	return ComponentListEnd(builder)
+}
+
+func (rcv *ComponentList) UnPackTo(t *ComponentListT) {
+	componentsLength := rcv.ComponentsLength()
+	t.Components = make([]*ComponentT, componentsLength)
+	for j := 0; j < componentsLength; j++ {
+		x := Component{}
+		rcv.Components(&x, j)
+		t.Components[j] = x.UnPack()
+	}
+}
+
+func (rcv *ComponentList) UnPack() *ComponentListT {
+	if rcv == nil { return nil }
+	t := &ComponentListT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ComponentList struct {
 	_tab flatbuffers.Table
 }

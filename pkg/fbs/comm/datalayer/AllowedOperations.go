@@ -6,6 +6,40 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AllowedOperationsT struct {
+	Read bool
+	Write bool
+	Create bool
+	Delete bool
+	Browse bool
+}
+
+func (t *AllowedOperationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AllowedOperationsStart(builder)
+	AllowedOperationsAddRead(builder, t.Read)
+	AllowedOperationsAddWrite(builder, t.Write)
+	AllowedOperationsAddCreate(builder, t.Create)
+	AllowedOperationsAddDelete(builder, t.Delete)
+	AllowedOperationsAddBrowse(builder, t.Browse)
+	return AllowedOperationsEnd(builder)
+}
+
+func (rcv *AllowedOperations) UnPackTo(t *AllowedOperationsT) {
+	t.Read = rcv.Read()
+	t.Write = rcv.Write()
+	t.Create = rcv.Create()
+	t.Delete = rcv.Delete()
+	t.Browse = rcv.Browse()
+}
+
+func (rcv *AllowedOperations) UnPack() *AllowedOperationsT {
+	if rcv == nil { return nil }
+	t := &AllowedOperationsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AllowedOperations struct {
 	_tab flatbuffers.Table
 }

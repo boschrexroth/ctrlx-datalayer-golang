@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DebugChannelT struct {
+	Name string
+	Address string
+	IsTrigger bool
+}
+
+func (t *DebugChannelT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	addressOffset := builder.CreateString(t.Address)
+	DebugChannelStart(builder)
+	DebugChannelAddName(builder, nameOffset)
+	DebugChannelAddAddress(builder, addressOffset)
+	DebugChannelAddIsTrigger(builder, t.IsTrigger)
+	return DebugChannelEnd(builder)
+}
+
+func (rcv *DebugChannel) UnPackTo(t *DebugChannelT) {
+	t.Name = string(rcv.Name())
+	t.Address = string(rcv.Address())
+	t.IsTrigger = rcv.IsTrigger()
+}
+
+func (rcv *DebugChannel) UnPack() *DebugChannelT {
+	if rcv == nil { return nil }
+	t := &DebugChannelT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DebugChannel struct {
 	_tab flatbuffers.Table
 }

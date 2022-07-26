@@ -6,6 +6,58 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MainDiagnosticT struct {
+	Number string
+	Version uint32
+	Text string
+	DetailedDiagnostics []*DetailedDiagnosticT
+}
+
+func (t *MainDiagnosticT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	numberOffset := builder.CreateString(t.Number)
+	textOffset := builder.CreateString(t.Text)
+	detailedDiagnosticsOffset := flatbuffers.UOffsetT(0)
+	if t.DetailedDiagnostics != nil {
+		detailedDiagnosticsLength := len(t.DetailedDiagnostics)
+		detailedDiagnosticsOffsets := make([]flatbuffers.UOffsetT, detailedDiagnosticsLength)
+		for j := 0; j < detailedDiagnosticsLength; j++ {
+			detailedDiagnosticsOffsets[j] = t.DetailedDiagnostics[j].Pack(builder)
+		}
+		MainDiagnosticStartDetailedDiagnosticsVector(builder, detailedDiagnosticsLength)
+		for j := detailedDiagnosticsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(detailedDiagnosticsOffsets[j])
+		}
+		detailedDiagnosticsOffset = builder.EndVector(detailedDiagnosticsLength)
+	}
+	MainDiagnosticStart(builder)
+	MainDiagnosticAddNumber(builder, numberOffset)
+	MainDiagnosticAddVersion(builder, t.Version)
+	MainDiagnosticAddText(builder, textOffset)
+	MainDiagnosticAddDetailedDiagnostics(builder, detailedDiagnosticsOffset)
+	return MainDiagnosticEnd(builder)
+}
+
+func (rcv *MainDiagnostic) UnPackTo(t *MainDiagnosticT) {
+	t.Number = string(rcv.Number())
+	t.Version = rcv.Version()
+	t.Text = string(rcv.Text())
+	detailedDiagnosticsLength := rcv.DetailedDiagnosticsLength()
+	t.DetailedDiagnostics = make([]*DetailedDiagnosticT, detailedDiagnosticsLength)
+	for j := 0; j < detailedDiagnosticsLength; j++ {
+		x := DetailedDiagnostic{}
+		rcv.DetailedDiagnostics(&x, j)
+		t.DetailedDiagnostics[j] = x.UnPack()
+	}
+}
+
+func (rcv *MainDiagnostic) UnPack() *MainDiagnosticT {
+	if rcv == nil { return nil }
+	t := &MainDiagnosticT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MainDiagnostic struct {
 	_tab flatbuffers.Table
 }

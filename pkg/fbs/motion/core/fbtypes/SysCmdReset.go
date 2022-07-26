@@ -7,6 +7,28 @@ import (
 )
 
 /// request structure for the ResetAllMotionObjects nodes
+type SysCmdResetT struct {
+	Type SysResetType
+}
+
+func (t *SysCmdResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SysCmdResetStart(builder)
+	SysCmdResetAddType(builder, t.Type)
+	return SysCmdResetEnd(builder)
+}
+
+func (rcv *SysCmdReset) UnPackTo(t *SysCmdResetT) {
+	t.Type = rcv.Type()
+}
+
+func (rcv *SysCmdReset) UnPack() *SysCmdResetT {
+	if rcv == nil { return nil }
+	t := &SysCmdResetT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCmdReset struct {
 	_tab flatbuffers.Table
 }

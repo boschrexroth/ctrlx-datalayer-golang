@@ -7,6 +7,35 @@ import (
 )
 
 /// return type of requests of the current boot state
+type BootStateT struct {
+	Text string
+	ActStep uint32
+	MaxSteps uint32
+}
+
+func (t *BootStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	textOffset := builder.CreateString(t.Text)
+	BootStateStart(builder)
+	BootStateAddText(builder, textOffset)
+	BootStateAddActStep(builder, t.ActStep)
+	BootStateAddMaxSteps(builder, t.MaxSteps)
+	return BootStateEnd(builder)
+}
+
+func (rcv *BootState) UnPackTo(t *BootStateT) {
+	t.Text = string(rcv.Text())
+	t.ActStep = rcv.ActStep()
+	t.MaxSteps = rcv.MaxSteps()
+}
+
+func (rcv *BootState) UnPack() *BootStateT {
+	if rcv == nil { return nil }
+	t := &BootStateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type BootState struct {
 	_tab flatbuffers.Table
 }

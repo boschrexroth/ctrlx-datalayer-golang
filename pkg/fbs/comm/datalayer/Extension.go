@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ExtensionT struct {
+	Key string
+	Value string
+}
+
+func (t *ExtensionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	keyOffset := builder.CreateString(t.Key)
+	valueOffset := builder.CreateString(t.Value)
+	ExtensionStart(builder)
+	ExtensionAddKey(builder, keyOffset)
+	ExtensionAddValue(builder, valueOffset)
+	return ExtensionEnd(builder)
+}
+
+func (rcv *Extension) UnPackTo(t *ExtensionT) {
+	t.Key = string(rcv.Key())
+	t.Value = string(rcv.Value())
+}
+
+func (rcv *Extension) UnPack() *ExtensionT {
+	if rcv == nil { return nil }
+	t := &ExtensionT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Extension struct {
 	_tab flatbuffers.Table
 }

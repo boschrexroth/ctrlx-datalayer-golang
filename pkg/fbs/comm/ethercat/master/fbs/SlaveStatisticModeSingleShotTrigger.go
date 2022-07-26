@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveStatisticModeSingleShotTriggerT struct {
+	Request *SlaveStatisticModeSingleShotTriggerRequestT
+	Response *SlaveStatisticModeSingleShotTriggerResponseT
+}
+
+func (t *SlaveStatisticModeSingleShotTriggerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	SlaveStatisticModeSingleShotTriggerStart(builder)
+	SlaveStatisticModeSingleShotTriggerAddRequest(builder, requestOffset)
+	SlaveStatisticModeSingleShotTriggerAddResponse(builder, responseOffset)
+	return SlaveStatisticModeSingleShotTriggerEnd(builder)
+}
+
+func (rcv *SlaveStatisticModeSingleShotTrigger) UnPackTo(t *SlaveStatisticModeSingleShotTriggerT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *SlaveStatisticModeSingleShotTrigger) UnPack() *SlaveStatisticModeSingleShotTriggerT {
+	if rcv == nil { return nil }
+	t := &SlaveStatisticModeSingleShotTriggerT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveStatisticModeSingleShotTrigger struct {
 	_tab flatbuffers.Table
 }

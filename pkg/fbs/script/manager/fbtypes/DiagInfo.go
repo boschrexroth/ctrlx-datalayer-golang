@@ -6,6 +6,55 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DiagInfoT struct {
+	LastMainDiag uint32
+	LastDetailDiag uint32
+	LastErrText string
+	LastErrTrace []string
+}
+
+func (t *DiagInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	lastErrTextOffset := builder.CreateString(t.LastErrText)
+	lastErrTraceOffset := flatbuffers.UOffsetT(0)
+	if t.LastErrTrace != nil {
+		lastErrTraceLength := len(t.LastErrTrace)
+		lastErrTraceOffsets := make([]flatbuffers.UOffsetT, lastErrTraceLength)
+		for j := 0; j < lastErrTraceLength; j++ {
+			lastErrTraceOffsets[j] = builder.CreateString(t.LastErrTrace[j])
+		}
+		DiagInfoStartLastErrTraceVector(builder, lastErrTraceLength)
+		for j := lastErrTraceLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(lastErrTraceOffsets[j])
+		}
+		lastErrTraceOffset = builder.EndVector(lastErrTraceLength)
+	}
+	DiagInfoStart(builder)
+	DiagInfoAddLastMainDiag(builder, t.LastMainDiag)
+	DiagInfoAddLastDetailDiag(builder, t.LastDetailDiag)
+	DiagInfoAddLastErrText(builder, lastErrTextOffset)
+	DiagInfoAddLastErrTrace(builder, lastErrTraceOffset)
+	return DiagInfoEnd(builder)
+}
+
+func (rcv *DiagInfo) UnPackTo(t *DiagInfoT) {
+	t.LastMainDiag = rcv.LastMainDiag()
+	t.LastDetailDiag = rcv.LastDetailDiag()
+	t.LastErrText = string(rcv.LastErrText())
+	lastErrTraceLength := rcv.LastErrTraceLength()
+	t.LastErrTrace = make([]string, lastErrTraceLength)
+	for j := 0; j < lastErrTraceLength; j++ {
+		t.LastErrTrace[j] = string(rcv.LastErrTrace(j))
+	}
+}
+
+func (rcv *DiagInfo) UnPack() *DiagInfoT {
+	if rcv == nil { return nil }
+	t := &DiagInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DiagInfo struct {
 	_tab flatbuffers.Table
 }
