@@ -26,6 +26,8 @@ package datalayer_test
 import (
 	"runtime"
 	"testing"
+	"time"
+	"unsafe"
 
 	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
 	a "github.com/stretchr/testify/assert"
@@ -167,6 +169,49 @@ func TestString(t *testing.T) {
 	a.NotPanics(t, func() { vtest.SetString(value) })
 	a.Equal(t, value, vtest.GetString())
 	a.Equal(t, datalayer.VariantTypeString, vtest.GetType())
+}
+
+// TestTimestamp ...
+func TestTimestamp(t *testing.T) {
+	arr := []uint64{116444736000000000, 130496832000000000}
+	for _, value := range arr {
+		a.NotPanics(t, func() { vtest.SetTimestamp(value) })
+		v := vtest.GetUint64()
+		a.Equal(t, value, v)
+		a.Equal(t, datalayer.VariantTypeTimestamp, vtest.GetType())
+	}
+}
+
+func TestTime(t *testing.T) {
+	m := map[uint64]time.Time{
+		116444736000000000: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+		130496832000000000: time.Date(2014, 7, 13, 0, 0, 0, 0, time.UTC),
+		87790176000000000:  time.Date(1879, 3, 14, 0, 0, 0, 0, time.UTC),
+		13256352000000000:  time.Date(1643, 1, 4, 0, 0, 0, 0, time.UTC),
+	}
+
+	for key, value := range m {
+		a.NotPanics(t, func() { vtest.SetTimestamp(key) })
+		v := vtest.GetTime()
+		a.Equal(t, value, v)
+		a.Equal(t, datalayer.VariantTypeTimestamp, vtest.GetType())
+	}
+}
+
+func TestSetTime(t *testing.T) {
+	m := map[uint64]time.Time{
+		116444736000000000: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+		130496832000000000: time.Date(2014, 7, 13, 0, 0, 0, 0, time.UTC),
+	}
+
+	for key, value := range m {
+		a.NotPanics(t, func() { vtest.SetTime(value) })
+		v := vtest.GetTime()
+		a.Equal(t, value, v)
+		a.Equal(t, datalayer.VariantTypeTimestamp, vtest.GetType())
+		ft := vtest.GetUint64()
+		a.Equal(t, ft, key)
+	}
 }
 
 // TestArrayBool8 ...
@@ -333,4 +378,68 @@ func TestCopy(t *testing.T) {
 	defer datalayer.DeleteVariant(val)
 	a.NotPanics(t, func() { vtest.Copy(val) })
 	a.Equal(t, datalayer.VariantTypeBool8, val.GetType())
+}
+
+func TestSetArrayTimestamp(t *testing.T) {
+	arr := []uint64{116444736000000000, 130496832000000000}
+	a.NotPanics(t, func() { vtest.SetArrayTimestamp(arr) })
+	a.Equal(t, datalayer.VariantTypeArrayTimestamp, vtest.GetType())
+	vals := vtest.GetArrayUint64()
+	a.Equal(t, vals, arr)
+}
+
+func TestGetArrayTime(t *testing.T) {
+	m := map[uint64]time.Time{
+		116444736000000000: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+		130496832000000000: time.Date(2014, 7, 13, 0, 0, 0, 0, time.UTC),
+	}
+
+	arr := []uint64{}
+	times := []time.Time{}
+	for key, value := range m {
+		arr = append(arr, key)
+		times = append(times, value)
+	}
+
+	a.NotPanics(t, func() { vtest.SetArrayTimestamp(arr) })
+	a.Equal(t, datalayer.VariantTypeArrayTimestamp, vtest.GetType())
+	vals := vtest.GetArrayTime()
+	a.Equal(t, vals, times)
+}
+
+func TestSetArrayTime(t *testing.T) {
+	m := map[uint64]time.Time{
+		116444736000000000: time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+		130496832000000000: time.Date(2014, 7, 13, 0, 0, 0, 0, time.UTC),
+	}
+
+	arr := []uint64{}
+	times := []time.Time{}
+	for key, value := range m {
+		arr = append(arr, key)
+		times = append(times, value)
+	}
+
+	a.NotPanics(t, func() { vtest.SetArrayTime(times) })
+	a.Equal(t, datalayer.VariantTypeArrayTimestamp, vtest.GetType())
+	vals := vtest.GetArrayTime()
+	a.Equal(t, vals, times)
+	va := vtest.GetArrayUint64()
+	a.Equal(t, va, arr)
+}
+
+func TestNilVariant(t *testing.T) {
+	v := &datalayer.Variant{}
+	a.Equal(t, v.GetType(), datalayer.VariantTypeUnknown)
+	a.Equal(t, v.GetData(), unsafe.Pointer(nil))
+	a.Equal(t, v.GetSize(), uint64(0))
+	a.Equal(t, v.GetCount(), uint64(0))
+	a.Equal(t, v.CheckConvert(datalayer.VariantTypeUnknown), datalayer.ResultNotInitialized)
+
+	d := &datalayer.Variant{}
+	a.Equal(t, v.Copy(nil), datalayer.ResultNotInitialized)
+	a.Equal(t, v.Copy(d), datalayer.ResultNotInitialized)
+	d = datalayer.NewVariant()
+	a.Equal(t, v.Copy(d), datalayer.ResultNotInitialized)
+	a.NotPanics(t, func() { datalayer.DeleteVariant(v) })
 }
