@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ArrayOfBool8T struct {
+	Value []bool
+}
+
+func (t *ArrayOfBool8T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != nil {
+		valueLength := len(t.Value)
+		ArrayOfBool8StartValueVector(builder, valueLength)
+		for j := valueLength - 1; j >= 0; j-- {
+			builder.PrependBool(t.Value[j])
+		}
+		valueOffset = builder.EndVector(valueLength)
+	}
+	ArrayOfBool8Start(builder)
+	ArrayOfBool8AddValue(builder, valueOffset)
+	return ArrayOfBool8End(builder)
+}
+
+func (rcv *ArrayOfBool8) UnPackTo(t *ArrayOfBool8T) {
+	valueLength := rcv.ValueLength()
+	t.Value = make([]bool, valueLength)
+	for j := 0; j < valueLength; j++ {
+		t.Value[j] = rcv.Value(j)
+	}
+}
+
+func (rcv *ArrayOfBool8) UnPack() *ArrayOfBool8T {
+	if rcv == nil { return nil }
+	t := &ArrayOfBool8T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ArrayOfBool8 struct {
 	_tab flatbuffers.Table
 }

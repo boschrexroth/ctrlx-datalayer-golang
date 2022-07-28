@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type mappingEntryT struct {
+	ValueID string
+	DatalayerURI string
+}
+
+func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueIDOffset := builder.CreateString(t.ValueID)
+	datalayerURIOffset := builder.CreateString(t.DatalayerURI)
+	mappingEntryStart(builder)
+	mappingEntryAddValueID(builder, valueIDOffset)
+	mappingEntryAddDatalayerURI(builder, datalayerURIOffset)
+	return mappingEntryEnd(builder)
+}
+
+func (rcv *mappingEntry) UnPackTo(t *mappingEntryT) {
+	t.ValueID = string(rcv.ValueID())
+	t.DatalayerURI = string(rcv.DatalayerURI())
+}
+
+func (rcv *mappingEntry) UnPack() *mappingEntryT {
+	if rcv == nil { return nil }
+	t := &mappingEntryT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type mappingEntry struct {
 	_tab flatbuffers.Table
 }

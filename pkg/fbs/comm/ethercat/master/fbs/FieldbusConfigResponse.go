@@ -6,6 +6,39 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type FieldbusConfigResponseT struct {
+	Ini []byte
+	Eni []byte
+}
+
+func (t *FieldbusConfigResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	iniOffset := flatbuffers.UOffsetT(0)
+	if t.Ini != nil {
+		iniOffset = builder.CreateByteString(t.Ini)
+	}
+	eniOffset := flatbuffers.UOffsetT(0)
+	if t.Eni != nil {
+		eniOffset = builder.CreateByteString(t.Eni)
+	}
+	FieldbusConfigResponseStart(builder)
+	FieldbusConfigResponseAddIni(builder, iniOffset)
+	FieldbusConfigResponseAddEni(builder, eniOffset)
+	return FieldbusConfigResponseEnd(builder)
+}
+
+func (rcv *FieldbusConfigResponse) UnPackTo(t *FieldbusConfigResponseT) {
+	t.Ini = rcv.IniBytes()
+	t.Eni = rcv.EniBytes()
+}
+
+func (rcv *FieldbusConfigResponse) UnPack() *FieldbusConfigResponseT {
+	if rcv == nil { return nil }
+	t := &FieldbusConfigResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type FieldbusConfigResponse struct {
 	_tab flatbuffers.Table
 }

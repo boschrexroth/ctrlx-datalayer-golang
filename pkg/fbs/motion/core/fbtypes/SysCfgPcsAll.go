@@ -7,6 +7,69 @@ import (
 )
 
 /// configuration of the product coordinate system of this kinematics
+type SysCfgPcsAllT struct {
+	Sets []*SysCfgPcsSetT
+	Groups []*SysCfgPcsGroupT
+}
+
+func (t *SysCfgPcsAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	setsOffset := flatbuffers.UOffsetT(0)
+	if t.Sets != nil {
+		setsLength := len(t.Sets)
+		setsOffsets := make([]flatbuffers.UOffsetT, setsLength)
+		for j := 0; j < setsLength; j++ {
+			setsOffsets[j] = t.Sets[j].Pack(builder)
+		}
+		SysCfgPcsAllStartSetsVector(builder, setsLength)
+		for j := setsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(setsOffsets[j])
+		}
+		setsOffset = builder.EndVector(setsLength)
+	}
+	groupsOffset := flatbuffers.UOffsetT(0)
+	if t.Groups != nil {
+		groupsLength := len(t.Groups)
+		groupsOffsets := make([]flatbuffers.UOffsetT, groupsLength)
+		for j := 0; j < groupsLength; j++ {
+			groupsOffsets[j] = t.Groups[j].Pack(builder)
+		}
+		SysCfgPcsAllStartGroupsVector(builder, groupsLength)
+		for j := groupsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(groupsOffsets[j])
+		}
+		groupsOffset = builder.EndVector(groupsLength)
+	}
+	SysCfgPcsAllStart(builder)
+	SysCfgPcsAllAddSets(builder, setsOffset)
+	SysCfgPcsAllAddGroups(builder, groupsOffset)
+	return SysCfgPcsAllEnd(builder)
+}
+
+func (rcv *SysCfgPcsAll) UnPackTo(t *SysCfgPcsAllT) {
+	setsLength := rcv.SetsLength()
+	t.Sets = make([]*SysCfgPcsSetT, setsLength)
+	for j := 0; j < setsLength; j++ {
+		x := SysCfgPcsSet{}
+		rcv.Sets(&x, j)
+		t.Sets[j] = x.UnPack()
+	}
+	groupsLength := rcv.GroupsLength()
+	t.Groups = make([]*SysCfgPcsGroupT, groupsLength)
+	for j := 0; j < groupsLength; j++ {
+		x := SysCfgPcsGroup{}
+		rcv.Groups(&x, j)
+		t.Groups[j] = x.UnPack()
+	}
+}
+
+func (rcv *SysCfgPcsAll) UnPack() *SysCfgPcsAllT {
+	if rcv == nil { return nil }
+	t := &SysCfgPcsAllT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgPcsAll struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,29 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CfgGlobalT struct {
+	InitScript *CfgInitScriptT
+}
+
+func (t *CfgGlobalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	initScriptOffset := t.InitScript.Pack(builder)
+	CfgGlobalStart(builder)
+	CfgGlobalAddInitScript(builder, initScriptOffset)
+	return CfgGlobalEnd(builder)
+}
+
+func (rcv *CfgGlobal) UnPackTo(t *CfgGlobalT) {
+	t.InitScript = rcv.InitScript(nil).UnPack()
+}
+
+func (rcv *CfgGlobal) UnPack() *CfgGlobalT {
+	if rcv == nil { return nil }
+	t := &CfgGlobalT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CfgGlobal struct {
 	_tab flatbuffers.Table
 }

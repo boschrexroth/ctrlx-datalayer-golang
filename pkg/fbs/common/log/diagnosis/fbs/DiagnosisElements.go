@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DiagnosisElementsT struct {
+	DiagnosisElements []*DiagnosisElementT
+}
+
+func (t *DiagnosisElementsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	diagnosisElementsOffset := flatbuffers.UOffsetT(0)
+	if t.DiagnosisElements != nil {
+		diagnosisElementsLength := len(t.DiagnosisElements)
+		diagnosisElementsOffsets := make([]flatbuffers.UOffsetT, diagnosisElementsLength)
+		for j := 0; j < diagnosisElementsLength; j++ {
+			diagnosisElementsOffsets[j] = t.DiagnosisElements[j].Pack(builder)
+		}
+		DiagnosisElementsStartDiagnosisElementsVector(builder, diagnosisElementsLength)
+		for j := diagnosisElementsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(diagnosisElementsOffsets[j])
+		}
+		diagnosisElementsOffset = builder.EndVector(diagnosisElementsLength)
+	}
+	DiagnosisElementsStart(builder)
+	DiagnosisElementsAddDiagnosisElements(builder, diagnosisElementsOffset)
+	return DiagnosisElementsEnd(builder)
+}
+
+func (rcv *DiagnosisElements) UnPackTo(t *DiagnosisElementsT) {
+	diagnosisElementsLength := rcv.DiagnosisElementsLength()
+	t.DiagnosisElements = make([]*DiagnosisElementT, diagnosisElementsLength)
+	for j := 0; j < diagnosisElementsLength; j++ {
+		x := DiagnosisElement{}
+		rcv.DiagnosisElements(&x, j)
+		t.DiagnosisElements[j] = x.UnPack()
+	}
+}
+
+func (rcv *DiagnosisElements) UnPack() *DiagnosisElementsT {
+	if rcv == nil { return nil }
+	t := &DiagnosisElementsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DiagnosisElements struct {
 	_tab flatbuffers.Table
 }

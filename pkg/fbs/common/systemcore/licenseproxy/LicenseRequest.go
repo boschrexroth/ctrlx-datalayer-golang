@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LicenseRequestT struct {
+	Name string
+	Version string
+}
+
+func (t *LicenseRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	LicenseRequestStart(builder)
+	LicenseRequestAddName(builder, nameOffset)
+	LicenseRequestAddVersion(builder, versionOffset)
+	return LicenseRequestEnd(builder)
+}
+
+func (rcv *LicenseRequest) UnPackTo(t *LicenseRequestT) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+}
+
+func (rcv *LicenseRequest) UnPack() *LicenseRequestT {
+	if rcv == nil { return nil }
+	t := &LicenseRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LicenseRequest struct {
 	_tab flatbuffers.Table
 }

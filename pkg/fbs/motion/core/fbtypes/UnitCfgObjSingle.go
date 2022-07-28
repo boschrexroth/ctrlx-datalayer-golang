@@ -7,6 +7,33 @@ import (
 )
 
 /// Single entry of the general unit configuration for a motion object
+type UnitCfgObjSingleT struct {
+	ValueType string
+	Abbreviation string
+}
+
+func (t *UnitCfgObjSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueTypeOffset := builder.CreateString(t.ValueType)
+	abbreviationOffset := builder.CreateString(t.Abbreviation)
+	UnitCfgObjSingleStart(builder)
+	UnitCfgObjSingleAddValueType(builder, valueTypeOffset)
+	UnitCfgObjSingleAddAbbreviation(builder, abbreviationOffset)
+	return UnitCfgObjSingleEnd(builder)
+}
+
+func (rcv *UnitCfgObjSingle) UnPackTo(t *UnitCfgObjSingleT) {
+	t.ValueType = string(rcv.ValueType())
+	t.Abbreviation = string(rcv.Abbreviation())
+}
+
+func (rcv *UnitCfgObjSingle) UnPack() *UnitCfgObjSingleT {
+	if rcv == nil { return nil }
+	t := &UnitCfgObjSingleT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UnitCfgObjSingle struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,36 @@ import (
 )
 
 /// command source (by which interface was this command inserted into the system (e.g. "PLC"))
+type CmdSourceT struct {
+	Type string
+	Name string
+	Line uint64
+}
+
+func (t *CmdSourceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	typeOffset := builder.CreateString(t.Type)
+	nameOffset := builder.CreateString(t.Name)
+	CmdSourceStart(builder)
+	CmdSourceAddType(builder, typeOffset)
+	CmdSourceAddName(builder, nameOffset)
+	CmdSourceAddLine(builder, t.Line)
+	return CmdSourceEnd(builder)
+}
+
+func (rcv *CmdSource) UnPackTo(t *CmdSourceT) {
+	t.Type = string(rcv.Type())
+	t.Name = string(rcv.Name())
+	t.Line = rcv.Line()
+}
+
+func (rcv *CmdSource) UnPack() *CmdSourceT {
+	if rcv == nil { return nil }
+	t := &CmdSourceT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CmdSource struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,49 @@ import (
 )
 
 /// get informations of a single active command
+type actCmdJobObjectsT struct {
+	CmdName string
+	JobObjects []string
+}
+
+func (t *actCmdJobObjectsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	cmdNameOffset := builder.CreateString(t.CmdName)
+	jobObjectsOffset := flatbuffers.UOffsetT(0)
+	if t.JobObjects != nil {
+		jobObjectsLength := len(t.JobObjects)
+		jobObjectsOffsets := make([]flatbuffers.UOffsetT, jobObjectsLength)
+		for j := 0; j < jobObjectsLength; j++ {
+			jobObjectsOffsets[j] = builder.CreateString(t.JobObjects[j])
+		}
+		actCmdJobObjectsStartJobObjectsVector(builder, jobObjectsLength)
+		for j := jobObjectsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(jobObjectsOffsets[j])
+		}
+		jobObjectsOffset = builder.EndVector(jobObjectsLength)
+	}
+	actCmdJobObjectsStart(builder)
+	actCmdJobObjectsAddCmdName(builder, cmdNameOffset)
+	actCmdJobObjectsAddJobObjects(builder, jobObjectsOffset)
+	return actCmdJobObjectsEnd(builder)
+}
+
+func (rcv *actCmdJobObjects) UnPackTo(t *actCmdJobObjectsT) {
+	t.CmdName = string(rcv.CmdName())
+	jobObjectsLength := rcv.JobObjectsLength()
+	t.JobObjects = make([]string, jobObjectsLength)
+	for j := 0; j < jobObjectsLength; j++ {
+		t.JobObjects[j] = string(rcv.JobObjects(j))
+	}
+}
+
+func (rcv *actCmdJobObjects) UnPack() *actCmdJobObjectsT {
+	if rcv == nil { return nil }
+	t := &actCmdJobObjectsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type actCmdJobObjects struct {
 	_tab flatbuffers.Table
 }

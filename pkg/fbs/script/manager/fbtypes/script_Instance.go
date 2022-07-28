@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type script_InstanceT struct {
+	Name string
+	Language string
+}
+
+func (t *script_InstanceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	languageOffset := builder.CreateString(t.Language)
+	script_InstanceStart(builder)
+	script_InstanceAddName(builder, nameOffset)
+	script_InstanceAddLanguage(builder, languageOffset)
+	return script_InstanceEnd(builder)
+}
+
+func (rcv *script_Instance) UnPackTo(t *script_InstanceT) {
+	t.Name = string(rcv.Name())
+	t.Language = string(rcv.Language())
+}
+
+func (rcv *script_Instance) UnPack() *script_InstanceT {
+	if rcv == nil { return nil }
+	t := &script_InstanceT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type script_Instance struct {
 	_tab flatbuffers.Table
 }

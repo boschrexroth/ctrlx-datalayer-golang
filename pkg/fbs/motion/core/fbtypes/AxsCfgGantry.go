@@ -7,6 +7,34 @@ import (
 )
 
 /// configuration for gantry coupling function of a single axis
+type AxsCfgGantryT struct {
+	IsMember bool
+	MoveAllowed bool
+	MultiBrakeDyn bool
+}
+
+func (t *AxsCfgGantryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AxsCfgGantryStart(builder)
+	AxsCfgGantryAddIsMember(builder, t.IsMember)
+	AxsCfgGantryAddMoveAllowed(builder, t.MoveAllowed)
+	AxsCfgGantryAddMultiBrakeDyn(builder, t.MultiBrakeDyn)
+	return AxsCfgGantryEnd(builder)
+}
+
+func (rcv *AxsCfgGantry) UnPackTo(t *AxsCfgGantryT) {
+	t.IsMember = rcv.IsMember()
+	t.MoveAllowed = rcv.MoveAllowed()
+	t.MultiBrakeDyn = rcv.MultiBrakeDyn()
+}
+
+func (rcv *AxsCfgGantry) UnPack() *AxsCfgGantryT {
+	if rcv == nil { return nil }
+	t := &AxsCfgGantryT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgGantry struct {
 	_tab flatbuffers.Table
 }

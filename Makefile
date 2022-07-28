@@ -7,8 +7,8 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-DATALAYER_DEB_VERSION      := 1.12.1
-DATALAYER_DEB_FILE_VERSION := 1.7.5
+DATALAYER_DEB_VERSION      := 1.16.0
+DATALAYER_DEB_FILE_VERSION := 1.8.6
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 

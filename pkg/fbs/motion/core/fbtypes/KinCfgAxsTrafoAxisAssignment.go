@@ -7,6 +7,47 @@ import (
 )
 
 /// data of a all axis assignments for an axis transformation
+type KinCfgAxsTrafoAxisAssignmentT struct {
+	Assignment []*KinCfgAxsTrafoSingleAxisAssignmentT
+}
+
+func (t *KinCfgAxsTrafoAxisAssignmentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	assignmentOffset := flatbuffers.UOffsetT(0)
+	if t.Assignment != nil {
+		assignmentLength := len(t.Assignment)
+		assignmentOffsets := make([]flatbuffers.UOffsetT, assignmentLength)
+		for j := 0; j < assignmentLength; j++ {
+			assignmentOffsets[j] = t.Assignment[j].Pack(builder)
+		}
+		KinCfgAxsTrafoAxisAssignmentStartAssignmentVector(builder, assignmentLength)
+		for j := assignmentLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(assignmentOffsets[j])
+		}
+		assignmentOffset = builder.EndVector(assignmentLength)
+	}
+	KinCfgAxsTrafoAxisAssignmentStart(builder)
+	KinCfgAxsTrafoAxisAssignmentAddAssignment(builder, assignmentOffset)
+	return KinCfgAxsTrafoAxisAssignmentEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoAxisAssignment) UnPackTo(t *KinCfgAxsTrafoAxisAssignmentT) {
+	assignmentLength := rcv.AssignmentLength()
+	t.Assignment = make([]*KinCfgAxsTrafoSingleAxisAssignmentT, assignmentLength)
+	for j := 0; j < assignmentLength; j++ {
+		x := KinCfgAxsTrafoSingleAxisAssignment{}
+		rcv.Assignment(&x, j)
+		t.Assignment[j] = x.UnPack()
+	}
+}
+
+func (rcv *KinCfgAxsTrafoAxisAssignment) UnPack() *KinCfgAxsTrafoAxisAssignmentT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoAxisAssignmentT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoAxisAssignment struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,31 @@ import (
 )
 
 /// parameters of the axis abort command
+type AxsCmdAbortDataT struct {
+	Dec float64
+	JrkDec float64
+}
+
+func (t *AxsCmdAbortDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AxsCmdAbortDataStart(builder)
+	AxsCmdAbortDataAddDec(builder, t.Dec)
+	AxsCmdAbortDataAddJrkDec(builder, t.JrkDec)
+	return AxsCmdAbortDataEnd(builder)
+}
+
+func (rcv *AxsCmdAbortData) UnPackTo(t *AxsCmdAbortDataT) {
+	t.Dec = rcv.Dec()
+	t.JrkDec = rcv.JrkDec()
+}
+
+func (rcv *AxsCmdAbortData) UnPack() *AxsCmdAbortDataT {
+	if rcv == nil { return nil }
+	t := &AxsCmdAbortDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdAbortData struct {
 	_tab flatbuffers.Table
 }

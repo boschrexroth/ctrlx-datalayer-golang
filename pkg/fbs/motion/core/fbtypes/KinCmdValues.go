@@ -7,6 +7,56 @@ import (
 )
 
 /// parameters and data of the active command
+type KinCmdValuesT struct {
+	TargetPos []float64
+	Lim *DynamicLimitsStateT
+	CoordSys string
+	CmdId uint64
+	Src *CmdSourceT
+}
+
+func (t *KinCmdValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	targetPosOffset := flatbuffers.UOffsetT(0)
+	if t.TargetPos != nil {
+		targetPosLength := len(t.TargetPos)
+		KinCmdValuesStartTargetPosVector(builder, targetPosLength)
+		for j := targetPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.TargetPos[j])
+		}
+		targetPosOffset = builder.EndVector(targetPosLength)
+	}
+	limOffset := t.Lim.Pack(builder)
+	coordSysOffset := builder.CreateString(t.CoordSys)
+	srcOffset := t.Src.Pack(builder)
+	KinCmdValuesStart(builder)
+	KinCmdValuesAddTargetPos(builder, targetPosOffset)
+	KinCmdValuesAddLim(builder, limOffset)
+	KinCmdValuesAddCoordSys(builder, coordSysOffset)
+	KinCmdValuesAddCmdId(builder, t.CmdId)
+	KinCmdValuesAddSrc(builder, srcOffset)
+	return KinCmdValuesEnd(builder)
+}
+
+func (rcv *KinCmdValues) UnPackTo(t *KinCmdValuesT) {
+	targetPosLength := rcv.TargetPosLength()
+	t.TargetPos = make([]float64, targetPosLength)
+	for j := 0; j < targetPosLength; j++ {
+		t.TargetPos[j] = rcv.TargetPos(j)
+	}
+	t.Lim = rcv.Lim(nil).UnPack()
+	t.CoordSys = string(rcv.CoordSys())
+	t.CmdId = rcv.CmdId()
+	t.Src = rcv.Src(nil).UnPack()
+}
+
+func (rcv *KinCmdValues) UnPack() *KinCmdValuesT {
+	if rcv == nil { return nil }
+	t := &KinCmdValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdValues struct {
 	_tab flatbuffers.Table
 }

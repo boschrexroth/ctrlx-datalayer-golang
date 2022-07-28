@@ -6,6 +6,57 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AoeDataRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	TargetNetId []byte
+	TargetPort uint16
+	IndexGroup uint32
+	IndexOffset uint32
+	Data []byte
+	MaxLength uint32
+}
+
+func (t *AoeDataRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	targetNetIdOffset := flatbuffers.UOffsetT(0)
+	if t.TargetNetId != nil {
+		targetNetIdOffset = builder.CreateByteString(t.TargetNetId)
+	}
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	AoeDataRequestStart(builder)
+	AoeDataRequestAddAddressType(builder, t.AddressType)
+	AoeDataRequestAddAddress(builder, t.Address)
+	AoeDataRequestAddTargetNetId(builder, targetNetIdOffset)
+	AoeDataRequestAddTargetPort(builder, t.TargetPort)
+	AoeDataRequestAddIndexGroup(builder, t.IndexGroup)
+	AoeDataRequestAddIndexOffset(builder, t.IndexOffset)
+	AoeDataRequestAddData(builder, dataOffset)
+	AoeDataRequestAddMaxLength(builder, t.MaxLength)
+	return AoeDataRequestEnd(builder)
+}
+
+func (rcv *AoeDataRequest) UnPackTo(t *AoeDataRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.TargetNetId = rcv.TargetNetIdBytes()
+	t.TargetPort = rcv.TargetPort()
+	t.IndexGroup = rcv.IndexGroup()
+	t.IndexOffset = rcv.IndexOffset()
+	t.Data = rcv.DataBytes()
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *AoeDataRequest) UnPack() *AoeDataRequestT {
+	if rcv == nil { return nil }
+	t := &AoeDataRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AoeDataRequest struct {
 	_tab flatbuffers.Table
 }

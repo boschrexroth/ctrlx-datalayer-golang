@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TokenUserPasswordT struct {
+	Username string
+	Password string
+}
+
+func (t *TokenUserPasswordT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	usernameOffset := builder.CreateString(t.Username)
+	passwordOffset := builder.CreateString(t.Password)
+	TokenUserPasswordStart(builder)
+	TokenUserPasswordAddUsername(builder, usernameOffset)
+	TokenUserPasswordAddPassword(builder, passwordOffset)
+	return TokenUserPasswordEnd(builder)
+}
+
+func (rcv *TokenUserPassword) UnPackTo(t *TokenUserPasswordT) {
+	t.Username = string(rcv.Username())
+	t.Password = string(rcv.Password())
+}
+
+func (rcv *TokenUserPassword) UnPack() *TokenUserPasswordT {
+	if rcv == nil { return nil }
+	t := &TokenUserPasswordT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type TokenUserPassword struct {
 	_tab flatbuffers.Table
 }

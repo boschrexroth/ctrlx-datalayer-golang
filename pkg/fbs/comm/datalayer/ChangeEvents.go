@@ -6,6 +6,34 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ChangeEventsT struct {
+	ValueChange DataChangeTrigger
+	BrowselistChange bool
+	MetadataChange bool
+}
+
+func (t *ChangeEventsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ChangeEventsStart(builder)
+	ChangeEventsAddValueChange(builder, t.ValueChange)
+	ChangeEventsAddBrowselistChange(builder, t.BrowselistChange)
+	ChangeEventsAddMetadataChange(builder, t.MetadataChange)
+	return ChangeEventsEnd(builder)
+}
+
+func (rcv *ChangeEvents) UnPackTo(t *ChangeEventsT) {
+	t.ValueChange = rcv.ValueChange()
+	t.BrowselistChange = rcv.BrowselistChange()
+	t.MetadataChange = rcv.MetadataChange()
+}
+
+func (rcv *ChangeEvents) UnPack() *ChangeEventsT {
+	if rcv == nil { return nil }
+	t := &ChangeEventsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ChangeEvents struct {
 	_tab flatbuffers.Table
 }

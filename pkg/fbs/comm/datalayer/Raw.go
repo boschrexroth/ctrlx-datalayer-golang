@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type RawT struct {
+	Value []int8
+}
+
+func (t *RawT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != nil {
+		valueLength := len(t.Value)
+		RawStartValueVector(builder, valueLength)
+		for j := valueLength - 1; j >= 0; j-- {
+			builder.PrependInt8(t.Value[j])
+		}
+		valueOffset = builder.EndVector(valueLength)
+	}
+	RawStart(builder)
+	RawAddValue(builder, valueOffset)
+	return RawEnd(builder)
+}
+
+func (rcv *Raw) UnPackTo(t *RawT) {
+	valueLength := rcv.ValueLength()
+	t.Value = make([]int8, valueLength)
+	for j := 0; j < valueLength; j++ {
+		t.Value[j] = rcv.Value(j)
+	}
+}
+
+func (rcv *Raw) UnPack() *RawT {
+	if rcv == nil { return nil }
+	t := &RawT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Raw struct {
 	_tab flatbuffers.Table
 }

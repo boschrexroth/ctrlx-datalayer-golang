@@ -6,6 +6,34 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ServerSettingsT struct {
+	ServerIdlePingTimeout uint32
+	ServerWaitResponseTimeout uint32
+	ServerMaxMessageSize uint32
+}
+
+func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ServerSettingsStart(builder)
+	ServerSettingsAddServerIdlePingTimeout(builder, t.ServerIdlePingTimeout)
+	ServerSettingsAddServerWaitResponseTimeout(builder, t.ServerWaitResponseTimeout)
+	ServerSettingsAddServerMaxMessageSize(builder, t.ServerMaxMessageSize)
+	return ServerSettingsEnd(builder)
+}
+
+func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
+	t.ServerIdlePingTimeout = rcv.ServerIdlePingTimeout()
+	t.ServerWaitResponseTimeout = rcv.ServerWaitResponseTimeout()
+	t.ServerMaxMessageSize = rcv.ServerMaxMessageSize()
+}
+
+func (rcv *ServerSettings) UnPack() *ServerSettingsT {
+	if rcv == nil { return nil }
+	t := &ServerSettingsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ServerSettings struct {
 	_tab flatbuffers.Table
 }
@@ -57,14 +85,29 @@ func (rcv *ServerSettings) MutateServerWaitResponseTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+func (rcv *ServerSettings) ServerMaxMessageSize() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 52428800
+}
+
+func (rcv *ServerSettings) MutateServerMaxMessageSize(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(8, n)
+}
+
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
 }
 func ServerSettingsAddServerWaitResponseTimeout(builder *flatbuffers.Builder, serverWaitResponseTimeout uint32) {
 	builder.PrependUint32Slot(1, serverWaitResponseTimeout, 3000)
+}
+func ServerSettingsAddServerMaxMessageSize(builder *flatbuffers.Builder, serverMaxMessageSize uint32) {
+	builder.PrependUint32Slot(2, serverMaxMessageSize, 52428800)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

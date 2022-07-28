@@ -7,6 +7,35 @@ import (
 )
 
 /// return type of requests of the current boot state
+type APRBootStateT struct {
+	Text string
+	ActStep uint32
+	MaxSteps uint32
+}
+
+func (t *APRBootStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	textOffset := builder.CreateString(t.Text)
+	APRBootStateStart(builder)
+	APRBootStateAddText(builder, textOffset)
+	APRBootStateAddActStep(builder, t.ActStep)
+	APRBootStateAddMaxSteps(builder, t.MaxSteps)
+	return APRBootStateEnd(builder)
+}
+
+func (rcv *APRBootState) UnPackTo(t *APRBootStateT) {
+	t.Text = string(rcv.Text())
+	t.ActStep = rcv.ActStep()
+	t.MaxSteps = rcv.MaxSteps()
+}
+
+func (rcv *APRBootState) UnPack() *APRBootStateT {
+	if rcv == nil { return nil }
+	t := &APRBootStateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type APRBootState struct {
 	_tab flatbuffers.Table
 }

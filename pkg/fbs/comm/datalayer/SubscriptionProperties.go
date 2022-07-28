@@ -6,6 +6,60 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SubscriptionPropertiesT struct {
+	Id string
+	KeepaliveInterval uint32
+	PublishInterval uint32
+	Rules []*PropertyT
+	ErrorInterval uint32
+}
+
+func (t *SubscriptionPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	idOffset := builder.CreateString(t.Id)
+	rulesOffset := flatbuffers.UOffsetT(0)
+	if t.Rules != nil {
+		rulesLength := len(t.Rules)
+		rulesOffsets := make([]flatbuffers.UOffsetT, rulesLength)
+		for j := 0; j < rulesLength; j++ {
+			rulesOffsets[j] = t.Rules[j].Pack(builder)
+		}
+		SubscriptionPropertiesStartRulesVector(builder, rulesLength)
+		for j := rulesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(rulesOffsets[j])
+		}
+		rulesOffset = builder.EndVector(rulesLength)
+	}
+	SubscriptionPropertiesStart(builder)
+	SubscriptionPropertiesAddId(builder, idOffset)
+	SubscriptionPropertiesAddKeepaliveInterval(builder, t.KeepaliveInterval)
+	SubscriptionPropertiesAddPublishInterval(builder, t.PublishInterval)
+	SubscriptionPropertiesAddRules(builder, rulesOffset)
+	SubscriptionPropertiesAddErrorInterval(builder, t.ErrorInterval)
+	return SubscriptionPropertiesEnd(builder)
+}
+
+func (rcv *SubscriptionProperties) UnPackTo(t *SubscriptionPropertiesT) {
+	t.Id = string(rcv.Id())
+	t.KeepaliveInterval = rcv.KeepaliveInterval()
+	t.PublishInterval = rcv.PublishInterval()
+	rulesLength := rcv.RulesLength()
+	t.Rules = make([]*PropertyT, rulesLength)
+	for j := 0; j < rulesLength; j++ {
+		x := Property{}
+		rcv.Rules(&x, j)
+		t.Rules[j] = x.UnPack()
+	}
+	t.ErrorInterval = rcv.ErrorInterval()
+}
+
+func (rcv *SubscriptionProperties) UnPack() *SubscriptionPropertiesT {
+	if rcv == nil { return nil }
+	t := &SubscriptionPropertiesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SubscriptionProperties struct {
 	_tab flatbuffers.Table
 }

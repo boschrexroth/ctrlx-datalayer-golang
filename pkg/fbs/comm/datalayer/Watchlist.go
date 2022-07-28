@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type WatchlistT struct {
+	Name string
+	Items []string
+}
+
+func (t *WatchlistT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	itemsOffset := flatbuffers.UOffsetT(0)
+	if t.Items != nil {
+		itemsLength := len(t.Items)
+		itemsOffsets := make([]flatbuffers.UOffsetT, itemsLength)
+		for j := 0; j < itemsLength; j++ {
+			itemsOffsets[j] = builder.CreateString(t.Items[j])
+		}
+		WatchlistStartItemsVector(builder, itemsLength)
+		for j := itemsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(itemsOffsets[j])
+		}
+		itemsOffset = builder.EndVector(itemsLength)
+	}
+	WatchlistStart(builder)
+	WatchlistAddName(builder, nameOffset)
+	WatchlistAddItems(builder, itemsOffset)
+	return WatchlistEnd(builder)
+}
+
+func (rcv *Watchlist) UnPackTo(t *WatchlistT) {
+	t.Name = string(rcv.Name())
+	itemsLength := rcv.ItemsLength()
+	t.Items = make([]string, itemsLength)
+	for j := 0; j < itemsLength; j++ {
+		t.Items[j] = string(rcv.Items(j))
+	}
+}
+
+func (rcv *Watchlist) UnPack() *WatchlistT {
+	if rcv == nil { return nil }
+	t := &WatchlistT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Watchlist struct {
 	_tab flatbuffers.Table
 }

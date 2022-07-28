@@ -6,6 +6,64 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LogParametersT struct {
+	MainDiagnosisCode string
+	DetailedDiagnosisCode string
+	UserId string
+	Entity string
+	Origin string
+	UnitName string
+	FileName string
+	FunctionName string
+	LineNumber uint32
+	DynamicDescription string
+}
+
+func (t *LogParametersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	mainDiagnosisCodeOffset := builder.CreateString(t.MainDiagnosisCode)
+	detailedDiagnosisCodeOffset := builder.CreateString(t.DetailedDiagnosisCode)
+	userIdOffset := builder.CreateString(t.UserId)
+	entityOffset := builder.CreateString(t.Entity)
+	originOffset := builder.CreateString(t.Origin)
+	unitNameOffset := builder.CreateString(t.UnitName)
+	fileNameOffset := builder.CreateString(t.FileName)
+	functionNameOffset := builder.CreateString(t.FunctionName)
+	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	LogParametersStart(builder)
+	LogParametersAddMainDiagnosisCode(builder, mainDiagnosisCodeOffset)
+	LogParametersAddDetailedDiagnosisCode(builder, detailedDiagnosisCodeOffset)
+	LogParametersAddUserId(builder, userIdOffset)
+	LogParametersAddEntity(builder, entityOffset)
+	LogParametersAddOrigin(builder, originOffset)
+	LogParametersAddUnitName(builder, unitNameOffset)
+	LogParametersAddFileName(builder, fileNameOffset)
+	LogParametersAddFunctionName(builder, functionNameOffset)
+	LogParametersAddLineNumber(builder, t.LineNumber)
+	LogParametersAddDynamicDescription(builder, dynamicDescriptionOffset)
+	return LogParametersEnd(builder)
+}
+
+func (rcv *LogParameters) UnPackTo(t *LogParametersT) {
+	t.MainDiagnosisCode = string(rcv.MainDiagnosisCode())
+	t.DetailedDiagnosisCode = string(rcv.DetailedDiagnosisCode())
+	t.UserId = string(rcv.UserId())
+	t.Entity = string(rcv.Entity())
+	t.Origin = string(rcv.Origin())
+	t.UnitName = string(rcv.UnitName())
+	t.FileName = string(rcv.FileName())
+	t.FunctionName = string(rcv.FunctionName())
+	t.LineNumber = rcv.LineNumber()
+	t.DynamicDescription = string(rcv.DynamicDescription())
+}
+
+func (rcv *LogParameters) UnPack() *LogParametersT {
+	if rcv == nil { return nil }
+	t := &LogParametersT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LogParameters struct {
 	_tab flatbuffers.Table
 }

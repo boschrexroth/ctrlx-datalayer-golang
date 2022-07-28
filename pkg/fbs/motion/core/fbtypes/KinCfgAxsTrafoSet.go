@@ -7,6 +7,37 @@ import (
 )
 
 /// data of a single axis transformation set
+type KinCfgAxsTrafoSetT struct {
+	Name string
+	AxsTrafo string
+	Param *KinCfgAxsTrafoAllParamT
+}
+
+func (t *KinCfgAxsTrafoSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	axsTrafoOffset := builder.CreateString(t.AxsTrafo)
+	paramOffset := t.Param.Pack(builder)
+	KinCfgAxsTrafoSetStart(builder)
+	KinCfgAxsTrafoSetAddName(builder, nameOffset)
+	KinCfgAxsTrafoSetAddAxsTrafo(builder, axsTrafoOffset)
+	KinCfgAxsTrafoSetAddParam(builder, paramOffset)
+	return KinCfgAxsTrafoSetEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoSet) UnPackTo(t *KinCfgAxsTrafoSetT) {
+	t.Name = string(rcv.Name())
+	t.AxsTrafo = string(rcv.AxsTrafo())
+	t.Param = rcv.Param(nil).UnPack()
+}
+
+func (rcv *KinCfgAxsTrafoSet) UnPack() *KinCfgAxsTrafoSetT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoSetT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoSet struct {
 	_tab flatbuffers.Table
 }

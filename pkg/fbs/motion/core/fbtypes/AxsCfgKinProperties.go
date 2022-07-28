@@ -7,6 +7,31 @@ import (
 )
 
 /// kinematic properties for axes
+type AxsCfgKinPropertiesT struct {
+	AccReserve float64
+	JrkReserve float64
+}
+
+func (t *AxsCfgKinPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AxsCfgKinPropertiesStart(builder)
+	AxsCfgKinPropertiesAddAccReserve(builder, t.AccReserve)
+	AxsCfgKinPropertiesAddJrkReserve(builder, t.JrkReserve)
+	return AxsCfgKinPropertiesEnd(builder)
+}
+
+func (rcv *AxsCfgKinProperties) UnPackTo(t *AxsCfgKinPropertiesT) {
+	t.AccReserve = rcv.AccReserve()
+	t.JrkReserve = rcv.JrkReserve()
+}
+
+func (rcv *AxsCfgKinProperties) UnPack() *AxsCfgKinPropertiesT {
+	if rcv == nil { return nil }
+	t := &AxsCfgKinPropertiesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgKinProperties struct {
 	_tab flatbuffers.Table
 }

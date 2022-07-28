@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TokenCertT struct {
+	Location string
+	Name string
+}
+
+func (t *TokenCertT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	locationOffset := builder.CreateString(t.Location)
+	nameOffset := builder.CreateString(t.Name)
+	TokenCertStart(builder)
+	TokenCertAddLocation(builder, locationOffset)
+	TokenCertAddName(builder, nameOffset)
+	return TokenCertEnd(builder)
+}
+
+func (rcv *TokenCert) UnPackTo(t *TokenCertT) {
+	t.Location = string(rcv.Location())
+	t.Name = string(rcv.Name())
+}
+
+func (rcv *TokenCert) UnPack() *TokenCertT {
+	if rcv == nil { return nil }
+	t := &TokenCertT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type TokenCert struct {
 	_tab flatbuffers.Table
 }

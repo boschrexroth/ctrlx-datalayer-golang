@@ -6,6 +6,32 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SDOResponseT struct {
+	Data []byte
+}
+
+func (t *SDOResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	SDOResponseStart(builder)
+	SDOResponseAddData(builder, dataOffset)
+	return SDOResponseEnd(builder)
+}
+
+func (rcv *SDOResponse) UnPackTo(t *SDOResponseT) {
+	t.Data = rcv.DataBytes()
+}
+
+func (rcv *SDOResponse) UnPack() *SDOResponseT {
+	if rcv == nil { return nil }
+	t := &SDOResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SDOResponse struct {
 	_tab flatbuffers.Table
 }

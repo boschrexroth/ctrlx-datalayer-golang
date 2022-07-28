@@ -6,6 +6,50 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ParameterRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	DriveNumber byte
+	ElementFlags ElementFlags
+	Idn uint16
+	Data []byte
+	MaxLength uint32
+}
+
+func (t *ParameterRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	ParameterRequestStart(builder)
+	ParameterRequestAddAddressType(builder, t.AddressType)
+	ParameterRequestAddAddress(builder, t.Address)
+	ParameterRequestAddDriveNumber(builder, t.DriveNumber)
+	ParameterRequestAddElementFlags(builder, t.ElementFlags)
+	ParameterRequestAddIdn(builder, t.Idn)
+	ParameterRequestAddData(builder, dataOffset)
+	ParameterRequestAddMaxLength(builder, t.MaxLength)
+	return ParameterRequestEnd(builder)
+}
+
+func (rcv *ParameterRequest) UnPackTo(t *ParameterRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.DriveNumber = rcv.DriveNumber()
+	t.ElementFlags = rcv.ElementFlags()
+	t.Idn = rcv.Idn()
+	t.Data = rcv.DataBytes()
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *ParameterRequest) UnPack() *ParameterRequestT {
+	if rcv == nil { return nil }
+	t := &ParameterRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ParameterRequest struct {
 	_tab flatbuffers.Table
 }

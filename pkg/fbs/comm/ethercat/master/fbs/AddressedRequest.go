@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AddressedRequestT struct {
+	AddressType Addresstype
+	Address uint16
+}
+
+func (t *AddressedRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	AddressedRequestStart(builder)
+	AddressedRequestAddAddressType(builder, t.AddressType)
+	AddressedRequestAddAddress(builder, t.Address)
+	return AddressedRequestEnd(builder)
+}
+
+func (rcv *AddressedRequest) UnPackTo(t *AddressedRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+}
+
+func (rcv *AddressedRequest) UnPack() *AddressedRequestT {
+	if rcv == nil { return nil }
+	t := &AddressedRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AddressedRequest struct {
 	_tab flatbuffers.Table
 }

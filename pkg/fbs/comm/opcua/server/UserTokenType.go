@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type UserTokenTypeT struct {
+	Type uint32
+	PolicyId uint32
+}
+
+func (t *UserTokenTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	UserTokenTypeStart(builder)
+	UserTokenTypeAddType(builder, t.Type)
+	UserTokenTypeAddPolicyId(builder, t.PolicyId)
+	return UserTokenTypeEnd(builder)
+}
+
+func (rcv *UserTokenType) UnPackTo(t *UserTokenTypeT) {
+	t.Type = rcv.Type()
+	t.PolicyId = rcv.PolicyId()
+}
+
+func (rcv *UserTokenType) UnPack() *UserTokenTypeT {
+	if rcv == nil { return nil }
+	t := &UserTokenTypeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UserTokenType struct {
 	_tab flatbuffers.Table
 }

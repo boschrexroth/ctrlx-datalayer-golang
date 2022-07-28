@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AoeControlT struct {
+	Request *AoeControlRequestT
+	Response *AoeControlResponseT
+}
+
+func (t *AoeControlT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	AoeControlStart(builder)
+	AoeControlAddRequest(builder, requestOffset)
+	AoeControlAddResponse(builder, responseOffset)
+	return AoeControlEnd(builder)
+}
+
+func (rcv *AoeControl) UnPackTo(t *AoeControlT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *AoeControl) UnPack() *AoeControlT {
+	if rcv == nil { return nil }
+	t := &AoeControlT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AoeControl struct {
 	_tab flatbuffers.Table
 }

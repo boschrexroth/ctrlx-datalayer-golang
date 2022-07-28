@@ -6,6 +6,52 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type profileConfigT struct {
+	DeviceAddress uint32
+	InputBuffer string
+	OutputBuffer string
+	ProfileBasicData *profileT
+	InputMapping *valueMappingT
+	OutputMapping *valueMappingT
+	ScalingInfo *profileScalingCfgT
+}
+
+func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	inputBufferOffset := builder.CreateString(t.InputBuffer)
+	outputBufferOffset := builder.CreateString(t.OutputBuffer)
+	profileBasicDataOffset := t.ProfileBasicData.Pack(builder)
+	inputMappingOffset := t.InputMapping.Pack(builder)
+	outputMappingOffset := t.OutputMapping.Pack(builder)
+	scalingInfoOffset := t.ScalingInfo.Pack(builder)
+	profileConfigStart(builder)
+	profileConfigAddDeviceAddress(builder, t.DeviceAddress)
+	profileConfigAddInputBuffer(builder, inputBufferOffset)
+	profileConfigAddOutputBuffer(builder, outputBufferOffset)
+	profileConfigAddProfileBasicData(builder, profileBasicDataOffset)
+	profileConfigAddInputMapping(builder, inputMappingOffset)
+	profileConfigAddOutputMapping(builder, outputMappingOffset)
+	profileConfigAddScalingInfo(builder, scalingInfoOffset)
+	return profileConfigEnd(builder)
+}
+
+func (rcv *profileConfig) UnPackTo(t *profileConfigT) {
+	t.DeviceAddress = rcv.DeviceAddress()
+	t.InputBuffer = string(rcv.InputBuffer())
+	t.OutputBuffer = string(rcv.OutputBuffer())
+	t.ProfileBasicData = rcv.ProfileBasicData(nil).UnPack()
+	t.InputMapping = rcv.InputMapping(nil).UnPack()
+	t.OutputMapping = rcv.OutputMapping(nil).UnPack()
+	t.ScalingInfo = rcv.ScalingInfo(nil).UnPack()
+}
+
+func (rcv *profileConfig) UnPack() *profileConfigT {
+	if rcv == nil { return nil }
+	t := &profileConfigT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type profileConfig struct {
 	_tab flatbuffers.Table
 }
@@ -100,8 +146,21 @@ func (rcv *profileConfig) OutputMapping(obj *valueMapping) *valueMapping {
 	return nil
 }
 
+func (rcv *profileConfig) ScalingInfo(obj *profileScalingCfg) *profileScalingCfg {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(profileScalingCfg)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
 func profileConfigStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func profileConfigAddDeviceAddress(builder *flatbuffers.Builder, deviceAddress uint32) {
 	builder.PrependUint32Slot(0, deviceAddress, 0)
@@ -120,6 +179,9 @@ func profileConfigAddInputMapping(builder *flatbuffers.Builder, inputMapping fla
 }
 func profileConfigAddOutputMapping(builder *flatbuffers.Builder, outputMapping flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(outputMapping), 0)
+}
+func profileConfigAddScalingInfo(builder *flatbuffers.Builder, scalingInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(scalingInfo), 0)
 }
 func profileConfigEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

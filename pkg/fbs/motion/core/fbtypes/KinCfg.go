@@ -7,6 +7,71 @@ import (
 )
 
 /// complete configuration of a single kinematics
+type KinCfgT struct {
+	ObjectType string
+	Limits *KinCfgLimitsT
+	AxsCfg []*KinCfgAxsT
+	Mcs *KinCfgAxsTrafoAllSetsT
+	Units *UnitCfgKinT
+	PrepLimits *KinCfgPrepLimitsT
+	RtInputs *RTInputsCfgT
+}
+
+func (t *KinCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	objectTypeOffset := builder.CreateString(t.ObjectType)
+	limitsOffset := t.Limits.Pack(builder)
+	axsCfgOffset := flatbuffers.UOffsetT(0)
+	if t.AxsCfg != nil {
+		axsCfgLength := len(t.AxsCfg)
+		axsCfgOffsets := make([]flatbuffers.UOffsetT, axsCfgLength)
+		for j := 0; j < axsCfgLength; j++ {
+			axsCfgOffsets[j] = t.AxsCfg[j].Pack(builder)
+		}
+		KinCfgStartAxsCfgVector(builder, axsCfgLength)
+		for j := axsCfgLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(axsCfgOffsets[j])
+		}
+		axsCfgOffset = builder.EndVector(axsCfgLength)
+	}
+	mcsOffset := t.Mcs.Pack(builder)
+	unitsOffset := t.Units.Pack(builder)
+	prepLimitsOffset := t.PrepLimits.Pack(builder)
+	rtInputsOffset := t.RtInputs.Pack(builder)
+	KinCfgStart(builder)
+	KinCfgAddObjectType(builder, objectTypeOffset)
+	KinCfgAddLimits(builder, limitsOffset)
+	KinCfgAddAxsCfg(builder, axsCfgOffset)
+	KinCfgAddMcs(builder, mcsOffset)
+	KinCfgAddUnits(builder, unitsOffset)
+	KinCfgAddPrepLimits(builder, prepLimitsOffset)
+	KinCfgAddRtInputs(builder, rtInputsOffset)
+	return KinCfgEnd(builder)
+}
+
+func (rcv *KinCfg) UnPackTo(t *KinCfgT) {
+	t.ObjectType = string(rcv.ObjectType())
+	t.Limits = rcv.Limits(nil).UnPack()
+	axsCfgLength := rcv.AxsCfgLength()
+	t.AxsCfg = make([]*KinCfgAxsT, axsCfgLength)
+	for j := 0; j < axsCfgLength; j++ {
+		x := KinCfgAxs{}
+		rcv.AxsCfg(&x, j)
+		t.AxsCfg[j] = x.UnPack()
+	}
+	t.Mcs = rcv.Mcs(nil).UnPack()
+	t.Units = rcv.Units(nil).UnPack()
+	t.PrepLimits = rcv.PrepLimits(nil).UnPack()
+	t.RtInputs = rcv.RtInputs(nil).UnPack()
+}
+
+func (rcv *KinCfg) UnPack() *KinCfgT {
+	if rcv == nil { return nil }
+	t := &KinCfgT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfg struct {
 	_tab flatbuffers.Table
 }
@@ -126,8 +191,23 @@ func (rcv *KinCfg) PrepLimits(obj *KinCfgPrepLimits) *KinCfgPrepLimits {
 }
 
 /// preparation limits of a kinematics
+/// configuration of the real-time inputs of the kinematics
+func (rcv *KinCfg) RtInputs(obj *RTInputsCfg) *RTInputsCfg {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(RTInputsCfg)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the real-time inputs of the kinematics
 func KinCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func KinCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -149,6 +229,9 @@ func KinCfgAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
 }
 func KinCfgAddPrepLimits(builder *flatbuffers.Builder, prepLimits flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(prepLimits), 0)
+}
+func KinCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(rtInputs), 0)
 }
 func KinCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

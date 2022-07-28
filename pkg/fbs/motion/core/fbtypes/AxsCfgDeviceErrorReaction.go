@@ -7,6 +7,33 @@ import (
 )
 
 /// configuration for reaction to device error
+type AxsCfgDeviceErrorReactionT struct {
+	UserEstopLim *AxsCfgEstopDynamicLimitsT
+	EstopSettings *AxsCfgEstopSettingsT
+}
+
+func (t *AxsCfgDeviceErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	userEstopLimOffset := t.UserEstopLim.Pack(builder)
+	estopSettingsOffset := t.EstopSettings.Pack(builder)
+	AxsCfgDeviceErrorReactionStart(builder)
+	AxsCfgDeviceErrorReactionAddUserEstopLim(builder, userEstopLimOffset)
+	AxsCfgDeviceErrorReactionAddEstopSettings(builder, estopSettingsOffset)
+	return AxsCfgDeviceErrorReactionEnd(builder)
+}
+
+func (rcv *AxsCfgDeviceErrorReaction) UnPackTo(t *AxsCfgDeviceErrorReactionT) {
+	t.UserEstopLim = rcv.UserEstopLim(nil).UnPack()
+	t.EstopSettings = rcv.EstopSettings(nil).UnPack()
+}
+
+func (rcv *AxsCfgDeviceErrorReaction) UnPack() *AxsCfgDeviceErrorReactionT {
+	if rcv == nil { return nil }
+	t := &AxsCfgDeviceErrorReactionT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgDeviceErrorReaction struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,50 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MemoryMapT struct {
+	Variables []*VariableT
+	Revision uint32
+}
+
+func (t *MemoryMapT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	variablesOffset := flatbuffers.UOffsetT(0)
+	if t.Variables != nil {
+		variablesLength := len(t.Variables)
+		variablesOffsets := make([]flatbuffers.UOffsetT, variablesLength)
+		for j := 0; j < variablesLength; j++ {
+			variablesOffsets[j] = t.Variables[j].Pack(builder)
+		}
+		MemoryMapStartVariablesVector(builder, variablesLength)
+		for j := variablesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(variablesOffsets[j])
+		}
+		variablesOffset = builder.EndVector(variablesLength)
+	}
+	MemoryMapStart(builder)
+	MemoryMapAddVariables(builder, variablesOffset)
+	MemoryMapAddRevision(builder, t.Revision)
+	return MemoryMapEnd(builder)
+}
+
+func (rcv *MemoryMap) UnPackTo(t *MemoryMapT) {
+	variablesLength := rcv.VariablesLength()
+	t.Variables = make([]*VariableT, variablesLength)
+	for j := 0; j < variablesLength; j++ {
+		x := Variable{}
+		rcv.Variables(&x, j)
+		t.Variables[j] = x.UnPack()
+	}
+	t.Revision = rcv.Revision()
+}
+
+func (rcv *MemoryMap) UnPack() *MemoryMapT {
+	if rcv == nil { return nil }
+	t := &MemoryMapT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MemoryMap struct {
 	_tab flatbuffers.Table
 }

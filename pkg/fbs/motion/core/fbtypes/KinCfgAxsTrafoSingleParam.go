@@ -7,6 +7,39 @@ import (
 )
 
 /// configuration of a single parameter of an axis transformation
+type KinCfgAxsTrafoSingleParamT struct {
+	Name string
+	ValueDouble float64
+	ValueInt int64
+	ValueString string
+}
+
+func (t *KinCfgAxsTrafoSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	valueStringOffset := builder.CreateString(t.ValueString)
+	KinCfgAxsTrafoSingleParamStart(builder)
+	KinCfgAxsTrafoSingleParamAddName(builder, nameOffset)
+	KinCfgAxsTrafoSingleParamAddValueDouble(builder, t.ValueDouble)
+	KinCfgAxsTrafoSingleParamAddValueInt(builder, t.ValueInt)
+	KinCfgAxsTrafoSingleParamAddValueString(builder, valueStringOffset)
+	return KinCfgAxsTrafoSingleParamEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoSingleParam) UnPackTo(t *KinCfgAxsTrafoSingleParamT) {
+	t.Name = string(rcv.Name())
+	t.ValueDouble = rcv.ValueDouble()
+	t.ValueInt = rcv.ValueInt()
+	t.ValueString = string(rcv.ValueString())
+}
+
+func (rcv *KinCfgAxsTrafoSingleParam) UnPack() *KinCfgAxsTrafoSingleParamT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoSingleParamT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoSingleParam struct {
 	_tab flatbuffers.Table
 }

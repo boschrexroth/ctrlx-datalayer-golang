@@ -6,6 +6,67 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CallableT struct {
+	Name string
+	Index uint32
+	Arguments []string
+	Id string
+	Alias string
+	Sync *SyncPointsT
+	Watchdog CallableWdgConfig
+}
+
+func (t *CallableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	argumentsOffset := flatbuffers.UOffsetT(0)
+	if t.Arguments != nil {
+		argumentsLength := len(t.Arguments)
+		argumentsOffsets := make([]flatbuffers.UOffsetT, argumentsLength)
+		for j := 0; j < argumentsLength; j++ {
+			argumentsOffsets[j] = builder.CreateString(t.Arguments[j])
+		}
+		CallableStartArgumentsVector(builder, argumentsLength)
+		for j := argumentsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(argumentsOffsets[j])
+		}
+		argumentsOffset = builder.EndVector(argumentsLength)
+	}
+	idOffset := builder.CreateString(t.Id)
+	aliasOffset := builder.CreateString(t.Alias)
+	syncOffset := t.Sync.Pack(builder)
+	CallableStart(builder)
+	CallableAddName(builder, nameOffset)
+	CallableAddIndex(builder, t.Index)
+	CallableAddArguments(builder, argumentsOffset)
+	CallableAddId(builder, idOffset)
+	CallableAddAlias(builder, aliasOffset)
+	CallableAddSync(builder, syncOffset)
+	CallableAddWatchdog(builder, t.Watchdog)
+	return CallableEnd(builder)
+}
+
+func (rcv *Callable) UnPackTo(t *CallableT) {
+	t.Name = string(rcv.Name())
+	t.Index = rcv.Index()
+	argumentsLength := rcv.ArgumentsLength()
+	t.Arguments = make([]string, argumentsLength)
+	for j := 0; j < argumentsLength; j++ {
+		t.Arguments[j] = string(rcv.Arguments(j))
+	}
+	t.Id = string(rcv.Id())
+	t.Alias = string(rcv.Alias())
+	t.Sync = rcv.Sync(nil).UnPack()
+	t.Watchdog = rcv.Watchdog()
+}
+
+func (rcv *Callable) UnPack() *CallableT {
+	if rcv == nil { return nil }
+	t := &CallableT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Callable struct {
 	_tab flatbuffers.Table
 }
@@ -33,6 +94,7 @@ func (rcv *Callable) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// singleton (callable factory name)
 func (rcv *Callable) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -41,6 +103,8 @@ func (rcv *Callable) Name() []byte {
 	return nil
 }
 
+/// singleton (callable factory name)
+/// call index 1 (highest) to maximum type range (default: 0 = lowest)
 func (rcv *Callable) Index() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -49,10 +113,12 @@ func (rcv *Callable) Index() uint32 {
 	return 0
 }
 
+/// call index 1 (highest) to maximum type range (default: 0 = lowest)
 func (rcv *Callable) MutateIndex(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// values to initialize the callable
 func (rcv *Callable) Arguments(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -70,6 +136,8 @@ func (rcv *Callable) ArgumentsLength() int {
 	return 0
 }
 
+/// values to initialize the callable
+/// desired callable ID (digits only, if unused - recommented - ID will set by system)
 func (rcv *Callable) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -78,8 +146,48 @@ func (rcv *Callable) Id() []byte {
 	return nil
 }
 
+/// desired callable ID (digits only, if unused - recommented - ID will set by system)
+/// alias, human readable callable ID
+func (rcv *Callable) Alias() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// alias, human readable callable ID
+/// sync points to get callables in order
+func (rcv *Callable) Sync(obj *SyncPoints) *SyncPoints {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(SyncPoints)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// sync points to get callables in order
+/// influence task and hardware watchdog handling
+func (rcv *Callable) Watchdog() CallableWdgConfig {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return CallableWdgConfig(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 3
+}
+
+/// influence task and hardware watchdog handling
+func (rcv *Callable) MutateWatchdog(n CallableWdgConfig) bool {
+	return rcv._tab.MutateInt8Slot(16, int8(n))
+}
+
 func CallableStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(7)
 }
 func CallableAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -95,6 +203,15 @@ func CallableStartArgumentsVector(builder *flatbuffers.Builder, numElems int) fl
 }
 func CallableAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(id), 0)
+}
+func CallableAddAlias(builder *flatbuffers.Builder, alias flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(alias), 0)
+}
+func CallableAddSync(builder *flatbuffers.Builder, sync flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(sync), 0)
+}
+func CallableAddWatchdog(builder *flatbuffers.Builder, watchdog CallableWdgConfig) {
+	builder.PrependInt8Slot(6, int8(watchdog), 3)
 }
 func CallableEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

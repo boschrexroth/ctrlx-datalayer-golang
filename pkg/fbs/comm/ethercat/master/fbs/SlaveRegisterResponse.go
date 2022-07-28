@@ -6,6 +6,32 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveRegisterResponseT struct {
+	Data []byte
+}
+
+func (t *SlaveRegisterResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	SlaveRegisterResponseStart(builder)
+	SlaveRegisterResponseAddData(builder, dataOffset)
+	return SlaveRegisterResponseEnd(builder)
+}
+
+func (rcv *SlaveRegisterResponse) UnPackTo(t *SlaveRegisterResponseT) {
+	t.Data = rcv.DataBytes()
+}
+
+func (rcv *SlaveRegisterResponse) UnPack() *SlaveRegisterResponseT {
+	if rcv == nil { return nil }
+	t := &SlaveRegisterResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveRegisterResponse struct {
 	_tab flatbuffers.Table
 }

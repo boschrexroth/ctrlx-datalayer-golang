@@ -6,6 +6,32 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type profileT struct {
+	Name string
+	Type ProfileType
+}
+
+func (t *profileT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	profileStart(builder)
+	profileAddName(builder, nameOffset)
+	profileAddType(builder, t.Type)
+	return profileEnd(builder)
+}
+
+func (rcv *profile) UnPackTo(t *profileT) {
+	t.Name = string(rcv.Name())
+	t.Type = rcv.Type()
+}
+
+func (rcv *profile) UnPack() *profileT {
+	if rcv == nil { return nil }
+	t := &profileT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type profile struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type BundleListT struct {
+	Bundles []*BundleT
+}
+
+func (t *BundleListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	bundlesOffset := flatbuffers.UOffsetT(0)
+	if t.Bundles != nil {
+		bundlesLength := len(t.Bundles)
+		bundlesOffsets := make([]flatbuffers.UOffsetT, bundlesLength)
+		for j := 0; j < bundlesLength; j++ {
+			bundlesOffsets[j] = t.Bundles[j].Pack(builder)
+		}
+		BundleListStartBundlesVector(builder, bundlesLength)
+		for j := bundlesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(bundlesOffsets[j])
+		}
+		bundlesOffset = builder.EndVector(bundlesLength)
+	}
+	BundleListStart(builder)
+	BundleListAddBundles(builder, bundlesOffset)
+	return BundleListEnd(builder)
+}
+
+func (rcv *BundleList) UnPackTo(t *BundleListT) {
+	bundlesLength := rcv.BundlesLength()
+	t.Bundles = make([]*BundleT, bundlesLength)
+	for j := 0; j < bundlesLength; j++ {
+		x := Bundle{}
+		rcv.Bundles(&x, j)
+		t.Bundles[j] = x.UnPack()
+	}
+}
+
+func (rcv *BundleList) UnPack() *BundleListT {
+	if rcv == nil { return nil }
+	t := &BundleListT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type BundleList struct {
 	_tab flatbuffers.Table
 }

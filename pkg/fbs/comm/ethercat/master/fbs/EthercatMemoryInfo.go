@@ -6,6 +6,27 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EthercatMemoryInfoT struct {
+	Offset uint32
+	Size uint32
+}
+
+func (t *EthercatMemoryInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	return CreateEthercatMemoryInfo(builder, t.Offset, t.Size)
+}
+func (rcv *EthercatMemoryInfo) UnPackTo(t *EthercatMemoryInfoT) {
+	t.Offset = rcv.Offset()
+	t.Size = rcv.Size()
+}
+
+func (rcv *EthercatMemoryInfo) UnPack() *EthercatMemoryInfoT {
+	if rcv == nil { return nil }
+	t := &EthercatMemoryInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EthercatMemoryInfo struct {
 	_tab flatbuffers.Struct
 }

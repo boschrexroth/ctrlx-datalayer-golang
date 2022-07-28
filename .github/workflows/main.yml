@@ -24,8 +24,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libsystemd-dev libzmq3-dev
         sudo apt install pkg-config 
-        wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.1/ctrlx-datalayer-1.7.5.deb
-        sudo apt-get install -y -f ./ctrlx-datalayer-1.7.5.deb
+        wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.16.0/ctrlx-datalayer-1.8.6.deb
+        sudo apt-get install -y -f ./ctrlx-datalayer-1.8.6.deb
     
     - name: Go
       uses: actions/setup-go@v2

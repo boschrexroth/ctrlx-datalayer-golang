@@ -6,6 +6,35 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CyclicT struct {
+	ErrorCount uint32
+	Reset bool
+	ErrorReaction *ErrorReactionT
+}
+
+func (t *CyclicT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	errorReactionOffset := t.ErrorReaction.Pack(builder)
+	CyclicStart(builder)
+	CyclicAddErrorCount(builder, t.ErrorCount)
+	CyclicAddReset(builder, t.Reset)
+	CyclicAddErrorReaction(builder, errorReactionOffset)
+	return CyclicEnd(builder)
+}
+
+func (rcv *Cyclic) UnPackTo(t *CyclicT) {
+	t.ErrorCount = rcv.ErrorCount()
+	t.Reset = rcv.Reset()
+	t.ErrorReaction = rcv.ErrorReaction(nil).UnPack()
+}
+
+func (rcv *Cyclic) UnPack() *CyclicT {
+	if rcv == nil { return nil }
+	t := &CyclicT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Cyclic struct {
 	_tab flatbuffers.Table
 }

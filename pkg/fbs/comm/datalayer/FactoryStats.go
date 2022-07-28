@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type FactoryStatsT struct {
+	NumClients uint32
+	NumProviders uint32
+	OpenClientRequests uint32
+	OpenProviderRequests uint32
+}
+
+func (t *FactoryStatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	FactoryStatsStart(builder)
+	FactoryStatsAddNumClients(builder, t.NumClients)
+	FactoryStatsAddNumProviders(builder, t.NumProviders)
+	FactoryStatsAddOpenClientRequests(builder, t.OpenClientRequests)
+	FactoryStatsAddOpenProviderRequests(builder, t.OpenProviderRequests)
+	return FactoryStatsEnd(builder)
+}
+
+func (rcv *FactoryStats) UnPackTo(t *FactoryStatsT) {
+	t.NumClients = rcv.NumClients()
+	t.NumProviders = rcv.NumProviders()
+	t.OpenClientRequests = rcv.OpenClientRequests()
+	t.OpenProviderRequests = rcv.OpenProviderRequests()
+}
+
+func (rcv *FactoryStats) UnPack() *FactoryStatsT {
+	if rcv == nil { return nil }
+	t := &FactoryStatsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type FactoryStats struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ParameterT struct {
+	Request *ParameterRequestT
+	Response *ParameterResponseT
+}
+
+func (t *ParameterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	ParameterStart(builder)
+	ParameterAddRequest(builder, requestOffset)
+	ParameterAddResponse(builder, responseOffset)
+	return ParameterEnd(builder)
+}
+
+func (rcv *Parameter) UnPackTo(t *ParameterT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *Parameter) UnPack() *ParameterT {
+	if rcv == nil { return nil }
+	t := &ParameterT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Parameter struct {
 	_tab flatbuffers.Table
 }

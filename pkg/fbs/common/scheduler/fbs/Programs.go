@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ProgramsT struct {
+	Programs []*ProgramT
+}
+
+func (t *ProgramsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	programsOffset := flatbuffers.UOffsetT(0)
+	if t.Programs != nil {
+		programsLength := len(t.Programs)
+		programsOffsets := make([]flatbuffers.UOffsetT, programsLength)
+		for j := 0; j < programsLength; j++ {
+			programsOffsets[j] = t.Programs[j].Pack(builder)
+		}
+		ProgramsStartProgramsVector(builder, programsLength)
+		for j := programsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(programsOffsets[j])
+		}
+		programsOffset = builder.EndVector(programsLength)
+	}
+	ProgramsStart(builder)
+	ProgramsAddPrograms(builder, programsOffset)
+	return ProgramsEnd(builder)
+}
+
+func (rcv *Programs) UnPackTo(t *ProgramsT) {
+	programsLength := rcv.ProgramsLength()
+	t.Programs = make([]*ProgramT, programsLength)
+	for j := 0; j < programsLength; j++ {
+		x := Program{}
+		rcv.Programs(&x, j)
+		t.Programs[j] = x.UnPack()
+	}
+}
+
+func (rcv *Programs) UnPack() *ProgramsT {
+	if rcv == nil { return nil }
+	t := &ProgramsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Programs struct {
 	_tab flatbuffers.Table
 }

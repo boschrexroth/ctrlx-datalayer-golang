@@ -7,6 +7,38 @@ import (
 )
 
 /// configuration of the limits in a single dimension of the box of a single safe area
+type SysCfgSafeAreaBoxT struct {
+	Min float64
+	Max float64
+	Unit string
+	Active bool
+}
+
+func (t *SysCfgSafeAreaBoxT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	unitOffset := builder.CreateString(t.Unit)
+	SysCfgSafeAreaBoxStart(builder)
+	SysCfgSafeAreaBoxAddMin(builder, t.Min)
+	SysCfgSafeAreaBoxAddMax(builder, t.Max)
+	SysCfgSafeAreaBoxAddUnit(builder, unitOffset)
+	SysCfgSafeAreaBoxAddActive(builder, t.Active)
+	return SysCfgSafeAreaBoxEnd(builder)
+}
+
+func (rcv *SysCfgSafeAreaBox) UnPackTo(t *SysCfgSafeAreaBoxT) {
+	t.Min = rcv.Min()
+	t.Max = rcv.Max()
+	t.Unit = string(rcv.Unit())
+	t.Active = rcv.Active()
+}
+
+func (rcv *SysCfgSafeAreaBox) UnPack() *SysCfgSafeAreaBoxT {
+	if rcv == nil { return nil }
+	t := &SysCfgSafeAreaBoxT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgSafeAreaBox struct {
 	_tab flatbuffers.Table
 }

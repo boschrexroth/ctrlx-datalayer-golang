@@ -7,6 +7,47 @@ import (
 )
 
 /// all currently acquired licenses (motion must be in state RUNNING)
+type AcquiredLicensesT struct {
+	Licenses []*SingleLicenseT
+}
+
+func (t *AcquiredLicensesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	licensesOffset := flatbuffers.UOffsetT(0)
+	if t.Licenses != nil {
+		licensesLength := len(t.Licenses)
+		licensesOffsets := make([]flatbuffers.UOffsetT, licensesLength)
+		for j := 0; j < licensesLength; j++ {
+			licensesOffsets[j] = t.Licenses[j].Pack(builder)
+		}
+		AcquiredLicensesStartLicensesVector(builder, licensesLength)
+		for j := licensesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(licensesOffsets[j])
+		}
+		licensesOffset = builder.EndVector(licensesLength)
+	}
+	AcquiredLicensesStart(builder)
+	AcquiredLicensesAddLicenses(builder, licensesOffset)
+	return AcquiredLicensesEnd(builder)
+}
+
+func (rcv *AcquiredLicenses) UnPackTo(t *AcquiredLicensesT) {
+	licensesLength := rcv.LicensesLength()
+	t.Licenses = make([]*SingleLicenseT, licensesLength)
+	for j := 0; j < licensesLength; j++ {
+		x := SingleLicense{}
+		rcv.Licenses(&x, j)
+		t.Licenses[j] = x.UnPack()
+	}
+}
+
+func (rcv *AcquiredLicenses) UnPack() *AcquiredLicensesT {
+	if rcv == nil { return nil }
+	t := &AcquiredLicensesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AcquiredLicenses struct {
 	_tab flatbuffers.Table
 }

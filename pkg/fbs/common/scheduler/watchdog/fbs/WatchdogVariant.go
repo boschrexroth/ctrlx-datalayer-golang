@@ -2,7 +2,11 @@
 
 package fbs
 
-import "strconv"
+import (
+	"strconv"
+
+	flatbuffers "github.com/google/flatbuffers/go"
+)
 
 type WatchdogVariant byte
 
@@ -29,4 +33,34 @@ func (v WatchdogVariant) String() string {
 		return s
 	}
 	return "WatchdogVariant(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
+type WatchdogVariantT struct {
+	Type WatchdogVariant
+	Value interface{}
+}
+
+func (t *WatchdogVariantT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil {
+		return 0
+	}
+	switch t.Type {
+	case WatchdogVariantCyclic:
+		return t.Value.(*CyclicT).Pack(builder)
+	case WatchdogVariantDuration:
+		return t.Value.(*DurationT).Pack(builder)
+	}
+	return 0
+}
+
+func (rcv WatchdogVariant) UnPack(table flatbuffers.Table) *WatchdogVariantT {
+	switch rcv {
+	case WatchdogVariantCyclic:
+		x := Cyclic{_tab: table}
+		return &WatchdogVariantT{ Type: WatchdogVariantCyclic, Value: x.UnPack() }
+	case WatchdogVariantDuration:
+		x := Duration{_tab: table}
+		return &WatchdogVariantT{ Type: WatchdogVariantDuration, Value: x.UnPack() }
+	}
+	return nil
 }

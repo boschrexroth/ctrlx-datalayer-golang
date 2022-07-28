@@ -6,6 +6,139 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MetadataT struct {
+	NodeClass NodeClass
+	Operations *AllowedOperationsT
+	Description string
+	DescriptionUrl string
+	DisplayName string
+	DisplayFormat DisplayFormat
+	Unit string
+	Extensions []*ExtensionT
+	References []*ReferenceT
+	Descriptions []*LocaleTextT
+	DisplayNames []*LocaleTextT
+}
+
+func (t *MetadataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	operationsOffset := t.Operations.Pack(builder)
+	descriptionOffset := builder.CreateString(t.Description)
+	descriptionUrlOffset := builder.CreateString(t.DescriptionUrl)
+	displayNameOffset := builder.CreateString(t.DisplayName)
+	unitOffset := builder.CreateString(t.Unit)
+	extensionsOffset := flatbuffers.UOffsetT(0)
+	if t.Extensions != nil {
+		extensionsLength := len(t.Extensions)
+		extensionsOffsets := make([]flatbuffers.UOffsetT, extensionsLength)
+		for j := 0; j < extensionsLength; j++ {
+			extensionsOffsets[j] = t.Extensions[j].Pack(builder)
+		}
+		MetadataStartExtensionsVector(builder, extensionsLength)
+		for j := extensionsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(extensionsOffsets[j])
+		}
+		extensionsOffset = builder.EndVector(extensionsLength)
+	}
+	referencesOffset := flatbuffers.UOffsetT(0)
+	if t.References != nil {
+		referencesLength := len(t.References)
+		referencesOffsets := make([]flatbuffers.UOffsetT, referencesLength)
+		for j := 0; j < referencesLength; j++ {
+			referencesOffsets[j] = t.References[j].Pack(builder)
+		}
+		MetadataStartReferencesVector(builder, referencesLength)
+		for j := referencesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(referencesOffsets[j])
+		}
+		referencesOffset = builder.EndVector(referencesLength)
+	}
+	descriptionsOffset := flatbuffers.UOffsetT(0)
+	if t.Descriptions != nil {
+		descriptionsLength := len(t.Descriptions)
+		descriptionsOffsets := make([]flatbuffers.UOffsetT, descriptionsLength)
+		for j := 0; j < descriptionsLength; j++ {
+			descriptionsOffsets[j] = t.Descriptions[j].Pack(builder)
+		}
+		MetadataStartDescriptionsVector(builder, descriptionsLength)
+		for j := descriptionsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(descriptionsOffsets[j])
+		}
+		descriptionsOffset = builder.EndVector(descriptionsLength)
+	}
+	displayNamesOffset := flatbuffers.UOffsetT(0)
+	if t.DisplayNames != nil {
+		displayNamesLength := len(t.DisplayNames)
+		displayNamesOffsets := make([]flatbuffers.UOffsetT, displayNamesLength)
+		for j := 0; j < displayNamesLength; j++ {
+			displayNamesOffsets[j] = t.DisplayNames[j].Pack(builder)
+		}
+		MetadataStartDisplayNamesVector(builder, displayNamesLength)
+		for j := displayNamesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(displayNamesOffsets[j])
+		}
+		displayNamesOffset = builder.EndVector(displayNamesLength)
+	}
+	MetadataStart(builder)
+	MetadataAddNodeClass(builder, t.NodeClass)
+	MetadataAddOperations(builder, operationsOffset)
+	MetadataAddDescription(builder, descriptionOffset)
+	MetadataAddDescriptionUrl(builder, descriptionUrlOffset)
+	MetadataAddDisplayName(builder, displayNameOffset)
+	MetadataAddDisplayFormat(builder, t.DisplayFormat)
+	MetadataAddUnit(builder, unitOffset)
+	MetadataAddExtensions(builder, extensionsOffset)
+	MetadataAddReferences(builder, referencesOffset)
+	MetadataAddDescriptions(builder, descriptionsOffset)
+	MetadataAddDisplayNames(builder, displayNamesOffset)
+	return MetadataEnd(builder)
+}
+
+func (rcv *Metadata) UnPackTo(t *MetadataT) {
+	t.NodeClass = rcv.NodeClass()
+	t.Operations = rcv.Operations(nil).UnPack()
+	t.Description = string(rcv.Description())
+	t.DescriptionUrl = string(rcv.DescriptionUrl())
+	t.DisplayName = string(rcv.DisplayName())
+	t.DisplayFormat = rcv.DisplayFormat()
+	t.Unit = string(rcv.Unit())
+	extensionsLength := rcv.ExtensionsLength()
+	t.Extensions = make([]*ExtensionT, extensionsLength)
+	for j := 0; j < extensionsLength; j++ {
+		x := Extension{}
+		rcv.Extensions(&x, j)
+		t.Extensions[j] = x.UnPack()
+	}
+	referencesLength := rcv.ReferencesLength()
+	t.References = make([]*ReferenceT, referencesLength)
+	for j := 0; j < referencesLength; j++ {
+		x := Reference{}
+		rcv.References(&x, j)
+		t.References[j] = x.UnPack()
+	}
+	descriptionsLength := rcv.DescriptionsLength()
+	t.Descriptions = make([]*LocaleTextT, descriptionsLength)
+	for j := 0; j < descriptionsLength; j++ {
+		x := LocaleText{}
+		rcv.Descriptions(&x, j)
+		t.Descriptions[j] = x.UnPack()
+	}
+	displayNamesLength := rcv.DisplayNamesLength()
+	t.DisplayNames = make([]*LocaleTextT, displayNamesLength)
+	for j := 0; j < displayNamesLength; j++ {
+		x := LocaleText{}
+		rcv.DisplayNames(&x, j)
+		t.DisplayNames[j] = x.UnPack()
+	}
+}
+
+func (rcv *Metadata) UnPack() *MetadataT {
+	if rcv == nil { return nil }
+	t := &MetadataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Metadata struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,33 @@ import (
 )
 
 /// information of a single acquired license
+type SingleLicenseT struct {
+	Name string
+	Version string
+}
+
+func (t *SingleLicenseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	SingleLicenseStart(builder)
+	SingleLicenseAddName(builder, nameOffset)
+	SingleLicenseAddVersion(builder, versionOffset)
+	return SingleLicenseEnd(builder)
+}
+
+func (rcv *SingleLicense) UnPackTo(t *SingleLicenseT) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+}
+
+func (rcv *SingleLicense) UnPack() *SingleLicenseT {
+	if rcv == nil { return nil }
+	t := &SingleLicenseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SingleLicense struct {
 	_tab flatbuffers.Table
 }

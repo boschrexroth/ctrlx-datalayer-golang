@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TimeoutConfigurationT struct {
+	BrowseCallTimeout uint32
+	DiscoveryTimeout uint32
+	PublishTimeout uint32
+	ReadCallTimeout uint32
+	SessionTimeout float64
+	WatchdogTimeout uint32
+	WriteCallTimeout uint32
+	CallCallTimeout uint32
+}
+
+func (t *TimeoutConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	TimeoutConfigurationStart(builder)
+	TimeoutConfigurationAddBrowseCallTimeout(builder, t.BrowseCallTimeout)
+	TimeoutConfigurationAddDiscoveryTimeout(builder, t.DiscoveryTimeout)
+	TimeoutConfigurationAddPublishTimeout(builder, t.PublishTimeout)
+	TimeoutConfigurationAddReadCallTimeout(builder, t.ReadCallTimeout)
+	TimeoutConfigurationAddSessionTimeout(builder, t.SessionTimeout)
+	TimeoutConfigurationAddWatchdogTimeout(builder, t.WatchdogTimeout)
+	TimeoutConfigurationAddWriteCallTimeout(builder, t.WriteCallTimeout)
+	TimeoutConfigurationAddCallCallTimeout(builder, t.CallCallTimeout)
+	return TimeoutConfigurationEnd(builder)
+}
+
+func (rcv *TimeoutConfiguration) UnPackTo(t *TimeoutConfigurationT) {
+	t.BrowseCallTimeout = rcv.BrowseCallTimeout()
+	t.DiscoveryTimeout = rcv.DiscoveryTimeout()
+	t.PublishTimeout = rcv.PublishTimeout()
+	t.ReadCallTimeout = rcv.ReadCallTimeout()
+	t.SessionTimeout = rcv.SessionTimeout()
+	t.WatchdogTimeout = rcv.WatchdogTimeout()
+	t.WriteCallTimeout = rcv.WriteCallTimeout()
+	t.CallCallTimeout = rcv.CallCallTimeout()
+}
+
+func (rcv *TimeoutConfiguration) UnPack() *TimeoutConfigurationT {
+	if rcv == nil { return nil }
+	t := &TimeoutConfigurationT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type TimeoutConfiguration struct {
 	_tab flatbuffers.Table
 }
@@ -117,8 +160,20 @@ func (rcv *TimeoutConfiguration) MutateWriteCallTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
+func (rcv *TimeoutConfiguration) CallCallTimeout() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 10000
+}
+
+func (rcv *TimeoutConfiguration) MutateCallCallTimeout(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(18, n)
+}
+
 func TimeoutConfigurationStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func TimeoutConfigurationAddBrowseCallTimeout(builder *flatbuffers.Builder, browseCallTimeout uint32) {
 	builder.PrependUint32Slot(0, browseCallTimeout, 10000)
@@ -140,6 +195,9 @@ func TimeoutConfigurationAddWatchdogTimeout(builder *flatbuffers.Builder, watchd
 }
 func TimeoutConfigurationAddWriteCallTimeout(builder *flatbuffers.Builder, writeCallTimeout uint32) {
 	builder.PrependUint32Slot(6, writeCallTimeout, 10000)
+}
+func TimeoutConfigurationAddCallCallTimeout(builder *flatbuffers.Builder, callCallTimeout uint32) {
+	builder.PrependUint32Slot(7, callCallTimeout, 10000)
 }
 func TimeoutConfigurationEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

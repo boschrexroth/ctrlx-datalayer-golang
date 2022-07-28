@@ -6,6 +6,53 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type CfgInitScriptT struct {
+	File string
+	Language string
+	Parameter []string
+}
+
+func (t *CfgInitScriptT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	fileOffset := builder.CreateString(t.File)
+	languageOffset := builder.CreateString(t.Language)
+	parameterOffset := flatbuffers.UOffsetT(0)
+	if t.Parameter != nil {
+		parameterLength := len(t.Parameter)
+		parameterOffsets := make([]flatbuffers.UOffsetT, parameterLength)
+		for j := 0; j < parameterLength; j++ {
+			parameterOffsets[j] = builder.CreateString(t.Parameter[j])
+		}
+		CfgInitScriptStartParameterVector(builder, parameterLength)
+		for j := parameterLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(parameterOffsets[j])
+		}
+		parameterOffset = builder.EndVector(parameterLength)
+	}
+	CfgInitScriptStart(builder)
+	CfgInitScriptAddFile(builder, fileOffset)
+	CfgInitScriptAddLanguage(builder, languageOffset)
+	CfgInitScriptAddParameter(builder, parameterOffset)
+	return CfgInitScriptEnd(builder)
+}
+
+func (rcv *CfgInitScript) UnPackTo(t *CfgInitScriptT) {
+	t.File = string(rcv.File())
+	t.Language = string(rcv.Language())
+	parameterLength := rcv.ParameterLength()
+	t.Parameter = make([]string, parameterLength)
+	for j := 0; j < parameterLength; j++ {
+		t.Parameter[j] = string(rcv.Parameter(j))
+	}
+}
+
+func (rcv *CfgInitScript) UnPack() *CfgInitScriptT {
+	if rcv == nil { return nil }
+	t := &CfgInitScriptT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CfgInitScript struct {
 	_tab flatbuffers.Table
 }

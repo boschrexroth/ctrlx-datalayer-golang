@@ -6,6 +6,59 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type InterfaceT struct {
+	Port string
+	Device string
+	LinkLayer string
+	CapabilityList []*CapabilityT
+}
+
+func (t *InterfaceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	portOffset := builder.CreateString(t.Port)
+	deviceOffset := builder.CreateString(t.Device)
+	linkLayerOffset := builder.CreateString(t.LinkLayer)
+	capabilityListOffset := flatbuffers.UOffsetT(0)
+	if t.CapabilityList != nil {
+		capabilityListLength := len(t.CapabilityList)
+		capabilityListOffsets := make([]flatbuffers.UOffsetT, capabilityListLength)
+		for j := 0; j < capabilityListLength; j++ {
+			capabilityListOffsets[j] = t.CapabilityList[j].Pack(builder)
+		}
+		InterfaceStartCapabilityListVector(builder, capabilityListLength)
+		for j := capabilityListLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(capabilityListOffsets[j])
+		}
+		capabilityListOffset = builder.EndVector(capabilityListLength)
+	}
+	InterfaceStart(builder)
+	InterfaceAddPort(builder, portOffset)
+	InterfaceAddDevice(builder, deviceOffset)
+	InterfaceAddLinkLayer(builder, linkLayerOffset)
+	InterfaceAddCapabilityList(builder, capabilityListOffset)
+	return InterfaceEnd(builder)
+}
+
+func (rcv *Interface) UnPackTo(t *InterfaceT) {
+	t.Port = string(rcv.Port())
+	t.Device = string(rcv.Device())
+	t.LinkLayer = string(rcv.LinkLayer())
+	capabilityListLength := rcv.CapabilityListLength()
+	t.CapabilityList = make([]*CapabilityT, capabilityListLength)
+	for j := 0; j < capabilityListLength; j++ {
+		x := Capability{}
+		rcv.CapabilityList(&x, j)
+		t.CapabilityList[j] = x.UnPack()
+	}
+}
+
+func (rcv *Interface) UnPack() *InterfaceT {
+	if rcv == nil { return nil }
+	t := &InterfaceT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Interface struct {
 	_tab flatbuffers.Table
 }

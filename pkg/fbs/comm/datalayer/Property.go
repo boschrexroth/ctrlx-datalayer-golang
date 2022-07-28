@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type PropertyT struct {
+	Rule *PropertiesT
+}
+
+func (t *PropertyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ruleOffset := t.Rule.Pack(builder)
+	
+	PropertyStart(builder)
+	if t.Rule != nil {
+		PropertyAddRuleType(builder, t.Rule.Type)
+	}
+	PropertyAddRule(builder, ruleOffset)
+	return PropertyEnd(builder)
+}
+
+func (rcv *Property) UnPackTo(t *PropertyT) {
+	ruleTable := flatbuffers.Table{}
+	if rcv.Rule(&ruleTable) {
+		t.Rule = rcv.RuleType().UnPack(ruleTable)
+	}
+}
+
+func (rcv *Property) UnPack() *PropertyT {
+	if rcv == nil { return nil }
+	t := &PropertyT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Property struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,39 @@ import (
 )
 
 /// common axis properties for a single axis
+type AxsCfgPropertiesT struct {
+	AxsType string
+	Modulo bool
+	ModuloValue float64
+	ModuloValueUnit string
+}
+
+func (t *AxsCfgPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axsTypeOffset := builder.CreateString(t.AxsType)
+	moduloValueUnitOffset := builder.CreateString(t.ModuloValueUnit)
+	AxsCfgPropertiesStart(builder)
+	AxsCfgPropertiesAddAxsType(builder, axsTypeOffset)
+	AxsCfgPropertiesAddModulo(builder, t.Modulo)
+	AxsCfgPropertiesAddModuloValue(builder, t.ModuloValue)
+	AxsCfgPropertiesAddModuloValueUnit(builder, moduloValueUnitOffset)
+	return AxsCfgPropertiesEnd(builder)
+}
+
+func (rcv *AxsCfgProperties) UnPackTo(t *AxsCfgPropertiesT) {
+	t.AxsType = string(rcv.AxsType())
+	t.Modulo = rcv.Modulo()
+	t.ModuloValue = rcv.ModuloValue()
+	t.ModuloValueUnit = string(rcv.ModuloValueUnit())
+}
+
+func (rcv *AxsCfgProperties) UnPack() *AxsCfgPropertiesT {
+	if rcv == nil { return nil }
+	t := &AxsCfgPropertiesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgProperties struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,38 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EnablingStateT struct {
+	UnitName string
+	Messages bool
+	Warnings bool
+	Errors bool
+}
+
+func (t *EnablingStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	unitNameOffset := builder.CreateString(t.UnitName)
+	EnablingStateStart(builder)
+	EnablingStateAddUnitName(builder, unitNameOffset)
+	EnablingStateAddMessages(builder, t.Messages)
+	EnablingStateAddWarnings(builder, t.Warnings)
+	EnablingStateAddErrors(builder, t.Errors)
+	return EnablingStateEnd(builder)
+}
+
+func (rcv *EnablingState) UnPackTo(t *EnablingStateT) {
+	t.UnitName = string(rcv.UnitName())
+	t.Messages = rcv.Messages()
+	t.Warnings = rcv.Warnings()
+	t.Errors = rcv.Errors()
+}
+
+func (rcv *EnablingState) UnPack() *EnablingStateT {
+	if rcv == nil { return nil }
+	t := &EnablingStateT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EnablingState struct {
 	_tab flatbuffers.Table
 }

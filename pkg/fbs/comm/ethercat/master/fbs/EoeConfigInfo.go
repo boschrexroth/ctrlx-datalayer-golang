@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EoeConfigInfoT struct {
+	Request *AddressedRequestT
+	Response *EoeConfigInfoResponseT
+}
+
+func (t *EoeConfigInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	EoeConfigInfoStart(builder)
+	EoeConfigInfoAddRequest(builder, requestOffset)
+	EoeConfigInfoAddResponse(builder, responseOffset)
+	return EoeConfigInfoEnd(builder)
+}
+
+func (rcv *EoeConfigInfo) UnPackTo(t *EoeConfigInfoT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *EoeConfigInfo) UnPack() *EoeConfigInfoT {
+	if rcv == nil { return nil }
+	t := &EoeConfigInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EoeConfigInfo struct {
 	_tab flatbuffers.Table
 }

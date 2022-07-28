@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SubscriptionDataT struct {
+	Properties *SubscriptionPropertiesT
+	Nodes []string
+}
+
+func (t *SubscriptionDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	propertiesOffset := t.Properties.Pack(builder)
+	nodesOffset := flatbuffers.UOffsetT(0)
+	if t.Nodes != nil {
+		nodesLength := len(t.Nodes)
+		nodesOffsets := make([]flatbuffers.UOffsetT, nodesLength)
+		for j := 0; j < nodesLength; j++ {
+			nodesOffsets[j] = builder.CreateString(t.Nodes[j])
+		}
+		SubscriptionDataStartNodesVector(builder, nodesLength)
+		for j := nodesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(nodesOffsets[j])
+		}
+		nodesOffset = builder.EndVector(nodesLength)
+	}
+	SubscriptionDataStart(builder)
+	SubscriptionDataAddProperties(builder, propertiesOffset)
+	SubscriptionDataAddNodes(builder, nodesOffset)
+	return SubscriptionDataEnd(builder)
+}
+
+func (rcv *SubscriptionData) UnPackTo(t *SubscriptionDataT) {
+	t.Properties = rcv.Properties(nil).UnPack()
+	nodesLength := rcv.NodesLength()
+	t.Nodes = make([]string, nodesLength)
+	for j := 0; j < nodesLength; j++ {
+		t.Nodes[j] = string(rcv.Nodes(j))
+	}
+}
+
+func (rcv *SubscriptionData) UnPack() *SubscriptionDataT {
+	if rcv == nil { return nil }
+	t := &SubscriptionDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SubscriptionData struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveStatisticModeAutoT struct {
+	Request *SlaveStatisticModeAutoRequestT
+	Response *SlaveStatisticModeAutoResponseT
+}
+
+func (t *SlaveStatisticModeAutoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	SlaveStatisticModeAutoStart(builder)
+	SlaveStatisticModeAutoAddRequest(builder, requestOffset)
+	SlaveStatisticModeAutoAddResponse(builder, responseOffset)
+	return SlaveStatisticModeAutoEnd(builder)
+}
+
+func (rcv *SlaveStatisticModeAuto) UnPackTo(t *SlaveStatisticModeAutoT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *SlaveStatisticModeAuto) UnPack() *SlaveStatisticModeAutoT {
+	if rcv == nil { return nil }
+	t := &SlaveStatisticModeAutoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveStatisticModeAuto struct {
 	_tab flatbuffers.Table
 }

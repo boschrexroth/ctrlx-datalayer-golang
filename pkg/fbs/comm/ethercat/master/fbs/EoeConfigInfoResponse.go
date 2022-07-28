@@ -6,6 +6,64 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EoeConfigInfoResponseT struct {
+	MacAddress []byte
+	IpAddress []byte
+	SubnetMask []byte
+	DefaultGateway []byte
+	DnsIpAddress []byte
+	DnsName string
+}
+
+func (t *EoeConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	macAddressOffset := flatbuffers.UOffsetT(0)
+	if t.MacAddress != nil {
+		macAddressOffset = builder.CreateByteString(t.MacAddress)
+	}
+	ipAddressOffset := flatbuffers.UOffsetT(0)
+	if t.IpAddress != nil {
+		ipAddressOffset = builder.CreateByteString(t.IpAddress)
+	}
+	subnetMaskOffset := flatbuffers.UOffsetT(0)
+	if t.SubnetMask != nil {
+		subnetMaskOffset = builder.CreateByteString(t.SubnetMask)
+	}
+	defaultGatewayOffset := flatbuffers.UOffsetT(0)
+	if t.DefaultGateway != nil {
+		defaultGatewayOffset = builder.CreateByteString(t.DefaultGateway)
+	}
+	dnsIpAddressOffset := flatbuffers.UOffsetT(0)
+	if t.DnsIpAddress != nil {
+		dnsIpAddressOffset = builder.CreateByteString(t.DnsIpAddress)
+	}
+	dnsNameOffset := builder.CreateString(t.DnsName)
+	EoeConfigInfoResponseStart(builder)
+	EoeConfigInfoResponseAddMacAddress(builder, macAddressOffset)
+	EoeConfigInfoResponseAddIpAddress(builder, ipAddressOffset)
+	EoeConfigInfoResponseAddSubnetMask(builder, subnetMaskOffset)
+	EoeConfigInfoResponseAddDefaultGateway(builder, defaultGatewayOffset)
+	EoeConfigInfoResponseAddDnsIpAddress(builder, dnsIpAddressOffset)
+	EoeConfigInfoResponseAddDnsName(builder, dnsNameOffset)
+	return EoeConfigInfoResponseEnd(builder)
+}
+
+func (rcv *EoeConfigInfoResponse) UnPackTo(t *EoeConfigInfoResponseT) {
+	t.MacAddress = rcv.MacAddressBytes()
+	t.IpAddress = rcv.IpAddressBytes()
+	t.SubnetMask = rcv.SubnetMaskBytes()
+	t.DefaultGateway = rcv.DefaultGatewayBytes()
+	t.DnsIpAddress = rcv.DnsIpAddressBytes()
+	t.DnsName = string(rcv.DnsName())
+}
+
+func (rcv *EoeConfigInfoResponse) UnPack() *EoeConfigInfoResponseT {
+	if rcv == nil { return nil }
+	t := &EoeConfigInfoResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EoeConfigInfoResponse struct {
 	_tab flatbuffers.Table
 }

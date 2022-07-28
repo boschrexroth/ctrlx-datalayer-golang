@@ -6,6 +6,44 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type HistogramT struct {
+	Scale uint64
+	Values []uint64
+}
+
+func (t *HistogramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valuesOffset := flatbuffers.UOffsetT(0)
+	if t.Values != nil {
+		valuesLength := len(t.Values)
+		HistogramStartValuesVector(builder, valuesLength)
+		for j := valuesLength - 1; j >= 0; j-- {
+			builder.PrependUint64(t.Values[j])
+		}
+		valuesOffset = builder.EndVector(valuesLength)
+	}
+	HistogramStart(builder)
+	HistogramAddScale(builder, t.Scale)
+	HistogramAddValues(builder, valuesOffset)
+	return HistogramEnd(builder)
+}
+
+func (rcv *Histogram) UnPackTo(t *HistogramT) {
+	t.Scale = rcv.Scale()
+	valuesLength := rcv.ValuesLength()
+	t.Values = make([]uint64, valuesLength)
+	for j := 0; j < valuesLength; j++ {
+		t.Values[j] = rcv.Values(j)
+	}
+}
+
+func (rcv *Histogram) UnPack() *HistogramT {
+	if rcv == nil { return nil }
+	t := &HistogramT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Histogram struct {
 	_tab flatbuffers.Table
 }

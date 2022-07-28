@@ -6,6 +6,27 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EthercatMailboxInfoT struct {
+	SizeIn uint32
+	SizeOut uint32
+}
+
+func (t *EthercatMailboxInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	return CreateEthercatMailboxInfo(builder, t.SizeIn, t.SizeOut)
+}
+func (rcv *EthercatMailboxInfo) UnPackTo(t *EthercatMailboxInfoT) {
+	t.SizeIn = rcv.SizeIn()
+	t.SizeOut = rcv.SizeOut()
+}
+
+func (rcv *EthercatMailboxInfo) UnPack() *EthercatMailboxInfoT {
+	if rcv == nil { return nil }
+	t := &EthercatMailboxInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EthercatMailboxInfo struct {
 	_tab flatbuffers.Struct
 }

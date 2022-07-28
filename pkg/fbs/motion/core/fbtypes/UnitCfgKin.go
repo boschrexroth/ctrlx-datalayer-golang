@@ -7,6 +7,67 @@ import (
 )
 
 /// General unit configuration for a kinematics object
+type UnitCfgKinT struct {
+	Default []*UnitCfgObjSingleT
+	Position []string
+}
+
+func (t *UnitCfgKinT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	defaultOffset := flatbuffers.UOffsetT(0)
+	if t.Default != nil {
+		defaultLength := len(t.Default)
+		defaultOffsets := make([]flatbuffers.UOffsetT, defaultLength)
+		for j := 0; j < defaultLength; j++ {
+			defaultOffsets[j] = t.Default[j].Pack(builder)
+		}
+		UnitCfgKinStartDefaultVector(builder, defaultLength)
+		for j := defaultLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(defaultOffsets[j])
+		}
+		defaultOffset = builder.EndVector(defaultLength)
+	}
+	positionOffset := flatbuffers.UOffsetT(0)
+	if t.Position != nil {
+		positionLength := len(t.Position)
+		positionOffsets := make([]flatbuffers.UOffsetT, positionLength)
+		for j := 0; j < positionLength; j++ {
+			positionOffsets[j] = builder.CreateString(t.Position[j])
+		}
+		UnitCfgKinStartPositionVector(builder, positionLength)
+		for j := positionLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(positionOffsets[j])
+		}
+		positionOffset = builder.EndVector(positionLength)
+	}
+	UnitCfgKinStart(builder)
+	UnitCfgKinAddDefault(builder, defaultOffset)
+	UnitCfgKinAddPosition(builder, positionOffset)
+	return UnitCfgKinEnd(builder)
+}
+
+func (rcv *UnitCfgKin) UnPackTo(t *UnitCfgKinT) {
+	defaultLength := rcv.DefaultLength()
+	t.Default = make([]*UnitCfgObjSingleT, defaultLength)
+	for j := 0; j < defaultLength; j++ {
+		x := UnitCfgObjSingle{}
+		rcv.Default(&x, j)
+		t.Default[j] = x.UnPack()
+	}
+	positionLength := rcv.PositionLength()
+	t.Position = make([]string, positionLength)
+	for j := 0; j < positionLength; j++ {
+		t.Position[j] = string(rcv.Position(j))
+	}
+}
+
+func (rcv *UnitCfgKin) UnPack() *UnitCfgKinT {
+	if rcv == nil { return nil }
+	t := &UnitCfgKinT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UnitCfgKin struct {
 	_tab flatbuffers.Table
 }

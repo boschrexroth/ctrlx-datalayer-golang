@@ -7,6 +7,53 @@ import (
 )
 
 /// currently interpolated values
+type IpoAddDataT struct {
+	DistFromStart float64
+	DistToTarget float64
+	TimeFromStart float64
+	TimeToTarget float64
+	DistFromStartUnit string
+	DistToTargetUnit string
+	TimeFromStartUnit string
+	TimeToTargetUnit string
+}
+
+func (t *IpoAddDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	distFromStartUnitOffset := builder.CreateString(t.DistFromStartUnit)
+	distToTargetUnitOffset := builder.CreateString(t.DistToTargetUnit)
+	timeFromStartUnitOffset := builder.CreateString(t.TimeFromStartUnit)
+	timeToTargetUnitOffset := builder.CreateString(t.TimeToTargetUnit)
+	IpoAddDataStart(builder)
+	IpoAddDataAddDistFromStart(builder, t.DistFromStart)
+	IpoAddDataAddDistToTarget(builder, t.DistToTarget)
+	IpoAddDataAddTimeFromStart(builder, t.TimeFromStart)
+	IpoAddDataAddTimeToTarget(builder, t.TimeToTarget)
+	IpoAddDataAddDistFromStartUnit(builder, distFromStartUnitOffset)
+	IpoAddDataAddDistToTargetUnit(builder, distToTargetUnitOffset)
+	IpoAddDataAddTimeFromStartUnit(builder, timeFromStartUnitOffset)
+	IpoAddDataAddTimeToTargetUnit(builder, timeToTargetUnitOffset)
+	return IpoAddDataEnd(builder)
+}
+
+func (rcv *IpoAddData) UnPackTo(t *IpoAddDataT) {
+	t.DistFromStart = rcv.DistFromStart()
+	t.DistToTarget = rcv.DistToTarget()
+	t.TimeFromStart = rcv.TimeFromStart()
+	t.TimeToTarget = rcv.TimeToTarget()
+	t.DistFromStartUnit = string(rcv.DistFromStartUnit())
+	t.DistToTargetUnit = string(rcv.DistToTargetUnit())
+	t.TimeFromStartUnit = string(rcv.TimeFromStartUnit())
+	t.TimeToTargetUnit = string(rcv.TimeToTargetUnit())
+}
+
+func (rcv *IpoAddData) UnPack() *IpoAddDataT {
+	if rcv == nil { return nil }
+	t := &IpoAddDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type IpoAddData struct {
 	_tab flatbuffers.Table
 }

@@ -72,10 +72,10 @@ func (c *Converter) generateJSONComplex(data Variant, ty Variant, indentStep int
 }
 
 // GenerateJsonComplex generates a JSON string out of a Variant with a complex type (flatbuffers) and the metadata of this data.
-// Parameter data is a Varaint that contains data of complex data type (flatbuffers). If data is empty (VariantType::UNKNOWN) type is converted to json schema.
-// Parameter type is a Variant that contains type of data (Variant with flatbuffers BFBS)
+// Parameter data is an array of bytes that contains data of complex data type (flatbuffers). If data is empty (VariantType::UNKNOWN) type is converted to json schema.
+// Parameter type is an array of bytes that contains type of data (Variant with flatbuffers BFBS)
 // Parameter indentStep is a indentation length for json string.
-// It returns generated JSON as a Variant (string).
+// It returns generated JSON as a string.
 func (c *Converter) GenerateJsonComplex(data []byte, ty []byte, indentStep int) (Result, []byte) {
 	d := NewVariant()
 	defer DeleteVariant(d)
@@ -92,7 +92,7 @@ func (c *Converter) GenerateJsonComplex(data []byte, ty []byte, indentStep int) 
 }
 
 // ParseJsonSimple generates a Variant out of a JSON string containing the (simple) data.
-// Parameter json is a data of the Variant as a json string.
+// Parameter json is an array of bytes as a json string.
 // It returns a result status of the function, data string which contains the data, error Error object.
 func (c *Converter) ParseJsonSimple(json []byte) (Result, *Variant, error) {
 	cjson := C.CString(string(json))
@@ -118,8 +118,8 @@ func (c *Converter) parseJSONComplex(json []byte, ty Variant) (Result, *Variant,
 }
 
 // ParseJsonComplex generates a Variant out of a JSON string containing the (complex) data.
-// Parameter json is a data of the Variant as a json string.
-// Parameter type (ty) is a Variant that contains type of data (Variant with bfbs flatbuffer content).
+// Parameter json is an array of bytes containing a json string.
+// Parameter type (ty) is an array of bytes that contains type of data (Variant with bfbs flatbuffer content).
 // It returns a result status of the function, data (array of byte) which contains the data, error Error as error object.
 func (c *Converter) ParseJsonComplex(json []byte, ty []byte) (Result, []byte, error) {
 	t := NewVariant()

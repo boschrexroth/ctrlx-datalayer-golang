@@ -6,6 +6,45 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DL_WriteT struct {
+	Path string
+	Type int32
+	S string
+	I int64
+	B bool
+	D float64
+}
+
+func (t *DL_WriteT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	pathOffset := builder.CreateString(t.Path)
+	sOffset := builder.CreateString(t.S)
+	DL_WriteStart(builder)
+	DL_WriteAddPath(builder, pathOffset)
+	DL_WriteAddType(builder, t.Type)
+	DL_WriteAddS(builder, sOffset)
+	DL_WriteAddI(builder, t.I)
+	DL_WriteAddB(builder, t.B)
+	DL_WriteAddD(builder, t.D)
+	return DL_WriteEnd(builder)
+}
+
+func (rcv *DL_Write) UnPackTo(t *DL_WriteT) {
+	t.Path = string(rcv.Path())
+	t.Type = rcv.Type()
+	t.S = string(rcv.S())
+	t.I = rcv.I()
+	t.B = rcv.B()
+	t.D = rcv.D()
+}
+
+func (rcv *DL_Write) UnPack() *DL_WriteT {
+	if rcv == nil { return nil }
+	t := &DL_WriteT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DL_Write struct {
 	_tab flatbuffers.Table
 }

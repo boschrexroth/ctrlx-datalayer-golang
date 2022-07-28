@@ -6,7 +6,48 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// data of all registered axis transformations
+/// data of all registered axis transformations when reading all data of implemented axis transformations
+type KinCfgAxsTrafoDataT struct {
+	AxsTrafoData []*KinCfgAxsTrafoDataSingleT
+}
+
+func (t *KinCfgAxsTrafoDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axsTrafoDataOffset := flatbuffers.UOffsetT(0)
+	if t.AxsTrafoData != nil {
+		axsTrafoDataLength := len(t.AxsTrafoData)
+		axsTrafoDataOffsets := make([]flatbuffers.UOffsetT, axsTrafoDataLength)
+		for j := 0; j < axsTrafoDataLength; j++ {
+			axsTrafoDataOffsets[j] = t.AxsTrafoData[j].Pack(builder)
+		}
+		KinCfgAxsTrafoDataStartAxsTrafoDataVector(builder, axsTrafoDataLength)
+		for j := axsTrafoDataLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(axsTrafoDataOffsets[j])
+		}
+		axsTrafoDataOffset = builder.EndVector(axsTrafoDataLength)
+	}
+	KinCfgAxsTrafoDataStart(builder)
+	KinCfgAxsTrafoDataAddAxsTrafoData(builder, axsTrafoDataOffset)
+	return KinCfgAxsTrafoDataEnd(builder)
+}
+
+func (rcv *KinCfgAxsTrafoData) UnPackTo(t *KinCfgAxsTrafoDataT) {
+	axsTrafoDataLength := rcv.AxsTrafoDataLength()
+	t.AxsTrafoData = make([]*KinCfgAxsTrafoDataSingleT, axsTrafoDataLength)
+	for j := 0; j < axsTrafoDataLength; j++ {
+		x := KinCfgAxsTrafoDataSingle{}
+		rcv.AxsTrafoData(&x, j)
+		t.AxsTrafoData[j] = x.UnPack()
+	}
+}
+
+func (rcv *KinCfgAxsTrafoData) UnPack() *KinCfgAxsTrafoDataT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsTrafoDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxsTrafoData struct {
 	_tab flatbuffers.Table
 }

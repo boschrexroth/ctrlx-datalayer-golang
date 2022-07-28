@@ -7,6 +7,48 @@ import (
 )
 
 /// informations of a single unit, that is supported by the system
+type UnitDataSingleT struct {
+	Name string
+	UnitObjType string
+	UnitValueType string
+	Abbreviation string
+	AbbreviationURI string
+	IsDefault bool
+}
+
+func (t *UnitDataSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	unitObjTypeOffset := builder.CreateString(t.UnitObjType)
+	unitValueTypeOffset := builder.CreateString(t.UnitValueType)
+	abbreviationOffset := builder.CreateString(t.Abbreviation)
+	abbreviationURIOffset := builder.CreateString(t.AbbreviationURI)
+	UnitDataSingleStart(builder)
+	UnitDataSingleAddName(builder, nameOffset)
+	UnitDataSingleAddUnitObjType(builder, unitObjTypeOffset)
+	UnitDataSingleAddUnitValueType(builder, unitValueTypeOffset)
+	UnitDataSingleAddAbbreviation(builder, abbreviationOffset)
+	UnitDataSingleAddAbbreviationURI(builder, abbreviationURIOffset)
+	UnitDataSingleAddIsDefault(builder, t.IsDefault)
+	return UnitDataSingleEnd(builder)
+}
+
+func (rcv *UnitDataSingle) UnPackTo(t *UnitDataSingleT) {
+	t.Name = string(rcv.Name())
+	t.UnitObjType = string(rcv.UnitObjType())
+	t.UnitValueType = string(rcv.UnitValueType())
+	t.Abbreviation = string(rcv.Abbreviation())
+	t.AbbreviationURI = string(rcv.AbbreviationURI())
+	t.IsDefault = rcv.IsDefault()
+}
+
+func (rcv *UnitDataSingle) UnPack() *UnitDataSingleT {
+	if rcv == nil { return nil }
+	t := &UnitDataSingleT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UnitDataSingle struct {
 	_tab flatbuffers.Table
 }

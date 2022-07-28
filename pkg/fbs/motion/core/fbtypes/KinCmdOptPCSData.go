@@ -7,6 +7,33 @@ import (
 )
 
 /// parameters for the command option PCS (product coordinate system) for kinematics
+type KinCmdOptPCSDataT struct {
+	PermType string
+	SetName string
+}
+
+func (t *KinCmdOptPCSDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	setNameOffset := builder.CreateString(t.SetName)
+	KinCmdOptPCSDataStart(builder)
+	KinCmdOptPCSDataAddPermType(builder, permTypeOffset)
+	KinCmdOptPCSDataAddSetName(builder, setNameOffset)
+	return KinCmdOptPCSDataEnd(builder)
+}
+
+func (rcv *KinCmdOptPCSData) UnPackTo(t *KinCmdOptPCSDataT) {
+	t.PermType = string(rcv.PermType())
+	t.SetName = string(rcv.SetName())
+}
+
+func (rcv *KinCmdOptPCSData) UnPack() *KinCmdOptPCSDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptPCSDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptPCSData struct {
 	_tab flatbuffers.Table
 }

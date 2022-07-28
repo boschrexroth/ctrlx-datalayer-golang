@@ -7,6 +7,48 @@ import (
 )
 
 /// parameters for the move direct commands for a kinematics
+type KinCmdMoveDirectDataT struct {
+	KinPos []float64
+	CoordSys string
+	Buffered bool
+}
+
+func (t *KinCmdMoveDirectDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	kinPosOffset := flatbuffers.UOffsetT(0)
+	if t.KinPos != nil {
+		kinPosLength := len(t.KinPos)
+		KinCmdMoveDirectDataStartKinPosVector(builder, kinPosLength)
+		for j := kinPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.KinPos[j])
+		}
+		kinPosOffset = builder.EndVector(kinPosLength)
+	}
+	coordSysOffset := builder.CreateString(t.CoordSys)
+	KinCmdMoveDirectDataStart(builder)
+	KinCmdMoveDirectDataAddKinPos(builder, kinPosOffset)
+	KinCmdMoveDirectDataAddCoordSys(builder, coordSysOffset)
+	KinCmdMoveDirectDataAddBuffered(builder, t.Buffered)
+	return KinCmdMoveDirectDataEnd(builder)
+}
+
+func (rcv *KinCmdMoveDirectData) UnPackTo(t *KinCmdMoveDirectDataT) {
+	kinPosLength := rcv.KinPosLength()
+	t.KinPos = make([]float64, kinPosLength)
+	for j := 0; j < kinPosLength; j++ {
+		t.KinPos[j] = rcv.KinPos(j)
+	}
+	t.CoordSys = string(rcv.CoordSys())
+	t.Buffered = rcv.Buffered()
+}
+
+func (rcv *KinCmdMoveDirectData) UnPack() *KinCmdMoveDirectDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdMoveDirectDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdMoveDirectData struct {
 	_tab flatbuffers.Table
 }

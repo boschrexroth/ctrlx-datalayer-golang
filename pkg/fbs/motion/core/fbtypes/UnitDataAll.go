@@ -7,6 +7,47 @@ import (
 )
 
 /// Data of all supported units
+type UnitDataAllT struct {
+	Supported []*UnitDataSingleT
+}
+
+func (t *UnitDataAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	supportedOffset := flatbuffers.UOffsetT(0)
+	if t.Supported != nil {
+		supportedLength := len(t.Supported)
+		supportedOffsets := make([]flatbuffers.UOffsetT, supportedLength)
+		for j := 0; j < supportedLength; j++ {
+			supportedOffsets[j] = t.Supported[j].Pack(builder)
+		}
+		UnitDataAllStartSupportedVector(builder, supportedLength)
+		for j := supportedLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(supportedOffsets[j])
+		}
+		supportedOffset = builder.EndVector(supportedLength)
+	}
+	UnitDataAllStart(builder)
+	UnitDataAllAddSupported(builder, supportedOffset)
+	return UnitDataAllEnd(builder)
+}
+
+func (rcv *UnitDataAll) UnPackTo(t *UnitDataAllT) {
+	supportedLength := rcv.SupportedLength()
+	t.Supported = make([]*UnitDataSingleT, supportedLength)
+	for j := 0; j < supportedLength; j++ {
+		x := UnitDataSingle{}
+		rcv.Supported(&x, j)
+		t.Supported[j] = x.UnPack()
+	}
+}
+
+func (rcv *UnitDataAll) UnPack() *UnitDataAllT {
+	if rcv == nil { return nil }
+	t := &UnitDataAllT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UnitDataAll struct {
 	_tab flatbuffers.Table
 }

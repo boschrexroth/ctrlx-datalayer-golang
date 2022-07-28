@@ -7,6 +7,82 @@ import (
 )
 
 /// currently interpolated values
+type KinIpoValuesT struct {
+	IpoPos []float64
+	IpoVel float64
+	IpoAcc float64
+	IpoJrk float64
+	IpoPosUnits []string
+	IpoVelUnits string
+	IpoAccUnits string
+	IpoJrkUnits string
+}
+
+func (t *KinIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ipoPosOffset := flatbuffers.UOffsetT(0)
+	if t.IpoPos != nil {
+		ipoPosLength := len(t.IpoPos)
+		KinIpoValuesStartIpoPosVector(builder, ipoPosLength)
+		for j := ipoPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.IpoPos[j])
+		}
+		ipoPosOffset = builder.EndVector(ipoPosLength)
+	}
+	ipoPosUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.IpoPosUnits != nil {
+		ipoPosUnitsLength := len(t.IpoPosUnits)
+		ipoPosUnitsOffsets := make([]flatbuffers.UOffsetT, ipoPosUnitsLength)
+		for j := 0; j < ipoPosUnitsLength; j++ {
+			ipoPosUnitsOffsets[j] = builder.CreateString(t.IpoPosUnits[j])
+		}
+		KinIpoValuesStartIpoPosUnitsVector(builder, ipoPosUnitsLength)
+		for j := ipoPosUnitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(ipoPosUnitsOffsets[j])
+		}
+		ipoPosUnitsOffset = builder.EndVector(ipoPosUnitsLength)
+	}
+	ipoVelUnitsOffset := builder.CreateString(t.IpoVelUnits)
+	ipoAccUnitsOffset := builder.CreateString(t.IpoAccUnits)
+	ipoJrkUnitsOffset := builder.CreateString(t.IpoJrkUnits)
+	KinIpoValuesStart(builder)
+	KinIpoValuesAddIpoPos(builder, ipoPosOffset)
+	KinIpoValuesAddIpoVel(builder, t.IpoVel)
+	KinIpoValuesAddIpoAcc(builder, t.IpoAcc)
+	KinIpoValuesAddIpoJrk(builder, t.IpoJrk)
+	KinIpoValuesAddIpoPosUnits(builder, ipoPosUnitsOffset)
+	KinIpoValuesAddIpoVelUnits(builder, ipoVelUnitsOffset)
+	KinIpoValuesAddIpoAccUnits(builder, ipoAccUnitsOffset)
+	KinIpoValuesAddIpoJrkUnits(builder, ipoJrkUnitsOffset)
+	return KinIpoValuesEnd(builder)
+}
+
+func (rcv *KinIpoValues) UnPackTo(t *KinIpoValuesT) {
+	ipoPosLength := rcv.IpoPosLength()
+	t.IpoPos = make([]float64, ipoPosLength)
+	for j := 0; j < ipoPosLength; j++ {
+		t.IpoPos[j] = rcv.IpoPos(j)
+	}
+	t.IpoVel = rcv.IpoVel()
+	t.IpoAcc = rcv.IpoAcc()
+	t.IpoJrk = rcv.IpoJrk()
+	ipoPosUnitsLength := rcv.IpoPosUnitsLength()
+	t.IpoPosUnits = make([]string, ipoPosUnitsLength)
+	for j := 0; j < ipoPosUnitsLength; j++ {
+		t.IpoPosUnits[j] = string(rcv.IpoPosUnits(j))
+	}
+	t.IpoVelUnits = string(rcv.IpoVelUnits())
+	t.IpoAccUnits = string(rcv.IpoAccUnits())
+	t.IpoJrkUnits = string(rcv.IpoJrkUnits())
+}
+
+func (rcv *KinIpoValues) UnPack() *KinIpoValuesT {
+	if rcv == nil { return nil }
+	t := &KinIpoValuesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinIpoValues struct {
 	_tab flatbuffers.Table
 }

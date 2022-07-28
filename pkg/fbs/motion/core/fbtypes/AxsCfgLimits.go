@@ -7,6 +7,81 @@ import (
 )
 
 /// configured limits of a single axis
+type AxsCfgLimitsT struct {
+	PosMin float64
+	PosMax float64
+	VelPos float64
+	VelNeg float64
+	Acc float64
+	Dec float64
+	JrkAcc float64
+	JrkDec float64
+	PosMinUnit string
+	PosMaxUnit string
+	VelPosUnit string
+	VelNegUnit string
+	AccUnit string
+	DecUnit string
+	JrkAccUnit string
+	JrkDecUnit string
+}
+
+func (t *AxsCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	posMinUnitOffset := builder.CreateString(t.PosMinUnit)
+	posMaxUnitOffset := builder.CreateString(t.PosMaxUnit)
+	velPosUnitOffset := builder.CreateString(t.VelPosUnit)
+	velNegUnitOffset := builder.CreateString(t.VelNegUnit)
+	accUnitOffset := builder.CreateString(t.AccUnit)
+	decUnitOffset := builder.CreateString(t.DecUnit)
+	jrkAccUnitOffset := builder.CreateString(t.JrkAccUnit)
+	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	AxsCfgLimitsStart(builder)
+	AxsCfgLimitsAddPosMin(builder, t.PosMin)
+	AxsCfgLimitsAddPosMax(builder, t.PosMax)
+	AxsCfgLimitsAddVelPos(builder, t.VelPos)
+	AxsCfgLimitsAddVelNeg(builder, t.VelNeg)
+	AxsCfgLimitsAddAcc(builder, t.Acc)
+	AxsCfgLimitsAddDec(builder, t.Dec)
+	AxsCfgLimitsAddJrkAcc(builder, t.JrkAcc)
+	AxsCfgLimitsAddJrkDec(builder, t.JrkDec)
+	AxsCfgLimitsAddPosMinUnit(builder, posMinUnitOffset)
+	AxsCfgLimitsAddPosMaxUnit(builder, posMaxUnitOffset)
+	AxsCfgLimitsAddVelPosUnit(builder, velPosUnitOffset)
+	AxsCfgLimitsAddVelNegUnit(builder, velNegUnitOffset)
+	AxsCfgLimitsAddAccUnit(builder, accUnitOffset)
+	AxsCfgLimitsAddDecUnit(builder, decUnitOffset)
+	AxsCfgLimitsAddJrkAccUnit(builder, jrkAccUnitOffset)
+	AxsCfgLimitsAddJrkDecUnit(builder, jrkDecUnitOffset)
+	return AxsCfgLimitsEnd(builder)
+}
+
+func (rcv *AxsCfgLimits) UnPackTo(t *AxsCfgLimitsT) {
+	t.PosMin = rcv.PosMin()
+	t.PosMax = rcv.PosMax()
+	t.VelPos = rcv.VelPos()
+	t.VelNeg = rcv.VelNeg()
+	t.Acc = rcv.Acc()
+	t.Dec = rcv.Dec()
+	t.JrkAcc = rcv.JrkAcc()
+	t.JrkDec = rcv.JrkDec()
+	t.PosMinUnit = string(rcv.PosMinUnit())
+	t.PosMaxUnit = string(rcv.PosMaxUnit())
+	t.VelPosUnit = string(rcv.VelPosUnit())
+	t.VelNegUnit = string(rcv.VelNegUnit())
+	t.AccUnit = string(rcv.AccUnit())
+	t.DecUnit = string(rcv.DecUnit())
+	t.JrkAccUnit = string(rcv.JrkAccUnit())
+	t.JrkDecUnit = string(rcv.JrkDecUnit())
+}
+
+func (rcv *AxsCfgLimits) UnPack() *AxsCfgLimitsT {
+	if rcv == nil { return nil }
+	t := &AxsCfgLimitsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfgLimits struct {
 	_tab flatbuffers.Table
 }

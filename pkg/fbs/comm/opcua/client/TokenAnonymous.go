@@ -6,6 +6,25 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TokenAnonymousT struct {
+}
+
+func (t *TokenAnonymousT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	TokenAnonymousStart(builder)
+	return TokenAnonymousEnd(builder)
+}
+
+func (rcv *TokenAnonymous) UnPackTo(t *TokenAnonymousT) {
+}
+
+func (rcv *TokenAnonymous) UnPack() *TokenAnonymousT {
+	if rcv == nil { return nil }
+	t := &TokenAnonymousT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type TokenAnonymous struct {
 	_tab flatbuffers.Table
 }

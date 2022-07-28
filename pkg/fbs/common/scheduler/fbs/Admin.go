@@ -5,8 +5,54 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__controls__fbs "common/scheduler/controls/fbs"
+	common__scheduler__controls__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/controls/fbs"
 )
+
+type AdminT struct {
+	StartupState CurrentState
+	StartupTimeout uint32
+	StartupErrorReaction CurrentErrorReaction
+	TriggerSource CurrentTrigger
+	ControlDebug *common__scheduler__controls__fbs.ControlsT
+	CpuInfo *CpuInfoT
+}
+
+func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	controlDebugOffset := t.ControlDebug.Pack(builder)
+	
+	cpuInfoOffset := t.CpuInfo.Pack(builder)
+	AdminStart(builder)
+	AdminAddStartupState(builder, t.StartupState)
+	AdminAddStartupTimeout(builder, t.StartupTimeout)
+	AdminAddStartupErrorReaction(builder, t.StartupErrorReaction)
+	AdminAddTriggerSource(builder, t.TriggerSource)
+	if t.ControlDebug != nil {
+		AdminAddControlDebugType(builder, t.ControlDebug.Type)
+	}
+	AdminAddControlDebug(builder, controlDebugOffset)
+	AdminAddCpuInfo(builder, cpuInfoOffset)
+	return AdminEnd(builder)
+}
+
+func (rcv *Admin) UnPackTo(t *AdminT) {
+	t.StartupState = rcv.StartupState()
+	t.StartupTimeout = rcv.StartupTimeout()
+	t.StartupErrorReaction = rcv.StartupErrorReaction()
+	t.TriggerSource = rcv.TriggerSource()
+	controlDebugTable := flatbuffers.Table{}
+	if rcv.ControlDebug(&controlDebugTable) {
+		t.ControlDebug = rcv.ControlDebugType().UnPack(controlDebugTable)
+	}
+	t.CpuInfo = rcv.CpuInfo(nil).UnPack()
+}
+
+func (rcv *Admin) UnPack() *AdminT {
+	if rcv == nil { return nil }
+	t := &AdminT{}
+	rcv.UnPackTo(t)
+	return t
+}
 
 type Admin struct {
 	_tab flatbuffers.Table

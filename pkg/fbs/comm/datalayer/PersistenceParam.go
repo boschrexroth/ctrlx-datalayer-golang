@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type PersistenceParamT struct {
+	ConfigurationPath string
+	Id string
+	Phase string
+}
+
+func (t *PersistenceParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	configurationPathOffset := builder.CreateString(t.ConfigurationPath)
+	idOffset := builder.CreateString(t.Id)
+	phaseOffset := builder.CreateString(t.Phase)
+	PersistenceParamStart(builder)
+	PersistenceParamAddConfigurationPath(builder, configurationPathOffset)
+	PersistenceParamAddId(builder, idOffset)
+	PersistenceParamAddPhase(builder, phaseOffset)
+	return PersistenceParamEnd(builder)
+}
+
+func (rcv *PersistenceParam) UnPackTo(t *PersistenceParamT) {
+	t.ConfigurationPath = string(rcv.ConfigurationPath())
+	t.Id = string(rcv.Id())
+	t.Phase = string(rcv.Phase())
+}
+
+func (rcv *PersistenceParam) UnPack() *PersistenceParamT {
+	if rcv == nil { return nil }
+	t := &PersistenceParamT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type PersistenceParam struct {
 	_tab flatbuffers.Table
 }

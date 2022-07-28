@@ -6,6 +6,59 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type RegistrationFileT struct {
+	Language string
+	Product string
+	Component string
+	MainDiagnostics []*MainDiagnosticT
+}
+
+func (t *RegistrationFileT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	languageOffset := builder.CreateString(t.Language)
+	productOffset := builder.CreateString(t.Product)
+	componentOffset := builder.CreateString(t.Component)
+	mainDiagnosticsOffset := flatbuffers.UOffsetT(0)
+	if t.MainDiagnostics != nil {
+		mainDiagnosticsLength := len(t.MainDiagnostics)
+		mainDiagnosticsOffsets := make([]flatbuffers.UOffsetT, mainDiagnosticsLength)
+		for j := 0; j < mainDiagnosticsLength; j++ {
+			mainDiagnosticsOffsets[j] = t.MainDiagnostics[j].Pack(builder)
+		}
+		RegistrationFileStartMainDiagnosticsVector(builder, mainDiagnosticsLength)
+		for j := mainDiagnosticsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(mainDiagnosticsOffsets[j])
+		}
+		mainDiagnosticsOffset = builder.EndVector(mainDiagnosticsLength)
+	}
+	RegistrationFileStart(builder)
+	RegistrationFileAddLanguage(builder, languageOffset)
+	RegistrationFileAddProduct(builder, productOffset)
+	RegistrationFileAddComponent(builder, componentOffset)
+	RegistrationFileAddMainDiagnostics(builder, mainDiagnosticsOffset)
+	return RegistrationFileEnd(builder)
+}
+
+func (rcv *RegistrationFile) UnPackTo(t *RegistrationFileT) {
+	t.Language = string(rcv.Language())
+	t.Product = string(rcv.Product())
+	t.Component = string(rcv.Component())
+	mainDiagnosticsLength := rcv.MainDiagnosticsLength()
+	t.MainDiagnostics = make([]*MainDiagnosticT, mainDiagnosticsLength)
+	for j := 0; j < mainDiagnosticsLength; j++ {
+		x := MainDiagnostic{}
+		rcv.MainDiagnostics(&x, j)
+		t.MainDiagnostics[j] = x.UnPack()
+	}
+}
+
+func (rcv *RegistrationFile) UnPack() *RegistrationFileT {
+	if rcv == nil { return nil }
+	t := &RegistrationFileT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type RegistrationFile struct {
 	_tab flatbuffers.Table
 }

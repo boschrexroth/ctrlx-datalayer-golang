@@ -7,6 +7,65 @@ import (
 )
 
 /// coordinate transformation based on the currently active transformations of the kinematics
+type KinCoordTransformT struct {
+	InPos []float64
+	InCoordSys string
+	OutPos []float64
+	OutCoordSys string
+}
+
+func (t *KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	inPosOffset := flatbuffers.UOffsetT(0)
+	if t.InPos != nil {
+		inPosLength := len(t.InPos)
+		KinCoordTransformStartInPosVector(builder, inPosLength)
+		for j := inPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.InPos[j])
+		}
+		inPosOffset = builder.EndVector(inPosLength)
+	}
+	inCoordSysOffset := builder.CreateString(t.InCoordSys)
+	outPosOffset := flatbuffers.UOffsetT(0)
+	if t.OutPos != nil {
+		outPosLength := len(t.OutPos)
+		KinCoordTransformStartOutPosVector(builder, outPosLength)
+		for j := outPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.OutPos[j])
+		}
+		outPosOffset = builder.EndVector(outPosLength)
+	}
+	outCoordSysOffset := builder.CreateString(t.OutCoordSys)
+	KinCoordTransformStart(builder)
+	KinCoordTransformAddInPos(builder, inPosOffset)
+	KinCoordTransformAddInCoordSys(builder, inCoordSysOffset)
+	KinCoordTransformAddOutPos(builder, outPosOffset)
+	KinCoordTransformAddOutCoordSys(builder, outCoordSysOffset)
+	return KinCoordTransformEnd(builder)
+}
+
+func (rcv *KinCoordTransform) UnPackTo(t *KinCoordTransformT) {
+	inPosLength := rcv.InPosLength()
+	t.InPos = make([]float64, inPosLength)
+	for j := 0; j < inPosLength; j++ {
+		t.InPos[j] = rcv.InPos(j)
+	}
+	t.InCoordSys = string(rcv.InCoordSys())
+	outPosLength := rcv.OutPosLength()
+	t.OutPos = make([]float64, outPosLength)
+	for j := 0; j < outPosLength; j++ {
+		t.OutPos[j] = rcv.OutPos(j)
+	}
+	t.OutCoordSys = string(rcv.OutCoordSys())
+}
+
+func (rcv *KinCoordTransform) UnPack() *KinCoordTransformT {
+	if rcv == nil { return nil }
+	t := &KinCoordTransformT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCoordTransform struct {
 	_tab flatbuffers.Table
 }

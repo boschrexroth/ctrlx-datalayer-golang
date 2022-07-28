@@ -7,6 +7,40 @@ import (
 )
 
 /// set of dynamic limits (for commands)
+type DynamicLimitsT struct {
+	Vel float64
+	Acc float64
+	Dec float64
+	JrkAcc float64
+	JrkDec float64
+}
+
+func (t *DynamicLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DynamicLimitsStart(builder)
+	DynamicLimitsAddVel(builder, t.Vel)
+	DynamicLimitsAddAcc(builder, t.Acc)
+	DynamicLimitsAddDec(builder, t.Dec)
+	DynamicLimitsAddJrkAcc(builder, t.JrkAcc)
+	DynamicLimitsAddJrkDec(builder, t.JrkDec)
+	return DynamicLimitsEnd(builder)
+}
+
+func (rcv *DynamicLimits) UnPackTo(t *DynamicLimitsT) {
+	t.Vel = rcv.Vel()
+	t.Acc = rcv.Acc()
+	t.Dec = rcv.Dec()
+	t.JrkAcc = rcv.JrkAcc()
+	t.JrkDec = rcv.JrkDec()
+}
+
+func (rcv *DynamicLimits) UnPack() *DynamicLimitsT {
+	if rcv == nil { return nil }
+	t := &DynamicLimitsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DynamicLimits struct {
 	_tab flatbuffers.Table
 }

@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TriggerT struct {
+	Trigger CurrentTrigger
+}
+
+func (t *TriggerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	TriggerStart(builder)
+	TriggerAddTrigger(builder, t.Trigger)
+	return TriggerEnd(builder)
+}
+
+func (rcv *Trigger) UnPackTo(t *TriggerT) {
+	t.Trigger = rcv.Trigger()
+}
+
+func (rcv *Trigger) UnPack() *TriggerT {
+	if rcv == nil { return nil }
+	t := &TriggerT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Trigger struct {
 	_tab flatbuffers.Table
 }

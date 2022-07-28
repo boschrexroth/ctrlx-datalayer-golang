@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DetailedDiagnosticT struct {
+	Number string
+	Version uint32
+	Text string
+}
+
+func (t *DetailedDiagnosticT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	numberOffset := builder.CreateString(t.Number)
+	textOffset := builder.CreateString(t.Text)
+	DetailedDiagnosticStart(builder)
+	DetailedDiagnosticAddNumber(builder, numberOffset)
+	DetailedDiagnosticAddVersion(builder, t.Version)
+	DetailedDiagnosticAddText(builder, textOffset)
+	return DetailedDiagnosticEnd(builder)
+}
+
+func (rcv *DetailedDiagnostic) UnPackTo(t *DetailedDiagnosticT) {
+	t.Number = string(rcv.Number())
+	t.Version = rcv.Version()
+	t.Text = string(rcv.Text())
+}
+
+func (rcv *DetailedDiagnostic) UnPack() *DetailedDiagnosticT {
+	if rcv == nil { return nil }
+	t := &DetailedDiagnosticT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DetailedDiagnostic struct {
 	_tab flatbuffers.Table
 }

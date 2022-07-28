@@ -6,6 +6,177 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveConfigInfoResponseT struct {
+	AutoIncAddr uint16
+	EthercatAddr uint16
+	IdentifyAdo uint16
+	IdentifyValue uint16
+	SlaveHandle uint32
+	HcGroupIdx uint32
+	PreviousEthercatAddr uint16
+	PreviousPort uint16
+	SlaveIdentity *EthercatIdentityInfoT
+	SlaveName string
+	MbxProtocols uint32
+	MbxStandard *EthercatMailboxInfoT
+	MbxBootstrap *EthercatMailboxInfoT
+	ProcessDataIn []*EthercatMemoryInfoT
+	ProcessDataOut []*EthercatMemoryInfoT
+	NumProcessVarsIn uint16
+	NumProcessVarsOut uint16
+	PortDescriptor byte
+	Reserved01 []byte
+	WkcStateDiagOffsIn []uint16
+	WkcStateDiagOffsOut []uint16
+	Reserved02 []uint32
+	IsPresent bool
+	IsHcGroupPresent bool
+	DcSupport bool
+}
+
+func (t *SlaveConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	slaveNameOffset := builder.CreateString(t.SlaveName)
+	processDataInOffset := flatbuffers.UOffsetT(0)
+	if t.ProcessDataIn != nil {
+		processDataInLength := len(t.ProcessDataIn)
+		SlaveConfigInfoResponseStartProcessDataInVector(builder, processDataInLength)
+		for j := processDataInLength - 1; j >= 0; j-- {
+			t.ProcessDataIn[j].Pack(builder)
+		}
+		processDataInOffset = builder.EndVector(processDataInLength)
+	}
+	processDataOutOffset := flatbuffers.UOffsetT(0)
+	if t.ProcessDataOut != nil {
+		processDataOutLength := len(t.ProcessDataOut)
+		SlaveConfigInfoResponseStartProcessDataOutVector(builder, processDataOutLength)
+		for j := processDataOutLength - 1; j >= 0; j-- {
+			t.ProcessDataOut[j].Pack(builder)
+		}
+		processDataOutOffset = builder.EndVector(processDataOutLength)
+	}
+	reserved01Offset := flatbuffers.UOffsetT(0)
+	if t.Reserved01 != nil {
+		reserved01Offset = builder.CreateByteString(t.Reserved01)
+	}
+	wkcStateDiagOffsInOffset := flatbuffers.UOffsetT(0)
+	if t.WkcStateDiagOffsIn != nil {
+		wkcStateDiagOffsInLength := len(t.WkcStateDiagOffsIn)
+		SlaveConfigInfoResponseStartWkcStateDiagOffsInVector(builder, wkcStateDiagOffsInLength)
+		for j := wkcStateDiagOffsInLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.WkcStateDiagOffsIn[j])
+		}
+		wkcStateDiagOffsInOffset = builder.EndVector(wkcStateDiagOffsInLength)
+	}
+	wkcStateDiagOffsOutOffset := flatbuffers.UOffsetT(0)
+	if t.WkcStateDiagOffsOut != nil {
+		wkcStateDiagOffsOutLength := len(t.WkcStateDiagOffsOut)
+		SlaveConfigInfoResponseStartWkcStateDiagOffsOutVector(builder, wkcStateDiagOffsOutLength)
+		for j := wkcStateDiagOffsOutLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.WkcStateDiagOffsOut[j])
+		}
+		wkcStateDiagOffsOutOffset = builder.EndVector(wkcStateDiagOffsOutLength)
+	}
+	reserved02Offset := flatbuffers.UOffsetT(0)
+	if t.Reserved02 != nil {
+		reserved02Length := len(t.Reserved02)
+		SlaveConfigInfoResponseStartReserved02Vector(builder, reserved02Length)
+		for j := reserved02Length - 1; j >= 0; j-- {
+			builder.PrependUint32(t.Reserved02[j])
+		}
+		reserved02Offset = builder.EndVector(reserved02Length)
+	}
+	SlaveConfigInfoResponseStart(builder)
+	SlaveConfigInfoResponseAddAutoIncAddr(builder, t.AutoIncAddr)
+	SlaveConfigInfoResponseAddEthercatAddr(builder, t.EthercatAddr)
+	SlaveConfigInfoResponseAddIdentifyAdo(builder, t.IdentifyAdo)
+	SlaveConfigInfoResponseAddIdentifyValue(builder, t.IdentifyValue)
+	SlaveConfigInfoResponseAddSlaveHandle(builder, t.SlaveHandle)
+	SlaveConfigInfoResponseAddHcGroupIdx(builder, t.HcGroupIdx)
+	SlaveConfigInfoResponseAddPreviousEthercatAddr(builder, t.PreviousEthercatAddr)
+	SlaveConfigInfoResponseAddPreviousPort(builder, t.PreviousPort)
+	slaveIdentityOffset := t.SlaveIdentity.Pack(builder)
+	SlaveConfigInfoResponseAddSlaveIdentity(builder, slaveIdentityOffset)
+	SlaveConfigInfoResponseAddSlaveName(builder, slaveNameOffset)
+	SlaveConfigInfoResponseAddMbxProtocols(builder, t.MbxProtocols)
+	mbxStandardOffset := t.MbxStandard.Pack(builder)
+	SlaveConfigInfoResponseAddMbxStandard(builder, mbxStandardOffset)
+	mbxBootstrapOffset := t.MbxBootstrap.Pack(builder)
+	SlaveConfigInfoResponseAddMbxBootstrap(builder, mbxBootstrapOffset)
+	SlaveConfigInfoResponseAddProcessDataIn(builder, processDataInOffset)
+	SlaveConfigInfoResponseAddProcessDataOut(builder, processDataOutOffset)
+	SlaveConfigInfoResponseAddNumProcessVarsIn(builder, t.NumProcessVarsIn)
+	SlaveConfigInfoResponseAddNumProcessVarsOut(builder, t.NumProcessVarsOut)
+	SlaveConfigInfoResponseAddPortDescriptor(builder, t.PortDescriptor)
+	SlaveConfigInfoResponseAddReserved01(builder, reserved01Offset)
+	SlaveConfigInfoResponseAddWkcStateDiagOffsIn(builder, wkcStateDiagOffsInOffset)
+	SlaveConfigInfoResponseAddWkcStateDiagOffsOut(builder, wkcStateDiagOffsOutOffset)
+	SlaveConfigInfoResponseAddReserved02(builder, reserved02Offset)
+	SlaveConfigInfoResponseAddIsPresent(builder, t.IsPresent)
+	SlaveConfigInfoResponseAddIsHcGroupPresent(builder, t.IsHcGroupPresent)
+	SlaveConfigInfoResponseAddDcSupport(builder, t.DcSupport)
+	return SlaveConfigInfoResponseEnd(builder)
+}
+
+func (rcv *SlaveConfigInfoResponse) UnPackTo(t *SlaveConfigInfoResponseT) {
+	t.AutoIncAddr = rcv.AutoIncAddr()
+	t.EthercatAddr = rcv.EthercatAddr()
+	t.IdentifyAdo = rcv.IdentifyAdo()
+	t.IdentifyValue = rcv.IdentifyValue()
+	t.SlaveHandle = rcv.SlaveHandle()
+	t.HcGroupIdx = rcv.HcGroupIdx()
+	t.PreviousEthercatAddr = rcv.PreviousEthercatAddr()
+	t.PreviousPort = rcv.PreviousPort()
+	t.SlaveIdentity = rcv.SlaveIdentity(nil).UnPack()
+	t.SlaveName = string(rcv.SlaveName())
+	t.MbxProtocols = rcv.MbxProtocols()
+	t.MbxStandard = rcv.MbxStandard(nil).UnPack()
+	t.MbxBootstrap = rcv.MbxBootstrap(nil).UnPack()
+	processDataInLength := rcv.ProcessDataInLength()
+	t.ProcessDataIn = make([]*EthercatMemoryInfoT, processDataInLength)
+	for j := 0; j < processDataInLength; j++ {
+		x := EthercatMemoryInfo{}
+		rcv.ProcessDataIn(&x, j)
+		t.ProcessDataIn[j] = x.UnPack()
+	}
+	processDataOutLength := rcv.ProcessDataOutLength()
+	t.ProcessDataOut = make([]*EthercatMemoryInfoT, processDataOutLength)
+	for j := 0; j < processDataOutLength; j++ {
+		x := EthercatMemoryInfo{}
+		rcv.ProcessDataOut(&x, j)
+		t.ProcessDataOut[j] = x.UnPack()
+	}
+	t.NumProcessVarsIn = rcv.NumProcessVarsIn()
+	t.NumProcessVarsOut = rcv.NumProcessVarsOut()
+	t.PortDescriptor = rcv.PortDescriptor()
+	t.Reserved01 = rcv.Reserved01Bytes()
+	wkcStateDiagOffsInLength := rcv.WkcStateDiagOffsInLength()
+	t.WkcStateDiagOffsIn = make([]uint16, wkcStateDiagOffsInLength)
+	for j := 0; j < wkcStateDiagOffsInLength; j++ {
+		t.WkcStateDiagOffsIn[j] = rcv.WkcStateDiagOffsIn(j)
+	}
+	wkcStateDiagOffsOutLength := rcv.WkcStateDiagOffsOutLength()
+	t.WkcStateDiagOffsOut = make([]uint16, wkcStateDiagOffsOutLength)
+	for j := 0; j < wkcStateDiagOffsOutLength; j++ {
+		t.WkcStateDiagOffsOut[j] = rcv.WkcStateDiagOffsOut(j)
+	}
+	reserved02Length := rcv.Reserved02Length()
+	t.Reserved02 = make([]uint32, reserved02Length)
+	for j := 0; j < reserved02Length; j++ {
+		t.Reserved02[j] = rcv.Reserved02(j)
+	}
+	t.IsPresent = rcv.IsPresent()
+	t.IsHcGroupPresent = rcv.IsHcGroupPresent()
+	t.DcSupport = rcv.DcSupport()
+}
+
+func (rcv *SlaveConfigInfoResponse) UnPack() *SlaveConfigInfoResponseT {
+	if rcv == nil { return nil }
+	t := &SlaveConfigInfoResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveConfigInfoResponse struct {
 	_tab flatbuffers.Table
 }

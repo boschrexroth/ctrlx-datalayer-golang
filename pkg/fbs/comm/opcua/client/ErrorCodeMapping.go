@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ErrorCodeMappingT struct {
+	ListDlResultToUaStatusCode []*DlResultToUaStatusCodeT
+}
+
+func (t *ErrorCodeMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	listDlResultToUaStatusCodeOffset := flatbuffers.UOffsetT(0)
+	if t.ListDlResultToUaStatusCode != nil {
+		listDlResultToUaStatusCodeLength := len(t.ListDlResultToUaStatusCode)
+		listDlResultToUaStatusCodeOffsets := make([]flatbuffers.UOffsetT, listDlResultToUaStatusCodeLength)
+		for j := 0; j < listDlResultToUaStatusCodeLength; j++ {
+			listDlResultToUaStatusCodeOffsets[j] = t.ListDlResultToUaStatusCode[j].Pack(builder)
+		}
+		ErrorCodeMappingStartListDlResultToUaStatusCodeVector(builder, listDlResultToUaStatusCodeLength)
+		for j := listDlResultToUaStatusCodeLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(listDlResultToUaStatusCodeOffsets[j])
+		}
+		listDlResultToUaStatusCodeOffset = builder.EndVector(listDlResultToUaStatusCodeLength)
+	}
+	ErrorCodeMappingStart(builder)
+	ErrorCodeMappingAddListDlResultToUaStatusCode(builder, listDlResultToUaStatusCodeOffset)
+	return ErrorCodeMappingEnd(builder)
+}
+
+func (rcv *ErrorCodeMapping) UnPackTo(t *ErrorCodeMappingT) {
+	listDlResultToUaStatusCodeLength := rcv.ListDlResultToUaStatusCodeLength()
+	t.ListDlResultToUaStatusCode = make([]*DlResultToUaStatusCodeT, listDlResultToUaStatusCodeLength)
+	for j := 0; j < listDlResultToUaStatusCodeLength; j++ {
+		x := DlResultToUaStatusCode{}
+		rcv.ListDlResultToUaStatusCode(&x, j)
+		t.ListDlResultToUaStatusCode[j] = x.UnPack()
+	}
+}
+
+func (rcv *ErrorCodeMapping) UnPack() *ErrorCodeMappingT {
+	if rcv == nil { return nil }
+	t := &ErrorCodeMappingT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ErrorCodeMapping struct {
 	_tab flatbuffers.Table
 }

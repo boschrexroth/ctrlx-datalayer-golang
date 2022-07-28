@@ -6,6 +6,49 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DurationRtT struct {
+	Total uint64
+	Task uint64
+	Other uint64
+	Equidistance uint64
+	Deviation uint64
+	Counter uint64
+	Samplerate uint64
+	Remaining uint64
+}
+
+func (t *DurationRtT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DurationRtStart(builder)
+	DurationRtAddTotal(builder, t.Total)
+	DurationRtAddTask(builder, t.Task)
+	DurationRtAddOther(builder, t.Other)
+	DurationRtAddEquidistance(builder, t.Equidistance)
+	DurationRtAddDeviation(builder, t.Deviation)
+	DurationRtAddCounter(builder, t.Counter)
+	DurationRtAddSamplerate(builder, t.Samplerate)
+	DurationRtAddRemaining(builder, t.Remaining)
+	return DurationRtEnd(builder)
+}
+
+func (rcv *DurationRt) UnPackTo(t *DurationRtT) {
+	t.Total = rcv.Total()
+	t.Task = rcv.Task()
+	t.Other = rcv.Other()
+	t.Equidistance = rcv.Equidistance()
+	t.Deviation = rcv.Deviation()
+	t.Counter = rcv.Counter()
+	t.Samplerate = rcv.Samplerate()
+	t.Remaining = rcv.Remaining()
+}
+
+func (rcv *DurationRt) UnPack() *DurationRtT {
+	if rcv == nil { return nil }
+	t := &DurationRtT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DurationRt struct {
 	_tab flatbuffers.Table
 }
@@ -117,8 +160,20 @@ func (rcv *DurationRt) MutateSamplerate(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(16, n)
 }
 
+func (rcv *DurationRt) Remaining() uint64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetUint64(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+func (rcv *DurationRt) MutateRemaining(n uint64) bool {
+	return rcv._tab.MutateUint64Slot(18, n)
+}
+
 func DurationRtStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func DurationRtAddTotal(builder *flatbuffers.Builder, total uint64) {
 	builder.PrependUint64Slot(0, total, 0)
@@ -140,6 +195,9 @@ func DurationRtAddCounter(builder *flatbuffers.Builder, counter uint64) {
 }
 func DurationRtAddSamplerate(builder *flatbuffers.Builder, samplerate uint64) {
 	builder.PrependUint64Slot(6, samplerate, 0)
+}
+func DurationRtAddRemaining(builder *flatbuffers.Builder, remaining uint64) {
+	builder.PrependUint64Slot(7, remaining, 0)
 }
 func DurationRtEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -6,6 +6,53 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveEepromRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	EepromOffset uint16
+	Data []uint16
+	MaxLength uint32
+}
+
+func (t *SlaveEepromRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataLength := len(t.Data)
+		SlaveEepromRequestStartDataVector(builder, dataLength)
+		for j := dataLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.Data[j])
+		}
+		dataOffset = builder.EndVector(dataLength)
+	}
+	SlaveEepromRequestStart(builder)
+	SlaveEepromRequestAddAddressType(builder, t.AddressType)
+	SlaveEepromRequestAddAddress(builder, t.Address)
+	SlaveEepromRequestAddEepromOffset(builder, t.EepromOffset)
+	SlaveEepromRequestAddData(builder, dataOffset)
+	SlaveEepromRequestAddMaxLength(builder, t.MaxLength)
+	return SlaveEepromRequestEnd(builder)
+}
+
+func (rcv *SlaveEepromRequest) UnPackTo(t *SlaveEepromRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.EepromOffset = rcv.EepromOffset()
+	dataLength := rcv.DataLength()
+	t.Data = make([]uint16, dataLength)
+	for j := 0; j < dataLength; j++ {
+		t.Data[j] = rcv.Data(j)
+	}
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *SlaveEepromRequest) UnPack() *SlaveEepromRequestT {
+	if rcv == nil { return nil }
+	t := &SlaveEepromRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveEepromRequest struct {
 	_tab flatbuffers.Table
 }

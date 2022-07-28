@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ObjectDescriptionRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	ObjectIndex uint16
+	MaxLength uint32
+}
+
+func (t *ObjectDescriptionRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	ObjectDescriptionRequestStart(builder)
+	ObjectDescriptionRequestAddAddressType(builder, t.AddressType)
+	ObjectDescriptionRequestAddAddress(builder, t.Address)
+	ObjectDescriptionRequestAddObjectIndex(builder, t.ObjectIndex)
+	ObjectDescriptionRequestAddMaxLength(builder, t.MaxLength)
+	return ObjectDescriptionRequestEnd(builder)
+}
+
+func (rcv *ObjectDescriptionRequest) UnPackTo(t *ObjectDescriptionRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.ObjectIndex = rcv.ObjectIndex()
+	t.MaxLength = rcv.MaxLength()
+}
+
+func (rcv *ObjectDescriptionRequest) UnPack() *ObjectDescriptionRequestT {
+	if rcv == nil { return nil }
+	t := &ObjectDescriptionRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ObjectDescriptionRequest struct {
 	_tab flatbuffers.Table
 }

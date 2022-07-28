@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type LicenseCapabilitiesT struct {
+	Capabilities []*LicenseCapabilityT
+}
+
+func (t *LicenseCapabilitiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	capabilitiesOffset := flatbuffers.UOffsetT(0)
+	if t.Capabilities != nil {
+		capabilitiesLength := len(t.Capabilities)
+		capabilitiesOffsets := make([]flatbuffers.UOffsetT, capabilitiesLength)
+		for j := 0; j < capabilitiesLength; j++ {
+			capabilitiesOffsets[j] = t.Capabilities[j].Pack(builder)
+		}
+		LicenseCapabilitiesStartCapabilitiesVector(builder, capabilitiesLength)
+		for j := capabilitiesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(capabilitiesOffsets[j])
+		}
+		capabilitiesOffset = builder.EndVector(capabilitiesLength)
+	}
+	LicenseCapabilitiesStart(builder)
+	LicenseCapabilitiesAddCapabilities(builder, capabilitiesOffset)
+	return LicenseCapabilitiesEnd(builder)
+}
+
+func (rcv *LicenseCapabilities) UnPackTo(t *LicenseCapabilitiesT) {
+	capabilitiesLength := rcv.CapabilitiesLength()
+	t.Capabilities = make([]*LicenseCapabilityT, capabilitiesLength)
+	for j := 0; j < capabilitiesLength; j++ {
+		x := LicenseCapability{}
+		rcv.Capabilities(&x, j)
+		t.Capabilities[j] = x.UnPack()
+	}
+}
+
+func (rcv *LicenseCapabilities) UnPack() *LicenseCapabilitiesT {
+	if rcv == nil { return nil }
+	t := &LicenseCapabilitiesT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type LicenseCapabilities struct {
 	_tab flatbuffers.Table
 }

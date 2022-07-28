@@ -7,6 +7,54 @@ import (
 )
 
 /// dummy flatbuffer for tests
+type dummyFbsT struct {
+	DummyByte int8
+	DummyStr string
+	DummyInt int32
+	DummyDouble float64
+	DummyDoublePtr []float64
+}
+
+func (t *dummyFbsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dummyStrOffset := builder.CreateString(t.DummyStr)
+	dummyDoublePtrOffset := flatbuffers.UOffsetT(0)
+	if t.DummyDoublePtr != nil {
+		dummyDoublePtrLength := len(t.DummyDoublePtr)
+		dummyFbsStartDummyDoublePtrVector(builder, dummyDoublePtrLength)
+		for j := dummyDoublePtrLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.DummyDoublePtr[j])
+		}
+		dummyDoublePtrOffset = builder.EndVector(dummyDoublePtrLength)
+	}
+	dummyFbsStart(builder)
+	dummyFbsAddDummyByte(builder, t.DummyByte)
+	dummyFbsAddDummyStr(builder, dummyStrOffset)
+	dummyFbsAddDummyInt(builder, t.DummyInt)
+	dummyFbsAddDummyDouble(builder, t.DummyDouble)
+	dummyFbsAddDummyDoublePtr(builder, dummyDoublePtrOffset)
+	return dummyFbsEnd(builder)
+}
+
+func (rcv *dummyFbs) UnPackTo(t *dummyFbsT) {
+	t.DummyByte = rcv.DummyByte()
+	t.DummyStr = string(rcv.DummyStr())
+	t.DummyInt = rcv.DummyInt()
+	t.DummyDouble = rcv.DummyDouble()
+	dummyDoublePtrLength := rcv.DummyDoublePtrLength()
+	t.DummyDoublePtr = make([]float64, dummyDoublePtrLength)
+	for j := 0; j < dummyDoublePtrLength; j++ {
+		t.DummyDoublePtr[j] = rcv.DummyDoublePtr(j)
+	}
+}
+
+func (rcv *dummyFbs) UnPack() *dummyFbsT {
+	if rcv == nil { return nil }
+	t := &dummyFbsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type dummyFbs struct {
 	_tab flatbuffers.Table
 }

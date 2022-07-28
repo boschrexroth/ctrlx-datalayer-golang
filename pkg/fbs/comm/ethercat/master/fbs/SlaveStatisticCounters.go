@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SlaveStatisticCountersT struct {
+	Request *AddressedRequestT
+	Response *SlaveStatisticCountersResponseT
+}
+
+func (t *SlaveStatisticCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	SlaveStatisticCountersStart(builder)
+	SlaveStatisticCountersAddRequest(builder, requestOffset)
+	SlaveStatisticCountersAddResponse(builder, responseOffset)
+	return SlaveStatisticCountersEnd(builder)
+}
+
+func (rcv *SlaveStatisticCounters) UnPackTo(t *SlaveStatisticCountersT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *SlaveStatisticCounters) UnPack() *SlaveStatisticCountersT {
+	if rcv == nil { return nil }
+	t := &SlaveStatisticCountersT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SlaveStatisticCounters struct {
 	_tab flatbuffers.Table
 }

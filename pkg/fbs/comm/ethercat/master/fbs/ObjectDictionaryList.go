@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ObjectDictionaryListT struct {
+	Request *ObjectDictionaryListRequestT
+	Response *ObjectDictionaryListResponseT
+}
+
+func (t *ObjectDictionaryListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
+	ObjectDictionaryListStart(builder)
+	ObjectDictionaryListAddRequest(builder, requestOffset)
+	ObjectDictionaryListAddResponse(builder, responseOffset)
+	return ObjectDictionaryListEnd(builder)
+}
+
+func (rcv *ObjectDictionaryList) UnPackTo(t *ObjectDictionaryListT) {
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
+}
+
+func (rcv *ObjectDictionaryList) UnPack() *ObjectDictionaryListT {
+	if rcv == nil { return nil }
+	t := &ObjectDictionaryListT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ObjectDictionaryList struct {
 	_tab flatbuffers.Table
 }

@@ -7,33 +7,45 @@ import "strconv"
 type CurrentState int8
 
 const (
-	CurrentStateINIT     CurrentState = 0
-	CurrentStateSTOP     CurrentState = 1
-	CurrentStateRUN      CurrentState = 2
-	CurrentStateERROR    CurrentState = 3
-	CurrentStateSYSERROR CurrentState = 4
-	CurrentStateSHUTDOWN CurrentState = 5
-	CurrentStateWARNING  CurrentState = 6
+	CurrentStateINIT              CurrentState = 0
+	CurrentStateSTOP              CurrentState = 1
+	CurrentStateRUN               CurrentState = 2
+	CurrentStateERROR             CurrentState = 3
+	CurrentStateSYSERROR          CurrentState = 4
+	CurrentStateSHUTDOWN          CurrentState = 5
+	CurrentStateWARNING           CurrentState = 6
+	CurrentStateSERVICE           CurrentState = 7
+	CurrentStateSETUP             CurrentState = 8
+	CurrentStatePARTIAL_OPERATING CurrentState = 9
+	CurrentStateOPERATING         CurrentState = 10
 )
 
 var EnumNamesCurrentState = map[CurrentState]string{
-	CurrentStateINIT:     "INIT",
-	CurrentStateSTOP:     "STOP",
-	CurrentStateRUN:      "RUN",
-	CurrentStateERROR:    "ERROR",
-	CurrentStateSYSERROR: "SYSERROR",
-	CurrentStateSHUTDOWN: "SHUTDOWN",
-	CurrentStateWARNING:  "WARNING",
+	CurrentStateINIT:              "INIT",
+	CurrentStateSTOP:              "STOP",
+	CurrentStateRUN:               "RUN",
+	CurrentStateERROR:             "ERROR",
+	CurrentStateSYSERROR:          "SYSERROR",
+	CurrentStateSHUTDOWN:          "SHUTDOWN",
+	CurrentStateWARNING:           "WARNING",
+	CurrentStateSERVICE:           "SERVICE",
+	CurrentStateSETUP:             "SETUP",
+	CurrentStatePARTIAL_OPERATING: "PARTIAL_OPERATING",
+	CurrentStateOPERATING:         "OPERATING",
 }
 
 var EnumValuesCurrentState = map[string]CurrentState{
-	"INIT":     CurrentStateINIT,
-	"STOP":     CurrentStateSTOP,
-	"RUN":      CurrentStateRUN,
-	"ERROR":    CurrentStateERROR,
-	"SYSERROR": CurrentStateSYSERROR,
-	"SHUTDOWN": CurrentStateSHUTDOWN,
-	"WARNING":  CurrentStateWARNING,
+	"INIT":              CurrentStateINIT,
+	"STOP":              CurrentStateSTOP,
+	"RUN":               CurrentStateRUN,
+	"ERROR":             CurrentStateERROR,
+	"SYSERROR":          CurrentStateSYSERROR,
+	"SHUTDOWN":          CurrentStateSHUTDOWN,
+	"WARNING":           CurrentStateWARNING,
+	"SERVICE":           CurrentStateSERVICE,
+	"SETUP":             CurrentStateSETUP,
+	"PARTIAL_OPERATING": CurrentStatePARTIAL_OPERATING,
+	"OPERATING":         CurrentStateOPERATING,
 }
 
 func (v CurrentState) String() string {

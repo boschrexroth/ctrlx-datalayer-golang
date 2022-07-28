@@ -64,7 +64,6 @@ func (d *System) Start(boStartBroker bool) {
 
 // Stop breaks a ctrlX Data Layer system.
 // Parameter boForceProviderStop forces stop off all created providers for this ctrlX Data Layer system.
-// It returns false if there is a client or provider active.
 func (d *System) Stop(boForceProviderStop bool) {
 	C.DLR_systemStop(d.this, C.bool(boForceProviderStop))
 }

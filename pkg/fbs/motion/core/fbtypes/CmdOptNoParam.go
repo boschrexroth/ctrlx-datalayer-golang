@@ -7,6 +7,29 @@ import (
 )
 
 /// parameters for all command options, that have no parameters (except the perm. type)
+type CmdOptNoParamT struct {
+	PermType string
+}
+
+func (t *CmdOptNoParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	CmdOptNoParamStart(builder)
+	CmdOptNoParamAddPermType(builder, permTypeOffset)
+	return CmdOptNoParamEnd(builder)
+}
+
+func (rcv *CmdOptNoParam) UnPackTo(t *CmdOptNoParamT) {
+	t.PermType = string(rcv.PermType())
+}
+
+func (rcv *CmdOptNoParam) UnPack() *CmdOptNoParamT {
+	if rcv == nil { return nil }
+	t := &CmdOptNoParamT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type CmdOptNoParam struct {
 	_tab flatbuffers.Table
 }

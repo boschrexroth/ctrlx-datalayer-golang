@@ -3,9 +3,10 @@
 This project provides ctrlX Data Layer access via Golang.
 It wraps the original ctrlX Data Layer written in C++.
 
-Documentation and examples you find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/).
+Documentation and examples you can find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/) and [GoDoc ](https://pkg.go.dev/github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer).
 
 ## Status
+
 
 ![Make Test](https://github.com/boschrexroth/ctrlx-datalayer-golang/actions/workflows/main.yml/badge.svg)
 
@@ -22,8 +23,8 @@ sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.12.1/ctrlx-datalayer-1.7.5.deb
-sudo dpkg -i ctrlx-datalayer-1.7.5.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.16.0/ctrlx-datalayer-1.8.6.deb
+sudo dpkg -i ctrlx-datalayer-1.8.6.deb
 ```
 
 ### Integrate in you project

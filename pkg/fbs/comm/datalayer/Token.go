@@ -6,6 +6,84 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TokenT struct {
+	Claims []*ClaimT
+	Id string
+	Iat uint64
+	Exp uint64
+	Name string
+	Plchandle uint64
+	Scope []string
+}
+
+func (t *TokenT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	claimsOffset := flatbuffers.UOffsetT(0)
+	if t.Claims != nil {
+		claimsLength := len(t.Claims)
+		claimsOffsets := make([]flatbuffers.UOffsetT, claimsLength)
+		for j := 0; j < claimsLength; j++ {
+			claimsOffsets[j] = t.Claims[j].Pack(builder)
+		}
+		TokenStartClaimsVector(builder, claimsLength)
+		for j := claimsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(claimsOffsets[j])
+		}
+		claimsOffset = builder.EndVector(claimsLength)
+	}
+	idOffset := builder.CreateString(t.Id)
+	nameOffset := builder.CreateString(t.Name)
+	scopeOffset := flatbuffers.UOffsetT(0)
+	if t.Scope != nil {
+		scopeLength := len(t.Scope)
+		scopeOffsets := make([]flatbuffers.UOffsetT, scopeLength)
+		for j := 0; j < scopeLength; j++ {
+			scopeOffsets[j] = builder.CreateString(t.Scope[j])
+		}
+		TokenStartScopeVector(builder, scopeLength)
+		for j := scopeLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(scopeOffsets[j])
+		}
+		scopeOffset = builder.EndVector(scopeLength)
+	}
+	TokenStart(builder)
+	TokenAddClaims(builder, claimsOffset)
+	TokenAddId(builder, idOffset)
+	TokenAddIat(builder, t.Iat)
+	TokenAddExp(builder, t.Exp)
+	TokenAddName(builder, nameOffset)
+	TokenAddPlchandle(builder, t.Plchandle)
+	TokenAddScope(builder, scopeOffset)
+	return TokenEnd(builder)
+}
+
+func (rcv *Token) UnPackTo(t *TokenT) {
+	claimsLength := rcv.ClaimsLength()
+	t.Claims = make([]*ClaimT, claimsLength)
+	for j := 0; j < claimsLength; j++ {
+		x := Claim{}
+		rcv.Claims(&x, j)
+		t.Claims[j] = x.UnPack()
+	}
+	t.Id = string(rcv.Id())
+	t.Iat = rcv.Iat()
+	t.Exp = rcv.Exp()
+	t.Name = string(rcv.Name())
+	t.Plchandle = rcv.Plchandle()
+	scopeLength := rcv.ScopeLength()
+	t.Scope = make([]string, scopeLength)
+	for j := 0; j < scopeLength; j++ {
+		t.Scope[j] = string(rcv.Scope(j))
+	}
+}
+
+func (rcv *Token) UnPack() *TokenT {
+	if rcv == nil { return nil }
+	t := &TokenT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Token struct {
 	_tab flatbuffers.Table
 }

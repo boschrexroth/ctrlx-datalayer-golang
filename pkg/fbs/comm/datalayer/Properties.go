@@ -2,7 +2,11 @@
 
 package datalayer
 
-import "strconv"
+import (
+	"strconv"
+
+	flatbuffers "github.com/google/flatbuffers/go"
+)
 
 type Properties byte
 
@@ -38,4 +42,49 @@ func (v Properties) String() string {
 		return s
 	}
 	return "Properties(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
+type PropertiesT struct {
+	Type Properties
+	Value interface{}
+}
+
+func (t *PropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil {
+		return 0
+	}
+	switch t.Type {
+	case PropertiesSampling:
+		return t.Value.(*SamplingT).Pack(builder)
+	case PropertiesQueueing:
+		return t.Value.(*QueueingT).Pack(builder)
+	case PropertiesDataChangeFilter:
+		return t.Value.(*DataChangeFilterT).Pack(builder)
+	case PropertiesChangeEvents:
+		return t.Value.(*ChangeEventsT).Pack(builder)
+	case PropertiesCounting:
+		return t.Value.(*CountingT).Pack(builder)
+	}
+	return 0
+}
+
+func (rcv Properties) UnPack(table flatbuffers.Table) *PropertiesT {
+	switch rcv {
+	case PropertiesSampling:
+		x := Sampling{_tab: table}
+		return &PropertiesT{ Type: PropertiesSampling, Value: x.UnPack() }
+	case PropertiesQueueing:
+		x := Queueing{_tab: table}
+		return &PropertiesT{ Type: PropertiesQueueing, Value: x.UnPack() }
+	case PropertiesDataChangeFilter:
+		x := DataChangeFilter{_tab: table}
+		return &PropertiesT{ Type: PropertiesDataChangeFilter, Value: x.UnPack() }
+	case PropertiesChangeEvents:
+		x := ChangeEvents{_tab: table}
+		return &PropertiesT{ Type: PropertiesChangeEvents, Value: x.UnPack() }
+	case PropertiesCounting:
+		x := Counting{_tab: table}
+		return &PropertiesT{ Type: PropertiesCounting, Value: x.UnPack() }
+	}
+	return nil
 }

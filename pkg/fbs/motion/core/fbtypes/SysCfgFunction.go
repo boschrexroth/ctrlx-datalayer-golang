@@ -7,6 +7,28 @@ import (
 )
 
 /// system function configuration items
+type SysCfgFunctionT struct {
+	IgnoreAxisProfiles bool
+}
+
+func (t *SysCfgFunctionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SysCfgFunctionStart(builder)
+	SysCfgFunctionAddIgnoreAxisProfiles(builder, t.IgnoreAxisProfiles)
+	return SysCfgFunctionEnd(builder)
+}
+
+func (rcv *SysCfgFunction) UnPackTo(t *SysCfgFunctionT) {
+	t.IgnoreAxisProfiles = rcv.IgnoreAxisProfiles()
+}
+
+func (rcv *SysCfgFunction) UnPack() *SysCfgFunctionT {
+	if rcv == nil { return nil }
+	t := &SysCfgFunctionT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgFunction struct {
 	_tab flatbuffers.Table
 }

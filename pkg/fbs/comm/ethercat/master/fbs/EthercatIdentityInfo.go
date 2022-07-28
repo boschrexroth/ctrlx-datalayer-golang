@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type EthercatIdentityInfoT struct {
+	VendorId uint32
+	ProductCode uint32
+	RevisionNumber uint32
+	SerialNumber uint32
+}
+
+func (t *EthercatIdentityInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	return CreateEthercatIdentityInfo(builder, t.VendorId, t.ProductCode, t.RevisionNumber, t.SerialNumber)
+}
+func (rcv *EthercatIdentityInfo) UnPackTo(t *EthercatIdentityInfoT) {
+	t.VendorId = rcv.VendorId()
+	t.ProductCode = rcv.ProductCode()
+	t.RevisionNumber = rcv.RevisionNumber()
+	t.SerialNumber = rcv.SerialNumber()
+}
+
+func (rcv *EthercatIdentityInfo) UnPack() *EthercatIdentityInfoT {
+	if rcv == nil { return nil }
+	t := &EthercatIdentityInfoT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type EthercatIdentityInfo struct {
 	_tab flatbuffers.Struct
 }

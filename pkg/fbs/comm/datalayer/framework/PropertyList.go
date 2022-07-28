@@ -6,6 +6,47 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type PropertyListT struct {
+	Properties []*PropertyT
+}
+
+func (t *PropertyListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	propertiesOffset := flatbuffers.UOffsetT(0)
+	if t.Properties != nil {
+		propertiesLength := len(t.Properties)
+		propertiesOffsets := make([]flatbuffers.UOffsetT, propertiesLength)
+		for j := 0; j < propertiesLength; j++ {
+			propertiesOffsets[j] = t.Properties[j].Pack(builder)
+		}
+		PropertyListStartPropertiesVector(builder, propertiesLength)
+		for j := propertiesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(propertiesOffsets[j])
+		}
+		propertiesOffset = builder.EndVector(propertiesLength)
+	}
+	PropertyListStart(builder)
+	PropertyListAddProperties(builder, propertiesOffset)
+	return PropertyListEnd(builder)
+}
+
+func (rcv *PropertyList) UnPackTo(t *PropertyListT) {
+	propertiesLength := rcv.PropertiesLength()
+	t.Properties = make([]*PropertyT, propertiesLength)
+	for j := 0; j < propertiesLength; j++ {
+		x := Property{}
+		rcv.Properties(&x, j)
+		t.Properties[j] = x.UnPack()
+	}
+}
+
+func (rcv *PropertyList) UnPack() *PropertyListT {
+	if rcv == nil { return nil }
+	t := &PropertyListT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type PropertyList struct {
 	_tab flatbuffers.Table
 }

@@ -5,8 +5,57 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__watchdog__fbs "common/scheduler/watchdog/fbs"
+	common__scheduler__watchdog__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/fbs"
 )
+
+type ProgramT struct {
+	Task *TaskT
+	Callables []*CallableT
+	Watchdog *common__scheduler__watchdog__fbs.WatchdogT
+}
+
+func (t *ProgramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	taskOffset := t.Task.Pack(builder)
+	callablesOffset := flatbuffers.UOffsetT(0)
+	if t.Callables != nil {
+		callablesLength := len(t.Callables)
+		callablesOffsets := make([]flatbuffers.UOffsetT, callablesLength)
+		for j := 0; j < callablesLength; j++ {
+			callablesOffsets[j] = t.Callables[j].Pack(builder)
+		}
+		ProgramStartCallablesVector(builder, callablesLength)
+		for j := callablesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(callablesOffsets[j])
+		}
+		callablesOffset = builder.EndVector(callablesLength)
+	}
+	watchdogOffset := t.Watchdog.Pack(builder)
+	ProgramStart(builder)
+	ProgramAddTask(builder, taskOffset)
+	ProgramAddCallables(builder, callablesOffset)
+	ProgramAddWatchdog(builder, watchdogOffset)
+	return ProgramEnd(builder)
+}
+
+func (rcv *Program) UnPackTo(t *ProgramT) {
+	t.Task = rcv.Task(nil).UnPack()
+	callablesLength := rcv.CallablesLength()
+	t.Callables = make([]*CallableT, callablesLength)
+	for j := 0; j < callablesLength; j++ {
+		x := Callable{}
+		rcv.Callables(&x, j)
+		t.Callables[j] = x.UnPack()
+	}
+	t.Watchdog = rcv.Watchdog(nil).UnPack()
+}
+
+func (rcv *Program) UnPack() *ProgramT {
+	if rcv == nil { return nil }
+	t := &ProgramT{}
+	rcv.UnPackTo(t)
+	return t
+}
 
 type Program struct {
 	_tab flatbuffers.Table

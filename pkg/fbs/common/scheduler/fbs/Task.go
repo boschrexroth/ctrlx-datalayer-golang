@@ -6,6 +6,45 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type TaskT struct {
+	Name string
+	Priority uint32
+	Affinity uint32
+	Stacksize uint32
+	Event string
+	Cycletime uint32
+}
+
+func (t *TaskT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	eventOffset := builder.CreateString(t.Event)
+	TaskStart(builder)
+	TaskAddName(builder, nameOffset)
+	TaskAddPriority(builder, t.Priority)
+	TaskAddAffinity(builder, t.Affinity)
+	TaskAddStacksize(builder, t.Stacksize)
+	TaskAddEvent(builder, eventOffset)
+	TaskAddCycletime(builder, t.Cycletime)
+	return TaskEnd(builder)
+}
+
+func (rcv *Task) UnPackTo(t *TaskT) {
+	t.Name = string(rcv.Name())
+	t.Priority = rcv.Priority()
+	t.Affinity = rcv.Affinity()
+	t.Stacksize = rcv.Stacksize()
+	t.Event = string(rcv.Event())
+	t.Cycletime = rcv.Cycletime()
+}
+
+func (rcv *Task) UnPack() *TaskT {
+	if rcv == nil { return nil }
+	t := &TaskT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Task struct {
 	_tab flatbuffers.Table
 }

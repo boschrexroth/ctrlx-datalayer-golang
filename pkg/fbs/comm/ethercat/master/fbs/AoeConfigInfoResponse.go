@@ -6,6 +6,32 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AoeConfigInfoResponseT struct {
+	NetId []byte
+}
+
+func (t *AoeConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	netIdOffset := flatbuffers.UOffsetT(0)
+	if t.NetId != nil {
+		netIdOffset = builder.CreateByteString(t.NetId)
+	}
+	AoeConfigInfoResponseStart(builder)
+	AoeConfigInfoResponseAddNetId(builder, netIdOffset)
+	return AoeConfigInfoResponseEnd(builder)
+}
+
+func (rcv *AoeConfigInfoResponse) UnPackTo(t *AoeConfigInfoResponseT) {
+	t.NetId = rcv.NetIdBytes()
+}
+
+func (rcv *AoeConfigInfoResponse) UnPack() *AoeConfigInfoResponseT {
+	if rcv == nil { return nil }
+	t := &AoeConfigInfoResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AoeConfigInfoResponse struct {
 	_tab flatbuffers.Table
 }

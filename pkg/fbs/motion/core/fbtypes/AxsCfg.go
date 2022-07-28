@@ -7,6 +7,61 @@ import (
 )
 
 /// complete configuration of a single axis
+type AxsCfgT struct {
+	ObjectType string
+	AxisProfileName string
+	Limits *AxsCfgLimitsT
+	Functions *AxsCfgFunctionsT
+	Properties *AxsCfgPropertiesT
+	Units *UnitCfgObjT
+	KinProperties *AxsCfgKinPropertiesT
+	DevErrReaction *AxsCfgDeviceErrorReactionT
+	RtInputs *RTInputsCfgT
+}
+
+func (t *AxsCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	objectTypeOffset := builder.CreateString(t.ObjectType)
+	axisProfileNameOffset := builder.CreateString(t.AxisProfileName)
+	limitsOffset := t.Limits.Pack(builder)
+	functionsOffset := t.Functions.Pack(builder)
+	propertiesOffset := t.Properties.Pack(builder)
+	unitsOffset := t.Units.Pack(builder)
+	kinPropertiesOffset := t.KinProperties.Pack(builder)
+	devErrReactionOffset := t.DevErrReaction.Pack(builder)
+	rtInputsOffset := t.RtInputs.Pack(builder)
+	AxsCfgStart(builder)
+	AxsCfgAddObjectType(builder, objectTypeOffset)
+	AxsCfgAddAxisProfileName(builder, axisProfileNameOffset)
+	AxsCfgAddLimits(builder, limitsOffset)
+	AxsCfgAddFunctions(builder, functionsOffset)
+	AxsCfgAddProperties(builder, propertiesOffset)
+	AxsCfgAddUnits(builder, unitsOffset)
+	AxsCfgAddKinProperties(builder, kinPropertiesOffset)
+	AxsCfgAddDevErrReaction(builder, devErrReactionOffset)
+	AxsCfgAddRtInputs(builder, rtInputsOffset)
+	return AxsCfgEnd(builder)
+}
+
+func (rcv *AxsCfg) UnPackTo(t *AxsCfgT) {
+	t.ObjectType = string(rcv.ObjectType())
+	t.AxisProfileName = string(rcv.AxisProfileName())
+	t.Limits = rcv.Limits(nil).UnPack()
+	t.Functions = rcv.Functions(nil).UnPack()
+	t.Properties = rcv.Properties(nil).UnPack()
+	t.Units = rcv.Units(nil).UnPack()
+	t.KinProperties = rcv.KinProperties(nil).UnPack()
+	t.DevErrReaction = rcv.DevErrReaction(nil).UnPack()
+	t.RtInputs = rcv.RtInputs(nil).UnPack()
+}
+
+func (rcv *AxsCfg) UnPack() *AxsCfgT {
+	if rcv == nil { return nil }
+	t := &AxsCfgT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCfg struct {
 	_tab flatbuffers.Table
 }
@@ -144,8 +199,23 @@ func (rcv *AxsCfg) DevErrReaction(obj *AxsCfgDeviceErrorReaction) *AxsCfgDeviceE
 }
 
 /// device error reation settings
+/// configuration of the real-time inputs of the axis
+func (rcv *AxsCfg) RtInputs(obj *RTInputsCfg) *RTInputsCfg {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(RTInputsCfg)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the real-time inputs of the axis
 func AxsCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(9)
 }
 func AxsCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -170,6 +240,9 @@ func AxsCfgAddKinProperties(builder *flatbuffers.Builder, kinProperties flatbuff
 }
 func AxsCfgAddDevErrReaction(builder *flatbuffers.Builder, devErrReaction flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(devErrReaction), 0)
+}
+func AxsCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(rtInputs), 0)
 }
 func AxsCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -6,6 +6,35 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ParameterResponseT struct {
+	ElementFlags ElementFlags
+	Data []byte
+}
+
+func (t *ParameterResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	ParameterResponseStart(builder)
+	ParameterResponseAddElementFlags(builder, t.ElementFlags)
+	ParameterResponseAddData(builder, dataOffset)
+	return ParameterResponseEnd(builder)
+}
+
+func (rcv *ParameterResponse) UnPackTo(t *ParameterResponseT) {
+	t.ElementFlags = rcv.ElementFlags()
+	t.Data = rcv.DataBytes()
+}
+
+func (rcv *ParameterResponse) UnPack() *ParameterResponseT {
+	if rcv == nil { return nil }
+	t := &ParameterResponseT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ParameterResponse struct {
 	_tab flatbuffers.Table
 }

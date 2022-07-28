@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type InstancesCreateRequestT struct {
+	InstanceName string
+	Port string
+	LinkLayer string
+	Arguments string
+}
+
+func (t *InstancesCreateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	instanceNameOffset := builder.CreateString(t.InstanceName)
+	portOffset := builder.CreateString(t.Port)
+	linkLayerOffset := builder.CreateString(t.LinkLayer)
+	argumentsOffset := builder.CreateString(t.Arguments)
+	InstancesCreateRequestStart(builder)
+	InstancesCreateRequestAddInstanceName(builder, instanceNameOffset)
+	InstancesCreateRequestAddPort(builder, portOffset)
+	InstancesCreateRequestAddLinkLayer(builder, linkLayerOffset)
+	InstancesCreateRequestAddArguments(builder, argumentsOffset)
+	return InstancesCreateRequestEnd(builder)
+}
+
+func (rcv *InstancesCreateRequest) UnPackTo(t *InstancesCreateRequestT) {
+	t.InstanceName = string(rcv.InstanceName())
+	t.Port = string(rcv.Port())
+	t.LinkLayer = string(rcv.LinkLayer())
+	t.Arguments = string(rcv.Arguments())
+}
+
+func (rcv *InstancesCreateRequest) UnPack() *InstancesCreateRequestT {
+	if rcv == nil { return nil }
+	t := &InstancesCreateRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type InstancesCreateRequest struct {
 	_tab flatbuffers.Table
 }

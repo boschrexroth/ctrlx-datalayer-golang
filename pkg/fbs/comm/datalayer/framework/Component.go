@@ -6,6 +6,84 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ComponentT struct {
+	Name string
+	Id string
+	Active bool
+	State string
+	Interfaces []*Interface_T
+	Dependencies []*DependencyT
+}
+
+func (t *ComponentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	idOffset := builder.CreateString(t.Id)
+	stateOffset := builder.CreateString(t.State)
+	interfacesOffset := flatbuffers.UOffsetT(0)
+	if t.Interfaces != nil {
+		interfacesLength := len(t.Interfaces)
+		interfacesOffsets := make([]flatbuffers.UOffsetT, interfacesLength)
+		for j := 0; j < interfacesLength; j++ {
+			interfacesOffsets[j] = t.Interfaces[j].Pack(builder)
+		}
+		ComponentStartInterfacesVector(builder, interfacesLength)
+		for j := interfacesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(interfacesOffsets[j])
+		}
+		interfacesOffset = builder.EndVector(interfacesLength)
+	}
+	dependenciesOffset := flatbuffers.UOffsetT(0)
+	if t.Dependencies != nil {
+		dependenciesLength := len(t.Dependencies)
+		dependenciesOffsets := make([]flatbuffers.UOffsetT, dependenciesLength)
+		for j := 0; j < dependenciesLength; j++ {
+			dependenciesOffsets[j] = t.Dependencies[j].Pack(builder)
+		}
+		ComponentStartDependenciesVector(builder, dependenciesLength)
+		for j := dependenciesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(dependenciesOffsets[j])
+		}
+		dependenciesOffset = builder.EndVector(dependenciesLength)
+	}
+	ComponentStart(builder)
+	ComponentAddName(builder, nameOffset)
+	ComponentAddId(builder, idOffset)
+	ComponentAddActive(builder, t.Active)
+	ComponentAddState(builder, stateOffset)
+	ComponentAddInterfaces(builder, interfacesOffset)
+	ComponentAddDependencies(builder, dependenciesOffset)
+	return ComponentEnd(builder)
+}
+
+func (rcv *Component) UnPackTo(t *ComponentT) {
+	t.Name = string(rcv.Name())
+	t.Id = string(rcv.Id())
+	t.Active = rcv.Active()
+	t.State = string(rcv.State())
+	interfacesLength := rcv.InterfacesLength()
+	t.Interfaces = make([]*Interface_T, interfacesLength)
+	for j := 0; j < interfacesLength; j++ {
+		x := Interface_{}
+		rcv.Interfaces(&x, j)
+		t.Interfaces[j] = x.UnPack()
+	}
+	dependenciesLength := rcv.DependenciesLength()
+	t.Dependencies = make([]*DependencyT, dependenciesLength)
+	for j := 0; j < dependenciesLength; j++ {
+		x := Dependency{}
+		rcv.Dependencies(&x, j)
+		t.Dependencies[j] = x.UnPack()
+	}
+}
+
+func (rcv *Component) UnPack() *ComponentT {
+	if rcv == nil { return nil }
+	t := &ComponentT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Component struct {
 	_tab flatbuffers.Table
 }

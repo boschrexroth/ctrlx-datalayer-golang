@@ -6,6 +6,61 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ScriptDescriptionT struct {
+	Language string
+	Version string
+	Executable string
+	FileEnding []string
+	License string
+}
+
+func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	languageOffset := builder.CreateString(t.Language)
+	versionOffset := builder.CreateString(t.Version)
+	executableOffset := builder.CreateString(t.Executable)
+	fileEndingOffset := flatbuffers.UOffsetT(0)
+	if t.FileEnding != nil {
+		fileEndingLength := len(t.FileEnding)
+		fileEndingOffsets := make([]flatbuffers.UOffsetT, fileEndingLength)
+		for j := 0; j < fileEndingLength; j++ {
+			fileEndingOffsets[j] = builder.CreateString(t.FileEnding[j])
+		}
+		ScriptDescriptionStartFileEndingVector(builder, fileEndingLength)
+		for j := fileEndingLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(fileEndingOffsets[j])
+		}
+		fileEndingOffset = builder.EndVector(fileEndingLength)
+	}
+	licenseOffset := builder.CreateString(t.License)
+	ScriptDescriptionStart(builder)
+	ScriptDescriptionAddLanguage(builder, languageOffset)
+	ScriptDescriptionAddVersion(builder, versionOffset)
+	ScriptDescriptionAddExecutable(builder, executableOffset)
+	ScriptDescriptionAddFileEnding(builder, fileEndingOffset)
+	ScriptDescriptionAddLicense(builder, licenseOffset)
+	return ScriptDescriptionEnd(builder)
+}
+
+func (rcv *ScriptDescription) UnPackTo(t *ScriptDescriptionT) {
+	t.Language = string(rcv.Language())
+	t.Version = string(rcv.Version())
+	t.Executable = string(rcv.Executable())
+	fileEndingLength := rcv.FileEndingLength()
+	t.FileEnding = make([]string, fileEndingLength)
+	for j := 0; j < fileEndingLength; j++ {
+		t.FileEnding[j] = string(rcv.FileEnding(j))
+	}
+	t.License = string(rcv.License())
+}
+
+func (rcv *ScriptDescription) UnPack() *ScriptDescriptionT {
+	if rcv == nil { return nil }
+	t := &ScriptDescriptionT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ScriptDescription struct {
 	_tab flatbuffers.Table
 }

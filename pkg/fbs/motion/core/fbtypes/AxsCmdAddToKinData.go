@@ -7,6 +7,32 @@ import (
 )
 
 /// parameters of the axis command add-to-kin
+type AxsCmdAddToKinDataT struct {
+	KinName string
+	Buffered bool
+}
+
+func (t *AxsCmdAddToKinDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	kinNameOffset := builder.CreateString(t.KinName)
+	AxsCmdAddToKinDataStart(builder)
+	AxsCmdAddToKinDataAddKinName(builder, kinNameOffset)
+	AxsCmdAddToKinDataAddBuffered(builder, t.Buffered)
+	return AxsCmdAddToKinDataEnd(builder)
+}
+
+func (rcv *AxsCmdAddToKinData) UnPackTo(t *AxsCmdAddToKinDataT) {
+	t.KinName = string(rcv.KinName())
+	t.Buffered = rcv.Buffered()
+}
+
+func (rcv *AxsCmdAddToKinData) UnPack() *AxsCmdAddToKinDataT {
+	if rcv == nil { return nil }
+	t := &AxsCmdAddToKinDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AxsCmdAddToKinData struct {
 	_tab flatbuffers.Table
 }

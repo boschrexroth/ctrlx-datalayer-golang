@@ -7,6 +7,33 @@ import (
 )
 
 /// parameters for the command option MCS (machine coordinate system a.k.a. axis transformation) for kinematics
+type KinCmdOptMCSDataT struct {
+	PermType string
+	SetName string
+}
+
+func (t *KinCmdOptMCSDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	setNameOffset := builder.CreateString(t.SetName)
+	KinCmdOptMCSDataStart(builder)
+	KinCmdOptMCSDataAddPermType(builder, permTypeOffset)
+	KinCmdOptMCSDataAddSetName(builder, setNameOffset)
+	return KinCmdOptMCSDataEnd(builder)
+}
+
+func (rcv *KinCmdOptMCSData) UnPackTo(t *KinCmdOptMCSDataT) {
+	t.PermType = string(rcv.PermType())
+	t.SetName = string(rcv.SetName())
+}
+
+func (rcv *KinCmdOptMCSData) UnPack() *KinCmdOptMCSDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptMCSDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptMCSData struct {
 	_tab flatbuffers.Table
 }

@@ -7,6 +7,33 @@ import (
 )
 
 /// parameters for the command option SafeArea (monitoring of safe zones and work areas) for kinematics
+type KinCmdOptSafeAreaDataT struct {
+	PermType string
+	SafeArea string
+}
+
+func (t *KinCmdOptSafeAreaDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	permTypeOffset := builder.CreateString(t.PermType)
+	safeAreaOffset := builder.CreateString(t.SafeArea)
+	KinCmdOptSafeAreaDataStart(builder)
+	KinCmdOptSafeAreaDataAddPermType(builder, permTypeOffset)
+	KinCmdOptSafeAreaDataAddSafeArea(builder, safeAreaOffset)
+	return KinCmdOptSafeAreaDataEnd(builder)
+}
+
+func (rcv *KinCmdOptSafeAreaData) UnPackTo(t *KinCmdOptSafeAreaDataT) {
+	t.PermType = string(rcv.PermType())
+	t.SafeArea = string(rcv.SafeArea())
+}
+
+func (rcv *KinCmdOptSafeAreaData) UnPack() *KinCmdOptSafeAreaDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptSafeAreaDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptSafeAreaData struct {
 	_tab flatbuffers.Table
 }

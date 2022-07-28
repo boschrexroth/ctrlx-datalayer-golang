@@ -6,6 +6,112 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ProblemT struct {
+	Type string
+	Title string
+	Status int32
+	Detail string
+	Instance string
+	MainDiagnosisCode string
+	DetailedDiagnosisCode string
+	DynamicDescription string
+	Severity Severity
+	Links []string
+	Entity string
+	MoreInfo []byte
+	Cause []*ProblemT
+}
+
+func (t *ProblemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	typeOffset := builder.CreateString(t.Type)
+	titleOffset := builder.CreateString(t.Title)
+	detailOffset := builder.CreateString(t.Detail)
+	instanceOffset := builder.CreateString(t.Instance)
+	mainDiagnosisCodeOffset := builder.CreateString(t.MainDiagnosisCode)
+	detailedDiagnosisCodeOffset := builder.CreateString(t.DetailedDiagnosisCode)
+	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	linksOffset := flatbuffers.UOffsetT(0)
+	if t.Links != nil {
+		linksLength := len(t.Links)
+		linksOffsets := make([]flatbuffers.UOffsetT, linksLength)
+		for j := 0; j < linksLength; j++ {
+			linksOffsets[j] = builder.CreateString(t.Links[j])
+		}
+		ProblemStartLinksVector(builder, linksLength)
+		for j := linksLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(linksOffsets[j])
+		}
+		linksOffset = builder.EndVector(linksLength)
+	}
+	entityOffset := builder.CreateString(t.Entity)
+	moreInfoOffset := flatbuffers.UOffsetT(0)
+	if t.MoreInfo != nil {
+		moreInfoOffset = builder.CreateByteString(t.MoreInfo)
+	}
+	causeOffset := flatbuffers.UOffsetT(0)
+	if t.Cause != nil {
+		causeLength := len(t.Cause)
+		causeOffsets := make([]flatbuffers.UOffsetT, causeLength)
+		for j := 0; j < causeLength; j++ {
+			causeOffsets[j] = t.Cause[j].Pack(builder)
+		}
+		ProblemStartCauseVector(builder, causeLength)
+		for j := causeLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(causeOffsets[j])
+		}
+		causeOffset = builder.EndVector(causeLength)
+	}
+	ProblemStart(builder)
+	ProblemAddType(builder, typeOffset)
+	ProblemAddTitle(builder, titleOffset)
+	ProblemAddStatus(builder, t.Status)
+	ProblemAddDetail(builder, detailOffset)
+	ProblemAddInstance(builder, instanceOffset)
+	ProblemAddMainDiagnosisCode(builder, mainDiagnosisCodeOffset)
+	ProblemAddDetailedDiagnosisCode(builder, detailedDiagnosisCodeOffset)
+	ProblemAddDynamicDescription(builder, dynamicDescriptionOffset)
+	ProblemAddSeverity(builder, t.Severity)
+	ProblemAddLinks(builder, linksOffset)
+	ProblemAddEntity(builder, entityOffset)
+	ProblemAddMoreInfo(builder, moreInfoOffset)
+	ProblemAddCause(builder, causeOffset)
+	return ProblemEnd(builder)
+}
+
+func (rcv *Problem) UnPackTo(t *ProblemT) {
+	t.Type = string(rcv.Type())
+	t.Title = string(rcv.Title())
+	t.Status = rcv.Status()
+	t.Detail = string(rcv.Detail())
+	t.Instance = string(rcv.Instance())
+	t.MainDiagnosisCode = string(rcv.MainDiagnosisCode())
+	t.DetailedDiagnosisCode = string(rcv.DetailedDiagnosisCode())
+	t.DynamicDescription = string(rcv.DynamicDescription())
+	t.Severity = rcv.Severity()
+	linksLength := rcv.LinksLength()
+	t.Links = make([]string, linksLength)
+	for j := 0; j < linksLength; j++ {
+		t.Links[j] = string(rcv.Links(j))
+	}
+	t.Entity = string(rcv.Entity())
+	t.MoreInfo = rcv.MoreInfoBytes()
+	causeLength := rcv.CauseLength()
+	t.Cause = make([]*ProblemT, causeLength)
+	for j := 0; j < causeLength; j++ {
+		x := Problem{}
+		rcv.Cause(&x, j)
+		t.Cause[j] = x.UnPack()
+	}
+}
+
+func (rcv *Problem) UnPack() *ProblemT {
+	if rcv == nil { return nil }
+	t := &ProblemT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Problem struct {
 	_tab flatbuffers.Table
 }
@@ -138,8 +244,62 @@ func (rcv *Problem) Entity() []byte {
 	return nil
 }
 
+func (rcv *Problem) MoreInfo(j int) byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.GetByte(a + flatbuffers.UOffsetT(j*1))
+	}
+	return 0
+}
+
+func (rcv *Problem) MoreInfoLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *Problem) MoreInfoBytes() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Problem) MutateMoreInfo(j int, n byte) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.MutateByte(a+flatbuffers.UOffsetT(j*1), n)
+	}
+	return false
+}
+
+func (rcv *Problem) Cause(obj *Problem, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Problem) CauseLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func ProblemStart(builder *flatbuffers.Builder) {
-	builder.StartObject(11)
+	builder.StartObject(13)
 }
 func ProblemAddType(builder *flatbuffers.Builder, type_ flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(type_), 0)
@@ -176,6 +336,18 @@ func ProblemStartLinksVector(builder *flatbuffers.Builder, numElems int) flatbuf
 }
 func ProblemAddEntity(builder *flatbuffers.Builder, entity flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(entity), 0)
+}
+func ProblemAddMoreInfo(builder *flatbuffers.Builder, moreInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(moreInfo), 0)
+}
+func ProblemStartMoreInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(1, numElems, 1)
+}
+func ProblemAddCause(builder *flatbuffers.Builder, cause flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(cause), 0)
+}
+func ProblemStartCauseVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func ProblemEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -7,6 +7,33 @@ import (
 )
 
 /// parameters for the command option SafeArea (monitoring of safe zones and work areas) for kinematics
+type KinCmdOptAxsDynLimDataT struct {
+	AxsName string
+	Lim *DynamicLimitsT
+}
+
+func (t *KinCmdOptAxsDynLimDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axsNameOffset := builder.CreateString(t.AxsName)
+	limOffset := t.Lim.Pack(builder)
+	KinCmdOptAxsDynLimDataStart(builder)
+	KinCmdOptAxsDynLimDataAddAxsName(builder, axsNameOffset)
+	KinCmdOptAxsDynLimDataAddLim(builder, limOffset)
+	return KinCmdOptAxsDynLimDataEnd(builder)
+}
+
+func (rcv *KinCmdOptAxsDynLimData) UnPackTo(t *KinCmdOptAxsDynLimDataT) {
+	t.AxsName = string(rcv.AxsName())
+	t.Lim = rcv.Lim(nil).UnPack()
+}
+
+func (rcv *KinCmdOptAxsDynLimData) UnPack() *KinCmdOptAxsDynLimDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdOptAxsDynLimDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdOptAxsDynLimData struct {
 	_tab flatbuffers.Table
 }

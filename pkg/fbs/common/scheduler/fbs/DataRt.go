@@ -6,6 +6,31 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DataRtT struct {
+	StartTime uint64
+	Counter uint64
+}
+
+func (t *DataRtT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	DataRtStart(builder)
+	DataRtAddStartTime(builder, t.StartTime)
+	DataRtAddCounter(builder, t.Counter)
+	return DataRtEnd(builder)
+}
+
+func (rcv *DataRt) UnPackTo(t *DataRtT) {
+	t.StartTime = rcv.StartTime()
+	t.Counter = rcv.Counter()
+}
+
+func (rcv *DataRt) UnPack() *DataRtT {
+	if rcv == nil { return nil }
+	t := &DataRtT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DataRt struct {
 	_tab flatbuffers.Table
 }

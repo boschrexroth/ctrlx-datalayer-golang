@@ -7,6 +7,37 @@ import (
 )
 
 /// configuration of an axis that can be added to a kinematics
+type KinCfgAxsT struct {
+	AxsName string
+	AxsMeaning string
+	AxsDir string
+}
+
+func (t *KinCfgAxsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	axsNameOffset := builder.CreateString(t.AxsName)
+	axsMeaningOffset := builder.CreateString(t.AxsMeaning)
+	axsDirOffset := builder.CreateString(t.AxsDir)
+	KinCfgAxsStart(builder)
+	KinCfgAxsAddAxsName(builder, axsNameOffset)
+	KinCfgAxsAddAxsMeaning(builder, axsMeaningOffset)
+	KinCfgAxsAddAxsDir(builder, axsDirOffset)
+	return KinCfgAxsEnd(builder)
+}
+
+func (rcv *KinCfgAxs) UnPackTo(t *KinCfgAxsT) {
+	t.AxsName = string(rcv.AxsName())
+	t.AxsMeaning = string(rcv.AxsMeaning())
+	t.AxsDir = string(rcv.AxsDir())
+}
+
+func (rcv *KinCfgAxs) UnPack() *KinCfgAxsT {
+	if rcv == nil { return nil }
+	t := &KinCfgAxsT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCfgAxs struct {
 	_tab flatbuffers.Table
 }

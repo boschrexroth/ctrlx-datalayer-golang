@@ -6,6 +6,54 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type AoeControlRequestT struct {
+	AddressType Addresstype
+	Address uint16
+	TargetNetId []byte
+	TargetPort uint16
+	AoeState uint16
+	DeviceState uint16
+	Data []byte
+}
+
+func (t *AoeControlRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	targetNetIdOffset := flatbuffers.UOffsetT(0)
+	if t.TargetNetId != nil {
+		targetNetIdOffset = builder.CreateByteString(t.TargetNetId)
+	}
+	dataOffset := flatbuffers.UOffsetT(0)
+	if t.Data != nil {
+		dataOffset = builder.CreateByteString(t.Data)
+	}
+	AoeControlRequestStart(builder)
+	AoeControlRequestAddAddressType(builder, t.AddressType)
+	AoeControlRequestAddAddress(builder, t.Address)
+	AoeControlRequestAddTargetNetId(builder, targetNetIdOffset)
+	AoeControlRequestAddTargetPort(builder, t.TargetPort)
+	AoeControlRequestAddAoeState(builder, t.AoeState)
+	AoeControlRequestAddDeviceState(builder, t.DeviceState)
+	AoeControlRequestAddData(builder, dataOffset)
+	return AoeControlRequestEnd(builder)
+}
+
+func (rcv *AoeControlRequest) UnPackTo(t *AoeControlRequestT) {
+	t.AddressType = rcv.AddressType()
+	t.Address = rcv.Address()
+	t.TargetNetId = rcv.TargetNetIdBytes()
+	t.TargetPort = rcv.TargetPort()
+	t.AoeState = rcv.AoeState()
+	t.DeviceState = rcv.DeviceState()
+	t.Data = rcv.DataBytes()
+}
+
+func (rcv *AoeControlRequest) UnPack() *AoeControlRequestT {
+	if rcv == nil { return nil }
+	t := &AoeControlRequestT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type AoeControlRequest struct {
 	_tab flatbuffers.Table
 }

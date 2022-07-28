@@ -7,6 +7,52 @@ import (
 )
 
 /// parameters for the move direct asynchronous command for a kinematics
+type KinCmdMoveDirectAsyncDataT struct {
+	KinPos []float64
+	CoordSys string
+	DynLimFactors *DynamicLimitsT
+	Buffered bool
+}
+
+func (t *KinCmdMoveDirectAsyncDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	kinPosOffset := flatbuffers.UOffsetT(0)
+	if t.KinPos != nil {
+		kinPosLength := len(t.KinPos)
+		KinCmdMoveDirectAsyncDataStartKinPosVector(builder, kinPosLength)
+		for j := kinPosLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.KinPos[j])
+		}
+		kinPosOffset = builder.EndVector(kinPosLength)
+	}
+	coordSysOffset := builder.CreateString(t.CoordSys)
+	dynLimFactorsOffset := t.DynLimFactors.Pack(builder)
+	KinCmdMoveDirectAsyncDataStart(builder)
+	KinCmdMoveDirectAsyncDataAddKinPos(builder, kinPosOffset)
+	KinCmdMoveDirectAsyncDataAddCoordSys(builder, coordSysOffset)
+	KinCmdMoveDirectAsyncDataAddDynLimFactors(builder, dynLimFactorsOffset)
+	KinCmdMoveDirectAsyncDataAddBuffered(builder, t.Buffered)
+	return KinCmdMoveDirectAsyncDataEnd(builder)
+}
+
+func (rcv *KinCmdMoveDirectAsyncData) UnPackTo(t *KinCmdMoveDirectAsyncDataT) {
+	kinPosLength := rcv.KinPosLength()
+	t.KinPos = make([]float64, kinPosLength)
+	for j := 0; j < kinPosLength; j++ {
+		t.KinPos[j] = rcv.KinPos(j)
+	}
+	t.CoordSys = string(rcv.CoordSys())
+	t.DynLimFactors = rcv.DynLimFactors(nil).UnPack()
+	t.Buffered = rcv.Buffered()
+}
+
+func (rcv *KinCmdMoveDirectAsyncData) UnPack() *KinCmdMoveDirectAsyncDataT {
+	if rcv == nil { return nil }
+	t := &KinCmdMoveDirectAsyncDataT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinCmdMoveDirectAsyncData struct {
 	_tab flatbuffers.Table
 }

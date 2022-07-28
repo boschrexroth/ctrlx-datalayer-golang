@@ -6,6 +6,59 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Interface_T struct {
+	Name string
+	Version string
+	Language string
+	Properties []*PropertyT
+}
+
+func (t *Interface_T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	versionOffset := builder.CreateString(t.Version)
+	languageOffset := builder.CreateString(t.Language)
+	propertiesOffset := flatbuffers.UOffsetT(0)
+	if t.Properties != nil {
+		propertiesLength := len(t.Properties)
+		propertiesOffsets := make([]flatbuffers.UOffsetT, propertiesLength)
+		for j := 0; j < propertiesLength; j++ {
+			propertiesOffsets[j] = t.Properties[j].Pack(builder)
+		}
+		Interface_StartPropertiesVector(builder, propertiesLength)
+		for j := propertiesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(propertiesOffsets[j])
+		}
+		propertiesOffset = builder.EndVector(propertiesLength)
+	}
+	Interface_Start(builder)
+	Interface_AddName(builder, nameOffset)
+	Interface_AddVersion(builder, versionOffset)
+	Interface_AddLanguage(builder, languageOffset)
+	Interface_AddProperties(builder, propertiesOffset)
+	return Interface_End(builder)
+}
+
+func (rcv *Interface_) UnPackTo(t *Interface_T) {
+	t.Name = string(rcv.Name())
+	t.Version = string(rcv.Version())
+	t.Language = string(rcv.Language())
+	propertiesLength := rcv.PropertiesLength()
+	t.Properties = make([]*PropertyT, propertiesLength)
+	for j := 0; j < propertiesLength; j++ {
+		x := Property{}
+		rcv.Properties(&x, j)
+		t.Properties[j] = x.UnPack()
+	}
+}
+
+func (rcv *Interface_) UnPack() *Interface_T {
+	if rcv == nil { return nil }
+	t := &Interface_T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Interface_ struct {
 	_tab flatbuffers.Table
 }

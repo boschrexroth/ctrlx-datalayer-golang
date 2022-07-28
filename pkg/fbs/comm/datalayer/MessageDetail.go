@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type MessageDetailT struct {
+	Timestamp uint64
+}
+
+func (t *MessageDetailT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	MessageDetailStart(builder)
+	MessageDetailAddTimestamp(builder, t.Timestamp)
+	return MessageDetailEnd(builder)
+}
+
+func (rcv *MessageDetail) UnPackTo(t *MessageDetailT) {
+	t.Timestamp = rcv.Timestamp()
+}
+
+func (rcv *MessageDetail) UnPack() *MessageDetailT {
+	if rcv == nil { return nil }
+	t := &MessageDetailT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type MessageDetail struct {
 	_tab flatbuffers.Table
 }

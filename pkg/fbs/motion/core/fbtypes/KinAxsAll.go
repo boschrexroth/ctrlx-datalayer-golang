@@ -7,6 +7,47 @@ import (
 )
 
 /// Data of all axes that are currently added to the kinematics
+type KinAxsAllT struct {
+	Info []*KinAxsSingleT
+}
+
+func (t *KinAxsAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	infoOffset := flatbuffers.UOffsetT(0)
+	if t.Info != nil {
+		infoLength := len(t.Info)
+		infoOffsets := make([]flatbuffers.UOffsetT, infoLength)
+		for j := 0; j < infoLength; j++ {
+			infoOffsets[j] = t.Info[j].Pack(builder)
+		}
+		KinAxsAllStartInfoVector(builder, infoLength)
+		for j := infoLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(infoOffsets[j])
+		}
+		infoOffset = builder.EndVector(infoLength)
+	}
+	KinAxsAllStart(builder)
+	KinAxsAllAddInfo(builder, infoOffset)
+	return KinAxsAllEnd(builder)
+}
+
+func (rcv *KinAxsAll) UnPackTo(t *KinAxsAllT) {
+	infoLength := rcv.InfoLength()
+	t.Info = make([]*KinAxsSingleT, infoLength)
+	for j := 0; j < infoLength; j++ {
+		x := KinAxsSingle{}
+		rcv.Info(&x, j)
+		t.Info[j] = x.UnPack()
+	}
+}
+
+func (rcv *KinAxsAll) UnPack() *KinAxsAllT {
+	if rcv == nil { return nil }
+	t := &KinAxsAllT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type KinAxsAll struct {
 	_tab flatbuffers.Table
 }

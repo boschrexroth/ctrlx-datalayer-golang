@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type UserIdentityTokenT struct {
+	UserIdentityToken *UserIdentityTokenUnionT
+}
+
+func (t *UserIdentityTokenT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	userIdentityTokenOffset := t.UserIdentityToken.Pack(builder)
+	
+	UserIdentityTokenStart(builder)
+	if t.UserIdentityToken != nil {
+		UserIdentityTokenAddUserIdentityTokenType(builder, t.UserIdentityToken.Type)
+	}
+	UserIdentityTokenAddUserIdentityToken(builder, userIdentityTokenOffset)
+	return UserIdentityTokenEnd(builder)
+}
+
+func (rcv *UserIdentityToken) UnPackTo(t *UserIdentityTokenT) {
+	userIdentityTokenTable := flatbuffers.Table{}
+	if rcv.UserIdentityToken(&userIdentityTokenTable) {
+		t.UserIdentityToken = rcv.UserIdentityTokenType().UnPack(userIdentityTokenTable)
+	}
+}
+
+func (rcv *UserIdentityToken) UnPack() *UserIdentityTokenT {
+	if rcv == nil { return nil }
+	t := &UserIdentityTokenT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type UserIdentityToken struct {
 	_tab flatbuffers.Table
 }

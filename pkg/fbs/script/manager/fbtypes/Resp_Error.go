@@ -6,6 +6,55 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Resp_ErrorT struct {
+	MainCode uint32
+	DetailCode uint32
+	Text string
+	Trace []string
+}
+
+func (t *Resp_ErrorT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	textOffset := builder.CreateString(t.Text)
+	traceOffset := flatbuffers.UOffsetT(0)
+	if t.Trace != nil {
+		traceLength := len(t.Trace)
+		traceOffsets := make([]flatbuffers.UOffsetT, traceLength)
+		for j := 0; j < traceLength; j++ {
+			traceOffsets[j] = builder.CreateString(t.Trace[j])
+		}
+		Resp_ErrorStartTraceVector(builder, traceLength)
+		for j := traceLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(traceOffsets[j])
+		}
+		traceOffset = builder.EndVector(traceLength)
+	}
+	Resp_ErrorStart(builder)
+	Resp_ErrorAddMainCode(builder, t.MainCode)
+	Resp_ErrorAddDetailCode(builder, t.DetailCode)
+	Resp_ErrorAddText(builder, textOffset)
+	Resp_ErrorAddTrace(builder, traceOffset)
+	return Resp_ErrorEnd(builder)
+}
+
+func (rcv *Resp_Error) UnPackTo(t *Resp_ErrorT) {
+	t.MainCode = rcv.MainCode()
+	t.DetailCode = rcv.DetailCode()
+	t.Text = string(rcv.Text())
+	traceLength := rcv.TraceLength()
+	t.Trace = make([]string, traceLength)
+	for j := 0; j < traceLength; j++ {
+		t.Trace[j] = string(rcv.Trace(j))
+	}
+}
+
+func (rcv *Resp_Error) UnPack() *Resp_ErrorT {
+	if rcv == nil { return nil }
+	t := &Resp_ErrorT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Resp_Error struct {
 	_tab flatbuffers.Table
 }

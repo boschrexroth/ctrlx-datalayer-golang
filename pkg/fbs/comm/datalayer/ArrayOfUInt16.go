@@ -6,6 +6,41 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type ArrayOfUInt16T struct {
+	Value []uint16
+}
+
+func (t *ArrayOfUInt16T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != nil {
+		valueLength := len(t.Value)
+		ArrayOfUInt16StartValueVector(builder, valueLength)
+		for j := valueLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.Value[j])
+		}
+		valueOffset = builder.EndVector(valueLength)
+	}
+	ArrayOfUInt16Start(builder)
+	ArrayOfUInt16AddValue(builder, valueOffset)
+	return ArrayOfUInt16End(builder)
+}
+
+func (rcv *ArrayOfUInt16) UnPackTo(t *ArrayOfUInt16T) {
+	valueLength := rcv.ValueLength()
+	t.Value = make([]uint16, valueLength)
+	for j := 0; j < valueLength; j++ {
+		t.Value[j] = rcv.Value(j)
+	}
+}
+
+func (rcv *ArrayOfUInt16) UnPack() *ArrayOfUInt16T {
+	if rcv == nil { return nil }
+	t := &ArrayOfUInt16T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type ArrayOfUInt16 struct {
 	_tab flatbuffers.Table
 }

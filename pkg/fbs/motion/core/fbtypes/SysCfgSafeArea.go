@@ -7,6 +7,58 @@ import (
 )
 
 /// configuration of a single safe area or work area
+type SysCfgSafeAreaT struct {
+	Name string
+	CoordSystem string
+	Type SafeAreaType
+	Box []*SysCfgSafeAreaBoxT
+}
+
+func (t *SysCfgSafeAreaT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	nameOffset := builder.CreateString(t.Name)
+	coordSystemOffset := builder.CreateString(t.CoordSystem)
+	boxOffset := flatbuffers.UOffsetT(0)
+	if t.Box != nil {
+		boxLength := len(t.Box)
+		boxOffsets := make([]flatbuffers.UOffsetT, boxLength)
+		for j := 0; j < boxLength; j++ {
+			boxOffsets[j] = t.Box[j].Pack(builder)
+		}
+		SysCfgSafeAreaStartBoxVector(builder, boxLength)
+		for j := boxLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(boxOffsets[j])
+		}
+		boxOffset = builder.EndVector(boxLength)
+	}
+	SysCfgSafeAreaStart(builder)
+	SysCfgSafeAreaAddName(builder, nameOffset)
+	SysCfgSafeAreaAddCoordSystem(builder, coordSystemOffset)
+	SysCfgSafeAreaAddType(builder, t.Type)
+	SysCfgSafeAreaAddBox(builder, boxOffset)
+	return SysCfgSafeAreaEnd(builder)
+}
+
+func (rcv *SysCfgSafeArea) UnPackTo(t *SysCfgSafeAreaT) {
+	t.Name = string(rcv.Name())
+	t.CoordSystem = string(rcv.CoordSystem())
+	t.Type = rcv.Type()
+	boxLength := rcv.BoxLength()
+	t.Box = make([]*SysCfgSafeAreaBoxT, boxLength)
+	for j := 0; j < boxLength; j++ {
+		x := SysCfgSafeAreaBox{}
+		rcv.Box(&x, j)
+		t.Box[j] = x.UnPack()
+	}
+}
+
+func (rcv *SysCfgSafeArea) UnPack() *SysCfgSafeAreaT {
+	if rcv == nil { return nil }
+	t := &SysCfgSafeAreaT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SysCfgSafeArea struct {
 	_tab flatbuffers.Table
 }

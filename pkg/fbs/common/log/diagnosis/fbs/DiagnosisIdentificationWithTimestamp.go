@@ -6,6 +6,33 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type DiagnosisIdentificationWithTimestampT struct {
+	DiagnosisIdentification *DiagnosisIdentificationT
+	Timestamp string
+}
+
+func (t *DiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	diagnosisIdentificationOffset := t.DiagnosisIdentification.Pack(builder)
+	timestampOffset := builder.CreateString(t.Timestamp)
+	DiagnosisIdentificationWithTimestampStart(builder)
+	DiagnosisIdentificationWithTimestampAddDiagnosisIdentification(builder, diagnosisIdentificationOffset)
+	DiagnosisIdentificationWithTimestampAddTimestamp(builder, timestampOffset)
+	return DiagnosisIdentificationWithTimestampEnd(builder)
+}
+
+func (rcv *DiagnosisIdentificationWithTimestamp) UnPackTo(t *DiagnosisIdentificationWithTimestampT) {
+	t.DiagnosisIdentification = rcv.DiagnosisIdentification(nil).UnPack()
+	t.Timestamp = string(rcv.Timestamp())
+}
+
+func (rcv *DiagnosisIdentificationWithTimestamp) UnPack() *DiagnosisIdentificationWithTimestampT {
+	if rcv == nil { return nil }
+	t := &DiagnosisIdentificationWithTimestampT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type DiagnosisIdentificationWithTimestamp struct {
 	_tab flatbuffers.Table
 }
