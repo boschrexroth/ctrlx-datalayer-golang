@@ -100,9 +100,14 @@ func DeleteProviderNode(n *ProviderNode) {
 	if n.this == nil {
 		return
 	}
-	close(n.channels.Done)
 	var i int = *(*int)(n.userdata)
 	nodeUnregister(i)
 	C.DLR_providerNodeDelete(n.this)
+	close(n.channels.Done)
+	close(n.channels.OnCreate)
+	close(n.channels.OnRemove)
+	close(n.channels.OnBrowse)
+	close(n.channels.OnRead)
+	close(n.channels.OnMetadata)
 	n.this = nil
 }

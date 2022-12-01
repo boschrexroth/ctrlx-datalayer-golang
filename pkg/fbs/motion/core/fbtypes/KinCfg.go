@@ -11,10 +11,12 @@ type KinCfgT struct {
 	ObjectType string
 	Limits *KinCfgLimitsT
 	AxsCfg []*KinCfgAxsT
-	Mcs *KinCfgAxsTrafoAllSetsT
+	Mcs *KinCfgJntTrafoAllSetsT
 	Units *UnitCfgKinT
 	PrepLimits *KinCfgPrepLimitsT
 	RtInputs *RTInputsCfgT
+	Dynamics *KinCfgDynamicsT
+	Geometry *KinGeoCfgT
 }
 
 func (t *KinCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -38,6 +40,8 @@ func (t *KinCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	unitsOffset := t.Units.Pack(builder)
 	prepLimitsOffset := t.PrepLimits.Pack(builder)
 	rtInputsOffset := t.RtInputs.Pack(builder)
+	dynamicsOffset := t.Dynamics.Pack(builder)
+	geometryOffset := t.Geometry.Pack(builder)
 	KinCfgStart(builder)
 	KinCfgAddObjectType(builder, objectTypeOffset)
 	KinCfgAddLimits(builder, limitsOffset)
@@ -46,6 +50,8 @@ func (t *KinCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	KinCfgAddUnits(builder, unitsOffset)
 	KinCfgAddPrepLimits(builder, prepLimitsOffset)
 	KinCfgAddRtInputs(builder, rtInputsOffset)
+	KinCfgAddDynamics(builder, dynamicsOffset)
+	KinCfgAddGeometry(builder, geometryOffset)
 	return KinCfgEnd(builder)
 }
 
@@ -63,6 +69,8 @@ func (rcv *KinCfg) UnPackTo(t *KinCfgT) {
 	t.Units = rcv.Units(nil).UnPack()
 	t.PrepLimits = rcv.PrepLimits(nil).UnPack()
 	t.RtInputs = rcv.RtInputs(nil).UnPack()
+	t.Dynamics = rcv.Dynamics(nil).UnPack()
+	t.Geometry = rcv.Geometry(nil).UnPack()
 }
 
 func (rcv *KinCfg) UnPack() *KinCfgT {
@@ -146,13 +154,13 @@ func (rcv *KinCfg) AxsCfgLength() int {
 }
 
 /// data of all axes, that can be added to this kinematics
-/// configuration of all axis transformations (ACS <--> MCS)
-func (rcv *KinCfg) Mcs(obj *KinCfgAxsTrafoAllSets) *KinCfgAxsTrafoAllSets {
+/// configuration of all joint transformations (ACS <--> MCS)
+func (rcv *KinCfg) Mcs(obj *KinCfgJntTrafoAllSets) *KinCfgJntTrafoAllSets {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(KinCfgAxsTrafoAllSets)
+			obj = new(KinCfgJntTrafoAllSets)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj
@@ -160,7 +168,7 @@ func (rcv *KinCfg) Mcs(obj *KinCfgAxsTrafoAllSets) *KinCfgAxsTrafoAllSets {
 	return nil
 }
 
-/// configuration of all axis transformations (ACS <--> MCS)
+/// configuration of all joint transformations (ACS <--> MCS)
 /// general unit configuration of this kinematics
 func (rcv *KinCfg) Units(obj *UnitCfgKin) *UnitCfgKin {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
@@ -206,8 +214,38 @@ func (rcv *KinCfg) RtInputs(obj *RTInputsCfg) *RTInputsCfg {
 }
 
 /// configuration of the real-time inputs of the kinematics
+/// configuration of the dynamics of the kinematics
+func (rcv *KinCfg) Dynamics(obj *KinCfgDynamics) *KinCfgDynamics {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinCfgDynamics)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the dynamics of the kinematics
+/// configuration of the geometry functions of the kinematics
+func (rcv *KinCfg) Geometry(obj *KinGeoCfg) *KinGeoCfg {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinGeoCfg)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the geometry functions of the kinematics
 func KinCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(9)
 }
 func KinCfgAddObjectType(builder *flatbuffers.Builder, objectType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objectType), 0)
@@ -232,6 +270,12 @@ func KinCfgAddPrepLimits(builder *flatbuffers.Builder, prepLimits flatbuffers.UO
 }
 func KinCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(rtInputs), 0)
+}
+func KinCfgAddDynamics(builder *flatbuffers.Builder, dynamics flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(dynamics), 0)
+}
+func KinCfgAddGeometry(builder *flatbuffers.Builder, geometry flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(geometry), 0)
 }
 func KinCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

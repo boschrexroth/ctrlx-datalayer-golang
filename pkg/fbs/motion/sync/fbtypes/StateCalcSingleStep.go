@@ -13,7 +13,7 @@ type StateCalcSingleStepT struct {
 	DocuRef string
 	Inputs []DataID
 	Outputs []DataID
-	Parameter []*StateCalcStepSingleParamT
+	Parameter *StateCalcStepParamsT
 	MutexParameter *StateCalcStepMutexParamT
 }
 
@@ -40,19 +40,7 @@ func (t *StateCalcSingleStepT) Pack(builder *flatbuffers.Builder) flatbuffers.UO
 		}
 		outputsOffset = builder.EndVector(outputsLength)
 	}
-	parameterOffset := flatbuffers.UOffsetT(0)
-	if t.Parameter != nil {
-		parameterLength := len(t.Parameter)
-		parameterOffsets := make([]flatbuffers.UOffsetT, parameterLength)
-		for j := 0; j < parameterLength; j++ {
-			parameterOffsets[j] = t.Parameter[j].Pack(builder)
-		}
-		StateCalcSingleStepStartParameterVector(builder, parameterLength)
-		for j := parameterLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(parameterOffsets[j])
-		}
-		parameterOffset = builder.EndVector(parameterLength)
-	}
+	parameterOffset := t.Parameter.Pack(builder)
 	mutexParameterOffset := t.MutexParameter.Pack(builder)
 	StateCalcSingleStepStart(builder)
 	StateCalcSingleStepAddName(builder, nameOffset)
@@ -79,13 +67,7 @@ func (rcv *StateCalcSingleStep) UnPackTo(t *StateCalcSingleStepT) {
 	for j := 0; j < outputsLength; j++ {
 		t.Outputs[j] = rcv.Outputs(j)
 	}
-	parameterLength := rcv.ParameterLength()
-	t.Parameter = make([]*StateCalcStepSingleParamT, parameterLength)
-	for j := 0; j < parameterLength; j++ {
-		x := StateCalcStepSingleParam{}
-		rcv.Parameter(&x, j)
-		t.Parameter[j] = x.UnPack()
-	}
+	t.Parameter = rcv.Parameter(nil).UnPack()
 	t.MutexParameter = rcv.MutexParameter(nil).UnPack()
 }
 
@@ -209,28 +191,21 @@ func (rcv *StateCalcSingleStep) MutateOutputs(j int, n DataID) bool {
 	return false
 }
 
-/// vector of parameters of the calculation step
-func (rcv *StateCalcSingleStep) Parameter(obj *StateCalcStepSingleParam, j int) bool {
+/// parameters of the calculation step
+func (rcv *StateCalcSingleStep) Parameter(obj *StateCalcStepParams) *StateCalcStepParams {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(StateCalcStepParams)
+		}
 		obj.Init(rcv._tab.Bytes, x)
-		return true
+		return obj
 	}
-	return false
+	return nil
 }
 
-func (rcv *StateCalcSingleStep) ParameterLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
-	if o != 0 {
-		return rcv._tab.VectorLen(o)
-	}
-	return 0
-}
-
-/// vector of parameters of the calculation step
+/// parameters of the calculation step
 /// mutex groups of parameters (identified by the names), that are optional and exclude each other
 func (rcv *StateCalcSingleStep) MutexParameter(obj *StateCalcStepMutexParam) *StateCalcStepMutexParam {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
@@ -272,9 +247,6 @@ func StateCalcSingleStepStartOutputsVector(builder *flatbuffers.Builder, numElem
 }
 func StateCalcSingleStepAddParameter(builder *flatbuffers.Builder, parameter flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(parameter), 0)
-}
-func StateCalcSingleStepStartParameterVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
-	return builder.StartVector(4, numElems, 4)
 }
 func StateCalcSingleStepAddMutexParameter(builder *flatbuffers.Builder, mutexParameter flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(mutexParameter), 0)

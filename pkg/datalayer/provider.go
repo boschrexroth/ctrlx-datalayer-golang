@@ -38,8 +38,12 @@ func DeleteProvider(p *Provider) {
 	if p == nil {
 		return
 	}
+	if p.this == nil {
+		return
+	}
 	p.Stop()
 	C.DLR_providerDelete(p.this)
+	p.this = nil
 }
 
 // RegisterType registers a type to the ctrlX Data Layer.

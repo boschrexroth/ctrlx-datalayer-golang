@@ -11,6 +11,7 @@ type SysCfgInternalT struct {
 	Save bool
 	UseIpoIVAJ bool
 	TimeMeasurement bool
+	DriveResetTimeout float64
 }
 
 func (t *SysCfgInternalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -19,6 +20,7 @@ func (t *SysCfgInternalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	SysCfgInternalAddSave(builder, t.Save)
 	SysCfgInternalAddUseIpoIVAJ(builder, t.UseIpoIVAJ)
 	SysCfgInternalAddTimeMeasurement(builder, t.TimeMeasurement)
+	SysCfgInternalAddDriveResetTimeout(builder, t.DriveResetTimeout)
 	return SysCfgInternalEnd(builder)
 }
 
@@ -26,6 +28,7 @@ func (rcv *SysCfgInternal) UnPackTo(t *SysCfgInternalT) {
 	t.Save = rcv.Save()
 	t.UseIpoIVAJ = rcv.UseIpoIVAJ()
 	t.TimeMeasurement = rcv.TimeMeasurement()
+	t.DriveResetTimeout = rcv.DriveResetTimeout()
 }
 
 func (rcv *SysCfgInternal) UnPack() *SysCfgInternalT {
@@ -104,8 +107,22 @@ func (rcv *SysCfgInternal) MutateTimeMeasurement(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+/// Change the timeout for the drive reset
+func (rcv *SysCfgInternal) DriveResetTimeout() float64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+	}
+	return 4.0
+}
+
+/// Change the timeout for the drive reset
+func (rcv *SysCfgInternal) MutateDriveResetTimeout(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(10, n)
+}
+
 func SysCfgInternalStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func SysCfgInternalAddSave(builder *flatbuffers.Builder, save bool) {
 	builder.PrependBoolSlot(0, save, false)
@@ -115,6 +132,9 @@ func SysCfgInternalAddUseIpoIVAJ(builder *flatbuffers.Builder, useIpoIVAJ bool) 
 }
 func SysCfgInternalAddTimeMeasurement(builder *flatbuffers.Builder, timeMeasurement bool) {
 	builder.PrependBoolSlot(2, timeMeasurement, false)
+}
+func SysCfgInternalAddDriveResetTimeout(builder *flatbuffers.Builder, driveResetTimeout float64) {
+	builder.PrependFloat64Slot(3, driveResetTimeout, 4.0)
 }
 func SysCfgInternalEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

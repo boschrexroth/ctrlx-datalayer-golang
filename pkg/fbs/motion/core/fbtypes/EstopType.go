@@ -9,27 +9,31 @@ type EstopType int8
 
 const (
 	/// keep exiting setting of E-Stop type
-	EstopTypeESTOP_PRESERVE    EstopType = -1
+	EstopTypeESTOP_PRESERVE        EstopType = -1
 	/// E-Stop with axis limitations
-	EstopTypeESTOP_AXIS_LIMIT  EstopType = 0
+	EstopTypeESTOP_AXIS_LIMIT      EstopType = 0
 	/// E-Stop with user set limitations
-	EstopTypeESTOP_USER_LIMIT  EstopType = 1
+	EstopTypeESTOP_USER_LIMIT      EstopType = 1
 	/// E-Stop with torque release
-	EstopTypeESTOP_TORQUE_FREE EstopType = 2
+	EstopTypeESTOP_TORQUE_FREE     EstopType = 2
+	///E-Stop with best possible deceleration
+	EstopTypeESTOP_BEST_POSBLE_DEC EstopType = 3
 )
 
 var EnumNamesEstopType = map[EstopType]string{
-	EstopTypeESTOP_PRESERVE:    "ESTOP_PRESERVE",
-	EstopTypeESTOP_AXIS_LIMIT:  "ESTOP_AXIS_LIMIT",
-	EstopTypeESTOP_USER_LIMIT:  "ESTOP_USER_LIMIT",
-	EstopTypeESTOP_TORQUE_FREE: "ESTOP_TORQUE_FREE",
+	EstopTypeESTOP_PRESERVE:        "ESTOP_PRESERVE",
+	EstopTypeESTOP_AXIS_LIMIT:      "ESTOP_AXIS_LIMIT",
+	EstopTypeESTOP_USER_LIMIT:      "ESTOP_USER_LIMIT",
+	EstopTypeESTOP_TORQUE_FREE:     "ESTOP_TORQUE_FREE",
+	EstopTypeESTOP_BEST_POSBLE_DEC: "ESTOP_BEST_POSBLE_DEC",
 }
 
 var EnumValuesEstopType = map[string]EstopType{
-	"ESTOP_PRESERVE":    EstopTypeESTOP_PRESERVE,
-	"ESTOP_AXIS_LIMIT":  EstopTypeESTOP_AXIS_LIMIT,
-	"ESTOP_USER_LIMIT":  EstopTypeESTOP_USER_LIMIT,
-	"ESTOP_TORQUE_FREE": EstopTypeESTOP_TORQUE_FREE,
+	"ESTOP_PRESERVE":        EstopTypeESTOP_PRESERVE,
+	"ESTOP_AXIS_LIMIT":      EstopTypeESTOP_AXIS_LIMIT,
+	"ESTOP_USER_LIMIT":      EstopTypeESTOP_USER_LIMIT,
+	"ESTOP_TORQUE_FREE":     EstopTypeESTOP_TORQUE_FREE,
+	"ESTOP_BEST_POSBLE_DEC": EstopTypeESTOP_BEST_POSBLE_DEC,
 }
 
 func (v EstopType) String() string {

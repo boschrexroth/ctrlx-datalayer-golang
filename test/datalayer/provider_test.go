@@ -34,7 +34,7 @@ import (
 var providerAddress string = ""
 
 func init() {
-	providerAddress = ctrlxProviderAddress()
+	providerAddress = ctrlxAddress()
 }
 
 func TestProviderNode(t *testing.T) {

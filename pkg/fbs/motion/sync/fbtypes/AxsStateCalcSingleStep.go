@@ -12,7 +12,7 @@ type AxsStateCalcSingleStepT struct {
 	Type string
 	Inputs []string
 	Outputs []string
-	Parameter []*AxsStateCalcStepSingleParamT
+	Parameter *AxsStateCalcStepParamsT
 }
 
 func (t *AxsStateCalcSingleStepT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -44,19 +44,7 @@ func (t *AxsStateCalcSingleStepT) Pack(builder *flatbuffers.Builder) flatbuffers
 		}
 		outputsOffset = builder.EndVector(outputsLength)
 	}
-	parameterOffset := flatbuffers.UOffsetT(0)
-	if t.Parameter != nil {
-		parameterLength := len(t.Parameter)
-		parameterOffsets := make([]flatbuffers.UOffsetT, parameterLength)
-		for j := 0; j < parameterLength; j++ {
-			parameterOffsets[j] = t.Parameter[j].Pack(builder)
-		}
-		AxsStateCalcSingleStepStartParameterVector(builder, parameterLength)
-		for j := parameterLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(parameterOffsets[j])
-		}
-		parameterOffset = builder.EndVector(parameterLength)
-	}
+	parameterOffset := t.Parameter.Pack(builder)
 	AxsStateCalcSingleStepStart(builder)
 	AxsStateCalcSingleStepAddStepID(builder, t.StepID)
 	AxsStateCalcSingleStepAddType(builder, typeOffset)
@@ -79,13 +67,7 @@ func (rcv *AxsStateCalcSingleStep) UnPackTo(t *AxsStateCalcSingleStepT) {
 	for j := 0; j < outputsLength; j++ {
 		t.Outputs[j] = string(rcv.Outputs(j))
 	}
-	parameterLength := rcv.ParameterLength()
-	t.Parameter = make([]*AxsStateCalcStepSingleParamT, parameterLength)
-	for j := 0; j < parameterLength; j++ {
-		x := AxsStateCalcStepSingleParam{}
-		rcv.Parameter(&x, j)
-		t.Parameter[j] = x.UnPack()
-	}
+	t.Parameter = rcv.Parameter(nil).UnPack()
 }
 
 func (rcv *AxsStateCalcSingleStep) UnPack() *AxsStateCalcSingleStepT {
@@ -185,27 +167,22 @@ func (rcv *AxsStateCalcSingleStep) OutputsLength() int {
 
 /// current output values
 /// all parameter values of the calculation step
-func (rcv *AxsStateCalcSingleStep) Parameter(obj *AxsStateCalcStepSingleParam, j int) bool {
+///parameter : [AxsStateCalcStepSingleParam];
+func (rcv *AxsStateCalcSingleStep) Parameter(obj *AxsStateCalcStepParams) *AxsStateCalcStepParams {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsStateCalcStepParams)
+		}
 		obj.Init(rcv._tab.Bytes, x)
-		return true
+		return obj
 	}
-	return false
-}
-
-func (rcv *AxsStateCalcSingleStep) ParameterLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
-	if o != 0 {
-		return rcv._tab.VectorLen(o)
-	}
-	return 0
+	return nil
 }
 
 /// all parameter values of the calculation step
+///parameter : [AxsStateCalcStepSingleParam];
 func AxsStateCalcSingleStepStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }
@@ -229,9 +206,6 @@ func AxsStateCalcSingleStepStartOutputsVector(builder *flatbuffers.Builder, numE
 }
 func AxsStateCalcSingleStepAddParameter(builder *flatbuffers.Builder, parameter flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(parameter), 0)
-}
-func AxsStateCalcSingleStepStartParameterVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
-	return builder.StartVector(4, numElems, 4)
 }
 func AxsStateCalcSingleStepEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

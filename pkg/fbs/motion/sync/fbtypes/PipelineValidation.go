@@ -6,31 +6,39 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// single result of the validation of a calculation pipeline
+/// validation of a calculation pipeline
 type PipelineValidationT struct {
-	MainDiag uint32
-	DetailDiag uint32
-	Uri string
-	AddInfo string
+	Validations []*SinglePipelineValidationT
 }
 
 func (t *PipelineValidationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	uriOffset := builder.CreateString(t.Uri)
-	addInfoOffset := builder.CreateString(t.AddInfo)
+	validationsOffset := flatbuffers.UOffsetT(0)
+	if t.Validations != nil {
+		validationsLength := len(t.Validations)
+		validationsOffsets := make([]flatbuffers.UOffsetT, validationsLength)
+		for j := 0; j < validationsLength; j++ {
+			validationsOffsets[j] = t.Validations[j].Pack(builder)
+		}
+		PipelineValidationStartValidationsVector(builder, validationsLength)
+		for j := validationsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(validationsOffsets[j])
+		}
+		validationsOffset = builder.EndVector(validationsLength)
+	}
 	PipelineValidationStart(builder)
-	PipelineValidationAddMainDiag(builder, t.MainDiag)
-	PipelineValidationAddDetailDiag(builder, t.DetailDiag)
-	PipelineValidationAddUri(builder, uriOffset)
-	PipelineValidationAddAddInfo(builder, addInfoOffset)
+	PipelineValidationAddValidations(builder, validationsOffset)
 	return PipelineValidationEnd(builder)
 }
 
 func (rcv *PipelineValidation) UnPackTo(t *PipelineValidationT) {
-	t.MainDiag = rcv.MainDiag()
-	t.DetailDiag = rcv.DetailDiag()
-	t.Uri = string(rcv.Uri())
-	t.AddInfo = string(rcv.AddInfo())
+	validationsLength := rcv.ValidationsLength()
+	t.Validations = make([]*SinglePipelineValidationT, validationsLength)
+	for j := 0; j < validationsLength; j++ {
+		x := SinglePipelineValidation{}
+		rcv.Validations(&x, j)
+		t.Validations[j] = x.UnPack()
+	}
 }
 
 func (rcv *PipelineValidation) UnPack() *PipelineValidationT {
@@ -67,68 +75,36 @@ func (rcv *PipelineValidation) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// main diagnosis code
-func (rcv *PipelineValidation) MainDiag() uint32 {
+/// vector of single result validations (multiple errors can occur)
+func (rcv *PipelineValidation) Validations(obj *SinglePipelineValidation, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *PipelineValidation) ValidationsLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
 	}
 	return 0
 }
 
-/// main diagnosis code
-func (rcv *PipelineValidation) MutateMainDiag(n uint32) bool {
-	return rcv._tab.MutateUint32Slot(4, n)
-}
-
-/// detail diagnosis code
-func (rcv *PipelineValidation) DetailDiag() uint32 {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
-	if o != 0 {
-		return rcv._tab.GetUint32(o + rcv._tab.Pos)
-	}
-	return 0
-}
-
-/// detail diagnosis code
-func (rcv *PipelineValidation) MutateDetailDiag(n uint32) bool {
-	return rcv._tab.MutateUint32Slot(6, n)
-}
-
-/// URI of the faulty instance
-func (rcv *PipelineValidation) Uri() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
-}
-
-/// URI of the faulty instance
-/// additional infomation
-func (rcv *PipelineValidation) AddInfo() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
-}
-
-/// additional infomation
+/// vector of single result validations (multiple errors can occur)
 func PipelineValidationStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(1)
 }
-func PipelineValidationAddMainDiag(builder *flatbuffers.Builder, mainDiag uint32) {
-	builder.PrependUint32Slot(0, mainDiag, 0)
+func PipelineValidationAddValidations(builder *flatbuffers.Builder, validations flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(validations), 0)
 }
-func PipelineValidationAddDetailDiag(builder *flatbuffers.Builder, detailDiag uint32) {
-	builder.PrependUint32Slot(1, detailDiag, 0)
-}
-func PipelineValidationAddUri(builder *flatbuffers.Builder, uri flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(uri), 0)
-}
-func PipelineValidationAddAddInfo(builder *flatbuffers.Builder, addInfo flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(addInfo), 0)
+func PipelineValidationStartValidationsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func PipelineValidationEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

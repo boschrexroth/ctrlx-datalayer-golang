@@ -10,14 +10,19 @@ type ServerSettingsT struct {
 	ServerIdlePingTimeout uint32
 	ServerWaitResponseTimeout uint32
 	ServerMaxMessageSize uint32
+	DebugAddress string
+	ServerMaxRtSize uint32
 }
 
 func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
+	debugAddressOffset := builder.CreateString(t.DebugAddress)
 	ServerSettingsStart(builder)
 	ServerSettingsAddServerIdlePingTimeout(builder, t.ServerIdlePingTimeout)
 	ServerSettingsAddServerWaitResponseTimeout(builder, t.ServerWaitResponseTimeout)
 	ServerSettingsAddServerMaxMessageSize(builder, t.ServerMaxMessageSize)
+	ServerSettingsAddDebugAddress(builder, debugAddressOffset)
+	ServerSettingsAddServerMaxRtSize(builder, t.ServerMaxRtSize)
 	return ServerSettingsEnd(builder)
 }
 
@@ -25,6 +30,8 @@ func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
 	t.ServerIdlePingTimeout = rcv.ServerIdlePingTimeout()
 	t.ServerWaitResponseTimeout = rcv.ServerWaitResponseTimeout()
 	t.ServerMaxMessageSize = rcv.ServerMaxMessageSize()
+	t.DebugAddress = string(rcv.DebugAddress())
+	t.ServerMaxRtSize = rcv.ServerMaxRtSize()
 }
 
 func (rcv *ServerSettings) UnPack() *ServerSettingsT {
@@ -97,8 +104,28 @@ func (rcv *ServerSettings) MutateServerMaxMessageSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+func (rcv *ServerSettings) DebugAddress() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 1048576
+}
+
+func (rcv *ServerSettings) MutateServerMaxRtSize(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(12, n)
+}
+
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(5)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
@@ -108,6 +135,12 @@ func ServerSettingsAddServerWaitResponseTimeout(builder *flatbuffers.Builder, se
 }
 func ServerSettingsAddServerMaxMessageSize(builder *flatbuffers.Builder, serverMaxMessageSize uint32) {
 	builder.PrependUint32Slot(2, serverMaxMessageSize, 52428800)
+}
+func ServerSettingsAddDebugAddress(builder *flatbuffers.Builder, debugAddress flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(debugAddress), 0)
+}
+func ServerSettingsAddServerMaxRtSize(builder *flatbuffers.Builder, serverMaxRtSize uint32) {
+	builder.PrependUint32Slot(4, serverMaxRtSize, 1048576)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

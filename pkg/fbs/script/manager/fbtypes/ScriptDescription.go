@@ -12,6 +12,7 @@ type ScriptDescriptionT struct {
 	Executable string
 	FileEnding []string
 	License string
+	LicenseVersion string
 }
 
 func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -33,12 +34,14 @@ func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		fileEndingOffset = builder.EndVector(fileEndingLength)
 	}
 	licenseOffset := builder.CreateString(t.License)
+	licenseVersionOffset := builder.CreateString(t.LicenseVersion)
 	ScriptDescriptionStart(builder)
 	ScriptDescriptionAddLanguage(builder, languageOffset)
 	ScriptDescriptionAddVersion(builder, versionOffset)
 	ScriptDescriptionAddExecutable(builder, executableOffset)
 	ScriptDescriptionAddFileEnding(builder, fileEndingOffset)
 	ScriptDescriptionAddLicense(builder, licenseOffset)
+	ScriptDescriptionAddLicenseVersion(builder, licenseVersionOffset)
 	return ScriptDescriptionEnd(builder)
 }
 
@@ -52,6 +55,7 @@ func (rcv *ScriptDescription) UnPackTo(t *ScriptDescriptionT) {
 		t.FileEnding[j] = string(rcv.FileEnding(j))
 	}
 	t.License = string(rcv.License())
+	t.LicenseVersion = string(rcv.LicenseVersion())
 }
 
 func (rcv *ScriptDescription) UnPack() *ScriptDescriptionT {
@@ -137,8 +141,16 @@ func (rcv *ScriptDescription) License() []byte {
 	return nil
 }
 
+func (rcv *ScriptDescription) LicenseVersion() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func ScriptDescriptionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func ScriptDescriptionAddLanguage(builder *flatbuffers.Builder, language flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(language), 0)
@@ -157,6 +169,9 @@ func ScriptDescriptionStartFileEndingVector(builder *flatbuffers.Builder, numEle
 }
 func ScriptDescriptionAddLicense(builder *flatbuffers.Builder, license flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(license), 0)
+}
+func ScriptDescriptionAddLicenseVersion(builder *flatbuffers.Builder, licenseVersion flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(licenseVersion), 0)
 }
 func ScriptDescriptionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

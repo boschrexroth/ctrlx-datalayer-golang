@@ -159,7 +159,7 @@ func (rcv *KinCoordTransform) MutateOutPos(j int, n float64) bool {
 	return false
 }
 
-/// coordinate system of the output coordinate (default is "ACS")s
+/// coordinate system of the output coordinate (default is "ACS")
 func (rcv *KinCoordTransform) OutCoordSys() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -168,7 +168,7 @@ func (rcv *KinCoordTransform) OutCoordSys() []byte {
 	return nil
 }
 
-/// coordinate system of the output coordinate (default is "ACS")s
+/// coordinate system of the output coordinate (default is "ACS")
 func KinCoordTransformStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

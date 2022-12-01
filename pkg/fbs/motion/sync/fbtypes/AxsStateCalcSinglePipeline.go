@@ -10,45 +10,24 @@ import (
 type AxsStateCalcSinglePipelineT struct {
 	Name string
 	State PipelineState
-	Validation []*PipelineValidationT
+	Validation *PipelineValidationT
 	IsBuiltIn bool
-	Steps []*AxsStateCalcSingleStepT
+	DryRunResult string
+	Steps *AxsStateCalcStepsT
 }
 
 func (t *AxsStateCalcSinglePipelineT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	nameOffset := builder.CreateString(t.Name)
-	validationOffset := flatbuffers.UOffsetT(0)
-	if t.Validation != nil {
-		validationLength := len(t.Validation)
-		validationOffsets := make([]flatbuffers.UOffsetT, validationLength)
-		for j := 0; j < validationLength; j++ {
-			validationOffsets[j] = t.Validation[j].Pack(builder)
-		}
-		AxsStateCalcSinglePipelineStartValidationVector(builder, validationLength)
-		for j := validationLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(validationOffsets[j])
-		}
-		validationOffset = builder.EndVector(validationLength)
-	}
-	stepsOffset := flatbuffers.UOffsetT(0)
-	if t.Steps != nil {
-		stepsLength := len(t.Steps)
-		stepsOffsets := make([]flatbuffers.UOffsetT, stepsLength)
-		for j := 0; j < stepsLength; j++ {
-			stepsOffsets[j] = t.Steps[j].Pack(builder)
-		}
-		AxsStateCalcSinglePipelineStartStepsVector(builder, stepsLength)
-		for j := stepsLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(stepsOffsets[j])
-		}
-		stepsOffset = builder.EndVector(stepsLength)
-	}
+	validationOffset := t.Validation.Pack(builder)
+	dryRunResultOffset := builder.CreateString(t.DryRunResult)
+	stepsOffset := t.Steps.Pack(builder)
 	AxsStateCalcSinglePipelineStart(builder)
 	AxsStateCalcSinglePipelineAddName(builder, nameOffset)
 	AxsStateCalcSinglePipelineAddState(builder, t.State)
 	AxsStateCalcSinglePipelineAddValidation(builder, validationOffset)
 	AxsStateCalcSinglePipelineAddIsBuiltIn(builder, t.IsBuiltIn)
+	AxsStateCalcSinglePipelineAddDryRunResult(builder, dryRunResultOffset)
 	AxsStateCalcSinglePipelineAddSteps(builder, stepsOffset)
 	return AxsStateCalcSinglePipelineEnd(builder)
 }
@@ -56,21 +35,10 @@ func (t *AxsStateCalcSinglePipelineT) Pack(builder *flatbuffers.Builder) flatbuf
 func (rcv *AxsStateCalcSinglePipeline) UnPackTo(t *AxsStateCalcSinglePipelineT) {
 	t.Name = string(rcv.Name())
 	t.State = rcv.State()
-	validationLength := rcv.ValidationLength()
-	t.Validation = make([]*PipelineValidationT, validationLength)
-	for j := 0; j < validationLength; j++ {
-		x := PipelineValidation{}
-		rcv.Validation(&x, j)
-		t.Validation[j] = x.UnPack()
-	}
+	t.Validation = rcv.Validation(nil).UnPack()
 	t.IsBuiltIn = rcv.IsBuiltIn()
-	stepsLength := rcv.StepsLength()
-	t.Steps = make([]*AxsStateCalcSingleStepT, stepsLength)
-	for j := 0; j < stepsLength; j++ {
-		x := AxsStateCalcSingleStep{}
-		rcv.Steps(&x, j)
-		t.Steps[j] = x.UnPack()
-	}
+	t.DryRunResult = string(rcv.DryRunResult())
+	t.Steps = rcv.Steps(nil).UnPack()
 }
 
 func (rcv *AxsStateCalcSinglePipeline) UnPack() *AxsStateCalcSinglePipelineT {
@@ -132,24 +100,17 @@ func (rcv *AxsStateCalcSinglePipeline) MutateState(n PipelineState) bool {
 }
 
 /// validation on the calculation pipeline (multiple errors can occur)
-func (rcv *AxsStateCalcSinglePipeline) Validation(obj *PipelineValidation, j int) bool {
+func (rcv *AxsStateCalcSinglePipeline) Validation(obj *PipelineValidation) *PipelineValidation {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(PipelineValidation)
+		}
 		obj.Init(rcv._tab.Bytes, x)
-		return true
+		return obj
 	}
-	return false
-}
-
-func (rcv *AxsStateCalcSinglePipeline) ValidationLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
-	if o != 0 {
-		return rcv._tab.VectorLen(o)
-	}
-	return 0
+	return nil
 }
 
 /// validation on the calculation pipeline (multiple errors can occur)
@@ -167,30 +128,33 @@ func (rcv *AxsStateCalcSinglePipeline) MutateIsBuiltIn(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
-/// all calculation steps of the calculation pipeline
-func (rcv *AxsStateCalcSinglePipeline) Steps(obj *AxsStateCalcSingleStep, j int) bool {
+/// result obtained after running calculation pipeline
+func (rcv *AxsStateCalcSinglePipeline) DryRunResult() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
-		obj.Init(rcv._tab.Bytes, x)
-		return true
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return false
+	return nil
 }
 
-func (rcv *AxsStateCalcSinglePipeline) StepsLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+/// result obtained after running calculation pipeline
+/// all calculation steps of the calculation pipeline
+func (rcv *AxsStateCalcSinglePipeline) Steps(obj *AxsStateCalcSteps) *AxsStateCalcSteps {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
-		return rcv._tab.VectorLen(o)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsStateCalcSteps)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
 /// all calculation steps of the calculation pipeline
 func AxsStateCalcSinglePipelineStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func AxsStateCalcSinglePipelineAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -201,17 +165,14 @@ func AxsStateCalcSinglePipelineAddState(builder *flatbuffers.Builder, state Pipe
 func AxsStateCalcSinglePipelineAddValidation(builder *flatbuffers.Builder, validation flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(validation), 0)
 }
-func AxsStateCalcSinglePipelineStartValidationVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
-	return builder.StartVector(4, numElems, 4)
-}
 func AxsStateCalcSinglePipelineAddIsBuiltIn(builder *flatbuffers.Builder, isBuiltIn bool) {
 	builder.PrependBoolSlot(3, isBuiltIn, false)
 }
-func AxsStateCalcSinglePipelineAddSteps(builder *flatbuffers.Builder, steps flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(steps), 0)
+func AxsStateCalcSinglePipelineAddDryRunResult(builder *flatbuffers.Builder, dryRunResult flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(dryRunResult), 0)
 }
-func AxsStateCalcSinglePipelineStartStepsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
-	return builder.StartVector(4, numElems, 4)
+func AxsStateCalcSinglePipelineAddSteps(builder *flatbuffers.Builder, steps flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(steps), 0)
 }
 func AxsStateCalcSinglePipelineEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
