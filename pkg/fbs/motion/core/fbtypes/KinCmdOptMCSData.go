@@ -6,7 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// parameters for the command option MCS (machine coordinate system a.k.a. axis transformation) for kinematics
+/// parameters for the command option MCS (machine coordinate system a.k.a. joint transformation) for kinematics
 type KinCmdOptMCSDataT struct {
 	PermType string
 	SetName string
@@ -71,7 +71,7 @@ func (rcv *KinCmdOptMCSData) PermType() []byte {
 }
 
 /// permanent type (e.g. "PermOn")
-/// name of the axis transformation set that should become active
+/// name of the joint transformation set that should become active
 func (rcv *KinCmdOptMCSData) SetName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -80,7 +80,7 @@ func (rcv *KinCmdOptMCSData) SetName() []byte {
 	return nil
 }
 
-/// name of the axis transformation set that should become active
+/// name of the joint transformation set that should become active
 func KinCmdOptMCSDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

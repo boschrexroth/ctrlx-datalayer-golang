@@ -90,6 +90,7 @@ func DeleteVariant(v *Variant) {
 		return
 	}
 	C.DLR_variantDelete(v.this)
+	v.this = nil
 }
 
 // GetType returns the type of the variant instance.

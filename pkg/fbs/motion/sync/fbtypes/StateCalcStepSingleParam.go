@@ -12,6 +12,7 @@ type StateCalcStepSingleParamT struct {
 	Description string
 	Mandatory bool
 	Type ParameterType
+	Unit UnitValueType
 }
 
 func (t *StateCalcStepSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -23,6 +24,7 @@ func (t *StateCalcStepSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffe
 	StateCalcStepSingleParamAddDescription(builder, descriptionOffset)
 	StateCalcStepSingleParamAddMandatory(builder, t.Mandatory)
 	StateCalcStepSingleParamAddType(builder, t.Type)
+	StateCalcStepSingleParamAddUnit(builder, t.Unit)
 	return StateCalcStepSingleParamEnd(builder)
 }
 
@@ -31,6 +33,7 @@ func (rcv *StateCalcStepSingleParam) UnPackTo(t *StateCalcStepSingleParamT) {
 	t.Description = string(rcv.Description())
 	t.Mandatory = rcv.Mandatory()
 	t.Type = rcv.Type()
+	t.Unit = rcv.Unit()
 }
 
 func (rcv *StateCalcStepSingleParam) UnPack() *StateCalcStepSingleParamT {
@@ -115,8 +118,22 @@ func (rcv *StateCalcStepSingleParam) MutateType(n ParameterType) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
+/// unit value of the parameter
+func (rcv *StateCalcStepSingleParam) Unit() UnitValueType {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return UnitValueType(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+/// unit value of the parameter
+func (rcv *StateCalcStepSingleParam) MutateUnit(n UnitValueType) bool {
+	return rcv._tab.MutateInt8Slot(12, int8(n))
+}
+
 func StateCalcStepSingleParamStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func StateCalcStepSingleParamAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -129,6 +146,9 @@ func StateCalcStepSingleParamAddMandatory(builder *flatbuffers.Builder, mandator
 }
 func StateCalcStepSingleParamAddType(builder *flatbuffers.Builder, type_ ParameterType) {
 	builder.PrependInt8Slot(3, int8(type_), 0)
+}
+func StateCalcStepSingleParamAddUnit(builder *flatbuffers.Builder, unit UnitValueType) {
+	builder.PrependInt8Slot(4, int8(unit), 0)
 }
 func StateCalcStepSingleParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

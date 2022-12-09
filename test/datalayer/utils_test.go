@@ -34,44 +34,64 @@ import (
 )
 
 type globalEnv struct {
-	addr    string
-	timeout string
+	addr             string
+	sslport          string
+	timeout          string
+	alldata_provider string
 }
 
 var globalEnvValue globalEnv
 
 func init() {
 	globalEnvValue.addr = os.Getenv("CTRLX_ADDRESS")
+	globalEnvValue.sslport = os.Getenv("CTRLX_SSL_PORT")
 	globalEnvValue.timeout = os.Getenv("CTRLX_TIMEOUT")
+	globalEnvValue.alldata_provider = os.Getenv("ALLDATA_PROVIDER")
 }
 
 func resetGlobalEnvs() {
 	//prevents side effects on other tests
 	os.Setenv("CTRLX_ADDRESS", globalEnvValue.addr)
+	os.Setenv("CTRLX_SSL_PORT", globalEnvValue.sslport)
 	os.Setenv("CTRLX_TIMEOUT", globalEnvValue.timeout)
+	os.Setenv("ALLDATA_PROVIDER", globalEnvValue.alldata_provider)
 }
 
+// ctrlxAddress - returns the TCP url to connect to the Data Layer of a ctrlX.
+// Cannot be used in snap environment!
+// There is no need to provide client/provider port (2069/2070) because the
+// datalayer component uses automatically the according port number.
 func ctrlxAddress() string {
-	env := os.Getenv("CTRLX_ADDRESS")
-	if env == "" {
+	addr := os.Getenv("CTRLX_ADDRESS")
+	if addr == "" || addr == "-" {
 		return ""
 	}
-	if env == "-" {
-		return ""
+	url := fmt.Sprintf("tcp://boschrexroth:boschrexroth@%s", addr)
+
+	sslport := os.Getenv("CTRLX_SSL_PORT")
+	if sslport == "" || sslport == "-" {
+		return url
 	}
-	return fmt.Sprintf("tcp://boschrexroth:boschrexroth@%s:2069", env)
+
+	return url + "?sslport=" + sslport
 }
 
 func ctrlxClientTimeout() uint {
 	env := os.Getenv("CTRLX_TIMEOUT")
-	if env == "" {
+	if env == "" || env == "-" {
 		return 2000
 	}
-	if env == "-" {
-		return 2000
-	}
+
 	t, _ := strconv.ParseUint(env, 10, 32)
 	return uint(t)
+}
+
+func allDataProvider() string {
+	env := os.Getenv("ALLDATA_PROVIDER")
+	if env == "" || env == "-" {
+		return ""
+	}
+	return env
 }
 
 func asyncTestTimeout() time.Duration {
@@ -84,17 +104,6 @@ func asyncTestTimeout() time.Duration {
 	return time.Duration(t) * time.Second
 }
 
-func ctrlxProviderAddress() string {
-	env := os.Getenv("CTRLX_ADDRESS")
-	if env == "" {
-		return ""
-	}
-	if env == "-" {
-		return ""
-	}
-	return fmt.Sprintf("tcp://boschrexroth:boschrexroth@%s:2070", env)
-}
-
 func TestClientAddressNoTests(t *testing.T) {
 	os.Setenv("CTRLX_ADDRESS", "-")
 	e := ctrlxAddress()
@@ -105,14 +114,15 @@ func TestClientAddressNoTests(t *testing.T) {
 func TestClientAddressSetEnv(t *testing.T) {
 	os.Setenv("CTRLX_ADDRESS", "10.0.2.2")
 	e := ctrlxAddress()
-	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2:2069")
+	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2")
 	resetGlobalEnvs()
 }
 
-func TestProviderAddressSetEnv(t *testing.T) {
+func TestClientAddressSetEnv2(t *testing.T) {
 	os.Setenv("CTRLX_ADDRESS", "10.0.2.2")
-	e := ctrlxProviderAddress()
-	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2:2070")
+	os.Setenv("CTRLX_SSL_PORT", "8443")
+	e := ctrlxAddress()
+	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2?sslport=8443")
 	resetGlobalEnvs()
 }
 

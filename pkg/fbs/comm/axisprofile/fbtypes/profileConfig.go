@@ -14,6 +14,7 @@ type profileConfigT struct {
 	InputMapping *valueMappingT
 	OutputMapping *valueMappingT
 	ScalingInfo *profileScalingCfgT
+	DeviceName string
 }
 
 func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,6 +25,7 @@ func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 	inputMappingOffset := t.InputMapping.Pack(builder)
 	outputMappingOffset := t.OutputMapping.Pack(builder)
 	scalingInfoOffset := t.ScalingInfo.Pack(builder)
+	deviceNameOffset := builder.CreateString(t.DeviceName)
 	profileConfigStart(builder)
 	profileConfigAddDeviceAddress(builder, t.DeviceAddress)
 	profileConfigAddInputBuffer(builder, inputBufferOffset)
@@ -32,6 +34,7 @@ func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 	profileConfigAddInputMapping(builder, inputMappingOffset)
 	profileConfigAddOutputMapping(builder, outputMappingOffset)
 	profileConfigAddScalingInfo(builder, scalingInfoOffset)
+	profileConfigAddDeviceName(builder, deviceNameOffset)
 	return profileConfigEnd(builder)
 }
 
@@ -43,6 +46,7 @@ func (rcv *profileConfig) UnPackTo(t *profileConfigT) {
 	t.InputMapping = rcv.InputMapping(nil).UnPack()
 	t.OutputMapping = rcv.OutputMapping(nil).UnPack()
 	t.ScalingInfo = rcv.ScalingInfo(nil).UnPack()
+	t.DeviceName = string(rcv.DeviceName())
 }
 
 func (rcv *profileConfig) UnPack() *profileConfigT {
@@ -159,8 +163,16 @@ func (rcv *profileConfig) ScalingInfo(obj *profileScalingCfg) *profileScalingCfg
 	return nil
 }
 
+func (rcv *profileConfig) DeviceName() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func profileConfigStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func profileConfigAddDeviceAddress(builder *flatbuffers.Builder, deviceAddress uint32) {
 	builder.PrependUint32Slot(0, deviceAddress, 0)
@@ -182,6 +194,9 @@ func profileConfigAddOutputMapping(builder *flatbuffers.Builder, outputMapping f
 }
 func profileConfigAddScalingInfo(builder *flatbuffers.Builder, scalingInfo flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(scalingInfo), 0)
+}
+func profileConfigAddDeviceName(builder *flatbuffers.Builder, deviceName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(deviceName), 0)
 }
 func profileConfigEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

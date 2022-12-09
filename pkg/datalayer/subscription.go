@@ -71,12 +71,18 @@ func (s *Subscription) Subscribe(addresses ...string) Result {
 	length := C.size_t(len(addresses))
 	cAddresses := (**C.char)(C.malloc(length * size))
 	cAddressView := (*[1 << 30]*C.char)(unsafe.Pointer(cAddresses))[0:len(addresses):len(addresses)]
-	defer func() {
-		C.free(unsafe.Pointer(cId))
-	}()
 	for i, address := range addresses {
 		cAddressView[i] = C.CString(address)
 	}
+
+	defer func() {
+		C.free(unsafe.Pointer(cId))
+		for i, _ := range addresses {
+			C.free(unsafe.Pointer(cAddressView[i]))
+		}
+		C.free(unsafe.Pointer(cAddresses))
+	}()
+
 	result := C.DLR_clientSubscribeMultiSync(s.client, cId, cAddresses, C.uint(len(addresses)))
 	if result == 0 {
 		s.mx.Lock()
@@ -97,12 +103,18 @@ func (s *Subscription) Unsubscribe(addresses ...string) Result {
 	length := C.size_t(len(addresses))
 	cAddresses := (**C.char)(C.malloc(length * size))
 	cAddressView := (*[1 << 30]*C.char)(unsafe.Pointer(cAddresses))[0:len(addresses):len(addresses)]
-	defer func() {
-		C.free(unsafe.Pointer(cId))
-	}()
 	for i, address := range addresses {
 		cAddressView[i] = C.CString(address)
 	}
+
+	defer func() {
+		C.free(unsafe.Pointer(cId))
+		for i, _ := range addresses {
+			C.free(unsafe.Pointer(cAddressView[i]))
+		}
+		C.free(unsafe.Pointer(cAddresses))
+	}()
+
 	result := C.DLR_clientUnsubscribeMultiSync(s.client, cId, cAddresses, C.uint(len(addresses)))
 	if result == 0 {
 		s.mx.Lock()

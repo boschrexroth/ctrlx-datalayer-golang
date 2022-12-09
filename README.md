@@ -1,9 +1,30 @@
 # ctrlX Data Layer client and provider library for golang
 
-This project provides ctrlX Data Layer access via Golang.
-It wraps the original ctrlX Data Layer written in C++.
+This project provides:
+  
+1. ctrlX Data Layer access via Golang
 
-Documentation and examples you can find here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/) and [GoDoc ](https://pkg.go.dev/github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer).
+    It wraps the original ctrlX Data Layer written in C++.
+
+    You can find documentation and examples here [ctrlX Software Development Kit](https://boschrexroth.github.io/ctrlx-automation-sdk/) and [GoDoc](https://pkg.go.dev/github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer).
+
+2. Server-Sent Events(SSE) Client
+
+    Server-Sent Events is HTTP/HTTP2 common standard, the SSE server pushes the update to the client, the client receives automatic updates via HTTP connection. 
+
+    ctrlX Data Layer provides a SSE Server, which makes the data on the Data Layer accessible to the web application.  
+
+    The SSE client library can be used to connect to the SSE Server of the ctrlX Data Layer running on the ctrlX Device. It is possible to subscribe to nodes on the server and the server will automatically send new updates on value changes.
+
+    You can find documentation here [GoDoc](https://pkg.go.dev/github.com/boschrexroth/ctrlx-datalayer-golang/pkg/sseclient)
+
+3. Token handling
+
+    JSON Web Token is used for authentification in ctrlX Core. 
+
+    The token library can be used to get token from ctrlX Core and later on check if the token is still valid. 
+
+    You can find documentation here [GoDoc](https://pkg.go.dev/github.com/boschrexroth/ctrlx-datalayer-golang/pkg/token)
 
 ## Status
 
@@ -23,8 +44,8 @@ sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.16.0/ctrlx-datalayer-1.8.6.deb
-sudo dpkg -i ctrlx-datalayer-1.8.6.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.18.0/ctrlx-datalayer-1.9.1.deb
+sudo dpkg -i ctrlx-datalayer-1.9.1.deb
 ```
 
 ### Integrate in you project

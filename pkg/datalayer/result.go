@@ -25,14 +25,16 @@ package datalayer
 //#include <stdbool.h>
 //#include <stdlib.h>
 //#include <system.h>
+//#include <variant.h>
 import "C"
 
 // Result ulong
 type Result C.DLR_RESULT
 
 const (
-	ResultOk     Result = C.DL_OK     //  FUNCTION CALL SUCCEEDED
-	ResultFailed Result = C.DL_FAILED //  ONLY ALLOWED FOR TEMPORARY USE - DEFINE MATCHING ERROR CODE
+	ResultOk          Result = C.DL_OK            //  FUNCTION CALL SUCCEEDED
+	ResultOkNoContent Result = C.DL_OK_NO_CONTENT //  FUNCTION CALL SUCCEEDED WITH NO CONTENT
+	ResultFailed      Result = C.DL_FAILED        //  ONLY ALLOWED FOR TEMPORARY USE - DEFINE MATCHING ERROR CODE
 
 	ResultInvalidAddress       Result = C.DL_INVALID_ADDRESS        //  ADDRESS NOT FOUND, ADDRESS INVALID (BROWSE OF THIS NODE NOT POSSIBLE, WRITE -> ADDRESS NOT VALID)
 	ResultUnsupported          Result = C.DL_UNSUPPORTED            //  FUNCTION NOT IMPLEMENTED
@@ -54,6 +56,12 @@ const (
 	ResultDeprecated           Result = C.DL_DEPRECATED             //  DEPRECATED - FUNCTION NOT LONGER SUPPORTED
 	ResultPermissionDenied     Result = C.DL_PERMISSION_DENIED      //  REQUEST DECLINED DUE TO MISSING PERMISSION RIGHTS
 	ResultNotInitialized       Result = C.DL_NOT_INITIALIZED        //  OBJECT NOT INITIALIZED YET
+	ResultMissingArgument      Result = C.DL_MISSING_ARGUMENT       //  MISSING ARGUMENT (EG. MISSING ARGUMENT IN fbs)
+	ResultTooManyArguments     Result = C.DL_TOO_MANY_ARGUMENTS     //  TO MANY ARGUMENT
+	ResultResourceUnavailable  Result = C.DL_RESOURCE_UNAVAILABLE   //  RESOURCE UNAVAILABLE
+	ResultCommunicationError   Result = C.DL_COMMUNICATION_ERROR    //  LOW LEVEL COMMUNICATION ERROR OCCURRED
+	ResultTooManyOperations    Result = C.DL_TOO_MANY_OPERATIONS    //  REQUEST CAN'T BE HANDLED DUE TO TOO MANY OPERATIONS
+	ResultWouldBlock           Result = C.DL_WOULD_BLOCK            //  REQUEST WOULD BLOCK, YOU HAVE CALLED A SYNCHRONOUS FUNCTION IN A CALLBACK FROM A ASYNCHRONOUS FUNCTION
 
 	ResultCommProtocolError Result = C.DL_COMM_PROTOCOL_ERROR //  INTERNAL PROTOCOL ERROR
 	ResultCommInvalidHeader Result = C.DL_COMM_INVALID_HEADER //  INTERNAL HEADER MISMATCH
@@ -73,6 +81,7 @@ const (
 	ResultSecInvalidsession      Result = C.DL_SEC_INVALIDSESSION      //  TOKEN NOT VALID (SESSION NOT FOUND)
 	ResultSecInvalidtokencontent Result = C.DL_SEC_INVALIDTOKENCONTENT //  TOKEN HAS WRONG CONTENT
 	ResultSecUnauthorized        Result = C.DL_SEC_UNAUTHORIZED        //  UNAUTHORIZED
+	ResultPaymentRequired        Result = C.DL_SEC_PAYMENT_REQUIRED    //  PAYMENT REQUIRED
 )
 
 func (r Result) String() string {
@@ -151,6 +160,22 @@ func (r Result) String() string {
 		return "DL_SEC_INVALIDTOKENCONTENT"
 	case ResultSecUnauthorized:
 		return "DL_SEC_UNAUTHORIZED"
+	case ResultOkNoContent:
+		return "DL_OK_NO_CONTENT"
+	case ResultMissingArgument:
+		return "DL_MISSING_ARGUMENT"
+	case ResultTooManyArguments:
+		return "DL_TOO_MANY_ARGUMENTS"
+	case ResultResourceUnavailable:
+		return "DL_RESOURCE_UNAVAILABLE"
+	case ResultCommunicationError:
+		return "DL_COMMUNICATION_ERROR"
+	case ResultTooManyOperations:
+		return "DL_TOO_MANY_OPERATIONS"
+	case ResultWouldBlock:
+		return "DL_WOULD_BLOCK"
+	case ResultPaymentRequired:
+		return "DL_SEC_PAYMENT_REQUIRED"
 	}
 	return "Result_Unknown"
 }

@@ -51,8 +51,12 @@ func DeleteSystem(d *System) {
 	if d == nil {
 		return
 	}
+	if d.this == nil {
+		return
+	}
 	d.Stop(true)
 	C.DLR_systemDelete(d.this)
+	d.this = nil
 }
 
 // Start runs a ctrlX Data Layer system.

@@ -9,11 +9,13 @@ import (
 type FrameStatisticResetRequestT struct {
 	NumTxFrames bool
 	NumRxFrames bool
-	NumLostFrames bool
 	NumCyclicFrames bool
 	NumCyclicDatagrams bool
 	NumAcyclicFrames bool
 	NumAcyclicDatagrams bool
+	NumLostFrames bool
+	NumLostCyclicFrames bool
+	NumLostAcyclicFrames bool
 }
 
 func (t *FrameStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -21,22 +23,26 @@ func (t *FrameStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuf
 	FrameStatisticResetRequestStart(builder)
 	FrameStatisticResetRequestAddNumTxFrames(builder, t.NumTxFrames)
 	FrameStatisticResetRequestAddNumRxFrames(builder, t.NumRxFrames)
-	FrameStatisticResetRequestAddNumLostFrames(builder, t.NumLostFrames)
 	FrameStatisticResetRequestAddNumCyclicFrames(builder, t.NumCyclicFrames)
 	FrameStatisticResetRequestAddNumCyclicDatagrams(builder, t.NumCyclicDatagrams)
 	FrameStatisticResetRequestAddNumAcyclicFrames(builder, t.NumAcyclicFrames)
 	FrameStatisticResetRequestAddNumAcyclicDatagrams(builder, t.NumAcyclicDatagrams)
+	FrameStatisticResetRequestAddNumLostFrames(builder, t.NumLostFrames)
+	FrameStatisticResetRequestAddNumLostCyclicFrames(builder, t.NumLostCyclicFrames)
+	FrameStatisticResetRequestAddNumLostAcyclicFrames(builder, t.NumLostAcyclicFrames)
 	return FrameStatisticResetRequestEnd(builder)
 }
 
 func (rcv *FrameStatisticResetRequest) UnPackTo(t *FrameStatisticResetRequestT) {
 	t.NumTxFrames = rcv.NumTxFrames()
 	t.NumRxFrames = rcv.NumRxFrames()
-	t.NumLostFrames = rcv.NumLostFrames()
 	t.NumCyclicFrames = rcv.NumCyclicFrames()
 	t.NumCyclicDatagrams = rcv.NumCyclicDatagrams()
 	t.NumAcyclicFrames = rcv.NumAcyclicFrames()
 	t.NumAcyclicDatagrams = rcv.NumAcyclicDatagrams()
+	t.NumLostFrames = rcv.NumLostFrames()
+	t.NumLostCyclicFrames = rcv.NumLostCyclicFrames()
+	t.NumLostAcyclicFrames = rcv.NumLostAcyclicFrames()
 }
 
 func (rcv *FrameStatisticResetRequest) UnPack() *FrameStatisticResetRequestT {
@@ -97,7 +103,7 @@ func (rcv *FrameStatisticResetRequest) MutateNumRxFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
-func (rcv *FrameStatisticResetRequest) NumLostFrames() bool {
+func (rcv *FrameStatisticResetRequest) NumCyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -105,11 +111,11 @@ func (rcv *FrameStatisticResetRequest) NumLostFrames() bool {
 	return false
 }
 
-func (rcv *FrameStatisticResetRequest) MutateNumLostFrames(n bool) bool {
+func (rcv *FrameStatisticResetRequest) MutateNumCyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
-func (rcv *FrameStatisticResetRequest) NumCyclicFrames() bool {
+func (rcv *FrameStatisticResetRequest) NumCyclicDatagrams() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -117,11 +123,11 @@ func (rcv *FrameStatisticResetRequest) NumCyclicFrames() bool {
 	return false
 }
 
-func (rcv *FrameStatisticResetRequest) MutateNumCyclicFrames(n bool) bool {
+func (rcv *FrameStatisticResetRequest) MutateNumCyclicDatagrams(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
-func (rcv *FrameStatisticResetRequest) NumCyclicDatagrams() bool {
+func (rcv *FrameStatisticResetRequest) NumAcyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -129,11 +135,11 @@ func (rcv *FrameStatisticResetRequest) NumCyclicDatagrams() bool {
 	return false
 }
 
-func (rcv *FrameStatisticResetRequest) MutateNumCyclicDatagrams(n bool) bool {
+func (rcv *FrameStatisticResetRequest) MutateNumAcyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }
 
-func (rcv *FrameStatisticResetRequest) NumAcyclicFrames() bool {
+func (rcv *FrameStatisticResetRequest) NumAcyclicDatagrams() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -141,11 +147,11 @@ func (rcv *FrameStatisticResetRequest) NumAcyclicFrames() bool {
 	return false
 }
 
-func (rcv *FrameStatisticResetRequest) MutateNumAcyclicFrames(n bool) bool {
+func (rcv *FrameStatisticResetRequest) MutateNumAcyclicDatagrams(n bool) bool {
 	return rcv._tab.MutateBoolSlot(14, n)
 }
 
-func (rcv *FrameStatisticResetRequest) NumAcyclicDatagrams() bool {
+func (rcv *FrameStatisticResetRequest) NumLostFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -153,12 +159,36 @@ func (rcv *FrameStatisticResetRequest) NumAcyclicDatagrams() bool {
 	return false
 }
 
-func (rcv *FrameStatisticResetRequest) MutateNumAcyclicDatagrams(n bool) bool {
+func (rcv *FrameStatisticResetRequest) MutateNumLostFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(16, n)
 }
 
+func (rcv *FrameStatisticResetRequest) NumLostCyclicFrames() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+func (rcv *FrameStatisticResetRequest) MutateNumLostCyclicFrames(n bool) bool {
+	return rcv._tab.MutateBoolSlot(18, n)
+}
+
+func (rcv *FrameStatisticResetRequest) NumLostAcyclicFrames() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+func (rcv *FrameStatisticResetRequest) MutateNumLostAcyclicFrames(n bool) bool {
+	return rcv._tab.MutateBoolSlot(20, n)
+}
+
 func FrameStatisticResetRequestStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(9)
 }
 func FrameStatisticResetRequestAddNumTxFrames(builder *flatbuffers.Builder, numTxFrames bool) {
 	builder.PrependBoolSlot(0, numTxFrames, false)
@@ -166,20 +196,26 @@ func FrameStatisticResetRequestAddNumTxFrames(builder *flatbuffers.Builder, numT
 func FrameStatisticResetRequestAddNumRxFrames(builder *flatbuffers.Builder, numRxFrames bool) {
 	builder.PrependBoolSlot(1, numRxFrames, false)
 }
-func FrameStatisticResetRequestAddNumLostFrames(builder *flatbuffers.Builder, numLostFrames bool) {
-	builder.PrependBoolSlot(2, numLostFrames, false)
-}
 func FrameStatisticResetRequestAddNumCyclicFrames(builder *flatbuffers.Builder, numCyclicFrames bool) {
-	builder.PrependBoolSlot(3, numCyclicFrames, false)
+	builder.PrependBoolSlot(2, numCyclicFrames, false)
 }
 func FrameStatisticResetRequestAddNumCyclicDatagrams(builder *flatbuffers.Builder, numCyclicDatagrams bool) {
-	builder.PrependBoolSlot(4, numCyclicDatagrams, false)
+	builder.PrependBoolSlot(3, numCyclicDatagrams, false)
 }
 func FrameStatisticResetRequestAddNumAcyclicFrames(builder *flatbuffers.Builder, numAcyclicFrames bool) {
-	builder.PrependBoolSlot(5, numAcyclicFrames, false)
+	builder.PrependBoolSlot(4, numAcyclicFrames, false)
 }
 func FrameStatisticResetRequestAddNumAcyclicDatagrams(builder *flatbuffers.Builder, numAcyclicDatagrams bool) {
-	builder.PrependBoolSlot(6, numAcyclicDatagrams, false)
+	builder.PrependBoolSlot(5, numAcyclicDatagrams, false)
+}
+func FrameStatisticResetRequestAddNumLostFrames(builder *flatbuffers.Builder, numLostFrames bool) {
+	builder.PrependBoolSlot(6, numLostFrames, false)
+}
+func FrameStatisticResetRequestAddNumLostCyclicFrames(builder *flatbuffers.Builder, numLostCyclicFrames bool) {
+	builder.PrependBoolSlot(7, numLostCyclicFrames, false)
+}
+func FrameStatisticResetRequestAddNumLostAcyclicFrames(builder *flatbuffers.Builder, numLostAcyclicFrames bool) {
+	builder.PrependBoolSlot(8, numLostAcyclicFrames, false)
 }
 func FrameStatisticResetRequestEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

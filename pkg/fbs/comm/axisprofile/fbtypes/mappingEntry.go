@@ -9,6 +9,7 @@ import (
 type mappingEntryT struct {
 	ValueID string
 	DatalayerURI string
+	ProfileVar variableType
 }
 
 func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -18,12 +19,14 @@ func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	mappingEntryStart(builder)
 	mappingEntryAddValueID(builder, valueIDOffset)
 	mappingEntryAddDatalayerURI(builder, datalayerURIOffset)
+	mappingEntryAddProfileVar(builder, t.ProfileVar)
 	return mappingEntryEnd(builder)
 }
 
 func (rcv *mappingEntry) UnPackTo(t *mappingEntryT) {
 	t.ValueID = string(rcv.ValueID())
 	t.DatalayerURI = string(rcv.DatalayerURI())
+	t.ProfileVar = rcv.ProfileVar()
 }
 
 func (rcv *mappingEntry) UnPack() *mappingEntryT {
@@ -76,14 +79,29 @@ func (rcv *mappingEntry) DatalayerURI() []byte {
 	return nil
 }
 
+func (rcv *mappingEntry) ProfileVar() variableType {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return variableType(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+func (rcv *mappingEntry) MutateProfileVar(n variableType) bool {
+	return rcv._tab.MutateInt8Slot(8, int8(n))
+}
+
 func mappingEntryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func mappingEntryAddValueID(builder *flatbuffers.Builder, valueID flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(valueID), 0)
 }
 func mappingEntryAddDatalayerURI(builder *flatbuffers.Builder, datalayerURI flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(datalayerURI), 0)
+}
+func mappingEntryAddProfileVar(builder *flatbuffers.Builder, profileVar variableType) {
+	builder.PrependInt8Slot(2, int8(profileVar), 0)
 }
 func mappingEntryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

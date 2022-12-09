@@ -55,7 +55,7 @@ func TestClientPingAsync(t *testing.T) {
 	a.True(t, client.IsConnected())
 
 	wg := sync.WaitGroup{}
-	for i := 0; i < 2000; i++ {
+	for i := 0; i < 500; i++ {
 		wg.Add(1)
 		go func() {
 			r := client.PingAsync(func(res datalayer.Result, v *datalayer.Variant) {

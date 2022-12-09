@@ -328,6 +328,11 @@ func TestReadJsonSync(t *testing.T) {
 	a.Equal(t, datalayer.Result(0), r)
 	a.NotNil(t, d)
 	a.True(t, len(d) != 0)
+
+	r, d = client.ReadJsonSyncArgs(cv, "scheduler/admin/state", 2, []byte("testdata"))
+	a.Equal(t, datalayer.Result(0), r)
+	a.NotNil(t, d)
+	a.True(t, len(d) != 0)
 }
 
 func TestWriteJsonSync(t *testing.T) {

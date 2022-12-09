@@ -18,6 +18,8 @@ type AdminT struct {
 	CpuInfo *CpuInfoT
 	HardwareWatchdogRequired bool
 	WatchdogDefaultValue common__scheduler__fbs.CallableWdgConfig
+	Utilization *UtilizationThresholdT
+	CallableTimeouts *CallableTimeoutsT
 }
 
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,6 +27,8 @@ func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	controlDebugOffset := t.ControlDebug.Pack(builder)
 	
 	cpuInfoOffset := t.CpuInfo.Pack(builder)
+	utilizationOffset := t.Utilization.Pack(builder)
+	callableTimeoutsOffset := t.CallableTimeouts.Pack(builder)
 	AdminStart(builder)
 	AdminAddStartupState(builder, t.StartupState)
 	AdminAddStartupTimeout(builder, t.StartupTimeout)
@@ -37,6 +41,8 @@ func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	AdminAddCpuInfo(builder, cpuInfoOffset)
 	AdminAddHardwareWatchdogRequired(builder, t.HardwareWatchdogRequired)
 	AdminAddWatchdogDefaultValue(builder, t.WatchdogDefaultValue)
+	AdminAddUtilization(builder, utilizationOffset)
+	AdminAddCallableTimeouts(builder, callableTimeoutsOffset)
 	return AdminEnd(builder)
 }
 
@@ -52,6 +58,8 @@ func (rcv *Admin) UnPackTo(t *AdminT) {
 	t.CpuInfo = rcv.CpuInfo(nil).UnPack()
 	t.HardwareWatchdogRequired = rcv.HardwareWatchdogRequired()
 	t.WatchdogDefaultValue = rcv.WatchdogDefaultValue()
+	t.Utilization = rcv.Utilization(nil).UnPack()
+	t.CallableTimeouts = rcv.CallableTimeouts(nil).UnPack()
 }
 
 func (rcv *Admin) UnPack() *AdminT {
@@ -198,8 +206,38 @@ func (rcv *Admin) MutateWatchdogDefaultValue(n common__scheduler__fbs.CallableWd
 	return rcv._tab.MutateInt8Slot(20, int8(n))
 }
 
+/// utilization thresholds of scheduler system
+func (rcv *Admin) Utilization(obj *UtilizationThreshold) *UtilizationThreshold {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(UtilizationThreshold)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// utilization thresholds of scheduler system
+/// callable timeouts for the switch events
+func (rcv *Admin) CallableTimeouts(obj *CallableTimeouts) *CallableTimeouts {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(CallableTimeouts)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// callable timeouts for the switch events
 func AdminStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(11)
 }
 func AdminAddStartupState(builder *flatbuffers.Builder, startupState CurrentState) {
 	builder.PrependInt8Slot(0, int8(startupState), 0)
@@ -227,6 +265,12 @@ func AdminAddHardwareWatchdogRequired(builder *flatbuffers.Builder, hardwareWatc
 }
 func AdminAddWatchdogDefaultValue(builder *flatbuffers.Builder, watchdogDefaultValue common__scheduler__fbs.CallableWdgConfig) {
 	builder.PrependInt8Slot(8, int8(watchdogDefaultValue), 3)
+}
+func AdminAddUtilization(builder *flatbuffers.Builder, utilization flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(utilization), 0)
+}
+func AdminAddCallableTimeouts(builder *flatbuffers.Builder, callableTimeouts flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(callableTimeouts), 0)
 }
 func AdminEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -68,7 +68,11 @@ func DeleteClient(c *Client) {
 	if c == nil {
 		return
 	}
+	if c.this == nil {
+		return
+	}
 	C.DLR_clientDelete(c.this)
+	c.this = nil
 }
 
 // PingAsync pings the next hop. This function is asynchronous. It will return immediately. Callback will be called if function call is finished.
@@ -126,7 +130,7 @@ func (c *Client) ReadAsync(address string, data *Variant, onResponse ResponseCal
 }
 
 // WriteAsync writes an object. This function is synchronous: It will wait for the answer.
-// Parameter address is an address of the node to read metadata.
+// Parameter address is an address of the node to write.
 // Parameter data is a data of the object.
 // Parameter callback is a callback to call when function is finished.
 // Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
@@ -327,10 +331,9 @@ func (c *Client) GetAuthToken() string {
 	return s
 }
 
-func (c *Client) readJsonSync(cv *Converter, address string, indentStep int) (Result, *Variant) {
+func (c *Client) readJsonSync(cv *Converter, address string, indentStep int, data *Variant) (Result, *Variant) {
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
-	data := NewVariant()
 	r := Result(C.DLR_clientReadJsonSync(c.this, cv.this, caddress, data.this, C.int(indentStep), nil))
 	return r, data
 }
@@ -341,8 +344,23 @@ func (c *Client) readJsonSync(cv *Converter, address string, indentStep int) (Re
 // Parameter indentStep is an indentation length for json string.
 // It returns the status of function and generated JSON
 func (c *Client) ReadJsonSync(cv *Converter, address string, indentStep int) (Result, []byte) {
-	r, d := c.readJsonSync(cv, address, indentStep)
+	return c.ReadJsonSyncArgs(cv, address, indentStep, nil)
+}
+
+// This function reads a values as a JSON string.
+// Parameter converter is reference to the converter (see System json_converter()).
+// Parameter address is an address of the node to read.
+// Parameter indentStep is an indentation length for json string.
+// Parameter json generated JSON as array of bytes (string)
+// It returns the status of function and generated JSON
+func (c *Client) ReadJsonSyncArgs(cv *Converter, address string, indentStep int, data []byte) (Result, []byte) {
+	d := NewVariant()
 	defer DeleteVariant(d)
+	if data != nil {
+		d.SetString(string(data))
+	}
+	r, d := c.readJsonSync(cv, address, indentStep, d)
+
 	if r != ResultOk {
 		return r, nil
 	}
@@ -366,4 +384,9 @@ func (c *Client) WriteJsonSync(cv *Converter, address string, json []byte) (Resu
 		return r, errors.New(err.GetString())
 	}
 	return r, nil
+}
+
+// CreateBulk creates a ctrlX Data Layer bulk
+func (c *Client) CreateBulk() *Bulk {
+	return newBulk(c)
 }
