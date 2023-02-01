@@ -40,17 +40,17 @@ then will be created on the server side, and it can be accessed by using the sub
 Let us now create a SseClient:
 
 The function NewSseClient needs three parameters:
-* the url is like "/automation/api/v2/events/<subscriptionID>",
-* the token is like "Bearer eyJhbGciOiJIUxxx"
-* the flag insecureSkipVerify has to be set to true if no corresponding certificate has been installed on the ctrlX CORE, which is usually not the case in delivery state.
+  * the url is like "/automation/api/v2/events/<subscriptionID>",
+  * the token is like "Bearer eyJhbGciOiJIUxxx"
+  * the flag insecureSkipVerify has to be set to true if no corresponding certificate has been installed on the ctrlX CORE, which is usually not the case in delivery state.
 
 	client := sseclient.NewSseClient(url, token, true)
 
 Reading event data:
 
 The function Subscribe starts GET request and then reads the event data continuouslly.
-* The paramter context is used to cancell the reading loop
-* The callback function of type SseReceiverFunc is used to handle the incoming event data.
+  * The paramter context is used to cancell the reading loop
+  * The callback function of type SseReceiverFunc is used to handle the incoming event data.
 
 This function will only terminate in case of connection errors (err != nil) or if the subscription is terminated
 by the main program side (err == nil).
@@ -61,20 +61,20 @@ by the main program side (err == nil).
 
 The SSE Server sends following types of event and data
 
-"event: update\n"
-"id: ...\n"
-"data: {"node":".....","timestamp":....,"type":"...","value":...}\n"
-"\n"
-
-"event: error\n"
-"id: ...\n"
-"data: {"type":".....","title":....,"status":...,"instance":"...","severity":""}\n"
-"\n"
-
-"event: keepalive\n"
-"id: ...\n"
-"data: {"timestamp":....}\n"
-"\n"
+  "event: update\n"
+  "id: ...\n"
+  "data: {"node":".....","timestamp":....,"type":"...","value":...}\n"
+  "\n"
+  
+  "event: error\n"
+  "id: ...\n"
+  "data: {"type":".....","title":....,"status":...,"instance":"...","severity":""}\n"
+  "\n"
+ 
+  "event: keepalive\n"
+  "id: ...\n"
+  "data: {"timestamp":....}\n"
+  "\n"
 
 The new subscription should be created and the connection should be restablished if it is broken, the SSE Server on the
 ctrlX Data Layer will delete the inactive existing subscription after a time period.
