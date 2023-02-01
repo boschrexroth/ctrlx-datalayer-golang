@@ -32,6 +32,7 @@ Before we create SseClient, two things are needed:
 
 1) Get authorization token
 The token is a Bearer token, which is provied by ctrlX Identity Manager Component.
+
 2) Create SSE subscription on the SSE Server on the Data Layer
 The subscriptionID is generated at first on client side by using for example package uuid, this id then will be sent to the
 server together with other SSE parameters especially nodelist by sending a POST request to the ctrlX Data Layer. The subscription
