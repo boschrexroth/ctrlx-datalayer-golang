@@ -8,8 +8,8 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-DATALAYER_DEB_VERSION      := 1.18.0
-DATALAYER_DEB_FILE_VERSION := 1.9.1
+DATALAYER_DEB_VERSION      := 1.20.0
+DATALAYER_DEB_FILE_VERSION := 1.10.7
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 
@@ -43,7 +43,7 @@ cpuprofile: ## Run cpu profiler
 	@go test -race -short -count=1 -mod=vendor $(TST_LIST) -cpuprofile cpu.pprof 
 	@go tool pprof -http=:8080 cpu.pprof 
 
-testcover: ## Run unittests with coverage
+testcover: ## Run unittests with coverage 'go tool cover -html=coverage.out -o coverage.html'
 	@go test -race -short -count=1 -mod=vendor -coverpkg=$(COV_PKG_LIST) -coverprofile=coverage.out -covermode=atomic $(TST_LIST)
 	
 build: go-dep ## Build the samples

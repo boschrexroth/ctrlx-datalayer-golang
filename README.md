@@ -44,8 +44,8 @@ sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.18.0/ctrlx-datalayer-1.9.1.deb
-sudo dpkg -i ctrlx-datalayer-1.9.1.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/1.20.0/ctrlx-datalayer-1.10.7.deb
+sudo dpkg -i ctrlx-datalayer-1.10.7.deb
 ```
 
 ### Integrate in you project
