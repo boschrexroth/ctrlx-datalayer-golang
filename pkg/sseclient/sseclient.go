@@ -105,7 +105,7 @@ func (c *SseClient) Subscribe(ctx context.Context, receiver SseReceiverFunc) err
 	for {
 		select {
 		case <-ctx.Done():
-			return nil
+			return ctx.Err()
 		default:
 			bytesRead, err := br.ReadBytes('\n')
 			if err == io.EOF {
