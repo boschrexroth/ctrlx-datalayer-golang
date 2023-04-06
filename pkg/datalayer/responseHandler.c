@@ -66,7 +66,7 @@ DLR_RESULT ClientReadASync(DLR_CLIENT client, const char *address, DLR_VARIANT v
 // Wrapper for DLR_clientWriteASync with responseKey instead of userdata
 DLR_RESULT ClientWriteASync(DLR_CLIENT client, const char *address, DLR_VARIANT variant, const char *token, unsigned long long responseKey)
 {
-    return DLR_clientReadASync(client, address, variant, token, responseCallback, (void *)responseKey);
+    return DLR_clientWriteASync(client, address, variant, token, responseCallback, (void *)responseKey);
 }
 
 // Wrapper for DLR_clientMetadataASync with responseKey instead of userdata
