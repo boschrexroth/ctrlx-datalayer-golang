@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the elements of one main diagnostics that should be registered.
 type MainDiagnosticT struct {
 	Number string
 	Version uint32
@@ -85,6 +86,7 @@ func (rcv *MainDiagnostic) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Main diagnostic number.
 func (rcv *MainDiagnostic) Number() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -93,6 +95,8 @@ func (rcv *MainDiagnostic) Number() []byte {
 	return nil
 }
 
+/// Main diagnostic number.
+/// Version of the main diagnostics starting with 1.
 func (rcv *MainDiagnostic) Version() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -101,10 +105,12 @@ func (rcv *MainDiagnostic) Version() uint32 {
 	return 1
 }
 
+/// Version of the main diagnostics starting with 1.
 func (rcv *MainDiagnostic) MutateVersion(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// Default text of the main diagnostics.
 func (rcv *MainDiagnostic) Text() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -113,6 +119,8 @@ func (rcv *MainDiagnostic) Text() []byte {
 	return nil
 }
 
+/// Default text of the main diagnostics.
+/// All detailed diagnostics that belong to this main diagnostics.
 func (rcv *MainDiagnostic) DetailedDiagnostics(obj *DetailedDiagnostic, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -133,6 +141,7 @@ func (rcv *MainDiagnostic) DetailedDiagnosticsLength() int {
 	return 0
 }
 
+/// All detailed diagnostics that belong to this main diagnostics.
 func MainDiagnosticStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

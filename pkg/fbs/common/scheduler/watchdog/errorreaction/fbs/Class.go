@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Criticality of task watchdog error which cause a pre-defined error reaction
 type ClassT struct {
 	Type CurrentClass
 }
@@ -55,6 +56,7 @@ func (rcv *Class) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Criticality of task watchdog error which cause a pre-defined error reaction
 func (rcv *Class) Type() CurrentClass {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *Class) Type() CurrentClass {
 	return 1
 }
 
+/// Criticality of task watchdog error which cause a pre-defined error reaction
 func (rcv *Class) MutateType(n CurrentClass) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

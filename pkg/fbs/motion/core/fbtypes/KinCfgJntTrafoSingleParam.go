@@ -12,17 +12,20 @@ type KinCfgJntTrafoSingleParamT struct {
 	ValueDouble float64
 	ValueInt int64
 	ValueString string
+	Unit string
 }
 
 func (t *KinCfgJntTrafoSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	nameOffset := builder.CreateString(t.Name)
 	valueStringOffset := builder.CreateString(t.ValueString)
+	unitOffset := builder.CreateString(t.Unit)
 	KinCfgJntTrafoSingleParamStart(builder)
 	KinCfgJntTrafoSingleParamAddName(builder, nameOffset)
 	KinCfgJntTrafoSingleParamAddValueDouble(builder, t.ValueDouble)
 	KinCfgJntTrafoSingleParamAddValueInt(builder, t.ValueInt)
 	KinCfgJntTrafoSingleParamAddValueString(builder, valueStringOffset)
+	KinCfgJntTrafoSingleParamAddUnit(builder, unitOffset)
 	return KinCfgJntTrafoSingleParamEnd(builder)
 }
 
@@ -31,6 +34,7 @@ func (rcv *KinCfgJntTrafoSingleParam) UnPackTo(t *KinCfgJntTrafoSingleParamT) {
 	t.ValueDouble = rcv.ValueDouble()
 	t.ValueInt = rcv.ValueInt()
 	t.ValueString = string(rcv.ValueString())
+	t.Unit = string(rcv.Unit())
 }
 
 func (rcv *KinCfgJntTrafoSingleParam) UnPack() *KinCfgJntTrafoSingleParamT {
@@ -115,8 +119,18 @@ func (rcv *KinCfgJntTrafoSingleParam) ValueString() []byte {
 }
 
 /// value of the parameter (when it's a string value)
+/// unit of the parameter
+func (rcv *KinCfgJntTrafoSingleParam) Unit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of the parameter
 func KinCfgJntTrafoSingleParamStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func KinCfgJntTrafoSingleParamAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -129,6 +143,9 @@ func KinCfgJntTrafoSingleParamAddValueInt(builder *flatbuffers.Builder, valueInt
 }
 func KinCfgJntTrafoSingleParamAddValueString(builder *flatbuffers.Builder, valueString flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(valueString), 0)
+}
+func KinCfgJntTrafoSingleParamAddUnit(builder *flatbuffers.Builder, unit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(unit), 0)
 }
 func KinCfgJntTrafoSingleParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

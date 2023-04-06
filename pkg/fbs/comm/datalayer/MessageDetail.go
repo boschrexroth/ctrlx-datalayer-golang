@@ -55,6 +55,7 @@ func (rcv *MessageDetail) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// source timestamp of message as FILETIME
 func (rcv *MessageDetail) Timestamp() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *MessageDetail) Timestamp() uint64 {
 	return 0
 }
 
+/// source timestamp of message as FILETIME
 func (rcv *MessageDetail) MutateTimestamp(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }

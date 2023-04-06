@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the generic event type 2 that is used to evaluate specific diagnostic events.
 type EventType2T struct {
 	EventCounter uint64
 }
@@ -55,6 +56,7 @@ func (rcv *EventType2) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Event counter that is incremented if the selected event occurs. 
 func (rcv *EventType2) EventCounter() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *EventType2) EventCounter() uint64 {
 	return 0
 }
 
+/// Event counter that is incremented if the selected event occurs. 
 func (rcv *EventType2) MutateEventCounter(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }

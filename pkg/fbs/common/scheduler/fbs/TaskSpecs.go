@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Task specifications to defined callable environment
 type TaskSpecsT struct {
 	Name string
 	Priority string
@@ -64,7 +65,9 @@ func (rcv *TaskSpecs) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// task name to link callables together within a task, e.g. "ctrlXAutomation" or "gppServices"
+/// Task name to link callables together within a task, e.g. "ctrlXAutomation" or "schedBackground"
+///   Allowed characters:
+///     Any alphanumeric character, beginning with a letter and a maximum length of 15 characters [a-zA-Z][a-zA-Z0-9]{1,15}
 func (rcv *TaskSpecs) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,8 +76,28 @@ func (rcv *TaskSpecs) Name() []byte {
 	return nil
 }
 
-/// task name to link callables together within a task, e.g. "ctrlXAutomation" or "gppServices"
-/// task priority as well defined digit or range, e.g. "40" or "mid" to runs with medium priority
+/// Task name to link callables together within a task, e.g. "ctrlXAutomation" or "schedBackground"
+///   Allowed characters:
+///     Any alphanumeric character, beginning with a letter and a maximum length of 15 characters [a-zA-Z][a-zA-Z0-9]{1,15}
+/// Task priority as well defined digit or range, e.g. "29" or "mid" to runs with medium priority
+///   Priority ranges:
+///       0 ..  10  : reserved for the system
+///      11 ..  99  : available for real-time user tasks
+///     100 .. 139  : available for non real-time user tasks
+///   Priority agreements:
+///      10         : reserved for Scheduler tick task 'schedMain'
+///      11         : highest prior real-time task, use of the policy FIFO policy
+///      23         : high prior real-time task, use of the policy FIFO policy
+///      29         : mid prior real-time task, use of the policy FIFO policy
+///      37         : low prior real-time task, use of the policy FIFO policy
+///      99         : lowest prior real-time task, use of the policy round-robin policy
+///     100         : highest prior non real-time task, use of the nice value of '-20'
+///     120         : common used non real-time task, use of the nice value of '0'
+///     139         : lowest prior non real-time task, use of the nice value of '19'
+///     high        : see (23), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "high+1" results (24)
+///     mid         : see (29), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "mid-2" results (27)
+///     low         : see (37), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "low+3" results (40)
+///     nrt         : see (120), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "nrt-10" results a nice value of (-10)
 func (rcv *TaskSpecs) Priority() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -83,8 +106,31 @@ func (rcv *TaskSpecs) Priority() []byte {
 	return nil
 }
 
-/// task priority as well defined digit or range, e.g. "40" or "mid" to runs with medium priority
-/// describes required task properties, e.g. "cyclic/ms/10" to runs cyclic every 10 millisecons
+/// Task priority as well defined digit or range, e.g. "29" or "mid" to runs with medium priority
+///   Priority ranges:
+///       0 ..  10  : reserved for the system
+///      11 ..  99  : available for real-time user tasks
+///     100 .. 139  : available for non real-time user tasks
+///   Priority agreements:
+///      10         : reserved for Scheduler tick task 'schedMain'
+///      11         : highest prior real-time task, use of the policy FIFO policy
+///      23         : high prior real-time task, use of the policy FIFO policy
+///      29         : mid prior real-time task, use of the policy FIFO policy
+///      37         : low prior real-time task, use of the policy FIFO policy
+///      99         : lowest prior real-time task, use of the policy round-robin policy
+///     100         : highest prior non real-time task, use of the nice value of '-20'
+///     120         : common used non real-time task, use of the nice value of '0'
+///     139         : lowest prior non real-time task, use of the nice value of '19'
+///     high        : see (23), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "high+1" results (24)
+///     mid         : see (29), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "mid-2" results (27)
+///     low         : see (37), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "low+3" results (40)
+///     nrt         : see (120), can be extended by operator '+' resp. '-' and in additional any digit offset, e.g. "nrt-10" results a nice value of (-10)
+/// Description of required task properties, e.g. "cyclic/ms/10" to runs cyclic every 10 millisecond
+/// The notation of the task properties depends on supported task types.
+/// Notation of cyclic tasks, separated by '/'
+///   event           : Execution event of the task ["cyclic"]
+///   cycle time unit : Supported units are millisecond ["ms"] and microsecond ["µs"]
+///   digit           : Any digit [0-9]+
 func (rcv *TaskSpecs) Type() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,7 +139,12 @@ func (rcv *TaskSpecs) Type() []byte {
 	return nil
 }
 
-/// describes required task properties, e.g. "cyclic/ms/10" to runs cyclic every 10 millisecons
+/// Description of required task properties, e.g. "cyclic/ms/10" to runs cyclic every 10 millisecond
+/// The notation of the task properties depends on supported task types.
+/// Notation of cyclic tasks, separated by '/'
+///   event           : Execution event of the task ["cyclic"]
+///   cycle time unit : Supported units are millisecond ["ms"] and microsecond ["µs"]
+///   digit           : Any digit [0-9]+
 func TaskSpecsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

@@ -60,6 +60,7 @@ func (rcv *CheckOperations) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// address to check
 func (rcv *CheckOperations) Address() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +69,8 @@ func (rcv *CheckOperations) Address() []byte {
 	return nil
 }
 
+/// address to check
+/// token to check
 func (rcv *CheckOperations) Token() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -76,6 +79,7 @@ func (rcv *CheckOperations) Token() []byte {
 	return nil
 }
 
+/// token to check
 func CheckOperationsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

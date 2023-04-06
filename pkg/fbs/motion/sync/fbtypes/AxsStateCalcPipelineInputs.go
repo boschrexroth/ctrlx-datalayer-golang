@@ -9,7 +9,7 @@ import (
 /// input parameters for reading the pipeline
 type AxsStateCalcPipelineInputsT struct {
 	Axes []string
-	CmdMode SyncCmdMode
+	SyncMode SyncMode
 	Inputs []*AxsStateCalcPipelineSingleInputT
 }
 
@@ -43,7 +43,7 @@ func (t *AxsStateCalcPipelineInputsT) Pack(builder *flatbuffers.Builder) flatbuf
 	}
 	AxsStateCalcPipelineInputsStart(builder)
 	AxsStateCalcPipelineInputsAddAxes(builder, axesOffset)
-	AxsStateCalcPipelineInputsAddCmdMode(builder, t.CmdMode)
+	AxsStateCalcPipelineInputsAddSyncMode(builder, t.SyncMode)
 	AxsStateCalcPipelineInputsAddInputs(builder, inputsOffset)
 	return AxsStateCalcPipelineInputsEnd(builder)
 }
@@ -54,7 +54,7 @@ func (rcv *AxsStateCalcPipelineInputs) UnPackTo(t *AxsStateCalcPipelineInputsT) 
 	for j := 0; j < axesLength; j++ {
 		t.Axes[j] = string(rcv.Axes(j))
 	}
-	t.CmdMode = rcv.CmdMode()
+	t.SyncMode = rcv.SyncMode()
 	inputsLength := rcv.InputsLength()
 	t.Inputs = make([]*AxsStateCalcPipelineSingleInputT, inputsLength)
 	for j := 0; j < inputsLength; j++ {
@@ -118,16 +118,16 @@ func (rcv *AxsStateCalcPipelineInputs) AxesLength() int {
 
 /// master input id
 /// sync cmd mode to run calculation pipeline
-func (rcv *AxsStateCalcPipelineInputs) CmdMode() SyncCmdMode {
+func (rcv *AxsStateCalcPipelineInputs) SyncMode() SyncMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return SyncCmdMode(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return SyncMode(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 2
 }
 
 /// sync cmd mode to run calculation pipeline
-func (rcv *AxsStateCalcPipelineInputs) MutateCmdMode(n SyncCmdMode) bool {
+func (rcv *AxsStateCalcPipelineInputs) MutateSyncMode(n SyncMode) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
@@ -162,8 +162,8 @@ func AxsStateCalcPipelineInputsAddAxes(builder *flatbuffers.Builder, axes flatbu
 func AxsStateCalcPipelineInputsStartAxesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func AxsStateCalcPipelineInputsAddCmdMode(builder *flatbuffers.Builder, cmdMode SyncCmdMode) {
-	builder.PrependInt8Slot(1, int8(cmdMode), 2)
+func AxsStateCalcPipelineInputsAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
+	builder.PrependInt8Slot(1, int8(syncMode), 2)
 }
 func AxsStateCalcPipelineInputsAddInputs(builder *flatbuffers.Builder, inputs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(inputs), 0)

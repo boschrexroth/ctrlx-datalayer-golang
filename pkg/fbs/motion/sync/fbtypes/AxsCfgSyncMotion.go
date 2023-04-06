@@ -10,21 +10,43 @@ import (
 type AxsCfgSyncMotionT struct {
 	ErrorReaction *AxsCfgErrReactionT
 	DynSynchronisation *AxsCfgDynSynchronisationT
+	CalculationPipelines []*AxsCfgCalcPipelineT
 }
 
 func (t *AxsCfgSyncMotionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	errorReactionOffset := t.ErrorReaction.Pack(builder)
 	dynSynchronisationOffset := t.DynSynchronisation.Pack(builder)
+	calculationPipelinesOffset := flatbuffers.UOffsetT(0)
+	if t.CalculationPipelines != nil {
+		calculationPipelinesLength := len(t.CalculationPipelines)
+		calculationPipelinesOffsets := make([]flatbuffers.UOffsetT, calculationPipelinesLength)
+		for j := 0; j < calculationPipelinesLength; j++ {
+			calculationPipelinesOffsets[j] = t.CalculationPipelines[j].Pack(builder)
+		}
+		AxsCfgSyncMotionStartCalculationPipelinesVector(builder, calculationPipelinesLength)
+		for j := calculationPipelinesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(calculationPipelinesOffsets[j])
+		}
+		calculationPipelinesOffset = builder.EndVector(calculationPipelinesLength)
+	}
 	AxsCfgSyncMotionStart(builder)
 	AxsCfgSyncMotionAddErrorReaction(builder, errorReactionOffset)
 	AxsCfgSyncMotionAddDynSynchronisation(builder, dynSynchronisationOffset)
+	AxsCfgSyncMotionAddCalculationPipelines(builder, calculationPipelinesOffset)
 	return AxsCfgSyncMotionEnd(builder)
 }
 
 func (rcv *AxsCfgSyncMotion) UnPackTo(t *AxsCfgSyncMotionT) {
 	t.ErrorReaction = rcv.ErrorReaction(nil).UnPack()
 	t.DynSynchronisation = rcv.DynSynchronisation(nil).UnPack()
+	calculationPipelinesLength := rcv.CalculationPipelinesLength()
+	t.CalculationPipelines = make([]*AxsCfgCalcPipelineT, calculationPipelinesLength)
+	for j := 0; j < calculationPipelinesLength; j++ {
+		x := AxsCfgCalcPipeline{}
+		rcv.CalculationPipelines(&x, j)
+		t.CalculationPipelines[j] = x.UnPack()
+	}
 }
 
 func (rcv *AxsCfgSyncMotion) UnPack() *AxsCfgSyncMotionT {
@@ -91,14 +113,42 @@ func (rcv *AxsCfgSyncMotion) DynSynchronisation(obj *AxsCfgDynSynchronisation) *
 }
 
 /// Reference to configuration of the dynamic synchronisation behavior of the axis
+/// configuration for calculation pipelines for a single axis
+func (rcv *AxsCfgSyncMotion) CalculationPipelines(obj *AxsCfgCalcPipeline, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *AxsCfgSyncMotion) CalculationPipelinesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// configuration for calculation pipelines for a single axis
 func AxsCfgSyncMotionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func AxsCfgSyncMotionAddErrorReaction(builder *flatbuffers.Builder, errorReaction flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(errorReaction), 0)
 }
 func AxsCfgSyncMotionAddDynSynchronisation(builder *flatbuffers.Builder, dynSynchronisation flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(dynSynchronisation), 0)
+}
+func AxsCfgSyncMotionAddCalculationPipelines(builder *flatbuffers.Builder, calculationPipelines flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(calculationPipelines), 0)
+}
+func AxsCfgSyncMotionStartCalculationPipelinesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func AxsCfgSyncMotionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

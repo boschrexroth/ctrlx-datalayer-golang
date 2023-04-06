@@ -7,9 +7,13 @@ import "strconv"
 type EnumMessageSecurityMode int8
 
 const (
+	/// Determines and uses the most secure method automatically
 	EnumMessageSecurityModeBESTAVAILABLE EnumMessageSecurityMode = 0
+	/// Unencrypted connection (only together with the security policy "None")
 	EnumMessageSecurityModeNONE          EnumMessageSecurityMode = 1
+	/// Signed connection
 	EnumMessageSecurityModeSIGN          EnumMessageSecurityMode = 2
+	/// Signed and encrypted connection
 	EnumMessageSecurityModeSIGNENCRYPT   EnumMessageSecurityMode = 3
 )
 

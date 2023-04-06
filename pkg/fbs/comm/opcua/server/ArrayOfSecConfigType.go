@@ -74,6 +74,8 @@ func (rcv *ArrayOfSecConfigType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// The endpoint security configurations of the OPC UA Server in an array
+/// Each array element describes one security configuration of OPC UA Server endpoint
 func (rcv *ArrayOfSecConfigType) SecConfigArray(obj *SecConfigType, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +96,8 @@ func (rcv *ArrayOfSecConfigType) SecConfigArrayLength() int {
 	return 0
 }
 
+/// The endpoint security configurations of the OPC UA Server in an array
+/// Each array element describes one security configuration of OPC UA Server endpoint
 func ArrayOfSecConfigTypeStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

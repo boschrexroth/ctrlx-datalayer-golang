@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Callable configurations of a callable factory
 type CallableConfigurationsT struct {
 	Configurations []*CallableConfigurationT
 }
@@ -74,7 +75,7 @@ func (rcv *CallableConfigurations) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// callable configurations of a factory
+/// Callable configurations of a callable factory
 func (rcv *CallableConfigurations) Configurations(obj *CallableConfiguration, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -95,7 +96,7 @@ func (rcv *CallableConfigurations) ConfigurationsLength() int {
 	return 0
 }
 
-/// callable configurations of a factory
+/// Callable configurations of a callable factory
 func CallableConfigurationsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

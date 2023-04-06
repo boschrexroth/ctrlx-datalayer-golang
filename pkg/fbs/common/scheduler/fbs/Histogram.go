@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Timing histogram
 type HistogramT struct {
 	Scale uint64
 	Values []uint64
@@ -71,6 +72,7 @@ func (rcv *Histogram) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Scale of one element of timing histogram in [µs]
 func (rcv *Histogram) Scale() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -79,10 +81,12 @@ func (rcv *Histogram) Scale() uint64 {
 	return 0
 }
 
+/// Scale of one element of timing histogram in [µs]
 func (rcv *Histogram) MutateScale(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
+/// Count of hits within the ranges of the scale elements of the timing values
 func (rcv *Histogram) Values(j int) uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -100,6 +104,7 @@ func (rcv *Histogram) ValuesLength() int {
 	return 0
 }
 
+/// Count of hits within the ranges of the scale elements of the timing values
 func (rcv *Histogram) MutateValues(j int, n uint64) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

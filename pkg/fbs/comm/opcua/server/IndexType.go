@@ -6,6 +6,28 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type IndexTypeT struct {
+	Index uint32
+}
+
+func (t *IndexTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	IndexTypeStart(builder)
+	IndexTypeAddIndex(builder, t.Index)
+	return IndexTypeEnd(builder)
+}
+
+func (rcv *IndexType) UnPackTo(t *IndexTypeT) {
+	t.Index = rcv.Index()
+}
+
+func (rcv *IndexType) UnPack() *IndexTypeT {
+	if rcv == nil { return nil }
+	t := &IndexTypeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type IndexType struct {
 	_tab flatbuffers.Table
 }

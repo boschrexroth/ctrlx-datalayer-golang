@@ -55,6 +55,7 @@ func (rcv *NTelBufferConfig) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// number of buffer used if ntel buffer is used
 func (rcv *NTelBufferConfig) DefaultN() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *NTelBufferConfig) DefaultN() uint16 {
 	return 6
 }
 
+/// number of buffer used if ntel buffer is used
 func (rcv *NTelBufferConfig) MutateDefaultN(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }

@@ -70,6 +70,7 @@ func (rcv *ProgramTask) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// id of the task
 func (rcv *ProgramTask) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -78,6 +79,8 @@ func (rcv *ProgramTask) Id() []byte {
 	return nil
 }
 
+/// id of the task
+/// state of the task
 func (rcv *ProgramTask) State() ProgramTaskState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -86,10 +89,12 @@ func (rcv *ProgramTask) State() ProgramTaskState {
 	return 0
 }
 
+/// state of the task
 func (rcv *ProgramTask) MutateState(n ProgramTaskState) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
+/// Progress of the task in percent, if it's not possible to calculate, set state to running and progress to 0
 func (rcv *ProgramTask) Progress() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -98,10 +103,12 @@ func (rcv *ProgramTask) Progress() uint32 {
 	return 0
 }
 
+/// Progress of the task in percent, if it's not possible to calculate, set state to running and progress to 0
 func (rcv *ProgramTask) MutateProgress(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// result of task;
 func (rcv *ProgramTask) Result(obj *Diagnosis) *Diagnosis {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -115,6 +122,8 @@ func (rcv *ProgramTask) Result(obj *Diagnosis) *Diagnosis {
 	return nil
 }
 
+/// result of task;
+/// Additional progress information
 func (rcv *ProgramTask) ProgressInfo() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -123,6 +132,7 @@ func (rcv *ProgramTask) ProgressInfo() []byte {
 	return nil
 }
 
+/// Additional progress information
 func ProgramTaskStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }

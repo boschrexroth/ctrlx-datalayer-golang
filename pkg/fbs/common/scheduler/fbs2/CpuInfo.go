@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Information about CPU cores of ctrlX CORE
 type CpuInfoT struct {
 	CpuCoresTotal []uint32
 	CpuCoresActive []uint32
@@ -150,6 +151,7 @@ func (rcv *CpuInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Identification indices of all available CPU cores
 func (rcv *CpuInfo) CpuCoresTotal(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -167,6 +169,7 @@ func (rcv *CpuInfo) CpuCoresTotalLength() int {
 	return 0
 }
 
+/// Identification indices of all available CPU cores
 func (rcv *CpuInfo) MutateCpuCoresTotal(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -176,6 +179,7 @@ func (rcv *CpuInfo) MutateCpuCoresTotal(j int, n uint32) bool {
 	return false
 }
 
+/// Identification indices of all available active CPU cores
 func (rcv *CpuInfo) CpuCoresActive(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -193,6 +197,7 @@ func (rcv *CpuInfo) CpuCoresActiveLength() int {
 	return 0
 }
 
+/// Identification indices of all available active CPU cores
 func (rcv *CpuInfo) MutateCpuCoresActive(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -202,6 +207,7 @@ func (rcv *CpuInfo) MutateCpuCoresActive(j int, n uint32) bool {
 	return false
 }
 
+/// Identification indices of the available CPU cores assigned to real-time processing
 func (rcv *CpuInfo) CpuCoresRealtime(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -219,6 +225,7 @@ func (rcv *CpuInfo) CpuCoresRealtimeLength() int {
 	return 0
 }
 
+/// Identification indices of the available CPU cores assigned to real-time processing
 func (rcv *CpuInfo) MutateCpuCoresRealtime(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -228,6 +235,7 @@ func (rcv *CpuInfo) MutateCpuCoresRealtime(j int, n uint32) bool {
 	return false
 }
 
+/// Identification indices of the available CPU cores assigned to non real-time processing
 func (rcv *CpuInfo) CpuCoresNonRealtime(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -245,6 +253,7 @@ func (rcv *CpuInfo) CpuCoresNonRealtimeLength() int {
 	return 0
 }
 
+/// Identification indices of the available CPU cores assigned to non real-time processing
 func (rcv *CpuInfo) MutateCpuCoresNonRealtime(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -254,6 +263,7 @@ func (rcv *CpuInfo) MutateCpuCoresNonRealtime(j int, n uint32) bool {
 	return false
 }
 
+/// Highest available identification index of the CPU core for real-time processing
 func (rcv *CpuInfo) CpuCoreRealtimeMax() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -262,10 +272,12 @@ func (rcv *CpuInfo) CpuCoreRealtimeMax() int32 {
 	return -1
 }
 
+/// Highest available identification index of the CPU core for real-time processing
 func (rcv *CpuInfo) MutateCpuCoreRealtimeMax(n int32) bool {
 	return rcv._tab.MutateInt32Slot(12, n)
 }
 
+/// Lowest available identification index of the CPU core for real-time processing
 func (rcv *CpuInfo) CpuCoreRealtimeMin() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -274,10 +286,12 @@ func (rcv *CpuInfo) CpuCoreRealtimeMin() int32 {
 	return -1
 }
 
+/// Lowest available identification index of the CPU core for real-time processing
 func (rcv *CpuInfo) MutateCpuCoreRealtimeMin(n int32) bool {
 	return rcv._tab.MutateInt32Slot(14, n)
 }
 
+/// Identification index of the CPU core assigned to real-time processing by default
 func (rcv *CpuInfo) CpuCoreRealtimeDefault() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -286,10 +300,12 @@ func (rcv *CpuInfo) CpuCoreRealtimeDefault() int32 {
 	return -1
 }
 
+/// Identification index of the CPU core assigned to real-time processing by default
 func (rcv *CpuInfo) MutateCpuCoreRealtimeDefault(n int32) bool {
 	return rcv._tab.MutateInt32Slot(16, n)
 }
 
+/// Highest available identification index of the CPU core for non real-time processing
 func (rcv *CpuInfo) CpuCoreNonRealtimeMax() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -298,10 +314,12 @@ func (rcv *CpuInfo) CpuCoreNonRealtimeMax() int32 {
 	return -1
 }
 
+/// Highest available identification index of the CPU core for non real-time processing
 func (rcv *CpuInfo) MutateCpuCoreNonRealtimeMax(n int32) bool {
 	return rcv._tab.MutateInt32Slot(18, n)
 }
 
+/// Lowest available identification index of the CPU core for non real-time processing
 func (rcv *CpuInfo) CpuCoreNonRealtimeMin() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -310,10 +328,12 @@ func (rcv *CpuInfo) CpuCoreNonRealtimeMin() int32 {
 	return -1
 }
 
+/// Lowest available identification index of the CPU core for non real-time processing
 func (rcv *CpuInfo) MutateCpuCoreNonRealtimeMin(n int32) bool {
 	return rcv._tab.MutateInt32Slot(20, n)
 }
 
+/// Identification index of the CPU core assigned to non real-time processing by default
 func (rcv *CpuInfo) CpuCoreNonRealtimeDefault() int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -322,10 +342,12 @@ func (rcv *CpuInfo) CpuCoreNonRealtimeDefault() int32 {
 	return -1
 }
 
+/// Identification index of the CPU core assigned to non real-time processing by default
 func (rcv *CpuInfo) MutateCpuCoreNonRealtimeDefault(n int32) bool {
 	return rcv._tab.MutateInt32Slot(22, n)
 }
 
+/// Variation ID to manage special handling of CPU type
 func (rcv *CpuInfo) VariationId() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -334,6 +356,8 @@ func (rcv *CpuInfo) VariationId() []byte {
 	return nil
 }
 
+/// Variation ID to manage special handling of CPU type
+/// Identification index of the CPU core on which the hardware watchdog is handled
 func (rcv *CpuInfo) CpuCoreHwWdg() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
@@ -342,10 +366,12 @@ func (rcv *CpuInfo) CpuCoreHwWdg() uint32 {
 	return 0
 }
 
+/// Identification index of the CPU core on which the hardware watchdog is handled
 func (rcv *CpuInfo) MutateCpuCoreHwWdg(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(26, n)
 }
 
+/// Identification index of the CPU core on which the FPGA interrupt is handled
 func (rcv *CpuInfo) CpuCorePtpTimer() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
 	if o != 0 {
@@ -354,10 +380,12 @@ func (rcv *CpuInfo) CpuCorePtpTimer() uint32 {
 	return 0
 }
 
+/// Identification index of the CPU core on which the FPGA interrupt is handled
 func (rcv *CpuInfo) MutateCpuCorePtpTimer(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(28, n)
 }
 
+/// Identification index of the CPU core on which the Scheduler tick task is executed
 func (rcv *CpuInfo) CpuCoreScheduler() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
 	if o != 0 {
@@ -366,10 +394,12 @@ func (rcv *CpuInfo) CpuCoreScheduler() uint32 {
 	return 0
 }
 
+/// Identification index of the CPU core on which the Scheduler tick task is executed
 func (rcv *CpuInfo) MutateCpuCoreScheduler(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(30, n)
 }
 
+/// Identification index of the CPU core on which the user task 'ctrlXAutomation' is executed by default
 func (rcv *CpuInfo) CpuCoreAutomation() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(32))
 	if o != 0 {
@@ -378,6 +408,7 @@ func (rcv *CpuInfo) CpuCoreAutomation() uint32 {
 	return 0
 }
 
+/// Identification index of the CPU core on which the user task 'ctrlXAutomation' is executed by default
 func (rcv *CpuInfo) MutateCpuCoreAutomation(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(32, n)
 }

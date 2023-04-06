@@ -10,7 +10,7 @@ import (
 type KinCfgJntTrafoAllParamT struct {
 	AxisAssignment *KinCfgJntTrafoAxisAssignmentT
 	Groups []*KinCfgJntTrafoParamGroupT
-	General *KinCfgJntTrafoParamGroupT
+	AxisOffsets *KinCfgJntTrafoAxisOffsetsT
 }
 
 func (t *KinCfgJntTrafoAllParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -29,11 +29,11 @@ func (t *KinCfgJntTrafoAllParamT) Pack(builder *flatbuffers.Builder) flatbuffers
 		}
 		groupsOffset = builder.EndVector(groupsLength)
 	}
-	generalOffset := t.General.Pack(builder)
+	axisOffsetsOffset := t.AxisOffsets.Pack(builder)
 	KinCfgJntTrafoAllParamStart(builder)
 	KinCfgJntTrafoAllParamAddAxisAssignment(builder, axisAssignmentOffset)
 	KinCfgJntTrafoAllParamAddGroups(builder, groupsOffset)
-	KinCfgJntTrafoAllParamAddGeneral(builder, generalOffset)
+	KinCfgJntTrafoAllParamAddAxisOffsets(builder, axisOffsetsOffset)
 	return KinCfgJntTrafoAllParamEnd(builder)
 }
 
@@ -46,7 +46,7 @@ func (rcv *KinCfgJntTrafoAllParam) UnPackTo(t *KinCfgJntTrafoAllParamT) {
 		rcv.Groups(&x, j)
 		t.Groups[j] = x.UnPack()
 	}
-	t.General = rcv.General(nil).UnPack()
+	t.AxisOffsets = rcv.AxisOffsets(nil).UnPack()
 }
 
 func (rcv *KinCfgJntTrafoAllParam) UnPack() *KinCfgJntTrafoAllParamT {
@@ -120,13 +120,13 @@ func (rcv *KinCfgJntTrafoAllParam) GroupsLength() int {
 }
 
 /// all configuration parameter groups of this joint transformation
-/// all general parameter of this joint transformation
-func (rcv *KinCfgJntTrafoAllParam) General(obj *KinCfgJntTrafoParamGroup) *KinCfgJntTrafoParamGroup {
+/// axis zero point offsets
+func (rcv *KinCfgJntTrafoAllParam) AxisOffsets(obj *KinCfgJntTrafoAxisOffsets) *KinCfgJntTrafoAxisOffsets {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(KinCfgJntTrafoParamGroup)
+			obj = new(KinCfgJntTrafoAxisOffsets)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj
@@ -134,7 +134,7 @@ func (rcv *KinCfgJntTrafoAllParam) General(obj *KinCfgJntTrafoParamGroup) *KinCf
 	return nil
 }
 
-/// all general parameter of this joint transformation
+/// axis zero point offsets
 func KinCfgJntTrafoAllParamStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
@@ -147,8 +147,8 @@ func KinCfgJntTrafoAllParamAddGroups(builder *flatbuffers.Builder, groups flatbu
 func KinCfgJntTrafoAllParamStartGroupsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func KinCfgJntTrafoAllParamAddGeneral(builder *flatbuffers.Builder, general flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(general), 0)
+func KinCfgJntTrafoAllParamAddAxisOffsets(builder *flatbuffers.Builder, axisOffsets flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(axisOffsets), 0)
 }
 func KinCfgJntTrafoAllParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

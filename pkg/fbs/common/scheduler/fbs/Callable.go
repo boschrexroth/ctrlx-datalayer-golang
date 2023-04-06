@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Callable, executes a job defined by regarding app
 type CallableT struct {
 	Name string
 	Index uint32
@@ -94,7 +95,7 @@ func (rcv *Callable) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// singleton (callable factory name)
+/// Name of callable factory provided by an installed app
 func (rcv *Callable) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -103,8 +104,12 @@ func (rcv *Callable) Name() []byte {
 	return nil
 }
 
-/// singleton (callable factory name)
-/// call index 1 (highest) to maximum type range (default: 0 = lowest)
+/// Name of callable factory provided by an installed app
+/// Run index to specify the call sequence, alternatively to the use of synchronization points
+/// Notes:
+///   - The run index ranges from 1 (high) to maximum of data type (low)
+///   - Using of run index cause disabling of synchronization points of this callable
+///   - Using no synchronization points and run index value '0' cause that this callable run together with other, same configured callables, unordered at the end of the task
 func (rcv *Callable) Index() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -113,12 +118,16 @@ func (rcv *Callable) Index() uint32 {
 	return 0
 }
 
-/// call index 1 (highest) to maximum type range (default: 0 = lowest)
+/// Run index to specify the call sequence, alternatively to the use of synchronization points
+/// Notes:
+///   - The run index ranges from 1 (high) to maximum of data type (low)
+///   - Using of run index cause disabling of synchronization points of this callable
+///   - Using no synchronization points and run index value '0' cause that this callable run together with other, same configured callables, unordered at the end of the task
 func (rcv *Callable) MutateIndex(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
-/// values to initialize the callable
+/// List of arguments to create the callable, for further information see application description of the callable factory
 func (rcv *Callable) Arguments(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -136,8 +145,8 @@ func (rcv *Callable) ArgumentsLength() int {
 	return 0
 }
 
-/// values to initialize the callable
-/// desired callable ID (digits only, if unused - recommented - ID will set by system)
+/// List of arguments to create the callable, for further information see application description of the callable factory
+/// Callable ID, used as reference, which is assigned automatically by the Scheduler [0-9]+
 func (rcv *Callable) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -146,8 +155,9 @@ func (rcv *Callable) Id() []byte {
 	return nil
 }
 
-/// desired callable ID (digits only, if unused - recommented - ID will set by system)
-/// alias, human readable callable ID
+/// Callable ID, used as reference, which is assigned automatically by the Scheduler [0-9]+
+/// Alias of callable, human readable replacement of callable ID
+/// The alias have match to the Data Layer compliance guide lines meaning any alphanumeric character are allowed [a-zA-Z_][a-zA-Z0-9-._]+
 func (rcv *Callable) Alias() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -156,8 +166,12 @@ func (rcv *Callable) Alias() []byte {
 	return nil
 }
 
-/// alias, human readable callable ID
-/// sync points to get callables in order
+/// Alias of callable, human readable replacement of callable ID
+/// The alias have match to the Data Layer compliance guide lines meaning any alphanumeric character are allowed [a-zA-Z_][a-zA-Z0-9-._]+
+/// Synchronization points to specify the call sequence, alternatively to the use of run index
+/// Notes:
+///   - Using of run index cause disabling of synchronization points of this callable
+///   - Using no synchronization points and run index value '0' cause that this callable run together with other, same configured callables, unordered at the end of the task
 func (rcv *Callable) Sync(obj *SyncPoints) *SyncPoints {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -171,8 +185,11 @@ func (rcv *Callable) Sync(obj *SyncPoints) *SyncPoints {
 	return nil
 }
 
-/// sync points to get callables in order
-/// influence task and hardware watchdog handling
+/// Synchronization points to specify the call sequence, alternatively to the use of run index
+/// Notes:
+///   - Using of run index cause disabling of synchronization points of this callable
+///   - Using no synchronization points and run index value '0' cause that this callable run together with other, same configured callables, unordered at the end of the task
+/// Requirement of the callable that a watchdog is present
 func (rcv *Callable) Watchdog() CallableWdgConfig {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -181,7 +198,7 @@ func (rcv *Callable) Watchdog() CallableWdgConfig {
 	return 3
 }
 
-/// influence task and hardware watchdog handling
+/// Requirement of the callable that a watchdog is present
 func (rcv *Callable) MutateWatchdog(n CallableWdgConfig) bool {
 	return rcv._tab.MutateInt8Slot(16, int8(n))
 }

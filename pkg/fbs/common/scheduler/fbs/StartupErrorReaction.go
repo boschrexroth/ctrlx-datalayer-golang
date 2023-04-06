@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Error reaction in case of not all configured components are available on startup
 type StartupErrorReactionT struct {
 	ErrorReaction CurrentErrorReaction
 }
@@ -55,6 +56,7 @@ func (rcv *StartupErrorReaction) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Error reaction in case of not all configured components are available on startup
 func (rcv *StartupErrorReaction) ErrorReaction() CurrentErrorReaction {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *StartupErrorReaction) ErrorReaction() CurrentErrorReaction {
 	return 0
 }
 
+/// Error reaction in case of not all configured components are available on startup
 func (rcv *StartupErrorReaction) MutateErrorReaction(n CurrentErrorReaction) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

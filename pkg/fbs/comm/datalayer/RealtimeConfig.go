@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// configuration of realtime input buffer system
 type RealtimeConfigT struct {
 	DefaultInputAcessType AccessType
 	NTelBufConfig *NTelBufferConfigT
@@ -59,6 +60,7 @@ func (rcv *RealtimeConfig) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// default buffer type used for Data Layer RT input
 func (rcv *RealtimeConfig) DefaultInputAcessType() AccessType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -67,10 +69,12 @@ func (rcv *RealtimeConfig) DefaultInputAcessType() AccessType {
 	return 2
 }
 
+/// default buffer type used for Data Layer RT input
 func (rcv *RealtimeConfig) MutateDefaultInputAcessType(n AccessType) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
+/// Configuration if NTelBuf is configured in defaultInputAcessType
 func (rcv *RealtimeConfig) NTelBufConfig(obj *NTelBufferConfig) *NTelBufferConfig {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,6 +88,7 @@ func (rcv *RealtimeConfig) NTelBufConfig(obj *NTelBufferConfig) *NTelBufferConfi
 	return nil
 }
 
+/// Configuration if NTelBuf is configured in defaultInputAcessType
 func RealtimeConfigStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

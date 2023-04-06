@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Task behavior in case of a task watchdog occurs
 type ConfigurationT struct {
 	Type CurrentConfiguration
 }
@@ -55,6 +56,7 @@ func (rcv *Configuration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Task behavior in case of a task watchdog occurs
 func (rcv *Configuration) Type() CurrentConfiguration {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *Configuration) Type() CurrentConfiguration {
 	return 0
 }
 
+/// Task behavior in case of a task watchdog occurs
 func (rcv *Configuration) MutateType(n CurrentConfiguration) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

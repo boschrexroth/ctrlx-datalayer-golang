@@ -72,6 +72,7 @@ func (rcv *ServerStatusType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Build info of the OPC UA Server
 func (rcv *ServerStatusType) BuildInfo(obj *BuildInfoType) *BuildInfoType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,6 +86,8 @@ func (rcv *ServerStatusType) BuildInfo(obj *BuildInfoType) *BuildInfoType {
 	return nil
 }
 
+/// Build info of the OPC UA Server
+/// The current time of the OPC UA Server
 func (rcv *ServerStatusType) CurrentTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -93,10 +96,13 @@ func (rcv *ServerStatusType) CurrentTime() uint32 {
 	return 0
 }
 
+/// The current time of the OPC UA Server
 func (rcv *ServerStatusType) MutateCurrentTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// The time until server shutdown if an OPC UA Server shutdown was requested
+/// Otherwise, the value is 0
 func (rcv *ServerStatusType) SecondsTillShutdown() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -105,10 +111,14 @@ func (rcv *ServerStatusType) SecondsTillShutdown() uint32 {
 	return 0
 }
 
+/// The time until server shutdown if an OPC UA Server shutdown was requested
+/// Otherwise, the value is 0
 func (rcv *ServerStatusType) MutateSecondsTillShutdown(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// The reason for the server shutdown if an OPC UA Server shutdown was requested
+/// Otherwise, an empty string is displayed
 func (rcv *ServerStatusType) ShutdownReason() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -117,6 +127,9 @@ func (rcv *ServerStatusType) ShutdownReason() []byte {
 	return nil
 }
 
+/// The reason for the server shutdown if an OPC UA Server shutdown was requested
+/// Otherwise, an empty string is displayed
+/// The starting point in time of the OPC UA Server
 func (rcv *ServerStatusType) StartTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -125,10 +138,12 @@ func (rcv *ServerStatusType) StartTime() uint32 {
 	return 0
 }
 
+/// The starting point in time of the OPC UA Server
 func (rcv *ServerStatusType) MutateStartTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+/// The current state of the OPC UA Server
 func (rcv *ServerStatusType) State() EnumServerState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -137,6 +152,7 @@ func (rcv *ServerStatusType) State() EnumServerState {
 	return 0
 }
 
+/// The current state of the OPC UA Server
 func (rcv *ServerStatusType) MutateState(n EnumServerState) bool {
 	return rcv._tab.MutateInt32Slot(14, int32(n))
 }

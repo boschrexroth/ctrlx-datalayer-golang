@@ -88,6 +88,7 @@ func (rcv *ServerDiagnosticsSummaryType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// The sum of the created sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) CumulatedSessionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -96,10 +97,12 @@ func (rcv *ServerDiagnosticsSummaryType) CumulatedSessionCount() uint32 {
 	return 0
 }
 
+/// The sum of the created sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateCumulatedSessionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// The sum of the created subscriptions during all sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) CumulatedSubscriptionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -108,10 +111,12 @@ func (rcv *ServerDiagnosticsSummaryType) CumulatedSubscriptionCount() uint32 {
 	return 0
 }
 
+/// The sum of the created subscriptions during all sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateCumulatedSubscriptionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// The current number of active sessions of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) CurrentSessonCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -120,10 +125,12 @@ func (rcv *ServerDiagnosticsSummaryType) CurrentSessonCount() uint32 {
 	return 0
 }
 
+/// The current number of active sessions of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) MutateCurrentSessonCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// The current number of active subscriptions of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) CurrentSubscriptionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -132,10 +139,12 @@ func (rcv *ServerDiagnosticsSummaryType) CurrentSubscriptionCount() uint32 {
 	return 0
 }
 
+/// The current number of active subscriptions of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) MutateCurrentSubscriptionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+/// The number of the supported publishing intervals of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) PublishingIntervalCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -144,10 +153,12 @@ func (rcv *ServerDiagnosticsSummaryType) PublishingIntervalCount() uint32 {
 	return 0
 }
 
+/// The number of the supported publishing intervals of the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) MutatePublishingIntervalCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+/// The number of the discarded queries of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) RejectedRequestsCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -156,10 +167,12 @@ func (rcv *ServerDiagnosticsSummaryType) RejectedRequestsCount() uint32 {
 	return 0
 }
 
+/// The number of the discarded queries of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateRejectedRequestsCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+/// The number of the discarded sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) RejectedSessionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -168,10 +181,13 @@ func (rcv *ServerDiagnosticsSummaryType) RejectedSessionCount() uint32 {
 	return 0
 }
 
+/// The number of the discarded sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateRejectedSessionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
+/// The number of discarded service queries of the OPC UA Server since its start
+/// that were rejected due to security criteria that were not met
 func (rcv *ServerDiagnosticsSummaryType) SecurityRejectedRequestsCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -180,10 +196,14 @@ func (rcv *ServerDiagnosticsSummaryType) SecurityRejectedRequestsCount() uint32 
 	return 0
 }
 
+/// The number of discarded service queries of the OPC UA Server since its start
+/// that were rejected due to security criteria that were not met
 func (rcv *ServerDiagnosticsSummaryType) MutateSecurityRejectedRequestsCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(18, n)
 }
 
+/// The number of discarded sessions (service queries) of the OPC UA Server since its start
+/// that were rejected due to security criteria that were not met
 func (rcv *ServerDiagnosticsSummaryType) SecurityRejectedSessionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -192,10 +212,13 @@ func (rcv *ServerDiagnosticsSummaryType) SecurityRejectedSessionCount() uint32 {
 	return 0
 }
 
+/// The number of discarded sessions (service queries) of the OPC UA Server since its start
+/// that were rejected due to security criteria that were not met
 func (rcv *ServerDiagnosticsSummaryType) MutateSecurityRejectedSessionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(20, n)
 }
 
+/// The number of views available in the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) ServerViewCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -204,10 +227,12 @@ func (rcv *ServerDiagnosticsSummaryType) ServerViewCount() uint32 {
 	return 0
 }
 
+/// The number of views available in the OPC UA Server
 func (rcv *ServerDiagnosticsSummaryType) MutateServerViewCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(22, n)
 }
 
+/// The number of the error-caused ended sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) SessionAbortCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -216,10 +241,12 @@ func (rcv *ServerDiagnosticsSummaryType) SessionAbortCount() uint32 {
 	return 0
 }
 
+/// The number of the error-caused ended sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateSessionAbortCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(24, n)
 }
 
+/// The number of the timeout-caused ended sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) SessionTimeoutCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
@@ -228,6 +255,7 @@ func (rcv *ServerDiagnosticsSummaryType) SessionTimeoutCount() uint32 {
 	return 0
 }
 
+/// The number of the timeout-caused ended sessions of the OPC UA Server since its start
 func (rcv *ServerDiagnosticsSummaryType) MutateSessionTimeoutCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(26, n)
 }

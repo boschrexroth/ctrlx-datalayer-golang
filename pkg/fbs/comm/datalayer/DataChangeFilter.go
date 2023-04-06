@@ -55,6 +55,7 @@ func (rcv *DataChangeFilter) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// If (abs(lastCapturedValue - newValue) > deadBandValue) capture(newValue);
 func (rcv *DataChangeFilter) DeadBandValue() float32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *DataChangeFilter) DeadBandValue() float32 {
 	return 0.0
 }
 
+/// If (abs(lastCapturedValue - newValue) > deadBandValue) capture(newValue);
 func (rcv *DataChangeFilter) MutateDeadBandValue(n float32) bool {
 	return rcv._tab.MutateFloat32Slot(4, n)
 }

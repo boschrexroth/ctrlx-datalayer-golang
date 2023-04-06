@@ -65,6 +65,7 @@ func (rcv *Memory) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// memory type
 func (rcv *Memory) Type() MemoryType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,10 +74,12 @@ func (rcv *Memory) Type() MemoryType {
 	return 0
 }
 
+/// memory type
 func (rcv *Memory) MutateType(n MemoryType) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
+/// identification of the memory - contains how to access memory
 func (rcv *Memory) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -85,6 +88,8 @@ func (rcv *Memory) Id() []byte {
 	return nil
 }
 
+/// identification of the memory - contains how to access memory
+/// size of usable bytes of memory
 func (rcv *Memory) SizeBytes() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,10 +98,12 @@ func (rcv *Memory) SizeBytes() uint32 {
 	return 0
 }
 
+/// size of usable bytes of memory
 func (rcv *Memory) MutateSizeBytes(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// how to access memory
 func (rcv *Memory) AccessType() AccessType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -105,6 +112,7 @@ func (rcv *Memory) AccessType() AccessType {
 	return 0
 }
 
+/// how to access memory
 func (rcv *Memory) MutateAccessType(n AccessType) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }

@@ -4,10 +4,13 @@ package fbs
 
 import "strconv"
 
+/// Error reaction in case of not all configured components are available on startup
 type CurrentErrorReaction int8
 
 const (
+	/// The Scheduler aborts further startup
 	CurrentErrorReactionSTOP     CurrentErrorReaction = 0
+	/// The Scheduler continues the startup without the missing components
 	CurrentErrorReactionCONTINUE CurrentErrorReaction = 1
 )
 

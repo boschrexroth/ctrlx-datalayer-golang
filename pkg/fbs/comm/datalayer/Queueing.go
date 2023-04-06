@@ -58,6 +58,7 @@ func (rcv *Queueing) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// size of buffer
 func (rcv *Queueing) QueueSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +67,12 @@ func (rcv *Queueing) QueueSize() uint32 {
 	return 10
 }
 
+/// size of buffer
 func (rcv *Queueing) MutateQueueSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// The queing strategy. Decided what data should be sent or disarded when the queue runs full before it could be sent.
 func (rcv *Queueing) Behaviour() QueueBehaviour {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +81,7 @@ func (rcv *Queueing) Behaviour() QueueBehaviour {
 	return 0
 }
 
+/// The queing strategy. Decided what data should be sent or disarded when the queue runs full before it could be sent.
 func (rcv *Queueing) MutateBehaviour(n QueueBehaviour) bool {
 	return rcv._tab.MutateInt32Slot(6, int32(n))
 }

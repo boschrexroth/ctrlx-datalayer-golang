@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the required elements to request the diagnostic text of a diagnostic log.
 type GetDetailedDiagnosisTextT struct {
 	DetailedDiagnosisNumber string
 	RelatedMainDiagnosisNumber string
@@ -60,6 +61,7 @@ func (rcv *GetDetailedDiagnosisText) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Detailed diagnostic number of the diagnostic log.
 func (rcv *GetDetailedDiagnosisText) DetailedDiagnosisNumber() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +70,8 @@ func (rcv *GetDetailedDiagnosisText) DetailedDiagnosisNumber() []byte {
 	return nil
 }
 
+/// Detailed diagnostic number of the diagnostic log.
+/// Related main diagnostic number of the diagnostic log.
 func (rcv *GetDetailedDiagnosisText) RelatedMainDiagnosisNumber() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -76,6 +80,7 @@ func (rcv *GetDetailedDiagnosisText) RelatedMainDiagnosisNumber() []byte {
 	return nil
 }
 
+/// Related main diagnostic number of the diagnostic log.
 func GetDetailedDiagnosisTextStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

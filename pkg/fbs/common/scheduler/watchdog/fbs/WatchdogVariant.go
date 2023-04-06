@@ -11,21 +11,18 @@ import (
 type WatchdogVariant byte
 
 const (
-	WatchdogVariantNONE     WatchdogVariant = 0
-	WatchdogVariantCyclic   WatchdogVariant = 1
-	WatchdogVariantDuration WatchdogVariant = 2
+	WatchdogVariantNONE   WatchdogVariant = 0
+	WatchdogVariantCyclic WatchdogVariant = 1
 )
 
 var EnumNamesWatchdogVariant = map[WatchdogVariant]string{
-	WatchdogVariantNONE:     "NONE",
-	WatchdogVariantCyclic:   "Cyclic",
-	WatchdogVariantDuration: "Duration",
+	WatchdogVariantNONE:   "NONE",
+	WatchdogVariantCyclic: "Cyclic",
 }
 
 var EnumValuesWatchdogVariant = map[string]WatchdogVariant{
-	"NONE":     WatchdogVariantNONE,
-	"Cyclic":   WatchdogVariantCyclic,
-	"Duration": WatchdogVariantDuration,
+	"NONE":   WatchdogVariantNONE,
+	"Cyclic": WatchdogVariantCyclic,
 }
 
 func (v WatchdogVariant) String() string {
@@ -47,8 +44,6 @@ func (t *WatchdogVariantT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	switch t.Type {
 	case WatchdogVariantCyclic:
 		return t.Value.(*CyclicT).Pack(builder)
-	case WatchdogVariantDuration:
-		return t.Value.(*DurationT).Pack(builder)
 	}
 	return 0
 }
@@ -58,9 +53,6 @@ func (rcv WatchdogVariant) UnPack(table flatbuffers.Table) *WatchdogVariantT {
 	case WatchdogVariantCyclic:
 		x := Cyclic{_tab: table}
 		return &WatchdogVariantT{ Type: WatchdogVariantCyclic, Value: x.UnPack() }
-	case WatchdogVariantDuration:
-		x := Duration{_tab: table}
-		return &WatchdogVariantT{ Type: WatchdogVariantDuration, Value: x.UnPack() }
 	}
 	return nil
 }

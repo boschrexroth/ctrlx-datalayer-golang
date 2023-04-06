@@ -84,6 +84,7 @@ func (rcv *SessionConfiguration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// UserToken to be used, e.g. for Anonymous or Username, Password
 func (rcv *SessionConfiguration) UserToken(obj *UserIdentityToken) *UserIdentityToken {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -97,6 +98,8 @@ func (rcv *SessionConfiguration) UserToken(obj *UserIdentityToken) *UserIdentity
 	return nil
 }
 
+/// UserToken to be used, e.g. for Anonymous or Username, Password
+/// The OPC UA Server to connect has to support the selected MessageSecurityMode
 func (rcv *SessionConfiguration) MessageSecurityMode(obj *MessageSecurityMode) *MessageSecurityMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -110,6 +113,8 @@ func (rcv *SessionConfiguration) MessageSecurityMode(obj *MessageSecurityMode) *
 	return nil
 }
 
+/// The OPC UA Server to connect has to support the selected MessageSecurityMode
+/// The OPC UA Server to connect has to support the selected SecurityPolicy
 func (rcv *SessionConfiguration) SecurityPolicy(obj *SecurityPolicy) *SecurityPolicy {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -123,6 +128,8 @@ func (rcv *SessionConfiguration) SecurityPolicy(obj *SecurityPolicy) *SecurityPo
 	return nil
 }
 
+/// The OPC UA Server to connect has to support the selected SecurityPolicy
+/// Define the LocalId establish a connection to the OPC UA Server (ActivateSession service)
 func (rcv *SessionConfiguration) LocaleIds(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -140,6 +147,7 @@ func (rcv *SessionConfiguration) LocaleIdsLength() int {
 	return 0
 }
 
+/// Define the LocalId establish a connection to the OPC UA Server (ActivateSession service)
 func SessionConfigurationStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

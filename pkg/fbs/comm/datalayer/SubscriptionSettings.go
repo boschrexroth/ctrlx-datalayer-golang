@@ -11,6 +11,7 @@ type SubscriptionSettingsT struct {
 	MinimumSampleInterval uint64
 	MaximumBufferSize uint32
 	MinimumErrorInterval uint32
+	MaximumRTSubscribedNodes uint32
 }
 
 func (t *SubscriptionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -20,6 +21,7 @@ func (t *SubscriptionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	SubscriptionSettingsAddMinimumSampleInterval(builder, t.MinimumSampleInterval)
 	SubscriptionSettingsAddMaximumBufferSize(builder, t.MaximumBufferSize)
 	SubscriptionSettingsAddMinimumErrorInterval(builder, t.MinimumErrorInterval)
+	SubscriptionSettingsAddMaximumRTSubscribedNodes(builder, t.MaximumRTSubscribedNodes)
 	return SubscriptionSettingsEnd(builder)
 }
 
@@ -28,6 +30,7 @@ func (rcv *SubscriptionSettings) UnPackTo(t *SubscriptionSettingsT) {
 	t.MinimumSampleInterval = rcv.MinimumSampleInterval()
 	t.MaximumBufferSize = rcv.MaximumBufferSize()
 	t.MinimumErrorInterval = rcv.MinimumErrorInterval()
+	t.MaximumRTSubscribedNodes = rcv.MaximumRTSubscribedNodes()
 }
 
 func (rcv *SubscriptionSettings) UnPack() *SubscriptionSettingsT {
@@ -64,6 +67,7 @@ func (rcv *SubscriptionSettings) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// minimum publish interval in milliseconds
 func (rcv *SubscriptionSettings) MinimumPublishInterval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +76,12 @@ func (rcv *SubscriptionSettings) MinimumPublishInterval() uint32 {
 	return 50
 }
 
+/// minimum publish interval in milliseconds
 func (rcv *SubscriptionSettings) MutateMinimumPublishInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// minimum sampling interval in microseconds
 func (rcv *SubscriptionSettings) MinimumSampleInterval() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +90,12 @@ func (rcv *SubscriptionSettings) MinimumSampleInterval() uint64 {
 	return 100000
 }
 
+/// minimum sampling interval in microseconds
 func (rcv *SubscriptionSettings) MutateMinimumSampleInterval(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }
 
+/// maximum size of buffer
 func (rcv *SubscriptionSettings) MaximumBufferSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +104,12 @@ func (rcv *SubscriptionSettings) MaximumBufferSize() uint32 {
 	return 50
 }
 
+/// maximum size of buffer
 func (rcv *SubscriptionSettings) MutateMaximumBufferSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// minimum error interval
 func (rcv *SubscriptionSettings) MinimumErrorInterval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,12 +118,27 @@ func (rcv *SubscriptionSettings) MinimumErrorInterval() uint32 {
 	return 10000
 }
 
+/// minimum error interval
 func (rcv *SubscriptionSettings) MutateMinimumErrorInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+/// Maximum allowed count of RT Subscriptions to addresses
+func (rcv *SubscriptionSettings) MaximumRTSubscribedNodes() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 50
+}
+
+/// Maximum allowed count of RT Subscriptions to addresses
+func (rcv *SubscriptionSettings) MutateMaximumRTSubscribedNodes(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(12, n)
+}
+
 func SubscriptionSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func SubscriptionSettingsAddMinimumPublishInterval(builder *flatbuffers.Builder, minimumPublishInterval uint32) {
 	builder.PrependUint32Slot(0, minimumPublishInterval, 50)
@@ -126,6 +151,9 @@ func SubscriptionSettingsAddMaximumBufferSize(builder *flatbuffers.Builder, maxi
 }
 func SubscriptionSettingsAddMinimumErrorInterval(builder *flatbuffers.Builder, minimumErrorInterval uint32) {
 	builder.PrependUint32Slot(3, minimumErrorInterval, 10000)
+}
+func SubscriptionSettingsAddMaximumRTSubscribedNodes(builder *flatbuffers.Builder, maximumRTSubscribedNodes uint32) {
+	builder.PrependUint32Slot(4, maximumRTSubscribedNodes, 50)
 }
 func SubscriptionSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

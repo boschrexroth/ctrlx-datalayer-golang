@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines which log class is selected.
 type ClassConfigT struct {
 	ClassConfig Class
 }
@@ -55,6 +56,7 @@ func (rcv *ClassConfig) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Selection of log class.
 func (rcv *ClassConfig) ClassConfig() Class {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *ClassConfig) ClassConfig() Class {
 	return 2
 }
 
+/// Selection of log class.
 func (rcv *ClassConfig) MutateClassConfig(n Class) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

@@ -110,6 +110,7 @@ func (rcv *Diagnosis) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Main diagnosis code for diagnosis system. E.g.: 0x3F0A0901
 func (rcv *Diagnosis) MainDiagnosisCode() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -118,10 +119,12 @@ func (rcv *Diagnosis) MainDiagnosisCode() uint32 {
 	return 0
 }
 
+/// Main diagnosis code for diagnosis system. E.g.: 0x3F0A0901
 func (rcv *Diagnosis) MutateMainDiagnosisCode(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// Detailed diagnosis code for diagnosis system. E.g.: 0xC00E2050
 func (rcv *Diagnosis) DetailedDiagnosisCode() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -130,10 +133,12 @@ func (rcv *Diagnosis) DetailedDiagnosisCode() uint32 {
 	return 0
 }
 
+/// Detailed diagnosis code for diagnosis system. E.g.: 0xC00E2050
 func (rcv *Diagnosis) MutateDetailedDiagnosisCode(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// A human-readable explanation with even more detailed information specific to this occurrence of the problem.
 func (rcv *Diagnosis) DynamicDescription() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -142,6 +147,8 @@ func (rcv *Diagnosis) DynamicDescription() []byte {
 	return nil
 }
 
+/// A human-readable explanation with even more detailed information specific to this occurrence of the problem.
+/// Resource or entity which causes the problem E.g.: motion/axs/Axis_1
 func (rcv *Diagnosis) Entity() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -150,6 +157,8 @@ func (rcv *Diagnosis) Entity() []byte {
 	return nil
 }
 
+/// Resource or entity which causes the problem E.g.: motion/axs/Axis_1
+/// More information about the diagnosis
 func (rcv *Diagnosis) MoreInfo(obj *DiagMoreInfo, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -170,6 +179,8 @@ func (rcv *Diagnosis) MoreInfoLength() int {
 	return 0
 }
 
+/// More information about the diagnosis
+/// Cause of this diagnosis
 func (rcv *Diagnosis) Cause(obj *Diagnosis, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -190,6 +201,7 @@ func (rcv *Diagnosis) CauseLength() int {
 	return 0
 }
 
+/// Cause of this diagnosis
 func DiagnosisStart(builder *flatbuffers.Builder) {
 	builder.StartObject(6)
 }

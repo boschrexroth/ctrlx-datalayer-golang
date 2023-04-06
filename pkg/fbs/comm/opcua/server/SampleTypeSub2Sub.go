@@ -6,6 +6,220 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SampleTypeSub2SubT struct {
+	AValueBool bool
+	AValueBoolArray []bool
+	BValueShort int16
+	BValueShortArray []int16
+	CValueUshort uint16
+	CValueUshortArray []uint16
+	DValueInt int32
+	DValueIntArray []int32
+	EValueUint uint32
+	EValueUintArray []uint32
+	FValueFloat float32
+	FValueFloatArray []float32
+	GValueLong int64
+	GValueLongArray []int64
+	HValueUlong uint64
+	HValueUlongArray []uint64
+	IValueDouble float64
+	IValueDoubleArray []float64
+	JValueString string
+	JValueStringArray []string
+}
+
+func (t *SampleTypeSub2SubT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	aValueBoolArrayOffset := flatbuffers.UOffsetT(0)
+	if t.AValueBoolArray != nil {
+		aValueBoolArrayLength := len(t.AValueBoolArray)
+		SampleTypeSub2SubStartAValueBoolArrayVector(builder, aValueBoolArrayLength)
+		for j := aValueBoolArrayLength - 1; j >= 0; j-- {
+			builder.PrependBool(t.AValueBoolArray[j])
+		}
+		aValueBoolArrayOffset = builder.EndVector(aValueBoolArrayLength)
+	}
+	bValueShortArrayOffset := flatbuffers.UOffsetT(0)
+	if t.BValueShortArray != nil {
+		bValueShortArrayLength := len(t.BValueShortArray)
+		SampleTypeSub2SubStartBValueShortArrayVector(builder, bValueShortArrayLength)
+		for j := bValueShortArrayLength - 1; j >= 0; j-- {
+			builder.PrependInt16(t.BValueShortArray[j])
+		}
+		bValueShortArrayOffset = builder.EndVector(bValueShortArrayLength)
+	}
+	cValueUshortArrayOffset := flatbuffers.UOffsetT(0)
+	if t.CValueUshortArray != nil {
+		cValueUshortArrayLength := len(t.CValueUshortArray)
+		SampleTypeSub2SubStartCValueUshortArrayVector(builder, cValueUshortArrayLength)
+		for j := cValueUshortArrayLength - 1; j >= 0; j-- {
+			builder.PrependUint16(t.CValueUshortArray[j])
+		}
+		cValueUshortArrayOffset = builder.EndVector(cValueUshortArrayLength)
+	}
+	dValueIntArrayOffset := flatbuffers.UOffsetT(0)
+	if t.DValueIntArray != nil {
+		dValueIntArrayLength := len(t.DValueIntArray)
+		SampleTypeSub2SubStartDValueIntArrayVector(builder, dValueIntArrayLength)
+		for j := dValueIntArrayLength - 1; j >= 0; j-- {
+			builder.PrependInt32(t.DValueIntArray[j])
+		}
+		dValueIntArrayOffset = builder.EndVector(dValueIntArrayLength)
+	}
+	eValueUintArrayOffset := flatbuffers.UOffsetT(0)
+	if t.EValueUintArray != nil {
+		eValueUintArrayLength := len(t.EValueUintArray)
+		SampleTypeSub2SubStartEValueUintArrayVector(builder, eValueUintArrayLength)
+		for j := eValueUintArrayLength - 1; j >= 0; j-- {
+			builder.PrependUint32(t.EValueUintArray[j])
+		}
+		eValueUintArrayOffset = builder.EndVector(eValueUintArrayLength)
+	}
+	fValueFloatArrayOffset := flatbuffers.UOffsetT(0)
+	if t.FValueFloatArray != nil {
+		fValueFloatArrayLength := len(t.FValueFloatArray)
+		SampleTypeSub2SubStartFValueFloatArrayVector(builder, fValueFloatArrayLength)
+		for j := fValueFloatArrayLength - 1; j >= 0; j-- {
+			builder.PrependFloat32(t.FValueFloatArray[j])
+		}
+		fValueFloatArrayOffset = builder.EndVector(fValueFloatArrayLength)
+	}
+	gValueLongArrayOffset := flatbuffers.UOffsetT(0)
+	if t.GValueLongArray != nil {
+		gValueLongArrayLength := len(t.GValueLongArray)
+		SampleTypeSub2SubStartGValueLongArrayVector(builder, gValueLongArrayLength)
+		for j := gValueLongArrayLength - 1; j >= 0; j-- {
+			builder.PrependInt64(t.GValueLongArray[j])
+		}
+		gValueLongArrayOffset = builder.EndVector(gValueLongArrayLength)
+	}
+	hValueUlongArrayOffset := flatbuffers.UOffsetT(0)
+	if t.HValueUlongArray != nil {
+		hValueUlongArrayLength := len(t.HValueUlongArray)
+		SampleTypeSub2SubStartHValueUlongArrayVector(builder, hValueUlongArrayLength)
+		for j := hValueUlongArrayLength - 1; j >= 0; j-- {
+			builder.PrependUint64(t.HValueUlongArray[j])
+		}
+		hValueUlongArrayOffset = builder.EndVector(hValueUlongArrayLength)
+	}
+	iValueDoubleArrayOffset := flatbuffers.UOffsetT(0)
+	if t.IValueDoubleArray != nil {
+		iValueDoubleArrayLength := len(t.IValueDoubleArray)
+		SampleTypeSub2SubStartIValueDoubleArrayVector(builder, iValueDoubleArrayLength)
+		for j := iValueDoubleArrayLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.IValueDoubleArray[j])
+		}
+		iValueDoubleArrayOffset = builder.EndVector(iValueDoubleArrayLength)
+	}
+	jValueStringOffset := builder.CreateString(t.JValueString)
+	jValueStringArrayOffset := flatbuffers.UOffsetT(0)
+	if t.JValueStringArray != nil {
+		jValueStringArrayLength := len(t.JValueStringArray)
+		jValueStringArrayOffsets := make([]flatbuffers.UOffsetT, jValueStringArrayLength)
+		for j := 0; j < jValueStringArrayLength; j++ {
+			jValueStringArrayOffsets[j] = builder.CreateString(t.JValueStringArray[j])
+		}
+		SampleTypeSub2SubStartJValueStringArrayVector(builder, jValueStringArrayLength)
+		for j := jValueStringArrayLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(jValueStringArrayOffsets[j])
+		}
+		jValueStringArrayOffset = builder.EndVector(jValueStringArrayLength)
+	}
+	SampleTypeSub2SubStart(builder)
+	SampleTypeSub2SubAddAValueBool(builder, t.AValueBool)
+	SampleTypeSub2SubAddAValueBoolArray(builder, aValueBoolArrayOffset)
+	SampleTypeSub2SubAddBValueShort(builder, t.BValueShort)
+	SampleTypeSub2SubAddBValueShortArray(builder, bValueShortArrayOffset)
+	SampleTypeSub2SubAddCValueUshort(builder, t.CValueUshort)
+	SampleTypeSub2SubAddCValueUshortArray(builder, cValueUshortArrayOffset)
+	SampleTypeSub2SubAddDValueInt(builder, t.DValueInt)
+	SampleTypeSub2SubAddDValueIntArray(builder, dValueIntArrayOffset)
+	SampleTypeSub2SubAddEValueUint(builder, t.EValueUint)
+	SampleTypeSub2SubAddEValueUintArray(builder, eValueUintArrayOffset)
+	SampleTypeSub2SubAddFValueFloat(builder, t.FValueFloat)
+	SampleTypeSub2SubAddFValueFloatArray(builder, fValueFloatArrayOffset)
+	SampleTypeSub2SubAddGValueLong(builder, t.GValueLong)
+	SampleTypeSub2SubAddGValueLongArray(builder, gValueLongArrayOffset)
+	SampleTypeSub2SubAddHValueUlong(builder, t.HValueUlong)
+	SampleTypeSub2SubAddHValueUlongArray(builder, hValueUlongArrayOffset)
+	SampleTypeSub2SubAddIValueDouble(builder, t.IValueDouble)
+	SampleTypeSub2SubAddIValueDoubleArray(builder, iValueDoubleArrayOffset)
+	SampleTypeSub2SubAddJValueString(builder, jValueStringOffset)
+	SampleTypeSub2SubAddJValueStringArray(builder, jValueStringArrayOffset)
+	return SampleTypeSub2SubEnd(builder)
+}
+
+func (rcv *SampleTypeSub2Sub) UnPackTo(t *SampleTypeSub2SubT) {
+	t.AValueBool = rcv.AValueBool()
+	aValueBoolArrayLength := rcv.AValueBoolArrayLength()
+	t.AValueBoolArray = make([]bool, aValueBoolArrayLength)
+	for j := 0; j < aValueBoolArrayLength; j++ {
+		t.AValueBoolArray[j] = rcv.AValueBoolArray(j)
+	}
+	t.BValueShort = rcv.BValueShort()
+	bValueShortArrayLength := rcv.BValueShortArrayLength()
+	t.BValueShortArray = make([]int16, bValueShortArrayLength)
+	for j := 0; j < bValueShortArrayLength; j++ {
+		t.BValueShortArray[j] = rcv.BValueShortArray(j)
+	}
+	t.CValueUshort = rcv.CValueUshort()
+	cValueUshortArrayLength := rcv.CValueUshortArrayLength()
+	t.CValueUshortArray = make([]uint16, cValueUshortArrayLength)
+	for j := 0; j < cValueUshortArrayLength; j++ {
+		t.CValueUshortArray[j] = rcv.CValueUshortArray(j)
+	}
+	t.DValueInt = rcv.DValueInt()
+	dValueIntArrayLength := rcv.DValueIntArrayLength()
+	t.DValueIntArray = make([]int32, dValueIntArrayLength)
+	for j := 0; j < dValueIntArrayLength; j++ {
+		t.DValueIntArray[j] = rcv.DValueIntArray(j)
+	}
+	t.EValueUint = rcv.EValueUint()
+	eValueUintArrayLength := rcv.EValueUintArrayLength()
+	t.EValueUintArray = make([]uint32, eValueUintArrayLength)
+	for j := 0; j < eValueUintArrayLength; j++ {
+		t.EValueUintArray[j] = rcv.EValueUintArray(j)
+	}
+	t.FValueFloat = rcv.FValueFloat()
+	fValueFloatArrayLength := rcv.FValueFloatArrayLength()
+	t.FValueFloatArray = make([]float32, fValueFloatArrayLength)
+	for j := 0; j < fValueFloatArrayLength; j++ {
+		t.FValueFloatArray[j] = rcv.FValueFloatArray(j)
+	}
+	t.GValueLong = rcv.GValueLong()
+	gValueLongArrayLength := rcv.GValueLongArrayLength()
+	t.GValueLongArray = make([]int64, gValueLongArrayLength)
+	for j := 0; j < gValueLongArrayLength; j++ {
+		t.GValueLongArray[j] = rcv.GValueLongArray(j)
+	}
+	t.HValueUlong = rcv.HValueUlong()
+	hValueUlongArrayLength := rcv.HValueUlongArrayLength()
+	t.HValueUlongArray = make([]uint64, hValueUlongArrayLength)
+	for j := 0; j < hValueUlongArrayLength; j++ {
+		t.HValueUlongArray[j] = rcv.HValueUlongArray(j)
+	}
+	t.IValueDouble = rcv.IValueDouble()
+	iValueDoubleArrayLength := rcv.IValueDoubleArrayLength()
+	t.IValueDoubleArray = make([]float64, iValueDoubleArrayLength)
+	for j := 0; j < iValueDoubleArrayLength; j++ {
+		t.IValueDoubleArray[j] = rcv.IValueDoubleArray(j)
+	}
+	t.JValueString = string(rcv.JValueString())
+	jValueStringArrayLength := rcv.JValueStringArrayLength()
+	t.JValueStringArray = make([]string, jValueStringArrayLength)
+	for j := 0; j < jValueStringArrayLength; j++ {
+		t.JValueStringArray[j] = string(rcv.JValueStringArray(j))
+	}
+}
+
+func (rcv *SampleTypeSub2Sub) UnPack() *SampleTypeSub2SubT {
+	if rcv == nil { return nil }
+	t := &SampleTypeSub2SubT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SampleTypeSub2Sub struct {
 	_tab flatbuffers.Table
 }

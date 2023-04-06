@@ -4,23 +4,29 @@ package fbtypes
 
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
+
+	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/sync/fbtypes"
 )
 
 /// configuration for coupling functions for a single axis
 type AxsCfgCouplingT struct {
 	Gantry *AxsCfgGantryT
+	Syncmotion *motion__sync__fbtypes.AxsCfgSyncMotionT
 }
 
 func (t *AxsCfgCouplingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	gantryOffset := t.Gantry.Pack(builder)
+	syncmotionOffset := t.Syncmotion.Pack(builder)
 	AxsCfgCouplingStart(builder)
 	AxsCfgCouplingAddGantry(builder, gantryOffset)
+	AxsCfgCouplingAddSyncmotion(builder, syncmotionOffset)
 	return AxsCfgCouplingEnd(builder)
 }
 
 func (rcv *AxsCfgCoupling) UnPackTo(t *AxsCfgCouplingT) {
 	t.Gantry = rcv.Gantry(nil).UnPack()
+	t.Syncmotion = rcv.Syncmotion(nil).UnPack()
 }
 
 func (rcv *AxsCfgCoupling) UnPack() *AxsCfgCouplingT {
@@ -72,11 +78,29 @@ func (rcv *AxsCfgCoupling) Gantry(obj *AxsCfgGantry) *AxsCfgGantry {
 }
 
 /// configuration for gantry coupling function of a single axis
+/// configuration for sync motion functionality for a single axis
+func (rcv *AxsCfgCoupling) Syncmotion(obj *motion__sync__fbtypes.AxsCfgSyncMotion) *motion__sync__fbtypes.AxsCfgSyncMotion {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(motion__sync__fbtypes.AxsCfgSyncMotion)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration for sync motion functionality for a single axis
 func AxsCfgCouplingStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func AxsCfgCouplingAddGantry(builder *flatbuffers.Builder, gantry flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(gantry), 0)
+}
+func AxsCfgCouplingAddSyncmotion(builder *flatbuffers.Builder, syncmotion flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(syncmotion), 0)
 }
 func AxsCfgCouplingEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

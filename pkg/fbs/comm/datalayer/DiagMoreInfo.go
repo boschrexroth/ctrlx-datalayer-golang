@@ -60,6 +60,9 @@ func (rcv *DiagMoreInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// defined key 
+///   "requiredLicenses": list of required licences seperated by ","
+///   "requiredScopes": list of required scopes seperated by ","
 func (rcv *DiagMoreInfo) Key() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +71,10 @@ func (rcv *DiagMoreInfo) Key() []byte {
 	return nil
 }
 
+/// defined key 
+///   "requiredLicenses": list of required licences seperated by ","
+///   "requiredScopes": list of required scopes seperated by ","
+/// corresponding value
 func (rcv *DiagMoreInfo) Value() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -76,6 +83,7 @@ func (rcv *DiagMoreInfo) Value() []byte {
 	return nil
 }
 
+/// corresponding value
 func DiagMoreInfoStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the structure of the registration json file that is needed to register diagnostics.
 type RegistrationFileT struct {
 	Language string
 	Product string
@@ -86,6 +87,7 @@ func (rcv *RegistrationFile) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Language of the default texts (optional).
 func (rcv *RegistrationFile) Language() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +96,8 @@ func (rcv *RegistrationFile) Language() []byte {
 	return nil
 }
 
+/// Language of the default texts (optional).
+/// Product associated to the diagnostics (optional).
 func (rcv *RegistrationFile) Product() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -102,6 +106,8 @@ func (rcv *RegistrationFile) Product() []byte {
 	return nil
 }
 
+/// Product associated to the diagnostics (optional).
+/// Component associated to the diagnostics (optional).
 func (rcv *RegistrationFile) Component() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -110,6 +116,8 @@ func (rcv *RegistrationFile) Component() []byte {
 	return nil
 }
 
+/// Component associated to the diagnostics (optional).
+/// All main diagnostics (including their related detailed diagnostics) that should be registered.
 func (rcv *RegistrationFile) MainDiagnostics(obj *MainDiagnostic, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -130,6 +138,7 @@ func (rcv *RegistrationFile) MainDiagnosticsLength() int {
 	return 0
 }
 
+/// All main diagnostics (including their related detailed diagnostics) that should be registered.
 func RegistrationFileStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

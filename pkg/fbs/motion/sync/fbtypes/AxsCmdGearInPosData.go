@@ -9,35 +9,33 @@ import (
 /// parameters of the axis GearInPos command
 type AxsCmdGearInPosDataT struct {
 	Master string
-	RatioMaster int32
-	RatioSlave int32
-	Offset float64
-	OffsetDLIdx int32
-	CmdMode SyncCmdMode
+	SyncSource SyncSource
+	SyncMode SyncMode
+	SyncDirection SyncDirection
+	Parameters *AxsCmdGearInPosParamsT
 	Buffered bool
 }
 
 func (t *AxsCmdGearInPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	masterOffset := builder.CreateString(t.Master)
+	parametersOffset := t.Parameters.Pack(builder)
 	AxsCmdGearInPosDataStart(builder)
 	AxsCmdGearInPosDataAddMaster(builder, masterOffset)
-	AxsCmdGearInPosDataAddRatioMaster(builder, t.RatioMaster)
-	AxsCmdGearInPosDataAddRatioSlave(builder, t.RatioSlave)
-	AxsCmdGearInPosDataAddOffset(builder, t.Offset)
-	AxsCmdGearInPosDataAddOffsetDLIdx(builder, t.OffsetDLIdx)
-	AxsCmdGearInPosDataAddCmdMode(builder, t.CmdMode)
+	AxsCmdGearInPosDataAddSyncSource(builder, t.SyncSource)
+	AxsCmdGearInPosDataAddSyncMode(builder, t.SyncMode)
+	AxsCmdGearInPosDataAddSyncDirection(builder, t.SyncDirection)
+	AxsCmdGearInPosDataAddParameters(builder, parametersOffset)
 	AxsCmdGearInPosDataAddBuffered(builder, t.Buffered)
 	return AxsCmdGearInPosDataEnd(builder)
 }
 
 func (rcv *AxsCmdGearInPosData) UnPackTo(t *AxsCmdGearInPosDataT) {
 	t.Master = string(rcv.Master())
-	t.RatioMaster = rcv.RatioMaster()
-	t.RatioSlave = rcv.RatioSlave()
-	t.Offset = rcv.Offset()
-	t.OffsetDLIdx = rcv.OffsetDLIdx()
-	t.CmdMode = rcv.CmdMode()
+	t.SyncSource = rcv.SyncSource()
+	t.SyncMode = rcv.SyncMode()
+	t.SyncDirection = rcv.SyncDirection()
+	t.Parameters = rcv.Parameters(nil).UnPack()
 	t.Buffered = rcv.Buffered()
 }
 
@@ -85,79 +83,66 @@ func (rcv *AxsCmdGearInPosData) Master() []byte {
 }
 
 /// name of the master axis
-/// gear ratio, master side (can be negative)
-func (rcv *AxsCmdGearInPosData) RatioMaster() int32 {
+/// sync source (Actual/Setpoint)
+func (rcv *AxsCmdGearInPosData) SyncSource() SyncSource {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+		return SyncSource(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 1
+	return 0
 }
 
-/// gear ratio, master side (can be negative)
-func (rcv *AxsCmdGearInPosData) MutateRatioMaster(n int32) bool {
-	return rcv._tab.MutateInt32Slot(6, n)
+/// sync source (Actual/Setpoint)
+func (rcv *AxsCmdGearInPosData) MutateSyncSource(n SyncSource) bool {
+	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
-/// gear ratio, slave side (can be negative)
-func (rcv *AxsCmdGearInPosData) RatioSlave() int32 {
+/// sync mode (Abs/Rel; Init/KeepState)
+func (rcv *AxsCmdGearInPosData) SyncMode() SyncMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+		return SyncMode(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 1
+	return 0
 }
 
-/// gear ratio, slave side (can be negative)
-func (rcv *AxsCmdGearInPosData) MutateRatioSlave(n int32) bool {
-	return rcv._tab.MutateInt32Slot(8, n)
+/// sync mode (Abs/Rel; Init/KeepState)
+func (rcv *AxsCmdGearInPosData) MutateSyncMode(n SyncMode) bool {
+	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
-/// post gear position offset as a constant value (set to 0.0, to have no offset); only used, when offsetDLIdx < 0
-func (rcv *AxsCmdGearInPosData) Offset() float64 {
+/// sync direction (SlowDown/CatchUp/ShortestPath)
+func (rcv *AxsCmdGearInPosData) SyncDirection() SyncDirection {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
-		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+		return SyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 0.0
+	return 0
 }
 
-/// post gear position offset as a constant value (set to 0.0, to have no offset); only used, when offsetDLIdx < 0
-func (rcv *AxsCmdGearInPosData) MutateOffset(n float64) bool {
-	return rcv._tab.MutateFloat64Slot(10, n)
+/// sync direction (SlowDown/CatchUp/ShortestPath)
+func (rcv *AxsCmdGearInPosData) MutateSyncDirection(n SyncDirection) bool {
+	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
-/// index of the DataLayerRT motion input for the post gear position offset (set to -1, to use the constant offset)
-func (rcv *AxsCmdGearInPosData) OffsetDLIdx() int32 {
+/// gear in pos parameters (master offset, slave offset, ratio numerator, ratio denominator, fine adjust)
+func (rcv *AxsCmdGearInPosData) Parameters(obj *AxsCmdGearInPosParams) *AxsCmdGearInPosParams {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCmdGearInPosParams)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return -1
+	return nil
 }
 
-/// index of the DataLayerRT motion input for the post gear position offset (set to -1, to use the constant offset)
-func (rcv *AxsCmdGearInPosData) MutateOffsetDLIdx(n int32) bool {
-	return rcv._tab.MutateInt32Slot(12, n)
-}
-
-/// Sync command mode
-func (rcv *AxsCmdGearInPosData) CmdMode() SyncCmdMode {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
-	if o != 0 {
-		return SyncCmdMode(rcv._tab.GetInt8(o + rcv._tab.Pos))
-	}
-	return 2
-}
-
-/// Sync command mode
-func (rcv *AxsCmdGearInPosData) MutateCmdMode(n SyncCmdMode) bool {
-	return rcv._tab.MutateInt8Slot(14, int8(n))
-}
-
+/// gear in pos parameters (master offset, slave offset, ratio numerator, ratio denominator, fine adjust)
 /// should this be a buffered command?
 func (rcv *AxsCmdGearInPosData) Buffered() bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
@@ -166,32 +151,29 @@ func (rcv *AxsCmdGearInPosData) Buffered() bool {
 
 /// should this be a buffered command?
 func (rcv *AxsCmdGearInPosData) MutateBuffered(n bool) bool {
-	return rcv._tab.MutateBoolSlot(16, n)
+	return rcv._tab.MutateBoolSlot(14, n)
 }
 
 func AxsCmdGearInPosDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(6)
 }
 func AxsCmdGearInPosDataAddMaster(builder *flatbuffers.Builder, master flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(master), 0)
 }
-func AxsCmdGearInPosDataAddRatioMaster(builder *flatbuffers.Builder, ratioMaster int32) {
-	builder.PrependInt32Slot(1, ratioMaster, 1)
+func AxsCmdGearInPosDataAddSyncSource(builder *flatbuffers.Builder, syncSource SyncSource) {
+	builder.PrependInt8Slot(1, int8(syncSource), 0)
 }
-func AxsCmdGearInPosDataAddRatioSlave(builder *flatbuffers.Builder, ratioSlave int32) {
-	builder.PrependInt32Slot(2, ratioSlave, 1)
+func AxsCmdGearInPosDataAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
+	builder.PrependInt8Slot(2, int8(syncMode), 0)
 }
-func AxsCmdGearInPosDataAddOffset(builder *flatbuffers.Builder, offset float64) {
-	builder.PrependFloat64Slot(3, offset, 0.0)
+func AxsCmdGearInPosDataAddSyncDirection(builder *flatbuffers.Builder, syncDirection SyncDirection) {
+	builder.PrependInt8Slot(3, int8(syncDirection), 0)
 }
-func AxsCmdGearInPosDataAddOffsetDLIdx(builder *flatbuffers.Builder, offsetDLIdx int32) {
-	builder.PrependInt32Slot(4, offsetDLIdx, -1)
-}
-func AxsCmdGearInPosDataAddCmdMode(builder *flatbuffers.Builder, cmdMode SyncCmdMode) {
-	builder.PrependInt8Slot(5, int8(cmdMode), 2)
+func AxsCmdGearInPosDataAddParameters(builder *flatbuffers.Builder, parameters flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(parameters), 0)
 }
 func AxsCmdGearInPosDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
-	builder.PrependBoolSlot(6, buffered, false)
+	builder.PrependBoolSlot(5, buffered, false)
 }
 func AxsCmdGearInPosDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

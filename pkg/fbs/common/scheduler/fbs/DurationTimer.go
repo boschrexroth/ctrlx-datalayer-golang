@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Type selector of duration measurement
 type DurationTimerT struct {
 	Timer Timer
 }
@@ -55,6 +56,7 @@ func (rcv *DurationTimer) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Type selector of duration measurement
 func (rcv *DurationTimer) Timer() Timer {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *DurationTimer) Timer() Timer {
 	return 4
 }
 
+/// Type selector of duration measurement
 func (rcv *DurationTimer) MutateTimer(n Timer) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

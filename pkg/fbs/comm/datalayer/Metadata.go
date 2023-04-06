@@ -191,6 +191,7 @@ func (rcv *Metadata) Operations(obj *AllowedOperations) *AllowedOperations {
 	return nil
 }
 
+/// markdown text only
 func (rcv *Metadata) Description() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -199,6 +200,8 @@ func (rcv *Metadata) Description() []byte {
 	return nil
 }
 
+/// markdown text only
+/// URL to description
 func (rcv *Metadata) DescriptionUrl() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -207,6 +210,7 @@ func (rcv *Metadata) DescriptionUrl() []byte {
 	return nil
 }
 
+/// URL to description
 func (rcv *Metadata) DisplayName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {

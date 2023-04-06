@@ -6,8 +6,11 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// The names of the syncronization points of a callabale have to be unique.
-/// To ensure that other callable can run after or before this callable it's recommended to set at least one syncronization point in each list.
+/// Synchronization points to specify the call sequence, alternatively to the use of run index
+/// Notes:
+///   - The names of the synchronization points of a callables have to be unique
+///   - The names of the synchronization points of a callables have match to the Data Layer compliance guide lines meaning any alphanumeric character are allowed [a-zA-Z_][a-zA-Z0-9-._]+
+///   - To ensure that other callable can run after or before this callable it's recommended to set at least one synchronization point in each list
 type SyncPointsT struct {
 	After []string
 	Before []string
@@ -94,7 +97,7 @@ func (rcv *SyncPoints) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// user defined syncronization points, execute callable in order after these points
+/// User defined synchronization points, execute callable in order after these points, 
 func (rcv *SyncPoints) After(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -112,8 +115,8 @@ func (rcv *SyncPoints) AfterLength() int {
 	return 0
 }
 
-/// user defined syncronization points, execute callable in order after these points
-/// user defined syncronization points, execute callable in order before these points
+/// User defined synchronization points, execute callable in order after these points, 
+/// User defined synchronization points, execute callable in order before these points, any alphanumeric character
 func (rcv *SyncPoints) Before(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -131,7 +134,7 @@ func (rcv *SyncPoints) BeforeLength() int {
 	return 0
 }
 
-/// user defined syncronization points, execute callable in order before these points
+/// User defined synchronization points, execute callable in order before these points, any alphanumeric character
 func SyncPointsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

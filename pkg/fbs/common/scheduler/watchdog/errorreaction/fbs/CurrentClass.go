@@ -4,10 +4,13 @@ package fbs
 
 import "strconv"
 
+/// Criticality of task watchdog error which cause a pre-defined error reaction
 type CurrentClass int8
 
 const (
+	/// Minor error without error reaction
 	CurrentClassF0 CurrentClass = 0
+	/// Serious error with error reaction
 	CurrentClassF6 CurrentClass = 1
 )
 

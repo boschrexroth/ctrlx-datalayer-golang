@@ -62,6 +62,7 @@ func (rcv *NotifyInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Node address
 func (rcv *NotifyInfo) Node() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -70,6 +71,8 @@ func (rcv *NotifyInfo) Node() []byte {
 	return nil
 }
 
+/// Node address
+/// Filetime: Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
 func (rcv *NotifyInfo) Timestamp() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +81,7 @@ func (rcv *NotifyInfo) Timestamp() uint64 {
 	return 0
 }
 
+/// Filetime: Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
 func (rcv *NotifyInfo) MutateTimestamp(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }

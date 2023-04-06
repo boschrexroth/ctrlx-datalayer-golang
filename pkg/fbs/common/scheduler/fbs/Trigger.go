@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Type selector of trigger sources of Scheduler
 type TriggerT struct {
 	Trigger CurrentTrigger
 }
@@ -55,6 +56,7 @@ func (rcv *Trigger) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Type selector of trigger sources of Scheduler
 func (rcv *Trigger) Trigger() CurrentTrigger {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *Trigger) Trigger() CurrentTrigger {
 	return 1
 }
 
+/// Type selector of trigger sources of Scheduler
 func (rcv *Trigger) MutateTrigger(n CurrentTrigger) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

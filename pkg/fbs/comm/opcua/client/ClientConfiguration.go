@@ -71,6 +71,7 @@ func (rcv *ClientConfiguration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Unique clientname (required)
 func (rcv *ClientConfiguration) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -79,6 +80,8 @@ func (rcv *ClientConfiguration) Name() []byte {
 	return nil
 }
 
+/// Unique clientname (required)
+/// Endpoint-url of the OPC UA Server to which the client should connect to (required)
 func (rcv *ClientConfiguration) EndpointUrl() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -87,6 +90,8 @@ func (rcv *ClientConfiguration) EndpointUrl() []byte {
 	return nil
 }
 
+/// Endpoint-url of the OPC UA Server to which the client should connect to (required)
+/// Session configuration for the client instance
 func (rcv *ClientConfiguration) SessionConfiguration(obj *SessionConfiguration) *SessionConfiguration {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -100,6 +105,8 @@ func (rcv *ClientConfiguration) SessionConfiguration(obj *SessionConfiguration) 
 	return nil
 }
 
+/// Session configuration for the client instance
+/// Timeout configuration for the client instance
 func (rcv *ClientConfiguration) TimeoutConfiguration(obj *TimeoutConfiguration) *TimeoutConfiguration {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -113,6 +120,8 @@ func (rcv *ClientConfiguration) TimeoutConfiguration(obj *TimeoutConfiguration) 
 	return nil
 }
 
+/// Timeout configuration for the client instance
+/// Determines whether configuration data of the client data is persisted and loaded upon the next start of the app or the control
 func (rcv *ClientConfiguration) Persistent() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -121,6 +130,7 @@ func (rcv *ClientConfiguration) Persistent() bool {
 	return false
 }
 
+/// Determines whether configuration data of the client data is persisted and loaded upon the next start of the app or the control
 func (rcv *ClientConfiguration) MutatePersistent(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }

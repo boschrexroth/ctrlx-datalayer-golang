@@ -11,6 +11,7 @@ type KinOriCfgT struct {
 	EffectiveRadius *KinOriRadiusT
 	Lim *KinCfgLimitsT
 	Units *UnitCfgObjT
+	RotToLinConversion *KinCfgRotToLinConversionT
 }
 
 func (t *KinOriCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -18,10 +19,12 @@ func (t *KinOriCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	effectiveRadiusOffset := t.EffectiveRadius.Pack(builder)
 	limOffset := t.Lim.Pack(builder)
 	unitsOffset := t.Units.Pack(builder)
+	rotToLinConversionOffset := t.RotToLinConversion.Pack(builder)
 	KinOriCfgStart(builder)
 	KinOriCfgAddEffectiveRadius(builder, effectiveRadiusOffset)
 	KinOriCfgAddLim(builder, limOffset)
 	KinOriCfgAddUnits(builder, unitsOffset)
+	KinOriCfgAddRotToLinConversion(builder, rotToLinConversionOffset)
 	return KinOriCfgEnd(builder)
 }
 
@@ -29,6 +32,7 @@ func (rcv *KinOriCfg) UnPackTo(t *KinOriCfgT) {
 	t.EffectiveRadius = rcv.EffectiveRadius(nil).UnPack()
 	t.Lim = rcv.Lim(nil).UnPack()
 	t.Units = rcv.Units(nil).UnPack()
+	t.RotToLinConversion = rcv.RotToLinConversion(nil).UnPack()
 }
 
 func (rcv *KinOriCfg) UnPack() *KinOriCfgT {
@@ -65,7 +69,7 @@ func (rcv *KinOriCfg) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// orientation radius
+/// DEPRECATED; Do not use! Values in this structure are ignored.
 func (rcv *KinOriCfg) EffectiveRadius(obj *KinOriRadius) *KinOriRadius {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -79,7 +83,7 @@ func (rcv *KinOriCfg) EffectiveRadius(obj *KinOriRadius) *KinOriRadius {
 	return nil
 }
 
-/// orientation radius
+/// DEPRECATED; Do not use! Values in this structure are ignored.
 /// max orientation vel
 func (rcv *KinOriCfg) Lim(obj *KinCfgLimits) *KinCfgLimits {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
@@ -110,8 +114,23 @@ func (rcv *KinOriCfg) Units(obj *UnitCfgObj) *UnitCfgObj {
 }
 
 /// general orientation unit configuration of this kinematics
+/// Rotation to Linear conversion factor
+func (rcv *KinOriCfg) RotToLinConversion(obj *KinCfgRotToLinConversion) *KinCfgRotToLinConversion {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinCfgRotToLinConversion)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// Rotation to Linear conversion factor
 func KinOriCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinOriCfgAddEffectiveRadius(builder *flatbuffers.Builder, effectiveRadius flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(effectiveRadius), 0)
@@ -121,6 +140,9 @@ func KinOriCfgAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
 }
 func KinOriCfgAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(units), 0)
+}
+func KinOriCfgAddRotToLinConversion(builder *flatbuffers.Builder, rotToLinConversion flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(rotToLinConversion), 0)
 }
 func KinOriCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

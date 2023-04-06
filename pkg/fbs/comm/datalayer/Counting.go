@@ -55,6 +55,7 @@ func (rcv *Counting) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Nodes are counted if subscribed multiple times. Unsubscribe only accures if counter for this node is 0.
 func (rcv *Counting) CountSubscriptions() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *Counting) CountSubscriptions() bool {
 	return false
 }
 
+/// Nodes are counted if subscribed multiple times. Unsubscribe only accures if counter for this node is 0.
 func (rcv *Counting) MutateCountSubscriptions(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }

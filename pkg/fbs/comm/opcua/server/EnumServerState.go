@@ -7,13 +7,24 @@ import "strconv"
 type EnumServerState int32
 
 const (
+	/// The OPC UA Server is running normally
+	/// This is the usual state for the OPC UA Server
 	EnumServerStateRUNNING            EnumServerState = 0
+	/// A vendor-specific fatal error has occurred within the OPC UA Server
+	/// The OPC UA Server is not working. Please have a look in the logbook for errors.
 	EnumServerStateFAILED             EnumServerState = 1
+	/// The OPC UA Server is running but has no configuration information loaded and therefore does not transfer data
 	EnumServerStateNOCONFIGURATION    EnumServerState = 2
+	/// The OPC UA Server has been temporarily suspended by some vendor-specific method and is not receiving or sending data
 	EnumServerStateSUSPENDED          EnumServerState = 3
+	/// The OPC UA Server initiated a shut down or is in the process of shutting down
 	EnumServerStateSHUTDOWN           EnumServerState = 4
+	/// The OPC UA Server is in Test Mode
+	/// The outputs are disconnected from the real hardware, but the OPC UA Server will otherwise behave normally
 	EnumServerStateTEST               EnumServerState = 5
+	/// The OPC UA Server is running properly, but is having difficulty accessing data from its data sources
 	EnumServerStateCOMMUNICATIONFAULT EnumServerState = 6
+	/// This state is used only to indicate that the OPC UA Server does not know the state of underlying system
 	EnumServerStateUNKNOWN            EnumServerState = 7
 	EnumServerStateMAX_ENUM_VALUE     EnumServerState = 2147483647
 )

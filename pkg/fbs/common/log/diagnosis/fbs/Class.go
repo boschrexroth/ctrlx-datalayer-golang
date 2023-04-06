@@ -4,6 +4,10 @@ package fbs
 
 import "strconv"
 
+/// Existing log classes/priorities.
+/// Log class ERROR means that only errors are selcted.
+/// Log class WARNING means that warnings and errors are selected.
+/// Log class MESSAGE means that messages, warnings and errors are selected.
 type Class int8
 
 const (

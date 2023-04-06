@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Callable configurations of a callable factory
 type CallableConfigurationT struct {
 	Alias string
 	Sync *SyncPointsT
@@ -87,7 +88,7 @@ func (rcv *CallableConfiguration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// user defined name of callable to label it human readable, must be unique for these factory
+/// Alias of callable, human readable replacement of callable ID, any alphanumeric character [a-zA-Z_][a-zA-Z0-9-._]+
 func (rcv *CallableConfiguration) Alias() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -96,8 +97,8 @@ func (rcv *CallableConfiguration) Alias() []byte {
 	return nil
 }
 
-/// user defined name of callable to label it human readable, must be unique for these factory
-/// sync points to get callables in order
+/// Alias of callable, human readable replacement of callable ID, any alphanumeric character [a-zA-Z_][a-zA-Z0-9-._]+
+/// Synchronization points to specify the call sequence
 func (rcv *CallableConfiguration) Sync(obj *SyncPoints) *SyncPoints {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -111,8 +112,8 @@ func (rcv *CallableConfiguration) Sync(obj *SyncPoints) *SyncPoints {
 	return nil
 }
 
-/// sync points to get callables in order
-/// values to initialize the callable
+/// Synchronization points to specify the call sequence
+/// List of arguments to create the callable, for further information see application description of the callable factory
 func (rcv *CallableConfiguration) Arguments(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -130,8 +131,8 @@ func (rcv *CallableConfiguration) ArgumentsLength() int {
 	return 0
 }
 
-/// values to initialize the callable
-/// influence task and hardware watchdog handling
+/// List of arguments to create the callable, for further information see application description of the callable factory
+/// Requirement of the callable that a watchdog is present
 func (rcv *CallableConfiguration) Watchdog() CallableWdgConfig {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -140,12 +141,12 @@ func (rcv *CallableConfiguration) Watchdog() CallableWdgConfig {
 	return 3
 }
 
-/// influence task and hardware watchdog handling
+/// Requirement of the callable that a watchdog is present
 func (rcv *CallableConfiguration) MutateWatchdog(n CallableWdgConfig) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
-/// task specifications to defined callable environment, used as defaults
+/// Task specifications to defined callable environment
 func (rcv *CallableConfiguration) Task(obj *TaskSpecs) *TaskSpecs {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -159,7 +160,7 @@ func (rcv *CallableConfiguration) Task(obj *TaskSpecs) *TaskSpecs {
 	return nil
 }
 
-/// task specifications to defined callable environment, used as defaults
+/// Task specifications to defined callable environment
 func CallableConfigurationStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }

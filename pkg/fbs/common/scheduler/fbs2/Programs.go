@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Composition of programs and available callables factories
 type ProgramsT struct {
 	Programs []*ProgramT
 	CallablePool []string
@@ -94,6 +95,7 @@ func (rcv *Programs) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Composition of programs
 func (rcv *Programs) Programs(obj *Program, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -114,6 +116,8 @@ func (rcv *Programs) ProgramsLength() int {
 	return 0
 }
 
+/// Composition of programs
+/// Collection of available callables factories provided by installed apps
 func (rcv *Programs) CallablePool(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -131,6 +135,7 @@ func (rcv *Programs) CallablePoolLength() int {
 	return 0
 }
 
+/// Collection of available callables factories provided by installed apps
 func ProgramsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

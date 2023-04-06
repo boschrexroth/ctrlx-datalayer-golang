@@ -28,5 +28,5 @@ func (v CmdTypeCmdOptionInfoReq) String() string {
 	if s, ok := EnumNamesCmdType_CmdOptionInfoReq[v]; ok {
 		return s
 	}
-	return "CmdTypeCmdOptionInfoReq(" + strconv.FormatInt(int64(v), 10) + ")"
+	return "CmdType_CmdOptionInfoReq(" + strconv.FormatInt(int64(v), 10) + ")"
 }

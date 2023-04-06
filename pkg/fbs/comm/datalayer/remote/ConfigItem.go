@@ -60,6 +60,7 @@ func (rcv *ConfigItem) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// name of the remote connection
 func (rcv *ConfigItem) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +69,8 @@ func (rcv *ConfigItem) Name() []byte {
 	return nil
 }
 
+/// name of the remote connection
+/// remote data layer connection string
 func (rcv *ConfigItem) Address() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -76,6 +79,7 @@ func (rcv *ConfigItem) Address() []byte {
 	return nil
 }
 
+/// remote data layer connection string
 func ConfigItemStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

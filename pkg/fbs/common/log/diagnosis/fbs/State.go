@@ -4,6 +4,9 @@ package fbs
 
 import "strconv"
 
+/// Possible states for a specific diagnostic log in the pending diagnostics.
+/// The state ACTIVE means a diagnostic error or warning is part of the pending diagnostics and is in state active. Solving the cause of the error or warning is necessary.
+/// The state RESET means a diagnostic error is part of the pending diagnostics and is in state reset. An clearing (acknowldgement) of the error is necessary.
 type State int8
 
 const (

@@ -11,6 +11,7 @@ type KinCfgAxsT struct {
 	AxsName string
 	AxsMeaning string
 	AxsDir string
+	AcsIndex byte
 }
 
 func (t *KinCfgAxsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -22,6 +23,7 @@ func (t *KinCfgAxsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	KinCfgAxsAddAxsName(builder, axsNameOffset)
 	KinCfgAxsAddAxsMeaning(builder, axsMeaningOffset)
 	KinCfgAxsAddAxsDir(builder, axsDirOffset)
+	KinCfgAxsAddAcsIndex(builder, t.AcsIndex)
 	return KinCfgAxsEnd(builder)
 }
 
@@ -29,6 +31,7 @@ func (rcv *KinCfgAxs) UnPackTo(t *KinCfgAxsT) {
 	t.AxsName = string(rcv.AxsName())
 	t.AxsMeaning = string(rcv.AxsMeaning())
 	t.AxsDir = string(rcv.AxsDir())
+	t.AcsIndex = rcv.AcsIndex()
 }
 
 func (rcv *KinCfgAxs) UnPack() *KinCfgAxsT {
@@ -75,7 +78,7 @@ func (rcv *KinCfgAxs) AxsName() []byte {
 }
 
 /// name of the axis
-/// (geometric) meaning of the axis in the kinematics when added
+/// DEPRECATED; (geometric) meaning of the axis in the kinematics when added (only useful for simple Cartesian kinematics); use "acsIndex" for all other cases and leave this out
 func (rcv *KinCfgAxs) AxsMeaning() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,7 +87,7 @@ func (rcv *KinCfgAxs) AxsMeaning() []byte {
 	return nil
 }
 
-/// (geometric) meaning of the axis in the kinematics when added
+/// DEPRECATED; (geometric) meaning of the axis in the kinematics when added (only useful for simple Cartesian kinematics); use "acsIndex" for all other cases and leave this out
 /// direction ("+" or "-") of the axis referring to the kinematics coordinate system
 func (rcv *KinCfgAxs) AxsDir() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
@@ -95,8 +98,22 @@ func (rcv *KinCfgAxs) AxsDir() []byte {
 }
 
 /// direction ("+" or "-") of the axis referring to the kinematics coordinate system
+/// index of the axis in the ACS (axis coordinate system) array of the kinematics (value 255 means "use the axsMeaning")
+func (rcv *KinCfgAxs) AcsIndex() byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetByte(o + rcv._tab.Pos)
+	}
+	return 255
+}
+
+/// index of the axis in the ACS (axis coordinate system) array of the kinematics (value 255 means "use the axsMeaning")
+func (rcv *KinCfgAxs) MutateAcsIndex(n byte) bool {
+	return rcv._tab.MutateByteSlot(10, n)
+}
+
 func KinCfgAxsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinCfgAxsAddAxsName(builder *flatbuffers.Builder, axsName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(axsName), 0)
@@ -106,6 +123,9 @@ func KinCfgAxsAddAxsMeaning(builder *flatbuffers.Builder, axsMeaning flatbuffers
 }
 func KinCfgAxsAddAxsDir(builder *flatbuffers.Builder, axsDir flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(axsDir), 0)
+}
+func KinCfgAxsAddAcsIndex(builder *flatbuffers.Builder, acsIndex byte) {
+	builder.PrependByteSlot(3, acsIndex, 255)
 }
 func KinCfgAxsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

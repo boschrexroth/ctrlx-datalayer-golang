@@ -8,9 +8,13 @@ type MemoryType int8
 
 const (
 	MemoryTypeUnknown      MemoryType = 0
+	/// data flow from owner to user
 	MemoryTypeInput        MemoryType = 1
+	/// data flow from user to owner
 	MemoryTypeOutput       MemoryType = 2
+	/// shared ram in retain area
 	MemoryTypeSharedRetain MemoryType = 3
+	/// shared ram
 	MemoryTypeShared       MemoryType = 4
 )
 

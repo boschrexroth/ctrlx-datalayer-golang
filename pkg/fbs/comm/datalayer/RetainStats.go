@@ -74,6 +74,7 @@ func (rcv *RetainStats) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// total size of memory in bytes
 func (rcv *RetainStats) Total() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -82,10 +83,12 @@ func (rcv *RetainStats) Total() uint32 {
 	return 0
 }
 
+/// total size of memory in bytes
 func (rcv *RetainStats) MutateTotal(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// free size of memory in bytes
 func (rcv *RetainStats) Free() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -94,10 +97,12 @@ func (rcv *RetainStats) Free() uint32 {
 	return 0
 }
 
+/// free size of memory in bytes
 func (rcv *RetainStats) MutateFree(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// used size of memory in bytes
 func (rcv *RetainStats) Used() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -106,10 +111,12 @@ func (rcv *RetainStats) Used() uint32 {
 	return 0
 }
 
+/// used size of memory in bytes
 func (rcv *RetainStats) MutateUsed(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// biggest free chunk of memory in bytes
 func (rcv *RetainStats) BiggestFree() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -118,10 +125,12 @@ func (rcv *RetainStats) BiggestFree() uint32 {
 	return 0
 }
 
+/// biggest free chunk of memory in bytes
 func (rcv *RetainStats) MutateBiggestFree(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+/// now often was the nvram synced
 func (rcv *RetainStats) SyncCounter() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -130,10 +139,12 @@ func (rcv *RetainStats) SyncCounter() uint32 {
 	return 0
 }
 
+/// now often was the nvram synced
 func (rcv *RetainStats) MutateSyncCounter(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+/// last used offset
 func (rcv *RetainStats) LastUsed() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -142,10 +153,12 @@ func (rcv *RetainStats) LastUsed() uint32 {
 	return 0
 }
 
+/// last used offset
 func (rcv *RetainStats) MutateLastUsed(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+/// debug information of shared memory
 func (rcv *RetainStats) Info() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -154,6 +167,7 @@ func (rcv *RetainStats) Info() []byte {
 	return nil
 }
 
+/// debug information of shared memory
 func RetainStatsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

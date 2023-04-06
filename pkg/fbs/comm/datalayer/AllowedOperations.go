@@ -67,6 +67,7 @@ func (rcv *AllowedOperations) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// get
 func (rcv *AllowedOperations) Read() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -75,10 +76,12 @@ func (rcv *AllowedOperations) Read() bool {
 	return false
 }
 
+/// get
 func (rcv *AllowedOperations) MutateRead(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }
 
+/// put
 func (rcv *AllowedOperations) Write() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -87,10 +90,12 @@ func (rcv *AllowedOperations) Write() bool {
 	return false
 }
 
+/// put
 func (rcv *AllowedOperations) MutateWrite(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+/// post
 func (rcv *AllowedOperations) Create() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -99,10 +104,12 @@ func (rcv *AllowedOperations) Create() bool {
 	return false
 }
 
+/// post
 func (rcv *AllowedOperations) MutateCreate(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+/// delete
 func (rcv *AllowedOperations) Delete() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -111,10 +118,12 @@ func (rcv *AllowedOperations) Delete() bool {
 	return false
 }
 
+/// delete
 func (rcv *AllowedOperations) MutateDelete(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
+/// browse
 func (rcv *AllowedOperations) Browse() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -123,6 +132,7 @@ func (rcv *AllowedOperations) Browse() bool {
 	return true
 }
 
+/// browse
 func (rcv *AllowedOperations) MutateBrowse(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }

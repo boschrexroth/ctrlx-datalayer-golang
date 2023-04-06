@@ -87,6 +87,7 @@ func (rcv *SubscriptionProperties) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// user identification for subscribtion Use it update and dispose the old subscription
 func (rcv *SubscriptionProperties) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -95,6 +96,8 @@ func (rcv *SubscriptionProperties) Id() []byte {
 	return nil
 }
 
+/// user identification for subscribtion Use it update and dispose the old subscription
+/// keepalive in milli seconds for subscription - this time is used to detect life status of providers
 func (rcv *SubscriptionProperties) KeepaliveInterval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -103,10 +106,12 @@ func (rcv *SubscriptionProperties) KeepaliveInterval() uint32 {
 	return 60000
 }
 
+/// keepalive in milli seconds for subscription - this time is used to detect life status of providers
 func (rcv *SubscriptionProperties) MutateKeepaliveInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// time in milli seconds for upper limit of publish messages to not get flooded with new messages
 func (rcv *SubscriptionProperties) PublishInterval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -115,10 +120,12 @@ func (rcv *SubscriptionProperties) PublishInterval() uint32 {
 	return 1000
 }
 
+/// time in milli seconds for upper limit of publish messages to not get flooded with new messages
 func (rcv *SubscriptionProperties) MutatePublishInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// Rules for subscription
 func (rcv *SubscriptionProperties) Rules(obj *Property, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -139,6 +146,8 @@ func (rcv *SubscriptionProperties) RulesLength() int {
 	return 0
 }
 
+/// Rules for subscription
+/// time in milli seconds to re-read data if an error was received for a nodex
 func (rcv *SubscriptionProperties) ErrorInterval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -147,6 +156,7 @@ func (rcv *SubscriptionProperties) ErrorInterval() uint32 {
 	return 10000
 }
 
+/// time in milli seconds to re-read data if an error was received for a nodex
 func (rcv *SubscriptionProperties) MutateErrorInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }

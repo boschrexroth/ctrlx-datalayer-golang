@@ -58,6 +58,11 @@ func (rcv *UserTokenType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// User token type
+/// UA_USERTOKENTYPE_ANONYMOUS = 0,
+/// UA_USERTOKENTYPE_USERNAME = 1,
+/// UA_USERTOKENTYPE_CERTIFICATE = 2,
+/// UA_USERTOKENTYPE_ISSUEDTOKEN = 3
 func (rcv *UserTokenType) Type() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +71,23 @@ func (rcv *UserTokenType) Type() uint32 {
 	return 0
 }
 
+/// User token type
+/// UA_USERTOKENTYPE_ANONYMOUS = 0,
+/// UA_USERTOKENTYPE_USERNAME = 1,
+/// UA_USERTOKENTYPE_CERTIFICATE = 2,
+/// UA_USERTOKENTYPE_ISSUEDTOKEN = 3
 func (rcv *UserTokenType) MutateType(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// Security policies
+/// UA_SECURITY_POLICY_NONE = 0,
+/// UA_SECURITY_POLICY_BASIC128RSA15 = 1,
+/// UA_SECURITY_POLICY_BASIC256 = 2,
+/// UA_SECURITY_POLICY_BASIC256SHA256 = 3,
+/// UA_SECURITY_POLICY_AES128_SHA256_RSAOAEP = 4,
+/// UA_SECURITY_POLICY_AES256_SHA256_RSAPSS = 5,
+/// UA_SECURITY_POLICY_ID_MAX = 6
 func (rcv *UserTokenType) PolicyId() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +96,14 @@ func (rcv *UserTokenType) PolicyId() uint32 {
 	return 0
 }
 
+/// Security policies
+/// UA_SECURITY_POLICY_NONE = 0,
+/// UA_SECURITY_POLICY_BASIC128RSA15 = 1,
+/// UA_SECURITY_POLICY_BASIC256 = 2,
+/// UA_SECURITY_POLICY_BASIC256SHA256 = 3,
+/// UA_SECURITY_POLICY_AES128_SHA256_RSAOAEP = 4,
+/// UA_SECURITY_POLICY_AES256_SHA256_RSAPSS = 5,
+/// UA_SECURITY_POLICY_ID_MAX = 6
 func (rcv *UserTokenType) MutatePolicyId(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
