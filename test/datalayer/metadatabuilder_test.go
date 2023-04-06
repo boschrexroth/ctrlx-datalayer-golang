@@ -33,7 +33,12 @@ import (
 )
 
 func TestMetadataBuilder(t *testing.T) {
-	v := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead|datalayer.AllowedOperationBrowse, "test", "test_url").Build()
+	mb := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead|datalayer.AllowedOperationBrowse, "test", "test_url")
+	mb.Unit("[m/s]")
+	mb.DisplayName("Name")
+	mb.NodeClass(fbs.NodeClassVariable)
+	mb.DisplayFormat(fbs.DisplayFormatDec)
+	v := mb.Build()
 	defer datalayer.DeleteVariant(v)
 	assert.NotNil(t, v)
 
@@ -46,6 +51,10 @@ func TestMetadataBuilder(t *testing.T) {
 	assert.True(t, op.Read())
 	assert.True(t, op.Browse())
 	assert.False(t, op.Write())
+	assert.Equal(t, string(m.Unit()), "[m/s]")
+	assert.Equal(t, string(m.DisplayName()), "Name")
+	assert.Equal(t, m.NodeClass(), fbs.NodeClassVariable)
+	assert.Equal(t, m.DisplayFormat(), fbs.DisplayFormatDec)
 }
 func TestMetadataReferenceBuilder(t *testing.T) {
 	m := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead|datalayer.AllowedOperationWrite|datalayer.AllowedOperationBrowse, "test", "test_url")

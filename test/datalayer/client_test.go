@@ -362,3 +362,24 @@ func TestWriteJsonSync(t *testing.T) {
 	a.Equal(t, datalayer.Result(0), r)
 	a.Nil(t, err)
 }
+
+func TestClientNilValues(t *testing.T) {
+	/*if clientAddress == "" {
+		t.Skip("ctrlX device does not exist")
+	}*/
+	system, client := initClient()
+	defer datalayer.DeleteSystem(system)
+	defer datalayer.DeleteClient(client)
+	r := client.WriteSync("", nil)
+	a.Equal(t, datalayer.ResultMissingArgument, r)
+	r = client.CreateSync("", nil)
+	a.Equal(t, datalayer.ResultMissingArgument, r)
+
+	f := func(result datalayer.Result, v *datalayer.Variant) {}
+	r = client.CreateAsync("", nil, f)
+	a.Equal(t, datalayer.ResultMissingArgument, r)
+	r = client.ReadAsync("", nil, f)
+	a.Equal(t, datalayer.ResultMissingArgument, r)
+	r = client.WriteAsync("", nil, f)
+	a.Equal(t, datalayer.ResultMissingArgument, r)
+}

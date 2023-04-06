@@ -181,6 +181,42 @@ var tcResult = []struct {
 		datalayer.ResultSecUnauthorized,
 		"DL_SEC_UNAUTHORIZED",
 	},
+	{
+		datalayer.ResultOkNoContent,
+		"DL_OK_NO_CONTENT",
+	},
+	{
+		datalayer.ResultMissingArgument,
+		"DL_MISSING_ARGUMENT",
+	},
+	{
+		datalayer.ResultTooManyArguments,
+		"DL_TOO_MANY_ARGUMENTS",
+	},
+	{
+		datalayer.ResultResourceUnavailable,
+		"DL_RESOURCE_UNAVAILABLE",
+	},
+	{
+		datalayer.ResultCommunicationError,
+		"DL_COMMUNICATION_ERROR",
+	},
+	{
+		datalayer.ResultTooManyOperations,
+		"DL_TOO_MANY_OPERATIONS",
+	},
+	{
+		datalayer.ResultWouldBlock,
+		"DL_WOULD_BLOCK",
+	},
+	{
+		datalayer.ResultPaymentRequired,
+		"DL_SEC_PAYMENT_REQUIRED",
+	},
+	{
+		datalayer.Result(1701),
+		"Result_Unknown",
+	},
 }
 
 func TestResult(t *testing.T) {
