@@ -4,16 +4,17 @@ package fbs
 
 import "strconv"
 
-/// WDG_HW_TASK = task and hardware watchdog activated (default)
-/// WDG_HW = hardware watchdog acivated; don't care about task watchdog
-/// WDG_NONE = neither task or hardware watchdog is needed
-/// WDG_DEFAULT = don't care about neither task or hardware watchdog, use of default value
+/// Requirement of the callable that a watchdog is present
 type CallableWdgConfig int8
 
 const (
+	/// Task and hardware watchdog activated
 	CallableWdgConfigWDG_HW_TASK CallableWdgConfig = 0
+	/// Hardware watchdog activated; don't care about task watchdog
 	CallableWdgConfigWDG_HW      CallableWdgConfig = 1
+	/// Neither task or hardware watchdog is needed
 	CallableWdgConfigWDG_NONE    CallableWdgConfig = 2
+	/// Don't care about neither task or hardware watchdog, use of default value
 	CallableWdgConfigWDG_DEFAULT CallableWdgConfig = 3
 )
 

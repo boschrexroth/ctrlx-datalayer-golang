@@ -28,5 +28,5 @@ func (v ObjectTypeGenCmdOption) String() string {
 	if s, ok := EnumNamesObjectType_GenCmdOption[v]; ok {
 		return s
 	}
-	return "ObjectTypeGenCmdOption(" + strconv.FormatInt(int64(v), 10) + ")"
+	return "ObjectType_GenCmdOption(" + strconv.FormatInt(int64(v), 10) + ")"
 }

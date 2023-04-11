@@ -11,17 +11,20 @@ type VariableT struct {
 	Bitoffset uint32
 	Bitsize uint32
 	Type string
+	Metadata *MetadataT
 }
 
 func (t *VariableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	nameOffset := builder.CreateString(t.Name)
 	typeOffset := builder.CreateString(t.Type)
+	metadataOffset := t.Metadata.Pack(builder)
 	VariableStart(builder)
 	VariableAddName(builder, nameOffset)
 	VariableAddBitoffset(builder, t.Bitoffset)
 	VariableAddBitsize(builder, t.Bitsize)
 	VariableAddType(builder, typeOffset)
+	VariableAddMetadata(builder, metadataOffset)
 	return VariableEnd(builder)
 }
 
@@ -30,6 +33,7 @@ func (rcv *Variable) UnPackTo(t *VariableT) {
 	t.Bitoffset = rcv.Bitoffset()
 	t.Bitsize = rcv.Bitsize()
 	t.Type = string(rcv.Type())
+	t.Metadata = rcv.Metadata(nil).UnPack()
 }
 
 func (rcv *Variable) UnPack() *VariableT {
@@ -66,6 +70,7 @@ func (rcv *Variable) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Name of the variable
 func (rcv *Variable) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -74,6 +79,8 @@ func (rcv *Variable) Name() []byte {
 	return nil
 }
 
+/// Name of the variable
+/// Offset (in bits) of variable in memory
 func (rcv *Variable) Bitoffset() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,10 +89,12 @@ func (rcv *Variable) Bitoffset() uint32 {
 	return 0
 }
 
+/// Offset (in bits) of variable in memory
 func (rcv *Variable) MutateBitoffset(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// Size (in bits) of variable in memory
 func (rcv *Variable) Bitsize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -94,10 +103,12 @@ func (rcv *Variable) Bitsize() uint32 {
 	return 0
 }
 
+/// Size (in bits) of variable in memory
 func (rcv *Variable) MutateBitsize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// type information
 func (rcv *Variable) Type() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -106,8 +117,24 @@ func (rcv *Variable) Type() []byte {
 	return nil
 }
 
+/// type information
+/// metadata of the variable
+func (rcv *Variable) Metadata(obj *Metadata) *Metadata {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(Metadata)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// metadata of the variable
 func VariableStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func VariableAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -120,6 +147,9 @@ func VariableAddBitsize(builder *flatbuffers.Builder, bitsize uint32) {
 }
 func VariableAddType(builder *flatbuffers.Builder, type_ flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(type_), 0)
+}
+func VariableAddMetadata(builder *flatbuffers.Builder, metadata flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(metadata), 0)
 }
 func VariableEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

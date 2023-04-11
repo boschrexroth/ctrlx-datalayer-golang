@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Type of watchdog of the task
 type TypeT struct {
 	Type CurrentType
 }
@@ -55,6 +56,7 @@ func (rcv *Type) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Type of watchdog of the task
 func (rcv *Type) Type() CurrentType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *Type) Type() CurrentType {
 	return 0
 }
 
+/// Type of watchdog of the task
 func (rcv *Type) MutateType(n CurrentType) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the elements of a main or detailed diagnostics that should be registered.
 type DiagnosisElementT struct {
 	DiagnosisNumber uint32
 	Version byte
@@ -62,6 +63,7 @@ func (rcv *DiagnosisElement) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Main or detailed diagnostic number.
 func (rcv *DiagnosisElement) DiagnosisNumber() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -70,10 +72,12 @@ func (rcv *DiagnosisElement) DiagnosisNumber() uint32 {
 	return 0
 }
 
+/// Main or detailed diagnostic number.
 func (rcv *DiagnosisElement) MutateDiagnosisNumber(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// Version of the diagnostics starting with 1.
 func (rcv *DiagnosisElement) Version() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,10 +86,12 @@ func (rcv *DiagnosisElement) Version() byte {
 	return 0
 }
 
+/// Version of the diagnostics starting with 1.
 func (rcv *DiagnosisElement) MutateVersion(n byte) bool {
 	return rcv._tab.MutateByteSlot(6, n)
 }
 
+/// English text of the diagnostics.
 func (rcv *DiagnosisElement) TextEnglish() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -94,6 +100,7 @@ func (rcv *DiagnosisElement) TextEnglish() []byte {
 	return nil
 }
 
+/// English text of the diagnostics.
 func DiagnosisElementStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

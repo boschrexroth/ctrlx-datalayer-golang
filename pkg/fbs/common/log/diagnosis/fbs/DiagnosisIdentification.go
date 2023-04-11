@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines all diagnostic elements that are required to uniquely identify a diagnostic log.
 type DiagnosisIdentificationT struct {
 	MainDiagnosisNumber string
 	DetailedDiagnosisNumber string
@@ -64,6 +65,7 @@ func (rcv *DiagnosisIdentification) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Main diagnostic number.
 func (rcv *DiagnosisIdentification) MainDiagnosisNumber() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,6 +74,8 @@ func (rcv *DiagnosisIdentification) MainDiagnosisNumber() []byte {
 	return nil
 }
 
+/// Main diagnostic number.
+/// Detailed diagnostic number.
 func (rcv *DiagnosisIdentification) DetailedDiagnosisNumber() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -80,6 +84,8 @@ func (rcv *DiagnosisIdentification) DetailedDiagnosisNumber() []byte {
 	return nil
 }
 
+/// Detailed diagnostic number.
+/// Entity/resource that is affected.
 func (rcv *DiagnosisIdentification) Entity() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -88,6 +94,7 @@ func (rcv *DiagnosisIdentification) Entity() []byte {
 	return nil
 }
 
+/// Entity/resource that is affected.
 func DiagnosisIdentificationStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

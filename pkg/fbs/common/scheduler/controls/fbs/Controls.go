@@ -8,10 +8,12 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Special extensions to modify Scheduler and system behavior e.g. activation of DEBUG mode
 type Controls byte
 
 const (
 	ControlsNONE  Controls = 0
+	/// Deactivation of hardware watchdog and task watchdogs to enabling debugging of machine
 	ControlsDebug Controls = 1
 )
 

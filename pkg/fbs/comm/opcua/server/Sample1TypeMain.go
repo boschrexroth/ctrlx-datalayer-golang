@@ -6,6 +6,65 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Sample1TypeMainT struct {
+	A1 string
+	A2 uint32
+	A3 *Sample1TypeSub1SubT
+	A4 []*Sample1TypeSub1SubT
+	A5 uint32
+	A6 *Sample1TypeSub2SubT
+}
+
+func (t *Sample1TypeMainT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	a1Offset := builder.CreateString(t.A1)
+	a3Offset := t.A3.Pack(builder)
+	a4Offset := flatbuffers.UOffsetT(0)
+	if t.A4 != nil {
+		a4Length := len(t.A4)
+		a4Offsets := make([]flatbuffers.UOffsetT, a4Length)
+		for j := 0; j < a4Length; j++ {
+			a4Offsets[j] = t.A4[j].Pack(builder)
+		}
+		Sample1TypeMainStartA4Vector(builder, a4Length)
+		for j := a4Length - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(a4Offsets[j])
+		}
+		a4Offset = builder.EndVector(a4Length)
+	}
+	a6Offset := t.A6.Pack(builder)
+	Sample1TypeMainStart(builder)
+	Sample1TypeMainAddA1(builder, a1Offset)
+	Sample1TypeMainAddA2(builder, t.A2)
+	Sample1TypeMainAddA3(builder, a3Offset)
+	Sample1TypeMainAddA4(builder, a4Offset)
+	Sample1TypeMainAddA5(builder, t.A5)
+	Sample1TypeMainAddA6(builder, a6Offset)
+	return Sample1TypeMainEnd(builder)
+}
+
+func (rcv *Sample1TypeMain) UnPackTo(t *Sample1TypeMainT) {
+	t.A1 = string(rcv.A1())
+	t.A2 = rcv.A2()
+	t.A3 = rcv.A3(nil).UnPack()
+	a4Length := rcv.A4Length()
+	t.A4 = make([]*Sample1TypeSub1SubT, a4Length)
+	for j := 0; j < a4Length; j++ {
+		x := Sample1TypeSub1Sub{}
+		rcv.A4(&x, j)
+		t.A4[j] = x.UnPack()
+	}
+	t.A5 = rcv.A5()
+	t.A6 = rcv.A6(nil).UnPack()
+}
+
+func (rcv *Sample1TypeMain) UnPack() *Sample1TypeMainT {
+	if rcv == nil { return nil }
+	t := &Sample1TypeMainT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Sample1TypeMain struct {
 	_tab flatbuffers.Table
 }

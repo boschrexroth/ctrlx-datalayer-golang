@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Properties of a task
 type TaskT struct {
 	Name string
 	Priority uint32
@@ -72,6 +73,9 @@ func (rcv *Task) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Name of the task [unique]
+///   Allowed characters:
+///     Any alphanumeric character, beginning with a letter and a maximum length of 15 characters [a-zA-Z][a-zA-Z0-9]{1,15}
 func (rcv *Task) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -80,18 +84,52 @@ func (rcv *Task) Name() []byte {
 	return nil
 }
 
+/// Name of the task [unique]
+///   Allowed characters:
+///     Any alphanumeric character, beginning with a letter and a maximum length of 15 characters [a-zA-Z][a-zA-Z0-9]{1,15}
+/// Priority of the task
+///   Priority ranges:
+///       0 ..  10  : reserved for the system
+///      11 ..  99  : available for real-time user tasks
+///     100 .. 139  : available for non real-time user tasks
+///   Priority agreements:
+///      10         : reserved for Scheduler tick task 'schedMain'
+///      11         : highest prior real-time task, use of the policy FIFO policy
+///      23         : high prior real-time task, use of the policy FIFO policy
+///      29         : mid prior real-time task, use of the policy FIFO policy
+///      37         : low prior real-time task, use of the policy FIFO policy
+///      99         : lowest prior real-time task, use of the policy round-robin policy
+///     100         : highest prior non real-time task, use of the nice value of '-20'
+///     120         : common used non real-time task, use of the nice value of '0'
+///     139         : lowest prior non real-time task, use of the nice value of '19'
 func (rcv *Task) Priority() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
 	}
-	return 119
+	return 120
 }
 
+/// Priority of the task
+///   Priority ranges:
+///       0 ..  10  : reserved for the system
+///      11 ..  99  : available for real-time user tasks
+///     100 .. 139  : available for non real-time user tasks
+///   Priority agreements:
+///      10         : reserved for Scheduler tick task 'schedMain'
+///      11         : highest prior real-time task, use of the policy FIFO policy
+///      23         : high prior real-time task, use of the policy FIFO policy
+///      29         : mid prior real-time task, use of the policy FIFO policy
+///      37         : low prior real-time task, use of the policy FIFO policy
+///      99         : lowest prior real-time task, use of the policy round-robin policy
+///     100         : highest prior non real-time task, use of the nice value of '-20'
+///     120         : common used non real-time task, use of the nice value of '0'
+///     139         : lowest prior non real-time task, use of the nice value of '19'
 func (rcv *Task) MutatePriority(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// CPU core affinity of the task, defining on which CPU core it is executed, available cores see 'scheduler/admin/info/cpu-cores'
 func (rcv *Task) Affinity() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -100,10 +138,12 @@ func (rcv *Task) Affinity() uint32 {
 	return 0
 }
 
+/// CPU core affinity of the task, defining on which CPU core it is executed, available cores see 'scheduler/admin/info/cpu-cores'
 func (rcv *Task) MutateAffinity(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// Stack size of the task in [byte]
 func (rcv *Task) Stacksize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -112,10 +152,12 @@ func (rcv *Task) Stacksize() uint32 {
 	return 131072
 }
 
+/// Stack size of the task in [byte]
 func (rcv *Task) MutateStacksize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+/// Execution event of the task ["cyclic"]
 func (rcv *Task) Event() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -124,6 +166,8 @@ func (rcv *Task) Event() []byte {
 	return nil
 }
 
+/// Execution event of the task ["cyclic"]
+/// Cycle time of the task in [µs]
 func (rcv *Task) Cycletime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -132,6 +176,7 @@ func (rcv *Task) Cycletime() uint32 {
 	return 20000
 }
 
+/// Cycle time of the task in [µs]
 func (rcv *Task) MutateCycletime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
@@ -143,7 +188,7 @@ func TaskAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
 }
 func TaskAddPriority(builder *flatbuffers.Builder, priority uint32) {
-	builder.PrependUint32Slot(1, priority, 119)
+	builder.PrependUint32Slot(1, priority, 120)
 }
 func TaskAddAffinity(builder *flatbuffers.Builder, affinity uint32) {
 	builder.PrependUint32Slot(2, affinity, 0)

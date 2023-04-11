@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the state of one diagnostic log in the pending diagnostics.
 type PendingDiagnosticStateT struct {
 	PendingDiagnosticState State
 }
@@ -55,6 +56,7 @@ func (rcv *PendingDiagnosticState) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// State of one diagnostic log in the pending diagnostics.
 func (rcv *PendingDiagnosticState) PendingDiagnosticState() State {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *PendingDiagnosticState) PendingDiagnosticState() State {
 	return 0
 }
 
+/// State of one diagnostic log in the pending diagnostics.
 func (rcv *PendingDiagnosticState) MutatePendingDiagnosticState(n State) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

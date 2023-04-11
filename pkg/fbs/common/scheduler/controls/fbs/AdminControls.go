@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Special extensions to modify Scheduler and system behavior e.g. activation of DEBUG mode
 type AdminControlsT struct {
 	Control *ControlsT
 }
@@ -75,6 +76,7 @@ func (rcv *AdminControls) MutateControlType(n Controls) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+/// Special extensions to modify Scheduler and system behavior e.g. activation of DEBUG mode
 func (rcv *AdminControls) Control(obj *flatbuffers.Table) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,6 +86,7 @@ func (rcv *AdminControls) Control(obj *flatbuffers.Table) bool {
 	return false
 }
 
+/// Special extensions to modify Scheduler and system behavior e.g. activation of DEBUG mode
 func AdminControlsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

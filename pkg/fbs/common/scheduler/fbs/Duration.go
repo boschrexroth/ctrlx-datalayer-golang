@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Duration measurement of execution of a task
 type DurationT struct {
 	Minimum uint64
 	Maximum uint64
@@ -64,6 +65,7 @@ func (rcv *Duration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Minimum value of duration measurement in [µs]
 func (rcv *Duration) Minimum() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +74,12 @@ func (rcv *Duration) Minimum() uint64 {
 	return 0
 }
 
+/// Minimum value of duration measurement in [µs]
 func (rcv *Duration) MutateMinimum(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
+/// Maximum value of duration measurement in [µs]
 func (rcv *Duration) Maximum() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +88,12 @@ func (rcv *Duration) Maximum() uint64 {
 	return 0
 }
 
+/// Maximum value of duration measurement in [µs]
 func (rcv *Duration) MutateMaximum(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }
 
+/// Average of values of duration measurement in [µs]
 func (rcv *Duration) Average() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +102,12 @@ func (rcv *Duration) Average() uint64 {
 	return 0
 }
 
+/// Average of values of duration measurement in [µs]
 func (rcv *Duration) MutateAverage(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(8, n)
 }
 
+/// Indication whether the duration measurement of execution is active (true) or not (false)
 func (rcv *Duration) Active() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,6 +116,7 @@ func (rcv *Duration) Active() bool {
 	return false
 }
 
+/// Indication whether the duration measurement of execution is active (true) or not (false)
 func (rcv *Duration) MutateActive(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }

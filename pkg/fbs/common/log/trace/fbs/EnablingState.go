@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table holds the enabling state of messages, warnings and errors of one trace unit.
 type EnablingStateT struct {
 	UnitName string
 	Messages bool
@@ -65,6 +66,7 @@ func (rcv *EnablingState) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Unit name of the registered trace unit.
 func (rcv *EnablingState) UnitName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,6 +75,8 @@ func (rcv *EnablingState) UnitName() []byte {
 	return nil
 }
 
+/// Unit name of the registered trace unit.
+/// Enabling state of messages.
 func (rcv *EnablingState) Messages() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +85,12 @@ func (rcv *EnablingState) Messages() bool {
 	return false
 }
 
+/// Enabling state of messages.
 func (rcv *EnablingState) MutateMessages(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+/// Enabling state of warnings.
 func (rcv *EnablingState) Warnings() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,10 +99,12 @@ func (rcv *EnablingState) Warnings() bool {
 	return false
 }
 
+/// Enabling state of warnings.
 func (rcv *EnablingState) MutateWarnings(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+/// Enabling state of errors.
 func (rcv *EnablingState) Errors() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -105,6 +113,7 @@ func (rcv *EnablingState) Errors() bool {
 	return false
 }
 
+/// Enabling state of errors.
 func (rcv *EnablingState) MutateErrors(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }

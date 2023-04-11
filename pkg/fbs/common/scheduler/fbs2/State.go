@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Type selector of operation state
 type StateT struct {
 	State CurrentState
 }
@@ -55,6 +56,7 @@ func (rcv *State) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Type selector of operation state
 func (rcv *State) State() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *State) State() CurrentState {
 	return 1
 }
 
+/// Type selector of operation state
 func (rcv *State) MutateState(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

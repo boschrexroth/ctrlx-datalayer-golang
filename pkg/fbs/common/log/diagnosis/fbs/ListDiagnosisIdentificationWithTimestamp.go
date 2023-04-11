@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines a list of uniquely identifiable diagnostic logs with the related timestamp (e.g. it is used for the pending diagnostics).
 type ListDiagnosisIdentificationWithTimestampT struct {
 	ListDiagnosisIdentificationWithTimestamp []*DiagnosisIdentificationWithTimestampT
 }
@@ -74,6 +75,7 @@ func (rcv *ListDiagnosisIdentificationWithTimestamp) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// List of uniquely identifiable diagnostic logs with the related timestamp.
 func (rcv *ListDiagnosisIdentificationWithTimestamp) ListDiagnosisIdentificationWithTimestamp(obj *DiagnosisIdentificationWithTimestamp, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +96,7 @@ func (rcv *ListDiagnosisIdentificationWithTimestamp) ListDiagnosisIdentification
 	return 0
 }
 
+/// List of uniquely identifiable diagnostic logs with the related timestamp.
 func ListDiagnosisIdentificationWithTimestampStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

@@ -6,6 +6,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines all elements that can be used to set a diagnostic log.
+/// It is used for diagnostic messages, warnings and errors.
 type LogParametersT struct {
 	MainDiagnosisCode string
 	DetailedDiagnosisCode string
@@ -91,6 +93,7 @@ func (rcv *LogParameters) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Main diagnostic number.
 func (rcv *LogParameters) MainDiagnosisCode() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -99,6 +102,8 @@ func (rcv *LogParameters) MainDiagnosisCode() []byte {
 	return nil
 }
 
+/// Main diagnostic number.
+/// Detailed diagnostic number.
 func (rcv *LogParameters) DetailedDiagnosisCode() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -107,6 +112,8 @@ func (rcv *LogParameters) DetailedDiagnosisCode() []byte {
 	return nil
 }
 
+/// Detailed diagnostic number.
+/// User id of the user who sends the log.
 func (rcv *LogParameters) UserId() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -115,6 +122,8 @@ func (rcv *LogParameters) UserId() []byte {
 	return nil
 }
 
+/// User id of the user who sends the log.
+/// Object/resource that notifies the log (e.g. motion/axs/axisY).
 func (rcv *LogParameters) Entity() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -123,6 +132,8 @@ func (rcv *LogParameters) Entity() []byte {
 	return nil
 }
 
+/// Object/resource that notifies the log (e.g. motion/axs/axisY).
+/// Application that notifies the log (e.g. rexroth-automationcore).
 func (rcv *LogParameters) Origin() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -131,6 +142,8 @@ func (rcv *LogParameters) Origin() []byte {
 	return nil
 }
 
+/// Application that notifies the log (e.g. rexroth-automationcore).
+/// Unit name of the component that notifies the log (e.g. comm.datalayer).
 func (rcv *LogParameters) UnitName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -139,6 +152,8 @@ func (rcv *LogParameters) UnitName() []byte {
 	return nil
 }
 
+/// Unit name of the component that notifies the log (e.g. comm.datalayer).
+/// Name of the file from where the log is set.
 func (rcv *LogParameters) FileName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -147,6 +162,8 @@ func (rcv *LogParameters) FileName() []byte {
 	return nil
 }
 
+/// Name of the file from where the log is set.
+/// Name of the function from where the log is set.
 func (rcv *LogParameters) FunctionName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -155,6 +172,8 @@ func (rcv *LogParameters) FunctionName() []byte {
 	return nil
 }
 
+/// Name of the function from where the log is set.
+/// Line number from where the log is set.
 func (rcv *LogParameters) LineNumber() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -163,10 +182,12 @@ func (rcv *LogParameters) LineNumber() uint32 {
 	return 0
 }
 
+/// Line number from where the log is set.
 func (rcv *LogParameters) MutateLineNumber(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(20, n)
 }
 
+/// Dynamic description to set additional dynamic elements.
 func (rcv *LogParameters) DynamicDescription() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -175,6 +196,7 @@ func (rcv *LogParameters) DynamicDescription() []byte {
 	return nil
 }
 
+/// Dynamic description to set additional dynamic elements.
 func LogParametersStart(builder *flatbuffers.Builder) {
 	builder.StartObject(10)
 }

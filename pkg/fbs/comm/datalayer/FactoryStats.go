@@ -64,6 +64,7 @@ func (rcv *FactoryStats) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// number of clients
 func (rcv *FactoryStats) NumClients() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +73,12 @@ func (rcv *FactoryStats) NumClients() uint32 {
 	return 0
 }
 
+/// number of clients
 func (rcv *FactoryStats) MutateNumClients(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// number of provider
 func (rcv *FactoryStats) NumProviders() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +87,12 @@ func (rcv *FactoryStats) NumProviders() uint32 {
 	return 0
 }
 
+/// number of provider
 func (rcv *FactoryStats) MutateNumProviders(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// number of open requests from clients
 func (rcv *FactoryStats) OpenClientRequests() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +101,12 @@ func (rcv *FactoryStats) OpenClientRequests() uint32 {
 	return 0
 }
 
+/// number of open requests from clients
 func (rcv *FactoryStats) MutateOpenClientRequests(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// number of open requests from provider
 func (rcv *FactoryStats) OpenProviderRequests() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,6 +115,7 @@ func (rcv *FactoryStats) OpenProviderRequests() uint32 {
 	return 0
 }
 
+/// number of open requests from provider
 func (rcv *FactoryStats) MutateOpenProviderRequests(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }

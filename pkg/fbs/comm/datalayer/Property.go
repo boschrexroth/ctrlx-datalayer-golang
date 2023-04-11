@@ -6,6 +6,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// The table Property can be used to set additional optional properties which influence the subcription behaviour.
+/// If no Properties are given, default values will be used automatically.
 type PropertyT struct {
 	Rule *PropertiesT
 }

@@ -47,8 +47,12 @@ type TimeoutSetting C.enum_DLR_TIMEOUT_SETTING
 
 // TimeoutSetting enum definition
 const (
+	// timeout to check whether to broker is still active when client is idle
 	TimeoutSettingIdle = C.DLR_TIMEOUT_SETTING_IDLE
+	// timeout to wait for a response for a request - it timeout exceeds request will be aborted with DL_TIMEOUT
 	TimeoutSettingPing = C.DLR_TIMEOUT_SETTING_PING
+	// timeout a reconnect attempt will be done if client looses connection to broker
+	TimeoutSettingReconnect = C.DLR_TIMEOUT_SETTING_RECONNECT
 )
 
 // ResponseCallback function type
@@ -91,6 +95,9 @@ func (c *Client) PingAsync(onResponse ResponseCallback) Result {
 // Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
 // It returns the status of function call.
 func (c *Client) CreateAsync(address string, data *Variant, onResponse ResponseCallback) Result {
+	if data == nil {
+		return ResultMissingArgument
+	}
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.ClientCreateASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
@@ -124,6 +131,9 @@ func (c *Client) BrowseAsync(address string, onResponse ResponseCallback) Result
 // Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
 // It returns the status of function call.
 func (c *Client) ReadAsync(address string, data *Variant, onResponse ResponseCallback) Result {
+	if data == nil {
+		return ResultMissingArgument
+	}
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.ClientReadASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
@@ -136,6 +146,9 @@ func (c *Client) ReadAsync(address string, data *Variant, onResponse ResponseCal
 // Parameter userdata will be returned in callback as a user data. You can use this userdata to identify your request.
 // It returns the status of function call.
 func (c *Client) WriteAsync(address string, data *Variant, onResponse ResponseCallback) Result {
+	if data == nil {
+		return ResultMissingArgument
+	}
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.ClientWriteASync(c.this, caddress, data.this, nil, responseRegister(onResponse)))
@@ -180,6 +193,9 @@ type OnSubscription func(result Result, items map[string]Variant)
 
 // DeleteSubscription deletes a subscription.
 func (c *Client) DeleteSubscription(subscription *Subscription) {
+	if subscription == nil {
+		return
+	}
 	cId := C.CString(subscription.id)
 	defer C.free(unsafe.Pointer(cId))
 	notifyResponseUnregister(subscription.notifyKey)
@@ -208,6 +224,9 @@ func (c *Client) PingSync() Result {
 // Parameter variant is a data of the object.
 // It returns the status of function call or a variant result of write or a tuple (Result, Variant).
 func (c *Client) CreateSync(address string, data *Variant) Result {
+	if data == nil {
+		return ResultMissingArgument
+	}
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.DLR_clientCreateSync(c.this, caddress, data.this, nil))
@@ -270,6 +289,9 @@ func (c *Client) ReadSync(address string) (Result, *Variant) {
 // Parameter variant ia a new data of the node.
 // It returns the status of function call or a result of write or a tuple Result, Variant).
 func (c *Client) WriteSync(address string, data *Variant) Result {
+	if data == nil {
+		return ResultMissingArgument
+	}
 	caddress := C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
 	return Result(C.DLR_clientWriteSync(c.this, caddress, data.this, nil))

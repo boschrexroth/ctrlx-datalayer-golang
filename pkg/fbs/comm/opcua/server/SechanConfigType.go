@@ -6,6 +6,37 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SechanConfigTypeT struct {
+	PolicyId uint32
+	ModeNone bool
+	ModeSign bool
+	ModeSignAndEncrypt bool
+}
+
+func (t *SechanConfigTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	SechanConfigTypeStart(builder)
+	SechanConfigTypeAddPolicyId(builder, t.PolicyId)
+	SechanConfigTypeAddModeNone(builder, t.ModeNone)
+	SechanConfigTypeAddModeSign(builder, t.ModeSign)
+	SechanConfigTypeAddModeSignAndEncrypt(builder, t.ModeSignAndEncrypt)
+	return SechanConfigTypeEnd(builder)
+}
+
+func (rcv *SechanConfigType) UnPackTo(t *SechanConfigTypeT) {
+	t.PolicyId = rcv.PolicyId()
+	t.ModeNone = rcv.ModeNone()
+	t.ModeSign = rcv.ModeSign()
+	t.ModeSignAndEncrypt = rcv.ModeSignAndEncrypt()
+}
+
+func (rcv *SechanConfigType) UnPack() *SechanConfigTypeT {
+	if rcv == nil { return nil }
+	t := &SechanConfigTypeT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SechanConfigType struct {
 	_tab flatbuffers.Table
 }

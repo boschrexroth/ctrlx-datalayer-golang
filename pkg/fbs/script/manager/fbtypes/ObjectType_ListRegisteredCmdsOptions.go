@@ -28,5 +28,5 @@ func (v ObjectTypeListRegisteredCmdsOptions) String() string {
 	if s, ok := EnumNamesObjectType_ListRegisteredCmdsOptions[v]; ok {
 		return s
 	}
-	return "ObjectTypeListRegisteredCmdsOptions(" + strconv.FormatInt(int64(v), 10) + ")"
+	return "ObjectType_ListRegisteredCmdsOptions(" + strconv.FormatInt(int64(v), 10) + ")"
 }

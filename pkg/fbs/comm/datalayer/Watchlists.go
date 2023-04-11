@@ -74,6 +74,7 @@ func (rcv *Watchlists) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Watchlists
 func (rcv *Watchlists) Watchlists(obj *Watchlist, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +95,7 @@ func (rcv *Watchlists) WatchlistsLength() int {
 	return 0
 }
 
+/// Watchlists
 func WatchlistsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

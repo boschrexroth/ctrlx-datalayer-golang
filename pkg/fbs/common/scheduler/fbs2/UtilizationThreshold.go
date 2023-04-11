@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Utilization of the cycle time of Scheduler tick task causes by itself
 type UtilizationThresholdT struct {
 	Warning byte
 	Error byte
@@ -58,6 +59,7 @@ func (rcv *UtilizationThreshold) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Threshold of utilization of the cycle time of Scheduler tick task causes by itself for reporting a warning
 func (rcv *UtilizationThreshold) Warning() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *UtilizationThreshold) Warning() byte {
 	return 50
 }
 
+/// Threshold of utilization of the cycle time of Scheduler tick task causes by itself for reporting a warning
 func (rcv *UtilizationThreshold) MutateWarning(n byte) bool {
 	return rcv._tab.MutateByteSlot(4, n)
 }
 
+/// Threshold of utilization of the cycle time of Scheduler tick task causes by itself for reporting an error
 func (rcv *UtilizationThreshold) Error() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *UtilizationThreshold) Error() byte {
 	return 75
 }
 
+/// Threshold of utilization of the cycle time of Scheduler tick task causes by itself for reporting an error
 func (rcv *UtilizationThreshold) MutateError(n byte) bool {
 	return rcv._tab.MutateByteSlot(6, n)
 }

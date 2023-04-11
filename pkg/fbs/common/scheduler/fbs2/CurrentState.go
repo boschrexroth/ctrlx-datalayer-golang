@@ -4,12 +4,17 @@ package fbs2
 
 import "strconv"
 
+/// Types of operation state
 type CurrentState int8
 
 const (
+	/// User tasks and callables will executed, changes to the configuration might not be permitted, action with influence on the real-time behavior (like app installation) are not allowed
 	CurrentStateOPERATING CurrentState = 0
+	/// User tasks and callables will executed, changes to the configuration are permitted, action with influence on the real-time behavior (like app installation) are not allowed
 	CurrentStateSETUP     CurrentState = 1
+	/// User tasks and callables are not executed, action with influence on the real-time behavior can be performed
 	CurrentStateSERVICE   CurrentState = 2
+	/// Termination of task is pending
 	CurrentStateEXIT      CurrentState = 3
 )
 

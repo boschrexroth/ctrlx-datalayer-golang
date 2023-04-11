@@ -4,10 +4,13 @@ package fbs
 
 import "strconv"
 
+/// Task behavior in case of a task watchdog occurs
 type CurrentConfiguration int8
 
 const (
+	/// The task is triggered even after the watchdog is triggered until the maximum number of consecutive errors is reached
 	CurrentConfigurationCONTINUE CurrentConfiguration = 0
+	/// The task is not triggered anymore after triggering the watchdog
 	CurrentConfigurationDISABLE  CurrentConfiguration = 1
 )
 

@@ -55,6 +55,7 @@ func (rcv *ServerStateType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Shows the current state of the OPC UA Server
 func (rcv *ServerStateType) State() EnumServerState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *ServerStateType) State() EnumServerState {
 	return 0
 }
 
+/// Shows the current state of the OPC UA Server
 func (rcv *ServerStateType) MutateState(n EnumServerState) bool {
 	return rcv._tab.MutateInt32Slot(4, int32(n))
 }

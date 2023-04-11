@@ -4,10 +4,13 @@ package fbs
 
 import "strconv"
 
+/// Types of trigger sources of Scheduler
 type CurrentTrigger int8
 
 const (
+	/// Trigger of Scheduler is cause by a timer interrupt
 	CurrentTriggerTIMER     CurrentTrigger = 0
+	/// Trigger of Scheduler is cause by a FPGA interrupt
 	CurrentTriggerINTERRUPT CurrentTrigger = 1
 )
 

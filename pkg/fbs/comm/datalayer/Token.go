@@ -111,6 +111,7 @@ func (rcv *Token) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// for all unknown claims - not in fields below
 func (rcv *Token) Claims(obj *Claim, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -131,6 +132,7 @@ func (rcv *Token) ClaimsLength() int {
 	return 0
 }
 
+/// for all unknown claims - not in fields below
 func (rcv *Token) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

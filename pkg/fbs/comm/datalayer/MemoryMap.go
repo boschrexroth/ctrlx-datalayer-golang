@@ -9,6 +9,7 @@ import (
 type MemoryMapT struct {
 	Variables []*VariableT
 	Revision uint32
+	DisableInputImage bool
 }
 
 func (t *MemoryMapT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -29,6 +30,7 @@ func (t *MemoryMapT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	MemoryMapStart(builder)
 	MemoryMapAddVariables(builder, variablesOffset)
 	MemoryMapAddRevision(builder, t.Revision)
+	MemoryMapAddDisableInputImage(builder, t.DisableInputImage)
 	return MemoryMapEnd(builder)
 }
 
@@ -41,6 +43,7 @@ func (rcv *MemoryMap) UnPackTo(t *MemoryMapT) {
 		t.Variables[j] = x.UnPack()
 	}
 	t.Revision = rcv.Revision()
+	t.DisableInputImage = rcv.DisableInputImage()
 }
 
 func (rcv *MemoryMap) UnPack() *MemoryMapT {
@@ -77,6 +80,7 @@ func (rcv *MemoryMap) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// array of variables
 func (rcv *MemoryMap) Variables(obj *Variable, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -97,6 +101,8 @@ func (rcv *MemoryMap) VariablesLength() int {
 	return 0
 }
 
+/// array of variables
+/// revision number- changes every time on variables changes
 func (rcv *MemoryMap) Revision() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -105,12 +111,27 @@ func (rcv *MemoryMap) Revision() uint32 {
 	return 0
 }
 
+/// revision number- changes every time on variables changes
 func (rcv *MemoryMap) MutateRevision(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// Disable input buffer so save one copy from image to data
+func (rcv *MemoryMap) DisableInputImage() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// Disable input buffer so save one copy from image to data
+func (rcv *MemoryMap) MutateDisableInputImage(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func MemoryMapStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func MemoryMapAddVariables(builder *flatbuffers.Builder, variables flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(variables), 0)
@@ -120,6 +141,9 @@ func MemoryMapStartVariablesVector(builder *flatbuffers.Builder, numElems int) f
 }
 func MemoryMapAddRevision(builder *flatbuffers.Builder, revision uint32) {
 	builder.PrependUint32Slot(1, revision, 0)
+}
+func MemoryMapAddDisableInputImage(builder *flatbuffers.Builder, disableInputImage bool) {
+	builder.PrependBoolSlot(2, disableInputImage, false)
 }
 func MemoryMapEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

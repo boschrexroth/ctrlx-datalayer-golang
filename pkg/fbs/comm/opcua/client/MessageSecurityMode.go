@@ -55,6 +55,7 @@ func (rcv *MessageSecurityMode) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// default is BESTAVAILABLE this determines and uses the most secure method automatically
 func (rcv *MessageSecurityMode) MessageSecurityMode() EnumMessageSecurityMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *MessageSecurityMode) MessageSecurityMode() EnumMessageSecurityMode {
 	return 0
 }
 
+/// default is BESTAVAILABLE this determines and uses the most secure method automatically
 func (rcv *MessageSecurityMode) MutateMessageSecurityMode(n EnumMessageSecurityMode) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

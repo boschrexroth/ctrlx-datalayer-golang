@@ -74,6 +74,7 @@ func (rcv *ArrayOfUserTokenType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// The user token configuration of the OPC UA Server in an array
 func (rcv *ArrayOfUserTokenType) UserTokenArray(obj *UserTokenType, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +95,7 @@ func (rcv *ArrayOfUserTokenType) UserTokenArrayLength() int {
 	return 0
 }
 
+/// The user token configuration of the OPC UA Server in an array
 func ArrayOfUserTokenTypeStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

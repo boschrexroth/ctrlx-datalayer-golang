@@ -11,6 +11,7 @@ type KinAxsSingleT struct {
 	Meaning string
 	Name string
 	Dir string
+	AcsIndex byte
 }
 
 func (t *KinAxsSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -22,6 +23,7 @@ func (t *KinAxsSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	KinAxsSingleAddMeaning(builder, meaningOffset)
 	KinAxsSingleAddName(builder, nameOffset)
 	KinAxsSingleAddDir(builder, dirOffset)
+	KinAxsSingleAddAcsIndex(builder, t.AcsIndex)
 	return KinAxsSingleEnd(builder)
 }
 
@@ -29,6 +31,7 @@ func (rcv *KinAxsSingle) UnPackTo(t *KinAxsSingleT) {
 	t.Meaning = string(rcv.Meaning())
 	t.Name = string(rcv.Name())
 	t.Dir = string(rcv.Dir())
+	t.AcsIndex = rcv.AcsIndex()
 }
 
 func (rcv *KinAxsSingle) UnPack() *KinAxsSingleT {
@@ -65,7 +68,7 @@ func (rcv *KinAxsSingle) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// (geometric) meaning of the axis in the kinematics 
+/// DEPRECATED; (geometric) meaning of the axis in the kinematics (only useful for simple Cartesian kinematics); use "acsIndex" for all other cases
 func (rcv *KinAxsSingle) Meaning() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -74,7 +77,7 @@ func (rcv *KinAxsSingle) Meaning() []byte {
 	return nil
 }
 
-/// (geometric) meaning of the axis in the kinematics 
+/// DEPRECATED; (geometric) meaning of the axis in the kinematics (only useful for simple Cartesian kinematics); use "acsIndex" for all other cases
 /// name of the axis
 func (rcv *KinAxsSingle) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
@@ -95,8 +98,22 @@ func (rcv *KinAxsSingle) Dir() []byte {
 }
 
 /// direction ("+" or "-") of the axis referring to the kinematics coordinate system
+/// index of the axis in the ACS (axis coordinate system) array of the kinematics
+func (rcv *KinAxsSingle) AcsIndex() byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetByte(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// index of the axis in the ACS (axis coordinate system) array of the kinematics
+func (rcv *KinAxsSingle) MutateAcsIndex(n byte) bool {
+	return rcv._tab.MutateByteSlot(10, n)
+}
+
 func KinAxsSingleStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinAxsSingleAddMeaning(builder *flatbuffers.Builder, meaning flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(meaning), 0)
@@ -106,6 +123,9 @@ func KinAxsSingleAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT
 }
 func KinAxsSingleAddDir(builder *flatbuffers.Builder, dir flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(dir), 0)
+}
+func KinAxsSingleAddAcsIndex(builder *flatbuffers.Builder, acsIndex byte) {
+	builder.PrependByteSlot(3, acsIndex, 0)
 }
 func KinAxsSingleEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

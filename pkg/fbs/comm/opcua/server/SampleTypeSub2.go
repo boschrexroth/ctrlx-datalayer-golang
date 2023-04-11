@@ -6,6 +6,36 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type SampleTypeSub2T struct {
+	SimpleData string
+	SimpleData2 uint32
+	SubStruct *SampleTypeSub2SubT
+}
+
+func (t *SampleTypeSub2T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	simpleDataOffset := builder.CreateString(t.SimpleData)
+	subStructOffset := t.SubStruct.Pack(builder)
+	SampleTypeSub2Start(builder)
+	SampleTypeSub2AddSimpleData(builder, simpleDataOffset)
+	SampleTypeSub2AddSimpleData2(builder, t.SimpleData2)
+	SampleTypeSub2AddSubStruct(builder, subStructOffset)
+	return SampleTypeSub2End(builder)
+}
+
+func (rcv *SampleTypeSub2) UnPackTo(t *SampleTypeSub2T) {
+	t.SimpleData = string(rcv.SimpleData())
+	t.SimpleData2 = rcv.SimpleData2()
+	t.SubStruct = rcv.SubStruct(nil).UnPack()
+}
+
+func (rcv *SampleTypeSub2) UnPack() *SampleTypeSub2T {
+	if rcv == nil { return nil }
+	t := &SampleTypeSub2T{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type SampleTypeSub2 struct {
 	_tab flatbuffers.Table
 }

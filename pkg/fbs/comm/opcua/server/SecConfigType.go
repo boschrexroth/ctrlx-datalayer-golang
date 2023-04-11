@@ -64,6 +64,14 @@ func (rcv *SecConfigType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Identifier of the policy to use
+/// UA_SECURITY_POLICY_NONE = 0,
+/// UA_SECURITY_POLICY_BASIC128RSA15 = 1,
+/// UA_SECURITY_POLICY_BASIC256 = 2,
+/// UA_SECURITY_POLICY_BASIC256SHA256 = 3,
+/// UA_SECURITY_POLICY_AES128_SHA256_RSAOAEP = 4,
+/// UA_SECURITY_POLICY_AES256_SHA256_RSAPSS = 5,
+/// UA_SECURITY_POLICY_ID_MAX = 6
 func (rcv *SecConfigType) PolicyId() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +80,19 @@ func (rcv *SecConfigType) PolicyId() uint32 {
 	return 0
 }
 
+/// Identifier of the policy to use
+/// UA_SECURITY_POLICY_NONE = 0,
+/// UA_SECURITY_POLICY_BASIC128RSA15 = 1,
+/// UA_SECURITY_POLICY_BASIC256 = 2,
+/// UA_SECURITY_POLICY_BASIC256SHA256 = 3,
+/// UA_SECURITY_POLICY_AES128_SHA256_RSAOAEP = 4,
+/// UA_SECURITY_POLICY_AES256_SHA256_RSAPSS = 5,
+/// UA_SECURITY_POLICY_ID_MAX = 6
 func (rcv *SecConfigType) MutatePolicyId(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// True if message security mode none is allowed
 func (rcv *SecConfigType) ModeNone() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +101,12 @@ func (rcv *SecConfigType) ModeNone() bool {
 	return false
 }
 
+/// True if message security mode none is allowed
 func (rcv *SecConfigType) MutateModeNone(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+/// True if message security mode sign is allowed
 func (rcv *SecConfigType) ModeSign() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +115,12 @@ func (rcv *SecConfigType) ModeSign() bool {
 	return false
 }
 
+/// True if message security mode sign is allowed
 func (rcv *SecConfigType) MutateModeSign(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+/// True if message security mode sign and encrypt is allowed
 func (rcv *SecConfigType) ModeSignAndEncrypt() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,6 +129,7 @@ func (rcv *SecConfigType) ModeSignAndEncrypt() bool {
 	return false
 }
 
+/// True if message security mode sign and encrypt is allowed
 func (rcv *SecConfigType) MutateModeSignAndEncrypt(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }

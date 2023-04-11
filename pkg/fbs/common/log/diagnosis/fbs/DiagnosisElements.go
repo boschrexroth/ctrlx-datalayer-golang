@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines a list of main or detailed diagnostics that should be registered.
 type DiagnosisElementsT struct {
 	DiagnosisElements []*DiagnosisElementT
 }
@@ -74,6 +75,7 @@ func (rcv *DiagnosisElements) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// List of main or detailed diagnostics.
 func (rcv *DiagnosisElements) DiagnosisElements(obj *DiagnosisElement, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +96,7 @@ func (rcv *DiagnosisElements) DiagnosisElementsLength() int {
 	return 0
 }
 
+/// List of main or detailed diagnostics.
 func DiagnosisElementsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

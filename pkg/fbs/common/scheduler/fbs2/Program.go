@@ -9,6 +9,7 @@ import (
 	common__scheduler__watchdog__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/fbs"
 )
 
+/// Composition of callables executed by the task in given sequence
 type ProgramT struct {
 	Task *common__scheduler__fbs.TaskT
 	Callables []*common__scheduler__fbs.CallableT
@@ -105,6 +106,7 @@ func (rcv *Program) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Task configuration which executes the program
 func (rcv *Program) Task(obj *common__scheduler__fbs.Task) *common__scheduler__fbs.Task {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -118,6 +120,8 @@ func (rcv *Program) Task(obj *common__scheduler__fbs.Task) *common__scheduler__f
 	return nil
 }
 
+/// Task configuration which executes the program
+/// Composition of callables, executes jobs defined by regarding apps
 func (rcv *Program) Callables(obj *common__scheduler__fbs.Callable, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -138,6 +142,8 @@ func (rcv *Program) CallablesLength() int {
 	return 0
 }
 
+/// Composition of callables, executes jobs defined by regarding apps
+/// Configuration of task watchdog
 func (rcv *Program) Watchdog(obj *common__scheduler__watchdog__fbs.Watchdog) *common__scheduler__watchdog__fbs.Watchdog {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -151,6 +157,8 @@ func (rcv *Program) Watchdog(obj *common__scheduler__watchdog__fbs.Watchdog) *co
 	return nil
 }
 
+/// Configuration of task watchdog
+/// Call sequence of callables within the program [0-9]+
 func (rcv *Program) Sequence(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -168,6 +176,7 @@ func (rcv *Program) SequenceLength() int {
 	return 0
 }
 
+/// Call sequence of callables within the program [0-9]+
 func ProgramStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

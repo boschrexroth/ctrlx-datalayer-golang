@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Switching progress (initial / current / target) of Scheduler operation state
 type StateSwitchingInfoT struct {
 	Initial CurrentState
 	Current CurrentState
@@ -61,6 +62,7 @@ func (rcv *StateSwitchingInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Initial operation state of Scheduler at the beginning of switching
 func (rcv *StateSwitchingInfo) Initial() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,10 +71,12 @@ func (rcv *StateSwitchingInfo) Initial() CurrentState {
 	return 2
 }
 
+/// Initial operation state of Scheduler at the beginning of switching
 func (rcv *StateSwitchingInfo) MutateInitial(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
+/// Current operation state of Scheduler
 func (rcv *StateSwitchingInfo) Current() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +85,12 @@ func (rcv *StateSwitchingInfo) Current() CurrentState {
 	return 2
 }
 
+/// Current operation state of Scheduler
 func (rcv *StateSwitchingInfo) MutateCurrent(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
+/// Target operation state of Scheduler
 func (rcv *StateSwitchingInfo) Target() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,6 +99,7 @@ func (rcv *StateSwitchingInfo) Target() CurrentState {
 	return 2
 }
 
+/// Target operation state of Scheduler
 func (rcv *StateSwitchingInfo) MutateTarget(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }

@@ -12,6 +12,7 @@ type ServerSettingsT struct {
 	ServerMaxMessageSize uint32
 	DebugAddress string
 	ServerMaxRtSize uint32
+	ServerEmulatedNvramSize uint32
 }
 
 func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -23,6 +24,7 @@ func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	ServerSettingsAddServerMaxMessageSize(builder, t.ServerMaxMessageSize)
 	ServerSettingsAddDebugAddress(builder, debugAddressOffset)
 	ServerSettingsAddServerMaxRtSize(builder, t.ServerMaxRtSize)
+	ServerSettingsAddServerEmulatedNvramSize(builder, t.ServerEmulatedNvramSize)
 	return ServerSettingsEnd(builder)
 }
 
@@ -32,6 +34,7 @@ func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
 	t.ServerMaxMessageSize = rcv.ServerMaxMessageSize()
 	t.DebugAddress = string(rcv.DebugAddress())
 	t.ServerMaxRtSize = rcv.ServerMaxRtSize()
+	t.ServerEmulatedNvramSize = rcv.ServerEmulatedNvramSize()
 }
 
 func (rcv *ServerSettings) UnPack() *ServerSettingsT {
@@ -68,6 +71,7 @@ func (rcv *ServerSettings) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// after this time send a ping to not used provider is send to test if provider is still alive
 func (rcv *ServerSettings) ServerIdlePingTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,10 +80,12 @@ func (rcv *ServerSettings) ServerIdlePingTimeout() uint32 {
 	return 30000
 }
 
+/// after this time send a ping to not used provider is send to test if provider is still alive
 func (rcv *ServerSettings) MutateServerIdlePingTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// after this time a response from provider is expected - if there is no answer a provider is assumed to be dead --> kick provider out of routing
 func (rcv *ServerSettings) ServerWaitResponseTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -88,10 +94,12 @@ func (rcv *ServerSettings) ServerWaitResponseTimeout() uint32 {
 	return 3000
 }
 
+/// after this time a response from provider is expected - if there is no answer a provider is assumed to be dead --> kick provider out of routing
 func (rcv *ServerSettings) MutateServerWaitResponseTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// maximum inbound message size
 func (rcv *ServerSettings) ServerMaxMessageSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -100,10 +108,12 @@ func (rcv *ServerSettings) ServerMaxMessageSize() uint32 {
 	return 52428800
 }
 
+/// maximum inbound message size
 func (rcv *ServerSettings) MutateServerMaxMessageSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// Address to debug disconnect
 func (rcv *ServerSettings) DebugAddress() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -112,6 +122,8 @@ func (rcv *ServerSettings) DebugAddress() []byte {
 	return nil
 }
 
+/// Address to debug disconnect
+/// Maximum size of a RT area
 func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -120,12 +132,27 @@ func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
 	return 1048576
 }
 
+/// Maximum size of a RT area
 func (rcv *ServerSettings) MutateServerMaxRtSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+/// Emulated NVRam size - will be active after a restart of app.automationcore
+func (rcv *ServerSettings) ServerEmulatedNvramSize() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 122880
+}
+
+/// Emulated NVRam size - will be active after a restart of app.automationcore
+func (rcv *ServerSettings) MutateServerEmulatedNvramSize(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(14, n)
+}
+
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
@@ -141,6 +168,9 @@ func ServerSettingsAddDebugAddress(builder *flatbuffers.Builder, debugAddress fl
 }
 func ServerSettingsAddServerMaxRtSize(builder *flatbuffers.Builder, serverMaxRtSize uint32) {
 	builder.PrependUint32Slot(4, serverMaxRtSize, 1048576)
+}
+func ServerSettingsAddServerEmulatedNvramSize(builder *flatbuffers.Builder, serverEmulatedNvramSize uint32) {
+	builder.PrependUint32Slot(5, serverEmulatedNvramSize, 122880)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

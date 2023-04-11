@@ -9,6 +9,7 @@ import (
 	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/fbs"
 )
 
+/// General settings of Scheduler, startup behavior, callables, tasks and timing
 type AdminT struct {
 	StartupState CurrentState
 	StartupTimeout uint32
@@ -96,6 +97,7 @@ func (rcv *Admin) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Target operation state of Scheduler after power on ctrlX CORE
 func (rcv *Admin) StartupState() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -104,34 +106,40 @@ func (rcv *Admin) StartupState() CurrentState {
 	return 0
 }
 
+/// Target operation state of Scheduler after power on ctrlX CORE
 func (rcv *Admin) MutateStartupState(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
+/// Timeout for waiting for missing components before carry on switching to target operation state
 func (rcv *Admin) StartupTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
 	}
-	return 5
+	return 0
 }
 
+/// Timeout for waiting for missing components before carry on switching to target operation state
 func (rcv *Admin) MutateStartupTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// Error reaction in case of not all configured components are available
 func (rcv *Admin) StartupErrorReaction() common__scheduler__fbs.CurrentErrorReaction {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return common__scheduler__fbs.CurrentErrorReaction(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 0
+	return 1
 }
 
+/// Error reaction in case of not all configured components are available
 func (rcv *Admin) MutateStartupErrorReaction(n common__scheduler__fbs.CurrentErrorReaction) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
+/// Trigger source of Scheduler task tick
 func (rcv *Admin) TriggerSource() common__scheduler__fbs.CurrentTrigger {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -140,6 +148,7 @@ func (rcv *Admin) TriggerSource() common__scheduler__fbs.CurrentTrigger {
 	return 1
 }
 
+/// Trigger source of Scheduler task tick
 func (rcv *Admin) MutateTriggerSource(n common__scheduler__fbs.CurrentTrigger) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
@@ -156,6 +165,7 @@ func (rcv *Admin) MutateControlDebugType(n common__scheduler__controls__fbs.Cont
 	return rcv._tab.MutateByteSlot(12, byte(n))
 }
 
+/// Indication whether the DEBUG mode is active and hardware watchdog and task watchdogs are disabled
 func (rcv *Admin) ControlDebug(obj *flatbuffers.Table) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -165,6 +175,8 @@ func (rcv *Admin) ControlDebug(obj *flatbuffers.Table) bool {
 	return false
 }
 
+/// Indication whether the DEBUG mode is active and hardware watchdog and task watchdogs are disabled
+/// Information about CPU cores of ctrlX CORE
 func (rcv *Admin) CpuInfo(obj *CpuInfo) *CpuInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -178,7 +190,8 @@ func (rcv *Admin) CpuInfo(obj *CpuInfo) *CpuInfo {
 	return nil
 }
 
-/// status of hardware watchdog requirment
+/// Information about CPU cores of ctrlX CORE
+/// Indication whether switching to the SERVICE state is required for managing apps
 func (rcv *Admin) HardwareWatchdogRequired() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -187,12 +200,12 @@ func (rcv *Admin) HardwareWatchdogRequired() bool {
 	return false
 }
 
-/// status of hardware watchdog requirment
+/// Indication whether switching to the SERVICE state is required for managing apps
 func (rcv *Admin) MutateHardwareWatchdogRequired(n bool) bool {
 	return rcv._tab.MutateBoolSlot(18, n)
 }
 
-/// influence default task and hardware watchdog handling
+/// Default behavior of task and hardware watchdog handling when no requirements are given by other
 func (rcv *Admin) WatchdogDefaultValue() common__scheduler__fbs.CallableWdgConfig {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -201,12 +214,12 @@ func (rcv *Admin) WatchdogDefaultValue() common__scheduler__fbs.CallableWdgConfi
 	return 3
 }
 
-/// influence default task and hardware watchdog handling
+/// Default behavior of task and hardware watchdog handling when no requirements are given by other
 func (rcv *Admin) MutateWatchdogDefaultValue(n common__scheduler__fbs.CallableWdgConfig) bool {
 	return rcv._tab.MutateInt8Slot(20, int8(n))
 }
 
-/// utilization thresholds of scheduler system
+/// Utilization of the cycle time of Scheduler tick task causes by itself
 func (rcv *Admin) Utilization(obj *UtilizationThreshold) *UtilizationThreshold {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -220,8 +233,8 @@ func (rcv *Admin) Utilization(obj *UtilizationThreshold) *UtilizationThreshold {
 	return nil
 }
 
-/// utilization thresholds of scheduler system
-/// callable timeouts for the switch events
+/// Utilization of the cycle time of Scheduler tick task causes by itself
+/// General settings for timeouts when switching callable operation states
 func (rcv *Admin) CallableTimeouts(obj *CallableTimeouts) *CallableTimeouts {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -235,7 +248,7 @@ func (rcv *Admin) CallableTimeouts(obj *CallableTimeouts) *CallableTimeouts {
 	return nil
 }
 
-/// callable timeouts for the switch events
+/// General settings for timeouts when switching callable operation states
 func AdminStart(builder *flatbuffers.Builder) {
 	builder.StartObject(11)
 }
@@ -243,10 +256,10 @@ func AdminAddStartupState(builder *flatbuffers.Builder, startupState CurrentStat
 	builder.PrependInt8Slot(0, int8(startupState), 0)
 }
 func AdminAddStartupTimeout(builder *flatbuffers.Builder, startupTimeout uint32) {
-	builder.PrependUint32Slot(1, startupTimeout, 5)
+	builder.PrependUint32Slot(1, startupTimeout, 0)
 }
 func AdminAddStartupErrorReaction(builder *flatbuffers.Builder, startupErrorReaction common__scheduler__fbs.CurrentErrorReaction) {
-	builder.PrependInt8Slot(2, int8(startupErrorReaction), 0)
+	builder.PrependInt8Slot(2, int8(startupErrorReaction), 1)
 }
 func AdminAddTriggerSource(builder *flatbuffers.Builder, triggerSource common__scheduler__fbs.CurrentTrigger) {
 	builder.PrependInt8Slot(3, int8(triggerSource), 1)

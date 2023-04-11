@@ -60,6 +60,7 @@ func (rcv *LocaleText) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// iso 639.1
 func (rcv *LocaleText) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +69,7 @@ func (rcv *LocaleText) Id() []byte {
 	return nil
 }
 
+/// iso 639.1
 func (rcv *LocaleText) Text() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

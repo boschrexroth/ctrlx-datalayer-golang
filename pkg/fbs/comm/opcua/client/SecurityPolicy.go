@@ -55,6 +55,7 @@ func (rcv *SecurityPolicy) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// default is BESTAVAILABLE determines and uses the most secure method automatically
 func (rcv *SecurityPolicy) SecurityPolicy() EnumSecurityPolicy {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *SecurityPolicy) SecurityPolicy() EnumSecurityPolicy {
 	return 0
 }
 
+/// default is BESTAVAILABLE determines and uses the most secure method automatically
 func (rcv *SecurityPolicy) MutateSecurityPolicy(n EnumSecurityPolicy) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

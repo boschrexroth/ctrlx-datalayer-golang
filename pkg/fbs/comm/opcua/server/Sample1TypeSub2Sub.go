@@ -6,6 +6,45 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Sample1TypeSub2SubT struct {
+	C1 *Sample1TypeSub3SubT
+	C2 []int32
+}
+
+func (t *Sample1TypeSub2SubT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	if t == nil { return 0 }
+	c1Offset := t.C1.Pack(builder)
+	c2Offset := flatbuffers.UOffsetT(0)
+	if t.C2 != nil {
+		c2Length := len(t.C2)
+		Sample1TypeSub2SubStartC2Vector(builder, c2Length)
+		for j := c2Length - 1; j >= 0; j-- {
+			builder.PrependInt32(t.C2[j])
+		}
+		c2Offset = builder.EndVector(c2Length)
+	}
+	Sample1TypeSub2SubStart(builder)
+	Sample1TypeSub2SubAddC1(builder, c1Offset)
+	Sample1TypeSub2SubAddC2(builder, c2Offset)
+	return Sample1TypeSub2SubEnd(builder)
+}
+
+func (rcv *Sample1TypeSub2Sub) UnPackTo(t *Sample1TypeSub2SubT) {
+	t.C1 = rcv.C1(nil).UnPack()
+	c2Length := rcv.C2Length()
+	t.C2 = make([]int32, c2Length)
+	for j := 0; j < c2Length; j++ {
+		t.C2[j] = rcv.C2(j)
+	}
+}
+
+func (rcv *Sample1TypeSub2Sub) UnPack() *Sample1TypeSub2SubT {
+	if rcv == nil { return nil }
+	t := &Sample1TypeSub2SubT{}
+	rcv.UnPackTo(t)
+	return t
+}
+
 type Sample1TypeSub2Sub struct {
 	_tab flatbuffers.Table
 }

@@ -7,12 +7,19 @@ import "strconv"
 type EnumSecurityPolicy int8
 
 const (
+	/// Determines and uses the most secure method automatically
 	EnumSecurityPolicyBESTAVAILABLE         EnumSecurityPolicy = 0
+	/// "http://opcfoundation.org/UA/SecurityPolicy#None"
 	EnumSecurityPolicyNONE                  EnumSecurityPolicy = 1
+	/// "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15"
 	EnumSecurityPolicyBASIC128RSA15         EnumSecurityPolicy = 2
+	/// "http://opcfoundation.org/UA/SecurityPolicy#Basic256"
 	EnumSecurityPolicyBASIC256              EnumSecurityPolicy = 3
+	/// "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256"
 	EnumSecurityPolicyBASIC256SHA256        EnumSecurityPolicy = 4
+	/// "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep"
 	EnumSecurityPolicyAES128_SHA256_RSAOAEP EnumSecurityPolicy = 5
+	/// "http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss"
 	EnumSecurityPolicyAES256_SHA256_RSAPSS  EnumSecurityPolicy = 6
 )
 

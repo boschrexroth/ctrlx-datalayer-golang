@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the unique identification of a diagnostic log in combination with the timestamp of the log.
 type DiagnosisIdentificationWithTimestampT struct {
 	DiagnosisIdentification *DiagnosisIdentificationT
 	Timestamp string
@@ -60,6 +61,7 @@ func (rcv *DiagnosisIdentificationWithTimestamp) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Unique identification of the diagnostic log.
 func (rcv *DiagnosisIdentificationWithTimestamp) DiagnosisIdentification(obj *DiagnosisIdentification) *DiagnosisIdentification {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,6 +75,8 @@ func (rcv *DiagnosisIdentificationWithTimestamp) DiagnosisIdentification(obj *Di
 	return nil
 }
 
+/// Unique identification of the diagnostic log.
+/// Timestamp of the diagnostic log.
 func (rcv *DiagnosisIdentificationWithTimestamp) Timestamp() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,6 +85,7 @@ func (rcv *DiagnosisIdentificationWithTimestamp) Timestamp() []byte {
 	return nil
 }
 
+/// Timestamp of the diagnostic log.
 func DiagnosisIdentificationWithTimestampStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

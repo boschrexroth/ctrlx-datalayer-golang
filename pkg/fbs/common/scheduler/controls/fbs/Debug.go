@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Machine ID to use the DEBUG configuration only on the intended machine
 type DebugT struct {
 	Machine string
 }
@@ -56,6 +57,7 @@ func (rcv *Debug) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Machine ID to use the DEBUG configuration only on the intended machine
 func (rcv *Debug) Machine() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -64,6 +66,7 @@ func (rcv *Debug) Machine() []byte {
 	return nil
 }
 
+/// Machine ID to use the DEBUG configuration only on the intended machine
 func DebugStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

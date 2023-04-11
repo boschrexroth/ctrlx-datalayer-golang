@@ -60,6 +60,7 @@ func (rcv *Reference) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// nodeid of type  "readType", "writeType", "createType", ...
 func (rcv *Reference) Type() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,6 +69,8 @@ func (rcv *Reference) Type() []byte {
 	return nil
 }
 
+/// nodeid of type  "readType", "writeType", "createType", ...
+/// full qualified address of target
 func (rcv *Reference) TargetAddress() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -76,6 +79,7 @@ func (rcv *Reference) TargetAddress() []byte {
 	return nil
 }
 
+/// full qualified address of target
 func ReferenceStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

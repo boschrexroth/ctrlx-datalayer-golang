@@ -4,10 +4,13 @@ package fbs
 
 import "strconv"
 
+/// Type of watchdog of the task
 type CurrentType int8
 
 const (
+	/// Task will be monitored regarding the consumed cycle time
 	CurrentTypeCYCLE CurrentType = 0
+	/// No watchdog used
 	CurrentTypeNONE  CurrentType = 1
 )
 

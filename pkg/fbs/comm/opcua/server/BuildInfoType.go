@@ -75,6 +75,7 @@ func (rcv *BuildInfoType) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// The build date of the OPC UA Server
 func (rcv *BuildInfoType) BuildDate() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -83,10 +84,12 @@ func (rcv *BuildInfoType) BuildDate() uint64 {
 	return 0
 }
 
+/// The build date of the OPC UA Server
 func (rcv *BuildInfoType) MutateBuildDate(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
+/// The build number of the OPC UA Server
 func (rcv *BuildInfoType) BuildNumber() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -95,6 +98,8 @@ func (rcv *BuildInfoType) BuildNumber() []byte {
 	return nil
 }
 
+/// The build number of the OPC UA Server
+/// The manufacturer name of the OPC UA Server
 func (rcv *BuildInfoType) ManufacturerName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -103,6 +108,8 @@ func (rcv *BuildInfoType) ManufacturerName() []byte {
 	return nil
 }
 
+/// The manufacturer name of the OPC UA Server
+/// The product name of the OPC UA Server
 func (rcv *BuildInfoType) ProductName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -111,6 +118,8 @@ func (rcv *BuildInfoType) ProductName() []byte {
 	return nil
 }
 
+/// The product name of the OPC UA Server
+/// The product uri of the OPC UA Server
 func (rcv *BuildInfoType) ProductUri() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -119,6 +128,8 @@ func (rcv *BuildInfoType) ProductUri() []byte {
 	return nil
 }
 
+/// The product uri of the OPC UA Server
+/// The software version of the OPC UA Server
 func (rcv *BuildInfoType) SoftwareVersion() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -127,6 +138,7 @@ func (rcv *BuildInfoType) SoftwareVersion() []byte {
 	return nil
 }
 
+/// The software version of the OPC UA Server
 func BuildInfoTypeStart(builder *flatbuffers.Builder) {
 	builder.StartObject(6)
 }

@@ -7,9 +7,13 @@ import "strconv"
 type ProgramTaskState int8
 
 const (
+	/// task is pending and not been started
 	ProgramTaskStatepending ProgramTaskState = 0
+	/// task finished with failure
 	ProgramTaskStatefailed  ProgramTaskState = 1
+	/// task is successfully done
 	ProgramTaskStatedone    ProgramTaskState = 2
+	/// task is running
 	ProgramTaskStaterunning ProgramTaskState = 3
 )
 

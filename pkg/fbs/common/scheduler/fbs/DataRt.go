@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Information about the current cycle of the task (related to real-time usage)
 type DataRtT struct {
 	StartTime uint64
 	Counter uint64
@@ -58,6 +59,7 @@ func (rcv *DataRt) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Start time of the task in [µs]
 func (rcv *DataRt) StartTime() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *DataRt) StartTime() uint64 {
 	return 0
 }
 
+/// Start time of the task in [µs]
 func (rcv *DataRt) MutateStartTime(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
+/// Count of execution of the task
 func (rcv *DataRt) Counter() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *DataRt) Counter() uint64 {
 	return 0
 }
 
+/// Count of execution of the task
 func (rcv *DataRt) MutateCounter(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }

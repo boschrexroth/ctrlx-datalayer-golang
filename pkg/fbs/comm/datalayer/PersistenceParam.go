@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// parameters of the persistence operation
+/// the type inforamtion of this flatbuffer is provided under "types/datalayer/persistence-param"
+/// at implementation of "onMetadata()" return this path as create type reference
 type PersistenceParamT struct {
 	ConfigurationPath string
 	Id string
@@ -64,6 +67,7 @@ func (rcv *PersistenceParam) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// the directory of the configuration to be loaded, or the directory of the target configuration in case of a save operation
 func (rcv *PersistenceParam) ConfigurationPath() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,6 +76,8 @@ func (rcv *PersistenceParam) ConfigurationPath() []byte {
 	return nil
 }
 
+/// the directory of the configuration to be loaded, or the directory of the target configuration in case of a save operation
+/// a random code which identifies the instance of save or load operation
 func (rcv *PersistenceParam) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -80,6 +86,8 @@ func (rcv *PersistenceParam) Id() []byte {
 	return nil
 }
 
+/// a random code which identifies the instance of save or load operation
+/// specifies the current processing phase of a save or load operation
 func (rcv *PersistenceParam) Phase() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -88,6 +96,7 @@ func (rcv *PersistenceParam) Phase() []byte {
 	return nil
 }
 
+/// specifies the current processing phase of a save or load operation
 func PersistenceParamStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

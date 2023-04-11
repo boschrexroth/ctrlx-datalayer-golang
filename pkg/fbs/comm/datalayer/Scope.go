@@ -144,6 +144,7 @@ func (rcv *Scope) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Identifier of the Scope
 func (rcv *Scope) Identifier() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -152,6 +153,8 @@ func (rcv *Scope) Identifier() []byte {
 	return nil
 }
 
+/// Identifier of the Scope
+/// Human readable name of the Scope
 func (rcv *Scope) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -160,6 +163,8 @@ func (rcv *Scope) Name() []byte {
 	return nil
 }
 
+/// Human readable name of the Scope
+/// Description of the Scope
 func (rcv *Scope) Description() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -168,6 +173,8 @@ func (rcv *Scope) Description() []byte {
 	return nil
 }
 
+/// Description of the Scope
+/// List of permission string for read operations
 func (rcv *Scope) PermissionsR(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -185,6 +192,8 @@ func (rcv *Scope) PermissionsRLength() int {
 	return 0
 }
 
+/// List of permission string for read operations
+/// List of permission string for read/write operations
 func (rcv *Scope) PermissionsRW(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -202,6 +211,8 @@ func (rcv *Scope) PermissionsRWLength() int {
 	return 0
 }
 
+/// List of permission string for read/write operations
+/// List of permission string for execute operations
 func (rcv *Scope) PermissionsX(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -219,6 +230,8 @@ func (rcv *Scope) PermissionsXLength() int {
 	return 0
 }
 
+/// List of permission string for execute operations
+/// List of permission string for all operations
 func (rcv *Scope) PermissionsRWX(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -236,6 +249,7 @@ func (rcv *Scope) PermissionsRWXLength() int {
 	return 0
 }
 
+/// List of permission string for all operations
 func ScopeStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

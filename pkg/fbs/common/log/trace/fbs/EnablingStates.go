@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// This table defines the enabling states of all trace units for a specific device.
 type EnablingStatesT struct {
 	EnablingStates []*EnablingStateT
 	MachineIdentification string
@@ -78,6 +79,7 @@ func (rcv *EnablingStates) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// All enabling states.
 func (rcv *EnablingStates) EnablingStates(obj *EnablingState, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -98,6 +100,8 @@ func (rcv *EnablingStates) EnablingStatesLength() int {
 	return 0
 }
 
+/// All enabling states.
+/// Machine identification to identify a specific device.
 func (rcv *EnablingStates) MachineIdentification() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -106,6 +110,7 @@ func (rcv *EnablingStates) MachineIdentification() []byte {
 	return nil
 }
 
+/// Machine identification to identify a specific device.
 func EnablingStatesStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

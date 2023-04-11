@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// DEPRECATED; Do not use! Values in this structure are ignored.
 /// common configuration of orientation. Effective radius as factor for the relation between position to orientation.
 type KinOriRadiusT struct {
 	Radius float64

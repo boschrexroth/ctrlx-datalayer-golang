@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Duration measurement of execution of the task (related to real-time usage)
 type DurationRtT struct {
 	Total uint64
 	Task uint64
@@ -76,6 +77,7 @@ func (rcv *DurationRt) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Total duration of the task including interruptions by other tasks in [µs]
 func (rcv *DurationRt) Total() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -84,10 +86,12 @@ func (rcv *DurationRt) Total() uint64 {
 	return 0
 }
 
+/// Total duration of the task including interruptions by other tasks in [µs]
 func (rcv *DurationRt) MutateTotal(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
+/// Task duration of the task without interruptions by other tasks in [µs]
 func (rcv *DurationRt) Task() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -96,10 +100,12 @@ func (rcv *DurationRt) Task() uint64 {
 	return 0
 }
 
+/// Task duration of the task without interruptions by other tasks in [µs]
 func (rcv *DurationRt) MutateTask(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }
 
+/// Duration of interruptions of the task by other tasks in [µs]
 func (rcv *DurationRt) Other() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -108,10 +114,12 @@ func (rcv *DurationRt) Other() uint64 {
 	return 0
 }
 
+/// Duration of interruptions of the task by other tasks in [µs]
 func (rcv *DurationRt) MutateOther(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(8, n)
 }
 
+/// Equidistance of the task from one cycle to an other in [µs]
 func (rcv *DurationRt) Equidistance() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -120,10 +128,12 @@ func (rcv *DurationRt) Equidistance() uint64 {
 	return 0
 }
 
+/// Equidistance of the task from one cycle to an other in [µs]
 func (rcv *DurationRt) MutateEquidistance(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(10, n)
 }
 
+/// Deviation of the task to the expected start time in [µs]
 func (rcv *DurationRt) Deviation() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -132,10 +142,12 @@ func (rcv *DurationRt) Deviation() uint64 {
 	return 0
 }
 
+/// Deviation of the task to the expected start time in [µs]
 func (rcv *DurationRt) MutateDeviation(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(12, n)
 }
 
+/// Count of execution of the task
 func (rcv *DurationRt) Counter() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -144,10 +156,12 @@ func (rcv *DurationRt) Counter() uint64 {
 	return 0
 }
 
+/// Count of execution of the task
 func (rcv *DurationRt) MutateCounter(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(14, n)
 }
 
+/// Sample rate resp. cycle time of the task in [µs]
 func (rcv *DurationRt) Samplerate() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -156,10 +170,12 @@ func (rcv *DurationRt) Samplerate() uint64 {
 	return 0
 }
 
+/// Sample rate resp. cycle time of the task in [µs]
 func (rcv *DurationRt) MutateSamplerate(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(16, n)
 }
 
+/// Remaining time from the end of the task to the begin of the next cycle of it in [µs]
 func (rcv *DurationRt) Remaining() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -168,6 +184,7 @@ func (rcv *DurationRt) Remaining() uint64 {
 	return 0
 }
 
+/// Remaining time from the end of the task to the begin of the next cycle of it in [µs]
 func (rcv *DurationRt) MutateRemaining(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(18, n)
 }

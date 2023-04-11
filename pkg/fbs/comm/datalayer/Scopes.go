@@ -74,6 +74,7 @@ func (rcv *Scopes) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// List of scopes
 func (rcv *Scopes) Scopes(obj *Scope, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +95,7 @@ func (rcv *Scopes) ScopesLength() int {
 	return 0
 }
 
+/// List of scopes
 func ScopesStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

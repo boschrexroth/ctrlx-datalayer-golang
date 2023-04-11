@@ -55,6 +55,7 @@ func (rcv *Sampling) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// sample time in µ seconds for minimum sampling of data - currently only multiples of 1000 are supported
 func (rcv *Sampling) SamplingInterval() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *Sampling) SamplingInterval() uint64 {
 	return 1000000
 }
 
+/// sample time in µ seconds for minimum sampling of data - currently only multiples of 1000 are supported
 func (rcv *Sampling) MutateSamplingInterval(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }

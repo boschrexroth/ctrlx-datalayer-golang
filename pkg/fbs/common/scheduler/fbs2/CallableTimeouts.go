@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// General settings for timeouts when switching callable operation states
 type CallableTimeoutsT struct {
 	Begin uint32
 	Execute uint32
@@ -61,6 +62,7 @@ func (rcv *CallableTimeouts) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// General settings for timeouts when switching callable operation states - phase BEGIN
 func (rcv *CallableTimeouts) Begin() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,10 +71,12 @@ func (rcv *CallableTimeouts) Begin() uint32 {
 	return 1000
 }
 
+/// General settings for timeouts when switching callable operation states - phase BEGIN
 func (rcv *CallableTimeouts) MutateBegin(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// General settings for timeouts when switching callable operation states - phase EXECUTE
 func (rcv *CallableTimeouts) Execute() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +85,12 @@ func (rcv *CallableTimeouts) Execute() uint32 {
 	return 60000
 }
 
+/// General settings for timeouts when switching callable operation states - phase EXECUTE
 func (rcv *CallableTimeouts) MutateExecute(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// General settings for timeouts when switching callable operation states - phase END
 func (rcv *CallableTimeouts) End() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,6 +99,7 @@ func (rcv *CallableTimeouts) End() uint32 {
 	return 1000
 }
 
+/// General settings for timeouts when switching callable operation states - phase END
 func (rcv *CallableTimeouts) MutateEnd(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
