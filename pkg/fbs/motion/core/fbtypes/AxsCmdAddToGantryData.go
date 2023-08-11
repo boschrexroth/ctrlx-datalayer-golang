@@ -8,13 +8,16 @@ import (
 
 /// parameters of the axis command add-to-gantry
 type AxsCmdAddToGantryDataT struct {
-	MasterName string
-	Buffered bool
+	MasterName string `json:"masterName"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdAddToGantryDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterNameOffset := builder.CreateString(t.MasterName)
+	masterNameOffset := flatbuffers.UOffsetT(0)
+	if t.MasterName != "" {
+		masterNameOffset = builder.CreateString(t.MasterName)
+	}
 	AxsCmdAddToGantryDataStart(builder)
 	AxsCmdAddToGantryDataAddMasterName(builder, masterNameOffset)
 	AxsCmdAddToGantryDataAddBuffered(builder, t.Buffered)

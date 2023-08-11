@@ -8,7 +8,7 @@ import (
 
 /// Task behavior in case of a task watchdog occurs
 type ConfigurationT struct {
-	Type CurrentConfiguration
+	Type CurrentConfiguration `json:"type"`
 }
 
 func (t *ConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,8 +8,8 @@ import (
 
 /// configuration for reaction to device error
 type AxsCfgDeviceErrorReactionT struct {
-	UserEstopLim *AxsCfgEstopDynamicLimitsT
-	EstopSettings *AxsCfgEstopSettingsT
+	UserEstopLim *AxsCfgEstopDynamicLimitsT `json:"userEstopLim"`
+	EstopSettings *AxsCfgEstopSettingsT `json:"estopSettings"`
 }
 
 func (t *AxsCfgDeviceErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

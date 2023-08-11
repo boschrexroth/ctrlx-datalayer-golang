@@ -7,7 +7,7 @@ import (
 )
 
 type StatsDlClientT struct {
-	Converter uint32
+	Converter uint32 `json:"converter"`
 }
 
 func (t *StatsDlClientT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

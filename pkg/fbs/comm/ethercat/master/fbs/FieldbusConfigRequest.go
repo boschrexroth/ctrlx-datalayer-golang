@@ -7,8 +7,8 @@ import (
 )
 
 type FieldbusConfigRequestT struct {
-	Ini []byte
-	Eni []byte
+	Ini []byte `json:"ini"`
+	Eni []byte `json:"eni"`
 }
 
 func (t *FieldbusConfigRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,7 +8,7 @@ import (
 
 /// data of a all axis zero point offsets for a joint transformation
 type KinCfgJntTrafoAxisOffsetsT struct {
-	Offsets []*KinCfgJntTrafoSingleAxisOffsetT
+	Offsets []*KinCfgJntTrafoSingleAxisOffsetT `json:"offsets"`
 }
 
 func (t *KinCfgJntTrafoAxisOffsetsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

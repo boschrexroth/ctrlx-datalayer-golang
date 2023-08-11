@@ -8,7 +8,7 @@ import (
 
 /// configuration parameter of a joint transformation
 type KinCfgJntTrafoAllParamGrpsT struct {
-	Groups []*KinCfgJntTrafoParamGroupT
+	Groups []*KinCfgJntTrafoParamGroupT `json:"groups"`
 }
 
 func (t *KinCfgJntTrafoAllParamGrpsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

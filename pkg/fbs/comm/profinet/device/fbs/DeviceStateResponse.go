@@ -7,8 +7,8 @@ import (
 )
 
 type DeviceStateResponseT struct {
-	CurrentState ProfinetState
-	RequestedState ProfinetState
+	CurrentState ProfinetState `json:"currentState"`
+	RequestedState ProfinetState `json:"requestedState"`
 }
 
 func (t *DeviceStateResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

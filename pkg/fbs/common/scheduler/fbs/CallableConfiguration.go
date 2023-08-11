@@ -8,16 +8,19 @@ import (
 
 /// Callable configurations of a callable factory
 type CallableConfigurationT struct {
-	Alias string
-	Sync *SyncPointsT
-	Arguments []string
-	Watchdog CallableWdgConfig
-	Task *TaskSpecsT
+	Alias string `json:"alias"`
+	Sync *SyncPointsT `json:"sync"`
+	Arguments []string `json:"arguments"`
+	Watchdog CallableWdgConfig `json:"watchdog"`
+	Task *TaskSpecsT `json:"task"`
 }
 
 func (t *CallableConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	aliasOffset := builder.CreateString(t.Alias)
+	aliasOffset := flatbuffers.UOffsetT(0)
+	if t.Alias != "" {
+		aliasOffset = builder.CreateString(t.Alias)
+	}
 	syncOffset := t.Sync.Pack(builder)
 	argumentsOffset := flatbuffers.UOffsetT(0)
 	if t.Arguments != nil {

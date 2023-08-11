@@ -3,19 +3,23 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type MetadataDBT struct {
-	Address string
-	Childs []*MetadataDBT
-	Asterisk *MetadataDBT
-	Metadata *MetadataT
+	Address string `json:"address"`
+	Childs []*MetadataDBT `json:"childs"`
+	Asterisk *MetadataDBT `json:"asterisk"`
+	Metadata *MetadataT `json:"metadata"`
 }
 
 func (t *MetadataDBT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	addressOffset := builder.CreateString(t.Address)
+	addressOffset := flatbuffers.UOffsetT(0)
+	if t.Address != "" {
+		addressOffset = builder.CreateString(t.Address)
+	}
 	childsOffset := flatbuffers.UOffsetT(0)
 	if t.Childs != nil {
 		childsLength := len(t.Childs)
@@ -94,6 +98,38 @@ func (rcv *MetadataDB) Address() []byte {
 	return nil
 }
 
+func MetadataDBKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &MetadataDB{}
+	obj2 := &MetadataDB{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Address()) < string(obj2.Address())
+}
+
+func (rcv *MetadataDB) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &MetadataDB{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Address(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 func (rcv *MetadataDB) Childs(obj *MetadataDB, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -102,6 +138,15 @@ func (rcv *MetadataDB) Childs(obj *MetadataDB, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *MetadataDB) ChildsByKey(obj *MetadataDB, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

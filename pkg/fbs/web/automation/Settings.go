@@ -7,18 +7,21 @@ import (
 )
 
 type SettingsT struct {
-	Timeout uint32
+	Timeout uint32 `json:"timeout"`
+	MaxJsonInput uint32 `json:"maxJsonInput"`
 }
 
 func (t *SettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	SettingsStart(builder)
 	SettingsAddTimeout(builder, t.Timeout)
+	SettingsAddMaxJsonInput(builder, t.MaxJsonInput)
 	return SettingsEnd(builder)
 }
 
 func (rcv *Settings) UnPackTo(t *SettingsT) {
 	t.Timeout = rcv.Timeout()
+	t.MaxJsonInput = rcv.MaxJsonInput()
 }
 
 func (rcv *Settings) UnPack() *SettingsT {
@@ -69,11 +72,28 @@ func (rcv *Settings) MutateTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// Maximum allowed size of JSON object for input data
+func (rcv *Settings) MaxJsonInput() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 1048576
+}
+
+/// Maximum allowed size of JSON object for input data
+func (rcv *Settings) MutateMaxJsonInput(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(6, n)
+}
+
 func SettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func SettingsAddTimeout(builder *flatbuffers.Builder, timeout uint32) {
 	builder.PrependUint32Slot(0, timeout, 3000)
+}
+func SettingsAddMaxJsonInput(builder *flatbuffers.Builder, maxJsonInput uint32) {
+	builder.PrependUint32Slot(1, maxJsonInput, 1048576)
 }
 func SettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

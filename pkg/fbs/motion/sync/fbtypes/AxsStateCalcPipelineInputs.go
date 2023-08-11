@@ -8,9 +8,9 @@ import (
 
 /// input parameters for reading the pipeline
 type AxsStateCalcPipelineInputsT struct {
-	Axes []string
-	SyncMode SyncMode
-	Inputs []*AxsStateCalcPipelineSingleInputT
+	Axes []string `json:"axes"`
+	SyncMode SyncMode `json:"syncMode"`
+	Inputs []float64 `json:"inputs"`
 }
 
 func (t *AxsStateCalcPipelineInputsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,13 +31,9 @@ func (t *AxsStateCalcPipelineInputsT) Pack(builder *flatbuffers.Builder) flatbuf
 	inputsOffset := flatbuffers.UOffsetT(0)
 	if t.Inputs != nil {
 		inputsLength := len(t.Inputs)
-		inputsOffsets := make([]flatbuffers.UOffsetT, inputsLength)
-		for j := 0; j < inputsLength; j++ {
-			inputsOffsets[j] = t.Inputs[j].Pack(builder)
-		}
 		AxsStateCalcPipelineInputsStartInputsVector(builder, inputsLength)
 		for j := inputsLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(inputsOffsets[j])
+			builder.PrependFloat64(t.Inputs[j])
 		}
 		inputsOffset = builder.EndVector(inputsLength)
 	}
@@ -56,11 +52,9 @@ func (rcv *AxsStateCalcPipelineInputs) UnPackTo(t *AxsStateCalcPipelineInputsT) 
 	}
 	t.SyncMode = rcv.SyncMode()
 	inputsLength := rcv.InputsLength()
-	t.Inputs = make([]*AxsStateCalcPipelineSingleInputT, inputsLength)
+	t.Inputs = make([]float64, inputsLength)
 	for j := 0; j < inputsLength; j++ {
-		x := AxsStateCalcPipelineSingleInput{}
-		rcv.Inputs(&x, j)
-		t.Inputs[j] = x.UnPack()
+		t.Inputs[j] = rcv.Inputs(j)
 	}
 }
 
@@ -132,16 +126,13 @@ func (rcv *AxsStateCalcPipelineInputs) MutateSyncMode(n SyncMode) bool {
 }
 
 /// id of the requested data
-func (rcv *AxsStateCalcPipelineInputs) Inputs(obj *AxsStateCalcPipelineSingleInput, j int) bool {
+func (rcv *AxsStateCalcPipelineInputs) Inputs(j int) float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
-		obj.Init(rcv._tab.Bytes, x)
-		return true
+		a := rcv._tab.Vector(o)
+		return rcv._tab.GetFloat64(a + flatbuffers.UOffsetT(j*8))
 	}
-	return false
+	return 0
 }
 
 func (rcv *AxsStateCalcPipelineInputs) InputsLength() int {
@@ -153,6 +144,15 @@ func (rcv *AxsStateCalcPipelineInputs) InputsLength() int {
 }
 
 /// id of the requested data
+func (rcv *AxsStateCalcPipelineInputs) MutateInputs(j int, n float64) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.MutateFloat64(a+flatbuffers.UOffsetT(j*8), n)
+	}
+	return false
+}
+
 func AxsStateCalcPipelineInputsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
@@ -169,7 +169,7 @@ func AxsStateCalcPipelineInputsAddInputs(builder *flatbuffers.Builder, inputs fl
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(inputs), 0)
 }
 func AxsStateCalcPipelineInputsStartInputsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
-	return builder.StartVector(4, numElems, 4)
+	return builder.StartVector(8, numElems, 8)
 }
 func AxsStateCalcPipelineInputsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

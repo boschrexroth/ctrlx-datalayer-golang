@@ -7,7 +7,7 @@ import (
 )
 
 type FrameStatisticCountersT struct {
-	Response *FrameStatisticCountersResponseT
+	Response *FrameStatisticCountersResponseT `json:"response"`
 }
 
 func (t *FrameStatisticCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

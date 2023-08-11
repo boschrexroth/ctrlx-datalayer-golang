@@ -7,8 +7,8 @@ import (
 )
 
 type AoeDataT struct {
-	Request *AoeDataRequestT
-	Response *AoeDataResponseT
+	Request *AoeDataRequestT `json:"request"`
+	Response *AoeDataResponseT `json:"response"`
 }
 
 func (t *AoeDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

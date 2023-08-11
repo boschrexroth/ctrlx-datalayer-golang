@@ -7,7 +7,7 @@ import (
 )
 
 type MessageSecurityModeT struct {
-	MessageSecurityMode EnumMessageSecurityMode
+	MessageSecurityMode EnumMessageSecurityMode `json:"messageSecurityMode"`
 }
 
 func (t *MessageSecurityModeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

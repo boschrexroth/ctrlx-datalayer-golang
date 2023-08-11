@@ -7,7 +7,7 @@ import (
 )
 
 type Int8T struct {
-	Value int8
+	Value int8 `json:"value"`
 }
 
 func (t *Int8T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

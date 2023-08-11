@@ -8,12 +8,15 @@ import (
 
 /// Machine ID to use the DEBUG configuration only on the intended machine
 type DebugT struct {
-	Machine string
+	Machine string `json:"machine"`
 }
 
 func (t *DebugT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	machineOffset := builder.CreateString(t.Machine)
+	machineOffset := flatbuffers.UOffsetT(0)
+	if t.Machine != "" {
+		machineOffset = builder.CreateString(t.Machine)
+	}
 	DebugStart(builder)
 	DebugAddMachine(builder, machineOffset)
 	return DebugEnd(builder)

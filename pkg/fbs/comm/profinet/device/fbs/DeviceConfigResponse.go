@@ -7,14 +7,20 @@ import (
 )
 
 type DeviceConfigResponseT struct {
-	Name string
-	Description string
+	Name string `json:"name"`
+	Description string `json:"description"`
 }
 
 func (t *DeviceConfigResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
 	DeviceConfigResponseStart(builder)
 	DeviceConfigResponseAddName(builder, nameOffset)
 	DeviceConfigResponseAddDescription(builder, descriptionOffset)

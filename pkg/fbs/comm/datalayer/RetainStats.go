@@ -7,18 +7,23 @@ import (
 )
 
 type RetainStatsT struct {
-	Total uint32
-	Free uint32
-	Used uint32
-	BiggestFree uint32
-	SyncCounter uint32
-	LastUsed uint32
-	Info string
+	Total uint32 `json:"total"`
+	Free uint32 `json:"free"`
+	Used uint32 `json:"used"`
+	BiggestFree uint32 `json:"biggestFree"`
+	SyncCounter uint32 `json:"syncCounter"`
+	LastUsed uint32 `json:"lastUsed"`
+	Info string `json:"info"`
+	Diagnosis *RetainDiagnosisT `json:"diagnosis"`
 }
 
 func (t *RetainStatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	infoOffset := builder.CreateString(t.Info)
+	infoOffset := flatbuffers.UOffsetT(0)
+	if t.Info != "" {
+		infoOffset = builder.CreateString(t.Info)
+	}
+	diagnosisOffset := t.Diagnosis.Pack(builder)
 	RetainStatsStart(builder)
 	RetainStatsAddTotal(builder, t.Total)
 	RetainStatsAddFree(builder, t.Free)
@@ -27,6 +32,7 @@ func (t *RetainStatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	RetainStatsAddSyncCounter(builder, t.SyncCounter)
 	RetainStatsAddLastUsed(builder, t.LastUsed)
 	RetainStatsAddInfo(builder, infoOffset)
+	RetainStatsAddDiagnosis(builder, diagnosisOffset)
 	return RetainStatsEnd(builder)
 }
 
@@ -38,6 +44,7 @@ func (rcv *RetainStats) UnPackTo(t *RetainStatsT) {
 	t.SyncCounter = rcv.SyncCounter()
 	t.LastUsed = rcv.LastUsed()
 	t.Info = string(rcv.Info())
+	t.Diagnosis = rcv.Diagnosis(nil).UnPack()
 }
 
 func (rcv *RetainStats) UnPack() *RetainStatsT {
@@ -168,8 +175,23 @@ func (rcv *RetainStats) Info() []byte {
 }
 
 /// debug information of shared memory
+/// diagnosis of nvram
+func (rcv *RetainStats) Diagnosis(obj *RetainDiagnosis) *RetainDiagnosis {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(RetainDiagnosis)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// diagnosis of nvram
 func RetainStatsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func RetainStatsAddTotal(builder *flatbuffers.Builder, total uint32) {
 	builder.PrependUint32Slot(0, total, 0)
@@ -191,6 +213,9 @@ func RetainStatsAddLastUsed(builder *flatbuffers.Builder, lastUsed uint32) {
 }
 func RetainStatsAddInfo(builder *flatbuffers.Builder, info flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(info), 0)
+}
+func RetainStatsAddDiagnosis(builder *flatbuffers.Builder, diagnosis flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(diagnosis), 0)
 }
 func RetainStatsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

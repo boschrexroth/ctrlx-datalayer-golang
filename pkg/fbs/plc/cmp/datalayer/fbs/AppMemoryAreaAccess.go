@@ -7,10 +7,10 @@ import (
 )
 
 type AppMemoryAreaAccessT struct {
-	Area *AppMemoryAreaT
-	Offset uint64
-	Number uint64
-	Value *ValueT
+	Area *AppMemoryAreaT `json:"area"`
+	Offset uint64 `json:"offset"`
+	Number uint64 `json:"number"`
+	Value *ValueT `json:"value"`
 }
 
 func (t *AppMemoryAreaAccessT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

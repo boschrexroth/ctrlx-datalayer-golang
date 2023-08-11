@@ -7,20 +7,23 @@ import (
 )
 
 type WatchdogT struct {
-	Name string
-	Type *TypeT
-	Variant *WatchdogVariantT
+	Name string `json:"name"`
+	Type *TypeT `json:"type"`
+	Variant *WatchdogVariantT `json:"variant"`
 }
 
 func (t *WatchdogT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	typeOffset := t.Type.Pack(builder)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	type_Offset := t.Type.Pack(builder)
 	variantOffset := t.Variant.Pack(builder)
 	
 	WatchdogStart(builder)
 	WatchdogAddName(builder, nameOffset)
-	WatchdogAddType(builder, typeOffset)
+	WatchdogAddType(builder, type_Offset)
 	if t.Variant != nil {
 		WatchdogAddVariantType(builder, t.Variant.Type)
 	}

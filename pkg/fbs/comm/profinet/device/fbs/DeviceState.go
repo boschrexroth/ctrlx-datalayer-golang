@@ -7,8 +7,8 @@ import (
 )
 
 type DeviceStateT struct {
-	Request *DeviceStateRequestT
-	Response *DeviceStateResponseT
+	Request *DeviceStateRequestT `json:"request"`
+	Response *DeviceStateResponseT `json:"response"`
 }
 
 func (t *DeviceStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

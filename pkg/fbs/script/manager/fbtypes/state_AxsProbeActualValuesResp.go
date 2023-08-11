@@ -8,20 +8,23 @@ import (
 
 /// currently the actual values of the probe
 type state_AxsProbeActualValuesRespT struct {
-	Valid bool
-	PosEdgeValue float64
-	NegEdgeValue float64
-	DifferValue float64
-	DiffCount uint32
-	PosEdgeCount uint32
-	NegEdgeCount uint32
-	MarksEdgeCount uint32
-	Status string
+	Valid bool `json:"valid"`
+	PosEdgeValue float64 `json:"posEdgeValue"`
+	NegEdgeValue float64 `json:"negEdgeValue"`
+	DifferValue float64 `json:"differValue"`
+	DiffCount uint32 `json:"diffCount"`
+	PosEdgeCount uint32 `json:"posEdgeCount"`
+	NegEdgeCount uint32 `json:"negEdgeCount"`
+	MarksEdgeCount uint32 `json:"marksEdgeCount"`
+	Status string `json:"status"`
 }
 
 func (t *state_AxsProbeActualValuesRespT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	statusOffset := builder.CreateString(t.Status)
+	statusOffset := flatbuffers.UOffsetT(0)
+	if t.Status != "" {
+		statusOffset = builder.CreateString(t.Status)
+	}
 	state_AxsProbeActualValuesRespStart(builder)
 	state_AxsProbeActualValuesRespAddValid(builder, t.Valid)
 	state_AxsProbeActualValuesRespAddPosEdgeValue(builder, t.PosEdgeValue)

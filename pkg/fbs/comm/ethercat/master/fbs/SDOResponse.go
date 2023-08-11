@@ -7,7 +7,7 @@ import (
 )
 
 type SDOResponseT struct {
-	Data []byte
+	Data []byte `json:"data"`
 }
 
 func (t *SDOResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

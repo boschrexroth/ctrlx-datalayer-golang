@@ -8,17 +8,26 @@ import (
 
 /// configuration of an axis that can be added to a kinematics
 type KinCfgAxsT struct {
-	AxsName string
-	AxsMeaning string
-	AxsDir string
-	AcsIndex byte
+	AxsName string `json:"axsName"`
+	AxsMeaning string `json:"axsMeaning"`
+	AxsDir string `json:"axsDir"`
+	AcsIndex byte `json:"acsIndex"`
 }
 
 func (t *KinCfgAxsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsNameOffset := builder.CreateString(t.AxsName)
-	axsMeaningOffset := builder.CreateString(t.AxsMeaning)
-	axsDirOffset := builder.CreateString(t.AxsDir)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
+	axsMeaningOffset := flatbuffers.UOffsetT(0)
+	if t.AxsMeaning != "" {
+		axsMeaningOffset = builder.CreateString(t.AxsMeaning)
+	}
+	axsDirOffset := flatbuffers.UOffsetT(0)
+	if t.AxsDir != "" {
+		axsDirOffset = builder.CreateString(t.AxsDir)
+	}
 	KinCfgAxsStart(builder)
 	KinCfgAxsAddAxsName(builder, axsNameOffset)
 	KinCfgAxsAddAxsMeaning(builder, axsMeaningOffset)

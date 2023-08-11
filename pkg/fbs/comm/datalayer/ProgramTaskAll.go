@@ -7,33 +7,33 @@ import (
 )
 
 type ProgramTaskAllT struct {
-	Tasks []*ProgramTaskT
+	Tasks []*ProgramTaskT `json:"Tasks"`
 }
 
 func (t *ProgramTaskAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	TasksOffset := flatbuffers.UOffsetT(0)
+	tasksOffset := flatbuffers.UOffsetT(0)
 	if t.Tasks != nil {
-		TasksLength := len(t.Tasks)
-		TasksOffsets := make([]flatbuffers.UOffsetT, TasksLength)
-		for j := 0; j < TasksLength; j++ {
-			TasksOffsets[j] = t.Tasks[j].Pack(builder)
+		tasksLength := len(t.Tasks)
+		tasksOffsets := make([]flatbuffers.UOffsetT, tasksLength)
+		for j := 0; j < tasksLength; j++ {
+			tasksOffsets[j] = t.Tasks[j].Pack(builder)
 		}
-		ProgramTaskAllStartTasksVector(builder, TasksLength)
-		for j := TasksLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(TasksOffsets[j])
+		ProgramTaskAllStartTasksVector(builder, tasksLength)
+		for j := tasksLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(tasksOffsets[j])
 		}
-		TasksOffset = builder.EndVector(TasksLength)
+		tasksOffset = builder.EndVector(tasksLength)
 	}
 	ProgramTaskAllStart(builder)
-	ProgramTaskAllAddTasks(builder, TasksOffset)
+	ProgramTaskAllAddTasks(builder, tasksOffset)
 	return ProgramTaskAllEnd(builder)
 }
 
 func (rcv *ProgramTaskAll) UnPackTo(t *ProgramTaskAllT) {
-	TasksLength := rcv.TasksLength()
-	t.Tasks = make([]*ProgramTaskT, TasksLength)
-	for j := 0; j < TasksLength; j++ {
+	tasksLength := rcv.TasksLength()
+	t.Tasks = make([]*ProgramTaskT, tasksLength)
+	for j := 0; j < tasksLength; j++ {
 		x := ProgramTask{}
 		rcv.Tasks(&x, j)
 		t.Tasks[j] = x.UnPack()
@@ -86,6 +86,15 @@ func (rcv *ProgramTaskAll) Tasks(obj *ProgramTask, j int) bool {
 	return false
 }
 
+func (rcv *ProgramTaskAll) TasksByKey(obj *ProgramTask, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
 func (rcv *ProgramTaskAll) TasksLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -97,8 +106,8 @@ func (rcv *ProgramTaskAll) TasksLength() int {
 func ProgramTaskAllStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }
-func ProgramTaskAllAddTasks(builder *flatbuffers.Builder, Tasks flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(Tasks), 0)
+func ProgramTaskAllAddTasks(builder *flatbuffers.Builder, tasks flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(tasks), 0)
 }
 func ProgramTaskAllStartTasksVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)

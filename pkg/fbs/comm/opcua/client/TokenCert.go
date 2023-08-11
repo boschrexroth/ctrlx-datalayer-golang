@@ -7,14 +7,20 @@ import (
 )
 
 type TokenCertT struct {
-	Location string
-	Name string
+	Location string `json:"location"`
+	Name string `json:"name"`
 }
 
 func (t *TokenCertT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	locationOffset := builder.CreateString(t.Location)
-	nameOffset := builder.CreateString(t.Name)
+	locationOffset := flatbuffers.UOffsetT(0)
+	if t.Location != "" {
+		locationOffset = builder.CreateString(t.Location)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	TokenCertStart(builder)
 	TokenCertAddLocation(builder, locationOffset)
 	TokenCertAddName(builder, nameOffset)

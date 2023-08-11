@@ -7,8 +7,8 @@ import (
 )
 
 type FoeT struct {
-	Request *FoeRequestT
-	Response *FoeResponseT
+	Request *FoeRequestT `json:"request"`
+	Response *FoeResponseT `json:"response"`
 }
 
 func (t *FoeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

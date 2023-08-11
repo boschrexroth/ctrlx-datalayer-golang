@@ -7,25 +7,28 @@ import (
 )
 
 type RecValueT struct {
-	Time *TimeT
-	ValuesBool bool
-	ValuesByte int8
-	ValuesShort int16
-	ValuesInt int32
-	ValuesLong int64
-	ValuesUbyte byte
-	ValuesUshort uint16
-	ValuesUint uint32
-	ValuesUlong uint64
-	ValuesFloat float32
-	ValuesDouble float64
-	ValuesString string
+	Time *TimeT `json:"time"`
+	ValuesBool bool `json:"values_bool"`
+	ValuesByte int8 `json:"values_byte"`
+	ValuesShort int16 `json:"values_short"`
+	ValuesInt int32 `json:"values_int"`
+	ValuesLong int64 `json:"values_long"`
+	ValuesUbyte byte `json:"values_ubyte"`
+	ValuesUshort uint16 `json:"values_ushort"`
+	ValuesUint uint32 `json:"values_uint"`
+	ValuesUlong uint64 `json:"values_ulong"`
+	ValuesFloat float32 `json:"values_float"`
+	ValuesDouble float64 `json:"values_double"`
+	ValuesString string `json:"values_string"`
 }
 
 func (t *RecValueT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	timeOffset := t.Time.Pack(builder)
-	valuesStringOffset := builder.CreateString(t.ValuesString)
+	valuesStringOffset := flatbuffers.UOffsetT(0)
+	if t.ValuesString != "" {
+		valuesStringOffset = builder.CreateString(t.ValuesString)
+	}
 	RecValueStart(builder)
 	RecValueAddTime(builder, timeOffset)
 	RecValueAddValuesBool(builder, t.ValuesBool)

@@ -9,12 +9,12 @@ import (
 )
 
 type AdminT struct {
-	StartupState CurrentState
-	StartupTimeout uint32
-	StartupErrorReaction CurrentErrorReaction
-	TriggerSource CurrentTrigger
-	ControlDebug *common__scheduler__controls__fbs.ControlsT
-	CpuInfo *CpuInfoT
+	StartupState CurrentState `json:"startupState"`
+	StartupTimeout uint32 `json:"startupTimeout"`
+	StartupErrorReaction CurrentErrorReaction `json:"startupErrorReaction"`
+	TriggerSource CurrentTrigger `json:"triggerSource"`
+	ControlDebug *common__scheduler__controls__fbs.ControlsT `json:"controlDebug"`
+	CpuInfo *CpuInfoT `json:"cpuInfo"`
 }
 
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

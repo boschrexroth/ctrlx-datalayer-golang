@@ -7,7 +7,7 @@ import (
 )
 
 type type_boolT struct {
-	Value bool
+	Value bool `json:"value"`
 }
 
 func (t *type_boolT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

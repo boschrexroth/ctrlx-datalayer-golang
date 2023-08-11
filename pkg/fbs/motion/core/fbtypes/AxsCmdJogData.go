@@ -8,14 +8,17 @@ import (
 
 /// parameters of the axis jog commands
 type AxsCmdJogDataT struct {
-	JogDir string
-	JogIncrement float64
-	Lim *DynamicLimitsT
+	JogDir string `json:"jogDir"`
+	JogIncrement float64 `json:"jogIncrement"`
+	Lim *DynamicLimitsT `json:"lim"`
 }
 
 func (t *AxsCmdJogDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	jogDirOffset := builder.CreateString(t.JogDir)
+	jogDirOffset := flatbuffers.UOffsetT(0)
+	if t.JogDir != "" {
+		jogDirOffset = builder.CreateString(t.JogDir)
+	}
 	limOffset := t.Lim.Pack(builder)
 	AxsCmdJogDataStart(builder)
 	AxsCmdJogDataAddJogDir(builder, jogDirOffset)

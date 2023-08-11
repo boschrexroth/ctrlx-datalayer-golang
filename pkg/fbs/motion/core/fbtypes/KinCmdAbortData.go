@@ -8,7 +8,7 @@ import (
 
 /// Command data for kinAbort command and kinInterrupt command
 type KinCmdAbortDataT struct {
-	Type BrakeLimit
+	Type BrakeLimit `json:"type"`
 }
 
 func (t *KinCmdAbortDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

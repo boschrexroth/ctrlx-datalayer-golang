@@ -8,7 +8,7 @@ import (
 
 /// get informations of all active commands of a single motion object
 type allActCmdJobObjectsT struct {
-	Cmds []*actCmdJobObjectsT
+	Cmds []*actCmdJobObjectsT `json:"cmds"`
 }
 
 func (t *allActCmdJobObjectsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

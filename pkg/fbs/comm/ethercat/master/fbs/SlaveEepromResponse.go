@@ -7,7 +7,7 @@ import (
 )
 
 type SlaveEepromResponseT struct {
-	Data []uint16
+	Data []uint16 `json:"data"`
 }
 
 func (t *SlaveEepromResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

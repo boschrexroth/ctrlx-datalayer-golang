@@ -7,9 +7,9 @@ import (
 )
 
 type SlaveStateRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	NewState EthercatState
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	NewState EthercatState `json:"newState"`
 }
 
 func (t *SlaveStateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

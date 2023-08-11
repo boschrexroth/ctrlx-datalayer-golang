@@ -7,7 +7,7 @@ import (
 )
 
 type AoeConfigInfoResponseT struct {
-	NetId []byte
+	NetId []byte `json:"netId"`
 }
 
 func (t *AoeConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

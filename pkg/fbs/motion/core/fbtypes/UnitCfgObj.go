@@ -8,33 +8,33 @@ import (
 
 /// General unit configuration for a motion object
 type UnitCfgObjT struct {
-	Default []*UnitCfgObjSingleT
+	Default []*UnitCfgObjSingleT `json:"default"`
 }
 
 func (t *UnitCfgObjT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	defaultOffset := flatbuffers.UOffsetT(0)
+	default_Offset := flatbuffers.UOffsetT(0)
 	if t.Default != nil {
-		defaultLength := len(t.Default)
-		defaultOffsets := make([]flatbuffers.UOffsetT, defaultLength)
-		for j := 0; j < defaultLength; j++ {
-			defaultOffsets[j] = t.Default[j].Pack(builder)
+		default_Length := len(t.Default)
+		default_Offsets := make([]flatbuffers.UOffsetT, default_Length)
+		for j := 0; j < default_Length; j++ {
+			default_Offsets[j] = t.Default[j].Pack(builder)
 		}
-		UnitCfgObjStartDefaultVector(builder, defaultLength)
-		for j := defaultLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(defaultOffsets[j])
+		UnitCfgObjStartDefaultVector(builder, default_Length)
+		for j := default_Length - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(default_Offsets[j])
 		}
-		defaultOffset = builder.EndVector(defaultLength)
+		default_Offset = builder.EndVector(default_Length)
 	}
 	UnitCfgObjStart(builder)
-	UnitCfgObjAddDefault(builder, defaultOffset)
+	UnitCfgObjAddDefault(builder, default_Offset)
 	return UnitCfgObjEnd(builder)
 }
 
 func (rcv *UnitCfgObj) UnPackTo(t *UnitCfgObjT) {
-	defaultLength := rcv.DefaultLength()
-	t.Default = make([]*UnitCfgObjSingleT, defaultLength)
-	for j := 0; j < defaultLength; j++ {
+	default_Length := rcv.DefaultLength()
+	t.Default = make([]*UnitCfgObjSingleT, default_Length)
+	for j := 0; j < default_Length; j++ {
 		x := UnitCfgObjSingle{}
 		rcv.Default(&x, j)
 		t.Default[j] = x.UnPack()
@@ -84,6 +84,15 @@ func (rcv *UnitCfgObj) Default(obj *UnitCfgObjSingle, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *UnitCfgObj) DefaultByKey(obj *UnitCfgObjSingle, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

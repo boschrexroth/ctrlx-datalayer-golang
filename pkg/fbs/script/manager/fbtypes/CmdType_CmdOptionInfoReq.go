@@ -4,27 +4,27 @@ package fbtypes
 
 import "strconv"
 
-type CmdTypeCmdOptionInfoReq int8
+type CmdType_CmdOptionInfoReq int8
 
 const (
-	CmdType_CmdOptionInfoReqUNKNOWN    CmdTypeCmdOptionInfoReq = 0
-	CmdType_CmdOptionInfoReqCMD        CmdTypeCmdOptionInfoReq = 1
-	CmdType_CmdOptionInfoReqCMD_OPTION CmdTypeCmdOptionInfoReq = 2
+	CmdType_CmdOptionInfoReqUNKNOWN    CmdType_CmdOptionInfoReq = 0
+	CmdType_CmdOptionInfoReqCMD        CmdType_CmdOptionInfoReq = 1
+	CmdType_CmdOptionInfoReqCMD_OPTION CmdType_CmdOptionInfoReq = 2
 )
 
-var EnumNamesCmdType_CmdOptionInfoReq = map[CmdTypeCmdOptionInfoReq]string{
+var EnumNamesCmdType_CmdOptionInfoReq = map[CmdType_CmdOptionInfoReq]string{
 	CmdType_CmdOptionInfoReqUNKNOWN:    "UNKNOWN",
 	CmdType_CmdOptionInfoReqCMD:        "CMD",
 	CmdType_CmdOptionInfoReqCMD_OPTION: "CMD_OPTION",
 }
 
-var EnumValuesCmdType_CmdOptionInfoReq = map[string]CmdTypeCmdOptionInfoReq{
+var EnumValuesCmdType_CmdOptionInfoReq = map[string]CmdType_CmdOptionInfoReq{
 	"UNKNOWN":    CmdType_CmdOptionInfoReqUNKNOWN,
 	"CMD":        CmdType_CmdOptionInfoReqCMD,
 	"CMD_OPTION": CmdType_CmdOptionInfoReqCMD_OPTION,
 }
 
-func (v CmdTypeCmdOptionInfoReq) String() string {
+func (v CmdType_CmdOptionInfoReq) String() string {
 	if s, ok := EnumNamesCmdType_CmdOptionInfoReq[v]; ok {
 		return s
 	}

@@ -7,8 +7,8 @@ import (
 )
 
 type Misc_SetOverrideT struct {
-	Base *Cmd_BaseT
-	Value float64
+	Base *Cmd_BaseT `json:"base"`
+	Value float64 `json:"value"`
 }
 
 func (t *Misc_SetOverrideT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

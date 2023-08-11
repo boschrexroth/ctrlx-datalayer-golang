@@ -8,26 +8,38 @@ import (
 
 /// currently the actual values of the probe
 type ProbeActualValuesT struct {
-	Valid bool
-	PosEdgeValue float64
-	NegEdgeValue float64
-	DifferValue float64
-	DiffCount uint32
-	PosEdgeCount uint32
-	NegEdgeCount uint32
-	MarksEdgeCount uint32
-	Status string
-	PosEdgeValueUnit string
-	NegEdgeValueUnit string
-	DifferValueUnit string
+	Valid bool `json:"valid"`
+	PosEdgeValue float64 `json:"posEdgeValue"`
+	NegEdgeValue float64 `json:"negEdgeValue"`
+	DifferValue float64 `json:"differValue"`
+	DiffCount uint32 `json:"diffCount"`
+	PosEdgeCount uint32 `json:"posEdgeCount"`
+	NegEdgeCount uint32 `json:"negEdgeCount"`
+	MarksEdgeCount uint32 `json:"marksEdgeCount"`
+	Status string `json:"status"`
+	PosEdgeValueUnit string `json:"posEdgeValueUnit"`
+	NegEdgeValueUnit string `json:"negEdgeValueUnit"`
+	DifferValueUnit string `json:"differValueUnit"`
 }
 
 func (t *ProbeActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	statusOffset := builder.CreateString(t.Status)
-	posEdgeValueUnitOffset := builder.CreateString(t.PosEdgeValueUnit)
-	negEdgeValueUnitOffset := builder.CreateString(t.NegEdgeValueUnit)
-	differValueUnitOffset := builder.CreateString(t.DifferValueUnit)
+	statusOffset := flatbuffers.UOffsetT(0)
+	if t.Status != "" {
+		statusOffset = builder.CreateString(t.Status)
+	}
+	posEdgeValueUnitOffset := flatbuffers.UOffsetT(0)
+	if t.PosEdgeValueUnit != "" {
+		posEdgeValueUnitOffset = builder.CreateString(t.PosEdgeValueUnit)
+	}
+	negEdgeValueUnitOffset := flatbuffers.UOffsetT(0)
+	if t.NegEdgeValueUnit != "" {
+		negEdgeValueUnitOffset = builder.CreateString(t.NegEdgeValueUnit)
+	}
+	differValueUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DifferValueUnit != "" {
+		differValueUnitOffset = builder.CreateString(t.DifferValueUnit)
+	}
 	ProbeActualValuesStart(builder)
 	ProbeActualValuesAddValid(builder, t.Valid)
 	ProbeActualValuesAddPosEdgeValue(builder, t.PosEdgeValue)

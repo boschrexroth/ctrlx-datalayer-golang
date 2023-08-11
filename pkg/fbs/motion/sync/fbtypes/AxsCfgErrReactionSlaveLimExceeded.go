@@ -8,8 +8,8 @@ import (
 
 /// TODO: Provide description
 type AxsCfgErrReactionSlaveLimExceededT struct {
-	Type SlaveCantFollowErrorReaction
-	Diagnosis SlaveCantFollowMessageType
+	Type SlaveCantFollowErrorReaction `json:"type"`
+	Diagnosis SlaveCantFollowMessageType `json:"diagnosis"`
 }
 
 func (t *AxsCfgErrReactionSlaveLimExceededT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

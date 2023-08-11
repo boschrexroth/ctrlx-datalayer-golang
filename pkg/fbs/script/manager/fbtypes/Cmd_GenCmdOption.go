@@ -7,16 +7,19 @@ import (
 )
 
 type Cmd_GenCmdOptionT struct {
-	Base *Cmd_BaseT
-	CmdName string
-	ObjType ObjectTypeGenCmdOption
-	Params []byte
+	Base *Cmd_BaseT `json:"base"`
+	CmdName string `json:"cmdName"`
+	ObjType ObjectType_GenCmdOption `json:"objType"`
+	Params []byte `json:"params"`
 }
 
 func (t *Cmd_GenCmdOptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	cmdNameOffset := builder.CreateString(t.CmdName)
+	cmdNameOffset := flatbuffers.UOffsetT(0)
+	if t.CmdName != "" {
+		cmdNameOffset = builder.CreateString(t.CmdName)
+	}
 	paramsOffset := flatbuffers.UOffsetT(0)
 	if t.Params != nil {
 		paramsOffset = builder.CreateByteString(t.Params)
@@ -91,15 +94,15 @@ func (rcv *Cmd_GenCmdOption) CmdName() []byte {
 	return nil
 }
 
-func (rcv *Cmd_GenCmdOption) ObjType() ObjectTypeGenCmdOption {
+func (rcv *Cmd_GenCmdOption) ObjType() ObjectType_GenCmdOption {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return ObjectTypeGenCmdOption(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return ObjectType_GenCmdOption(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Cmd_GenCmdOption) MutateObjType(n ObjectTypeGenCmdOption) bool {
+func (rcv *Cmd_GenCmdOption) MutateObjType(n ObjectType_GenCmdOption) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
@@ -146,7 +149,7 @@ func Cmd_GenCmdOptionAddBase(builder *flatbuffers.Builder, base flatbuffers.UOff
 func Cmd_GenCmdOptionAddCmdName(builder *flatbuffers.Builder, cmdName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(cmdName), 0)
 }
-func Cmd_GenCmdOptionAddObjType(builder *flatbuffers.Builder, objType ObjectTypeGenCmdOption) {
+func Cmd_GenCmdOptionAddObjType(builder *flatbuffers.Builder, objType ObjectType_GenCmdOption) {
 	builder.PrependInt8Slot(2, int8(objType), 0)
 }
 func Cmd_GenCmdOptionAddParams(builder *flatbuffers.Builder, params flatbuffers.UOffsetT) {

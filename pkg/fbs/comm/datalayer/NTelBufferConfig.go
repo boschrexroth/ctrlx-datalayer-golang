@@ -7,7 +7,7 @@ import (
 )
 
 type NTelBufferConfigT struct {
-	DefaultN uint16
+	DefaultN uint16 `json:"defaultN"`
 }
 
 func (t *NTelBufferConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

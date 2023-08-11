@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveAddressMappingT struct {
-	Request *SlaveAddressMappingRequestT
-	Response *SlaveAddressMappingResponseT
+	Request *SlaveAddressMappingRequestT `json:"request"`
+	Response *SlaveAddressMappingResponseT `json:"response"`
 }
 
 func (t *SlaveAddressMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,7 +8,7 @@ import (
 
 /// request structure for the ResetAllMotionObjects nodes
 type SysCmdResetT struct {
-	Type SysResetType
+	Type SysResetType `json:"type"`
 }
 
 func (t *SysCmdResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

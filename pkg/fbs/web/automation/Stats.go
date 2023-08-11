@@ -7,11 +7,11 @@ import (
 )
 
 type StatsT struct {
-	Sse *StatsSSET
-	DlClient *StatsDlClientT
-	Restbed *StatsRestbedT
-	RequestsV1 uint32
-	RequestsV2 uint32
+	Sse *StatsSSET `json:"sse"`
+	DlClient *StatsDlClientT `json:"dlClient"`
+	Restbed *StatsRestbedT `json:"restbed"`
+	RequestsV1 uint32 `json:"requestsV1"`
+	RequestsV2 uint32 `json:"requestsV2"`
 }
 
 func (t *StatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

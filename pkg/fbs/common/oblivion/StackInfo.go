@@ -7,17 +7,20 @@ import (
 )
 
 type StackInfoT struct {
-	Id uint32
-	State State
-	Name string
-	Size uint32
-	Used uint32
-	Percent uint32
+	Id uint32 `json:"id"`
+	State State `json:"state"`
+	Name string `json:"name"`
+	Size uint32 `json:"size"`
+	Used uint32 `json:"used"`
+	Percent uint32 `json:"percent"`
 }
 
 func (t *StackInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	StackInfoStart(builder)
 	StackInfoAddId(builder, t.Id)
 	StackInfoAddState(builder, t.State)

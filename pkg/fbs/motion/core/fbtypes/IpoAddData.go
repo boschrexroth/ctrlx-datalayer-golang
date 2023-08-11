@@ -8,22 +8,34 @@ import (
 
 /// currently interpolated values
 type IpoAddDataT struct {
-	DistFromStart float64
-	DistToTarget float64
-	TimeFromStart float64
-	TimeToTarget float64
-	DistFromStartUnit string
-	DistToTargetUnit string
-	TimeFromStartUnit string
-	TimeToTargetUnit string
+	DistFromStart float64 `json:"distFromStart"`
+	DistToTarget float64 `json:"distToTarget"`
+	TimeFromStart float64 `json:"timeFromStart"`
+	TimeToTarget float64 `json:"timeToTarget"`
+	DistFromStartUnit string `json:"distFromStartUnit"`
+	DistToTargetUnit string `json:"distToTargetUnit"`
+	TimeFromStartUnit string `json:"timeFromStartUnit"`
+	TimeToTargetUnit string `json:"timeToTargetUnit"`
 }
 
 func (t *IpoAddDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	distFromStartUnitOffset := builder.CreateString(t.DistFromStartUnit)
-	distToTargetUnitOffset := builder.CreateString(t.DistToTargetUnit)
-	timeFromStartUnitOffset := builder.CreateString(t.TimeFromStartUnit)
-	timeToTargetUnitOffset := builder.CreateString(t.TimeToTargetUnit)
+	distFromStartUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DistFromStartUnit != "" {
+		distFromStartUnitOffset = builder.CreateString(t.DistFromStartUnit)
+	}
+	distToTargetUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DistToTargetUnit != "" {
+		distToTargetUnitOffset = builder.CreateString(t.DistToTargetUnit)
+	}
+	timeFromStartUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TimeFromStartUnit != "" {
+		timeFromStartUnitOffset = builder.CreateString(t.TimeFromStartUnit)
+	}
+	timeToTargetUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TimeToTargetUnit != "" {
+		timeToTargetUnitOffset = builder.CreateString(t.TimeToTargetUnit)
+	}
 	IpoAddDataStart(builder)
 	IpoAddDataAddDistFromStart(builder, t.DistFromStart)
 	IpoAddDataAddDistToTarget(builder, t.DistToTarget)

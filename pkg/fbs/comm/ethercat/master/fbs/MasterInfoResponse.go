@@ -9,13 +9,13 @@ import (
 )
 
 type MasterInfoResponseT struct {
-	MasterState *MasterStateResponseT
-	MasterStatus uint32
-	Checksums []*ChecksumElementT
-	TopologyStatus *TopologyStatusResponseT
-	SystemTime uint64
-	TaskInfos []*taskInfoT
-	ComponentState *common__scheduler__fbs2.StateT
+	MasterState *MasterStateResponseT `json:"masterState"`
+	MasterStatus uint32 `json:"masterStatus"`
+	Checksums []*ChecksumElementT `json:"checksums"`
+	TopologyStatus *TopologyStatusResponseT `json:"topologyStatus"`
+	SystemTime uint64 `json:"systemTime"`
+	TaskInfos []*taskInfoT `json:"taskInfos"`
+	ComponentState *common__scheduler__fbs2.StateT `json:"componentState"`
 }
 
 func (t *MasterInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -149,6 +149,15 @@ func (rcv *MasterInfoResponse) Checksums(obj *ChecksumElement, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *MasterInfoResponse) ChecksumsByKey(obj *ChecksumElement, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

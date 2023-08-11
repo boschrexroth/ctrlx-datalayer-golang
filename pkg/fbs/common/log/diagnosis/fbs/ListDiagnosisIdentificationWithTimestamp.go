@@ -8,7 +8,7 @@ import (
 
 /// This table defines a list of uniquely identifiable diagnostic logs with the related timestamp (e.g. it is used for the pending diagnostics).
 type ListDiagnosisIdentificationWithTimestampT struct {
-	ListDiagnosisIdentificationWithTimestamp []*DiagnosisIdentificationWithTimestampT
+	ListDiagnosisIdentificationWithTimestamp []*DiagnosisIdentificationWithTimestampT `json:"listDiagnosisIdentificationWithTimestamp"`
 }
 
 func (t *ListDiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

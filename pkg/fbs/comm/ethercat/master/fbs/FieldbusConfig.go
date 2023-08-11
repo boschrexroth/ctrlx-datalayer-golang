@@ -7,8 +7,8 @@ import (
 )
 
 type FieldbusConfigT struct {
-	Request *FieldbusConfigRequestT
-	Response *FieldbusConfigResponseT
+	Request *FieldbusConfigRequestT `json:"request"`
+	Response *FieldbusConfigResponseT `json:"response"`
 }
 
 func (t *FieldbusConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

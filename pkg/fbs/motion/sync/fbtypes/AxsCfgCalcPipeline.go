@@ -8,13 +8,16 @@ import (
 
 /// configuration of a single calculation pipelines
 type AxsCfgCalcPipelineT struct {
-	Name string
-	Steps *AxsCfgCalcStepAllT
+	Name string `json:"name"`
+	Steps *AxsCfgCalcStepAllT `json:"steps"`
 }
 
 func (t *AxsCfgCalcPipelineT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	stepsOffset := t.Steps.Pack(builder)
 	AxsCfgCalcPipelineStart(builder)
 	AxsCfgCalcPipelineAddName(builder, nameOffset)

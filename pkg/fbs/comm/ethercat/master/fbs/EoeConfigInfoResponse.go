@@ -7,12 +7,12 @@ import (
 )
 
 type EoeConfigInfoResponseT struct {
-	MacAddress []byte
-	IpAddress []byte
-	SubnetMask []byte
-	DefaultGateway []byte
-	DnsIpAddress []byte
-	DnsName string
+	MacAddress []byte `json:"macAddress"`
+	IpAddress []byte `json:"ipAddress"`
+	SubnetMask []byte `json:"subnetMask"`
+	DefaultGateway []byte `json:"defaultGateway"`
+	DnsIpAddress []byte `json:"dnsIpAddress"`
+	DnsName string `json:"dnsName"`
 }
 
 func (t *EoeConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -37,7 +37,10 @@ func (t *EoeConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.
 	if t.DnsIpAddress != nil {
 		dnsIpAddressOffset = builder.CreateByteString(t.DnsIpAddress)
 	}
-	dnsNameOffset := builder.CreateString(t.DnsName)
+	dnsNameOffset := flatbuffers.UOffsetT(0)
+	if t.DnsName != "" {
+		dnsNameOffset = builder.CreateString(t.DnsName)
+	}
 	EoeConfigInfoResponseStart(builder)
 	EoeConfigInfoResponseAddMacAddress(builder, macAddressOffset)
 	EoeConfigInfoResponseAddIpAddress(builder, ipAddressOffset)

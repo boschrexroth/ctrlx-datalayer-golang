@@ -8,16 +8,22 @@ import (
 
 /// base parameters of the axis probe and axis probe abort command
 type cmd_AxsProbeBaseT struct {
-	Base *Cmd_BaseT
-	TriggerSrc string
-	ProbeIndex string
+	Base *Cmd_BaseT `json:"base"`
+	TriggerSrc string `json:"triggerSrc"`
+	ProbeIndex string `json:"probeIndex"`
 }
 
 func (t *cmd_AxsProbeBaseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	triggerSrcOffset := builder.CreateString(t.TriggerSrc)
-	probeIndexOffset := builder.CreateString(t.ProbeIndex)
+	triggerSrcOffset := flatbuffers.UOffsetT(0)
+	if t.TriggerSrc != "" {
+		triggerSrcOffset = builder.CreateString(t.TriggerSrc)
+	}
+	probeIndexOffset := flatbuffers.UOffsetT(0)
+	if t.ProbeIndex != "" {
+		probeIndexOffset = builder.CreateString(t.ProbeIndex)
+	}
 	cmd_AxsProbeBaseStart(builder)
 	cmd_AxsProbeBaseAddBase(builder, baseOffset)
 	cmd_AxsProbeBaseAddTriggerSrc(builder, triggerSrcOffset)

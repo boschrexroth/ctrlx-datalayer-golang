@@ -8,8 +8,8 @@ import (
 
 /// parameters for the contour command for a kinematics
 type KinCmdContourDataT struct {
-	IsStart bool
-	PrepCmds uint32
+	IsStart bool `json:"isStart"`
+	PrepCmds uint32 `json:"prepCmds"`
 }
 
 func (t *KinCmdContourDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

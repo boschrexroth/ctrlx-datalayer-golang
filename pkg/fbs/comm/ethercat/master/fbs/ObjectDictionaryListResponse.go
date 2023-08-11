@@ -7,7 +7,7 @@ import (
 )
 
 type ObjectDictionaryListResponseT struct {
-	Indices []uint16
+	Indices []uint16 `json:"indices"`
 }
 
 func (t *ObjectDictionaryListResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

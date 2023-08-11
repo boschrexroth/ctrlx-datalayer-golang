@@ -7,15 +7,18 @@ import (
 )
 
 type DiagInfoT struct {
-	LastMainDiag uint32
-	LastDetailDiag uint32
-	LastErrText string
-	LastErrTrace []string
+	LastMainDiag uint32 `json:"lastMainDiag"`
+	LastDetailDiag uint32 `json:"lastDetailDiag"`
+	LastErrText string `json:"lastErrText"`
+	LastErrTrace []string `json:"lastErrTrace"`
 }
 
 func (t *DiagInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	lastErrTextOffset := builder.CreateString(t.LastErrText)
+	lastErrTextOffset := flatbuffers.UOffsetT(0)
+	if t.LastErrText != "" {
+		lastErrTextOffset = builder.CreateString(t.LastErrText)
+	}
 	lastErrTraceOffset := flatbuffers.UOffsetT(0)
 	if t.LastErrTrace != nil {
 		lastErrTraceLength := len(t.LastErrTrace)

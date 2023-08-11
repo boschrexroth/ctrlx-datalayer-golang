@@ -7,16 +7,22 @@ import (
 )
 
 type DlResultToUaStatusCodeT struct {
-	DlResult uint32
-	UaStatusCode uint32
-	UaStatusCodeName string
-	UaStatusCodeDescr string
+	DlResult uint32 `json:"dlResult"`
+	UaStatusCode uint32 `json:"uaStatusCode"`
+	UaStatusCodeName string `json:"uaStatusCodeName"`
+	UaStatusCodeDescr string `json:"uaStatusCodeDescr"`
 }
 
 func (t *DlResultToUaStatusCodeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	uaStatusCodeNameOffset := builder.CreateString(t.UaStatusCodeName)
-	uaStatusCodeDescrOffset := builder.CreateString(t.UaStatusCodeDescr)
+	uaStatusCodeNameOffset := flatbuffers.UOffsetT(0)
+	if t.UaStatusCodeName != "" {
+		uaStatusCodeNameOffset = builder.CreateString(t.UaStatusCodeName)
+	}
+	uaStatusCodeDescrOffset := flatbuffers.UOffsetT(0)
+	if t.UaStatusCodeDescr != "" {
+		uaStatusCodeDescrOffset = builder.CreateString(t.UaStatusCodeDescr)
+	}
 	DlResultToUaStatusCodeStart(builder)
 	DlResultToUaStatusCodeAddDlResult(builder, t.DlResult)
 	DlResultToUaStatusCodeAddUaStatusCode(builder, t.UaStatusCode)

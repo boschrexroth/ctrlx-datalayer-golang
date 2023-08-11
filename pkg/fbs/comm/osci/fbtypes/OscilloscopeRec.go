@@ -7,8 +7,8 @@ import (
 )
 
 type OscilloscopeRecT struct {
-	Trigger *TimeT
-	Channels []string
+	Trigger *TimeT `json:"trigger"`
+	Channels []string `json:"channels"`
 }
 
 func (t *OscilloscopeRecT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,8 +8,8 @@ import (
 
 /// Utilization of the cycle time of Scheduler tick task causes by itself
 type UtilizationThresholdT struct {
-	Warning byte
-	Error byte
+	Warning byte `json:"warning"`
+	Error byte `json:"error"`
 }
 
 func (t *UtilizationThresholdT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

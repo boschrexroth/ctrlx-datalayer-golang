@@ -7,7 +7,7 @@ import (
 )
 
 type RecAllSignalsT struct {
-	AllSignals []*RecChannelT
+	AllSignals []*RecChannelT `json:"allSignals"`
 }
 
 func (t *RecAllSignalsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

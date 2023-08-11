@@ -8,15 +8,21 @@ import (
 
 /// data of a single joint transformation set
 type KinCfgJntTrafoSetT struct {
-	Name string
-	JntTrafo string
-	Param *KinCfgJntTrafoAllParamT
+	Name string `json:"name"`
+	JntTrafo string `json:"jntTrafo"`
+	Param *KinCfgJntTrafoAllParamT `json:"param"`
 }
 
 func (t *KinCfgJntTrafoSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	jntTrafoOffset := builder.CreateString(t.JntTrafo)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	jntTrafoOffset := flatbuffers.UOffsetT(0)
+	if t.JntTrafo != "" {
+		jntTrafoOffset = builder.CreateString(t.JntTrafo)
+	}
 	paramOffset := t.Param.Pack(builder)
 	KinCfgJntTrafoSetStart(builder)
 	KinCfgJntTrafoSetAddName(builder, nameOffset)

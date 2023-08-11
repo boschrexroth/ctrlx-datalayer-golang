@@ -10,8 +10,9 @@ import (
 
 /// configuration for specific functions of this axis
 type AxsCfgFunctionsT struct {
-	Coupling *AxsCfgCouplingT
-	CalculationPipelines []*motion__sync__fbtypes.CalcPipelineCfgT
+	Coupling *AxsCfgCouplingT `json:"coupling"`
+	CalculationPipelines []*motion__sync__fbtypes.CalcPipelineCfgT `json:"calculationPipelines"`
+	PosMode *AxsCfgPosModeT `json:"posMode"`
 }
 
 func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -30,9 +31,11 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 		}
 		calculationPipelinesOffset = builder.EndVector(calculationPipelinesLength)
 	}
+	posModeOffset := t.PosMode.Pack(builder)
 	AxsCfgFunctionsStart(builder)
 	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
 	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
+	AxsCfgFunctionsAddPosMode(builder, posModeOffset)
 	return AxsCfgFunctionsEnd(builder)
 }
 
@@ -45,6 +48,7 @@ func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
 		rcv.CalculationPipelines(&x, j)
 		t.CalculationPipelines[j] = x.UnPack()
 	}
+	t.PosMode = rcv.PosMode(nil).UnPack()
 }
 
 func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
@@ -118,8 +122,23 @@ func (rcv *AxsCfgFunctions) CalculationPipelinesLength() int {
 }
 
 /// configuration for calculation pipelines for a single axis
+/// configuration for position mode function parameters for a single axis
+func (rcv *AxsCfgFunctions) PosMode(obj *AxsCfgPosMode) *AxsCfgPosMode {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgPosMode)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration for position mode function parameters for a single axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
@@ -129,6 +148,9 @@ func AxsCfgFunctionsAddCalculationPipelines(builder *flatbuffers.Builder, calcul
 }
 func AxsCfgFunctionsStartCalculationPipelinesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func AxsCfgFunctionsAddPosMode(builder *flatbuffers.Builder, posMode flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(posMode), 0)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

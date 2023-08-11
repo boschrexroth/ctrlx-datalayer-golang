@@ -8,7 +8,7 @@ import (
 
 /// Special extensions to modify Scheduler and system behavior e.g. activation of DEBUG mode
 type AdminControlsT struct {
-	Control *ControlsT
+	Control *ControlsT `json:"control"`
 }
 
 func (t *AdminControlsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

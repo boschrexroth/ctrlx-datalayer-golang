@@ -8,24 +8,33 @@ import (
 
 /// parameters and data of the active command
 type AxsCmdValuesT struct {
-	TargetPos float64
-	TargetVel float64
-	TargetTrq float64
-	Lim *DynamicLimitsStateT
-	CmdId uint64
-	Src *CmdSourceT
-	TargetPosUnit string
-	TargetVelUnit string
-	TargetTrqUnit string
+	TargetPos float64 `json:"targetPos"`
+	TargetVel float64 `json:"targetVel"`
+	TargetTrq float64 `json:"targetTrq"`
+	Lim *DynamicLimitsStateT `json:"lim"`
+	CmdId uint64 `json:"cmdId"`
+	Src *CmdSourceT `json:"src"`
+	TargetPosUnit string `json:"targetPosUnit"`
+	TargetVelUnit string `json:"targetVelUnit"`
+	TargetTrqUnit string `json:"targetTrqUnit"`
 }
 
 func (t *AxsCmdValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	limOffset := t.Lim.Pack(builder)
 	srcOffset := t.Src.Pack(builder)
-	targetPosUnitOffset := builder.CreateString(t.TargetPosUnit)
-	targetVelUnitOffset := builder.CreateString(t.TargetVelUnit)
-	targetTrqUnitOffset := builder.CreateString(t.TargetTrqUnit)
+	targetPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TargetPosUnit != "" {
+		targetPosUnitOffset = builder.CreateString(t.TargetPosUnit)
+	}
+	targetVelUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TargetVelUnit != "" {
+		targetVelUnitOffset = builder.CreateString(t.TargetVelUnit)
+	}
+	targetTrqUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TargetTrqUnit != "" {
+		targetTrqUnitOffset = builder.CreateString(t.TargetTrqUnit)
+	}
 	AxsCmdValuesStart(builder)
 	AxsCmdValuesAddTargetPos(builder, t.TargetPos)
 	AxsCmdValuesAddTargetVel(builder, t.TargetVel)

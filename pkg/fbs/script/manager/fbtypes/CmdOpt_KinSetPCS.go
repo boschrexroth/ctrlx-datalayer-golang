@@ -7,14 +7,17 @@ import (
 )
 
 type CmdOpt_KinSetPCST struct {
-	Base *CmdOpt_BaseT
-	SetName string
+	Base *CmdOpt_BaseT `json:"base"`
+	SetName string `json:"setName"`
 }
 
 func (t *CmdOpt_KinSetPCST) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	setNameOffset := builder.CreateString(t.SetName)
+	setNameOffset := flatbuffers.UOffsetT(0)
+	if t.SetName != "" {
+		setNameOffset = builder.CreateString(t.SetName)
+	}
 	CmdOpt_KinSetPCSStart(builder)
 	CmdOpt_KinSetPCSAddBase(builder, baseOffset)
 	CmdOpt_KinSetPCSAddSetName(builder, setNameOffset)

@@ -7,7 +7,7 @@ import (
 )
 
 type ChecksumResponseT struct {
-	Checksums []*ChecksumElementT
+	Checksums []*ChecksumElementT `json:"checksums"`
 }
 
 func (t *ChecksumResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -82,6 +82,15 @@ func (rcv *ChecksumResponse) Checksums(obj *ChecksumElement, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *ChecksumResponse) ChecksumsByKey(obj *ChecksumElement, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

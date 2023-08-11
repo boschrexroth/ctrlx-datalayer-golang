@@ -8,13 +8,16 @@ import (
 
 /// get informations of a single active command
 type actCmdJobObjectsT struct {
-	CmdName string
-	JobObjects []string
+	CmdName string `json:"cmdName"`
+	JobObjects []string `json:"jobObjects"`
 }
 
 func (t *actCmdJobObjectsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	cmdNameOffset := builder.CreateString(t.CmdName)
+	cmdNameOffset := flatbuffers.UOffsetT(0)
+	if t.CmdName != "" {
+		cmdNameOffset = builder.CreateString(t.CmdName)
+	}
 	jobObjectsOffset := flatbuffers.UOffsetT(0)
 	if t.JobObjects != nil {
 		jobObjectsLength := len(t.JobObjects)

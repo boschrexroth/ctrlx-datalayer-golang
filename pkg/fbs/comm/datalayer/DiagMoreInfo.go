@@ -3,18 +3,25 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type DiagMoreInfoT struct {
-	Key string
-	Value string
+	Key string `json:"key"`
+	Value string `json:"value"`
 }
 
 func (t *DiagMoreInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	keyOffset := builder.CreateString(t.Key)
-	valueOffset := builder.CreateString(t.Value)
+	keyOffset := flatbuffers.UOffsetT(0)
+	if t.Key != "" {
+		keyOffset = builder.CreateString(t.Key)
+	}
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != "" {
+		valueOffset = builder.CreateString(t.Value)
+	}
 	DiagMoreInfoStart(builder)
 	DiagMoreInfoAddKey(builder, keyOffset)
 	DiagMoreInfoAddValue(builder, valueOffset)
@@ -74,6 +81,38 @@ func (rcv *DiagMoreInfo) Key() []byte {
 /// defined key 
 ///   "requiredLicenses": list of required licences seperated by ","
 ///   "requiredScopes": list of required scopes seperated by ","
+func DiagMoreInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &DiagMoreInfo{}
+	obj2 := &DiagMoreInfo{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Key()) < string(obj2.Key())
+}
+
+func (rcv *DiagMoreInfo) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &DiagMoreInfo{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Key(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// corresponding value
 func (rcv *DiagMoreInfo) Value() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

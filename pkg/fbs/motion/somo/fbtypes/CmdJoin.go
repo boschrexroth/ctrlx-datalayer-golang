@@ -8,8 +8,8 @@ import (
 
 /// parameters for the command join
 type CmdJoinT struct {
-	Group []string
-	SyncStartNextCmd bool
+	Group []string `json:"group"`
+	SyncStartNextCmd bool `json:"syncStartNextCmd"`
 }
 
 func (t *CmdJoinT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

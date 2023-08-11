@@ -7,7 +7,7 @@ import (
 )
 
 type DependencyListT struct {
-	Dependencies []*DependencyT
+	Dependencies []*DependencyT `json:"dependencies"`
 }
 
 func (t *DependencyListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -82,6 +82,15 @@ func (rcv *DependencyList) Dependencies(obj *Dependency, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *DependencyList) DependenciesByKey(obj *Dependency, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

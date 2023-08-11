@@ -7,11 +7,11 @@ import (
 )
 
 type AllowedOperationsT struct {
-	Read bool
-	Write bool
-	Create bool
-	Delete bool
-	Browse bool
+	Read bool `json:"read"`
+	Write bool `json:"write"`
+	Create bool `json:"create"`
+	Delete bool `json:"delete"`
+	Browse bool `json:"browse"`
 }
 
 func (t *AllowedOperationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

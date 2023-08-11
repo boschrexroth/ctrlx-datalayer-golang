@@ -10,8 +10,8 @@ import (
 
 /// configuration for coupling functions for a single axis
 type AxsCfgCouplingT struct {
-	Gantry *AxsCfgGantryT
-	Syncmotion *motion__sync__fbtypes.AxsCfgSyncMotionT
+	Gantry *AxsCfgGantryT `json:"gantry"`
+	Syncmotion *motion__sync__fbtypes.AxsCfgSyncMotionT `json:"syncmotion"`
 }
 
 func (t *AxsCfgCouplingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

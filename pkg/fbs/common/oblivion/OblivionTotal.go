@@ -7,8 +7,8 @@ import (
 )
 
 type OblivionTotalT struct {
-	Overhead uint32
-	Unobserved uint32
+	Overhead uint32 `json:"overhead"`
+	Unobserved uint32 `json:"unobserved"`
 }
 
 func (t *OblivionTotalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

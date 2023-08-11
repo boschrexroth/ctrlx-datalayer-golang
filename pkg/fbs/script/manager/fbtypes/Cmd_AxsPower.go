@@ -7,8 +7,8 @@ import (
 )
 
 type Cmd_AxsPowerT struct {
-	Base *Cmd_BaseT
-	SwitchOn bool
+	Base *Cmd_BaseT `json:"base"`
+	SwitchOn bool `json:"switchOn"`
 }
 
 func (t *Cmd_AxsPowerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,7 +7,7 @@ import (
 )
 
 type ProgramsT struct {
-	Programs []*ProgramT
+	Programs []*ProgramT `json:"programs"`
 }
 
 func (t *ProgramsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

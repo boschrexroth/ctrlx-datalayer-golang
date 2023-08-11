@@ -8,7 +8,7 @@ import (
 
 /// preparation limits for kinematics
 type KinCfgPrepLimitsT struct {
-	MaxCmdsInBuffer uint64
+	MaxCmdsInBuffer uint64 `json:"maxCmdsInBuffer"`
 }
 
 func (t *KinCfgPrepLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

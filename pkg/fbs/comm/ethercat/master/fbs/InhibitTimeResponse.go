@@ -7,7 +7,7 @@ import (
 )
 
 type InhibitTimeResponseT struct {
-	Time uint32
+	Time uint32 `json:"time"`
 }
 
 func (t *InhibitTimeResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

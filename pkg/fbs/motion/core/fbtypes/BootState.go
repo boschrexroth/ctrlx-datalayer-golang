@@ -8,14 +8,17 @@ import (
 
 /// return type of requests of the current boot state
 type BootStateT struct {
-	Text string
-	ActStep uint32
-	MaxSteps uint32
+	Text string `json:"text"`
+	ActStep uint32 `json:"actStep"`
+	MaxSteps uint32 `json:"maxSteps"`
 }
 
 func (t *BootStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	textOffset := builder.CreateString(t.Text)
+	textOffset := flatbuffers.UOffsetT(0)
+	if t.Text != "" {
+		textOffset = builder.CreateString(t.Text)
+	}
 	BootStateStart(builder)
 	BootStateAddText(builder, textOffset)
 	BootStateAddActStep(builder, t.ActStep)

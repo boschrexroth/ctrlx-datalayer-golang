@@ -7,11 +7,11 @@ import (
 )
 
 type profileScalingCfgT struct {
-	ScalingStrategy *profileScalingStrategyT
-	ScalingType *profileDeviceScalingTypeT
-	Numerator uint32
-	Denominator uint32
-	Resolution uint32
+	ScalingStrategy *profileScalingStrategyT `json:"scalingStrategy"`
+	ScalingType *profileDeviceScalingTypeT `json:"scalingType"`
+	Numerator uint32 `json:"numerator"`
+	Denominator uint32 `json:"denominator"`
+	Resolution uint32 `json:"resolution"`
 }
 
 func (t *profileScalingCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

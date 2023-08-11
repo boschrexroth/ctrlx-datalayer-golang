@@ -7,7 +7,7 @@ import (
 )
 
 type ArrayOfSecConfigTypeT struct {
-	SecConfigArray []*SecConfigTypeT
+	SecConfigArray []*SecConfigTypeT `json:"secConfigArray"`
 }
 
 func (t *ArrayOfSecConfigTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

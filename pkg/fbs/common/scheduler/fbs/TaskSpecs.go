@@ -8,20 +8,29 @@ import (
 
 /// Task specifications to defined callable environment
 type TaskSpecsT struct {
-	Name string
-	Priority string
-	Type string
+	Name string `json:"name"`
+	Priority string `json:"priority"`
+	Type string `json:"type"`
 }
 
 func (t *TaskSpecsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	priorityOffset := builder.CreateString(t.Priority)
-	typeOffset := builder.CreateString(t.Type)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	priorityOffset := flatbuffers.UOffsetT(0)
+	if t.Priority != "" {
+		priorityOffset = builder.CreateString(t.Priority)
+	}
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
 	TaskSpecsStart(builder)
 	TaskSpecsAddName(builder, nameOffset)
 	TaskSpecsAddPriority(builder, priorityOffset)
-	TaskSpecsAddType(builder, typeOffset)
+	TaskSpecsAddType(builder, type_Offset)
 	return TaskSpecsEnd(builder)
 }
 

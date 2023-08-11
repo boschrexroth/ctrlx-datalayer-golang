@@ -3,18 +3,25 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type LocaleTextT struct {
-	Id string
-	Text string
+	Id string `json:"id"`
+	Text string `json:"text"`
 }
 
 func (t *LocaleTextT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
-	textOffset := builder.CreateString(t.Text)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	textOffset := flatbuffers.UOffsetT(0)
+	if t.Text != "" {
+		textOffset = builder.CreateString(t.Text)
+	}
 	LocaleTextStart(builder)
 	LocaleTextAddId(builder, idOffset)
 	LocaleTextAddText(builder, textOffset)
@@ -70,6 +77,38 @@ func (rcv *LocaleText) Id() []byte {
 }
 
 /// iso 639.1
+func LocaleTextKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &LocaleText{}
+	obj2 := &LocaleText{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Id()) < string(obj2.Id())
+}
+
+func (rcv *LocaleText) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &LocaleText{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Id(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 func (rcv *LocaleText) Text() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

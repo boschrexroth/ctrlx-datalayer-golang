@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveEepromT struct {
-	Request *SlaveEepromRequestT
-	Response *SlaveEepromResponseT
+	Request *SlaveEepromRequestT `json:"request"`
+	Response *SlaveEepromResponseT `json:"response"`
 }
 
 func (t *SlaveEepromT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,13 +7,13 @@ import (
 )
 
 type MailboxStatisticResetRequestT struct {
-	Aoe *ProtocolStatisticResetT
-	Coe *ProtocolStatisticResetT
-	Foe *ProtocolStatisticResetT
-	Eoe *ProtocolStatisticResetT
-	Soe *ProtocolStatisticResetT
-	Voe *ProtocolStatisticResetT
-	Raw *ProtocolStatisticResetT
+	Aoe *ProtocolStatisticResetT `json:"aoe"`
+	Coe *ProtocolStatisticResetT `json:"coe"`
+	Foe *ProtocolStatisticResetT `json:"foe"`
+	Eoe *ProtocolStatisticResetT `json:"eoe"`
+	Soe *ProtocolStatisticResetT `json:"soe"`
+	Voe *ProtocolStatisticResetT `json:"voe"`
+	Raw *ProtocolStatisticResetT `json:"raw"`
 }
 
 func (t *MailboxStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

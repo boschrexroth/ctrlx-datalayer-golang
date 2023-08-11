@@ -7,10 +7,10 @@ import (
 )
 
 type FactoryStatsT struct {
-	NumClients uint32
-	NumProviders uint32
-	OpenClientRequests uint32
-	OpenProviderRequests uint32
+	NumClients uint32 `json:"numClients"`
+	NumProviders uint32 `json:"numProviders"`
+	OpenClientRequests uint32 `json:"openClientRequests"`
+	OpenProviderRequests uint32 `json:"openProviderRequests"`
 }
 
 func (t *FactoryStatsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

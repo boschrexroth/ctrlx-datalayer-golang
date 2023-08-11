@@ -8,9 +8,9 @@ import (
 
 /// Configuration of the synchronized motion behavior of a single axis
 type AxsCfgSyncMotionT struct {
-	ErrorReaction *AxsCfgErrReactionT
-	DynSynchronisation *AxsCfgDynSynchronisationT
-	CalculationPipelines []*AxsCfgCalcPipelineT
+	ErrorReaction *AxsCfgErrReactionT `json:"errorReaction"`
+	DynSynchronisation *AxsCfgDynSynchronisationT `json:"dynSynchronisation"`
+	CalculationPipelines []*AxsCfgCalcPipelineT `json:"calculationPipelines"`
 }
 
 func (t *AxsCfgSyncMotionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

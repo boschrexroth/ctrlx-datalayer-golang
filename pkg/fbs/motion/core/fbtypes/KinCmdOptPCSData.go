@@ -8,14 +8,20 @@ import (
 
 /// parameters for the command option PCS (product coordinate system) for kinematics
 type KinCmdOptPCSDataT struct {
-	PermType string
-	SetName string
+	PermType string `json:"permType"`
+	SetName string `json:"setName"`
 }
 
 func (t *KinCmdOptPCSDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
-	setNameOffset := builder.CreateString(t.SetName)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
+	setNameOffset := flatbuffers.UOffsetT(0)
+	if t.SetName != "" {
+		setNameOffset = builder.CreateString(t.SetName)
+	}
 	KinCmdOptPCSDataStart(builder)
 	KinCmdOptPCSDataAddPermType(builder, permTypeOffset)
 	KinCmdOptPCSDataAddSetName(builder, setNameOffset)

@@ -7,15 +7,21 @@ import (
 )
 
 type CfgInitScriptT struct {
-	File string
-	Language string
-	Parameter []string
+	File string `json:"file"`
+	Language string `json:"language"`
+	Parameter []string `json:"parameter"`
 }
 
 func (t *CfgInitScriptT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	fileOffset := builder.CreateString(t.File)
-	languageOffset := builder.CreateString(t.Language)
+	fileOffset := flatbuffers.UOffsetT(0)
+	if t.File != "" {
+		fileOffset = builder.CreateString(t.File)
+	}
+	languageOffset := flatbuffers.UOffsetT(0)
+	if t.Language != "" {
+		languageOffset = builder.CreateString(t.Language)
+	}
 	parameterOffset := flatbuffers.UOffsetT(0)
 	if t.Parameter != nil {
 		parameterLength := len(t.Parameter)

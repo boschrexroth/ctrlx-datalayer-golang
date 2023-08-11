@@ -7,9 +7,9 @@ import (
 )
 
 type AoeDataResponseT struct {
-	Data []byte
-	ErrorCode uint32
-	CmdResult uint32
+	Data []byte `json:"data"`
+	ErrorCode uint32 `json:"errorCode"`
+	CmdResult uint32 `json:"cmdResult"`
 }
 
 func (t *AoeDataResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

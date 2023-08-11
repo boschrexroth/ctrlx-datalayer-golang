@@ -7,16 +7,25 @@ import (
 )
 
 type LinkLayerConfigInfoResponseT struct {
-	Port string
-	LinkLayer string
-	Arguments string
+	Port string `json:"port"`
+	LinkLayer string `json:"linkLayer"`
+	Arguments string `json:"arguments"`
 }
 
 func (t *LinkLayerConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	portOffset := builder.CreateString(t.Port)
-	linkLayerOffset := builder.CreateString(t.LinkLayer)
-	argumentsOffset := builder.CreateString(t.Arguments)
+	portOffset := flatbuffers.UOffsetT(0)
+	if t.Port != "" {
+		portOffset = builder.CreateString(t.Port)
+	}
+	linkLayerOffset := flatbuffers.UOffsetT(0)
+	if t.LinkLayer != "" {
+		linkLayerOffset = builder.CreateString(t.LinkLayer)
+	}
+	argumentsOffset := flatbuffers.UOffsetT(0)
+	if t.Arguments != "" {
+		argumentsOffset = builder.CreateString(t.Arguments)
+	}
 	LinkLayerConfigInfoResponseStart(builder)
 	LinkLayerConfigInfoResponseAddPort(builder, portOffset)
 	LinkLayerConfigInfoResponseAddLinkLayer(builder, linkLayerOffset)

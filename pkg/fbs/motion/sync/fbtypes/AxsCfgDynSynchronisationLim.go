@@ -8,12 +8,12 @@ import (
 
 /// Configuration of the dynamic synchronisation limits of a single axis
 type AxsCfgDynSynchronisationLimT struct {
-	Acc float64
-	Dec float64
-	JrkAcc float64
-	JrkDec float64
-	VelNeg float64
-	VelPos float64
+	Acc float64 `json:"acc"`
+	Dec float64 `json:"dec"`
+	JrkAcc float64 `json:"jrkAcc"`
+	JrkDec float64 `json:"jrkDec"`
+	VelNeg float64 `json:"velNeg"`
+	VelPos float64 `json:"velPos"`
 }
 
 func (t *AxsCfgDynSynchronisationLimT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,15 +7,18 @@ import (
 )
 
 type Resp_ErrorT struct {
-	MainCode uint32
-	DetailCode uint32
-	Text string
-	Trace []string
+	MainCode uint32 `json:"mainCode"`
+	DetailCode uint32 `json:"detailCode"`
+	Text string `json:"text"`
+	Trace []string `json:"trace"`
 }
 
 func (t *Resp_ErrorT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	textOffset := builder.CreateString(t.Text)
+	textOffset := flatbuffers.UOffsetT(0)
+	if t.Text != "" {
+		textOffset = builder.CreateString(t.Text)
+	}
 	traceOffset := flatbuffers.UOffsetT(0)
 	if t.Trace != nil {
 		traceLength := len(t.Trace)

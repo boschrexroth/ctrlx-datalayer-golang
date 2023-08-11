@@ -7,9 +7,9 @@ import (
 )
 
 type Cmd_KinContourT struct {
-	Base *Cmd_BaseT
-	IsStart bool
-	PrepCmds uint32
+	Base *Cmd_BaseT `json:"base"`
+	IsStart bool `json:"isStart"`
+	PrepCmds uint32 `json:"prepCmds"`
 }
 
 func (t *Cmd_KinContourT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

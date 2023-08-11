@@ -8,14 +8,14 @@ import (
 
 /// Duration measurement of execution of the task (related to real-time usage)
 type DurationRtT struct {
-	Total uint64
-	Task uint64
-	Other uint64
-	Equidistance uint64
-	Deviation uint64
-	Counter uint64
-	Samplerate uint64
-	Remaining uint64
+	Total uint64 `json:"total"`
+	Task uint64 `json:"task"`
+	Other uint64 `json:"other"`
+	Equidistance uint64 `json:"equidistance"`
+	Deviation uint64 `json:"deviation"`
+	Counter uint64 `json:"counter"`
+	Samplerate uint64 `json:"samplerate"`
+	Remaining uint64 `json:"remaining"`
 }
 
 func (t *DurationRtT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

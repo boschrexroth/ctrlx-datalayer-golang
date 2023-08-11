@@ -3,20 +3,27 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ReferenceT struct {
-	Type string
-	TargetAddress string
+	Type string `json:"type"`
+	TargetAddress string `json:"targetAddress"`
 }
 
 func (t *ReferenceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	typeOffset := builder.CreateString(t.Type)
-	targetAddressOffset := builder.CreateString(t.TargetAddress)
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
+	targetAddressOffset := flatbuffers.UOffsetT(0)
+	if t.TargetAddress != "" {
+		targetAddressOffset = builder.CreateString(t.TargetAddress)
+	}
 	ReferenceStart(builder)
-	ReferenceAddType(builder, typeOffset)
+	ReferenceAddType(builder, type_Offset)
 	ReferenceAddTargetAddress(builder, targetAddressOffset)
 	return ReferenceEnd(builder)
 }
@@ -70,6 +77,38 @@ func (rcv *Reference) Type() []byte {
 }
 
 /// nodeid of type  "readType", "writeType", "createType", ...
+func ReferenceKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Reference{}
+	obj2 := &Reference{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Type()) < string(obj2.Type())
+}
+
+func (rcv *Reference) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &Reference{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Type(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// full qualified address of target
 func (rcv *Reference) TargetAddress() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

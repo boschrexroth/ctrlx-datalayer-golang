@@ -7,15 +7,15 @@ import (
 )
 
 type FrameStatisticResetRequestT struct {
-	NumTxFrames bool
-	NumRxFrames bool
-	NumCyclicFrames bool
-	NumCyclicDatagrams bool
-	NumAcyclicFrames bool
-	NumAcyclicDatagrams bool
-	NumLostFrames bool
-	NumLostCyclicFrames bool
-	NumLostAcyclicFrames bool
+	NumTxFrames bool `json:"numTxFrames"`
+	NumRxFrames bool `json:"numRxFrames"`
+	NumCyclicFrames bool `json:"numCyclicFrames"`
+	NumCyclicDatagrams bool `json:"numCyclicDatagrams"`
+	NumAcyclicFrames bool `json:"numAcyclicFrames"`
+	NumAcyclicDatagrams bool `json:"numAcyclicDatagrams"`
+	NumLostFrames bool `json:"numLostFrames"`
+	NumLostCyclicFrames bool `json:"numLostCyclicFrames"`
+	NumLostAcyclicFrames bool `json:"numLostAcyclicFrames"`
 }
 
 func (t *FrameStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

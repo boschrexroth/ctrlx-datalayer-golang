@@ -7,11 +7,11 @@ import (
 )
 
 type Cmd_DynLimitsT struct {
-	Vel float64
-	Acc float64
-	Dec float64
-	JrkAcc float64
-	JrkDec float64
+	Vel float64 `json:"vel"`
+	Acc float64 `json:"acc"`
+	Dec float64 `json:"dec"`
+	JrkAcc float64 `json:"jrkAcc"`
+	JrkDec float64 `json:"jrkDec"`
 }
 
 func (t *Cmd_DynLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,18 +8,24 @@ import (
 
 /// parameters of the axis generic GearInPos command
 type AxsCmdSyncGenericGearInPosDataT struct {
-	Master string
-	Pipeline string
-	SyncSource SyncSource
-	SyncMode SyncMode
-	SyncDirection SyncDirection
-	Buffered bool
+	Master string `json:"master"`
+	Pipeline string `json:"pipeline"`
+	SyncSource SyncSource `json:"syncSource"`
+	SyncMode SyncMode `json:"syncMode"`
+	SyncDirection SyncDirection `json:"syncDirection"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdSyncGenericGearInPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterOffset := builder.CreateString(t.Master)
-	pipelineOffset := builder.CreateString(t.Pipeline)
+	masterOffset := flatbuffers.UOffsetT(0)
+	if t.Master != "" {
+		masterOffset = builder.CreateString(t.Master)
+	}
+	pipelineOffset := flatbuffers.UOffsetT(0)
+	if t.Pipeline != "" {
+		pipelineOffset = builder.CreateString(t.Pipeline)
+	}
 	AxsCmdSyncGenericGearInPosDataStart(builder)
 	AxsCmdSyncGenericGearInPosDataAddMaster(builder, masterOffset)
 	AxsCmdSyncGenericGearInPosDataAddPipeline(builder, pipelineOffset)

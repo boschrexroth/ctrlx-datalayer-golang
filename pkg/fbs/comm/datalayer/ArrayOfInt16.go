@@ -7,7 +7,7 @@ import (
 )
 
 type ArrayOfInt16T struct {
-	Value []int16
+	Value []int16 `json:"value"`
 }
 
 func (t *ArrayOfInt16T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

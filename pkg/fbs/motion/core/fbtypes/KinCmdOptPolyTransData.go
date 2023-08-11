@@ -8,15 +8,18 @@ import (
 
 /// parameters for the command option PolyTrans (inserting polynomial commands between successively move commands) for kinematics
 type KinCmdOptPolyTransDataT struct {
-	PermType string
-	Dist1 float64
-	Dist2 float64
-	Eps float64
+	PermType string `json:"permType"`
+	Dist1 float64 `json:"dist1"`
+	Dist2 float64 `json:"dist2"`
+	Eps float64 `json:"eps"`
 }
 
 func (t *KinCmdOptPolyTransDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	KinCmdOptPolyTransDataStart(builder)
 	KinCmdOptPolyTransDataAddPermType(builder, permTypeOffset)
 	KinCmdOptPolyTransDataAddDist1(builder, t.Dist1)
@@ -83,7 +86,7 @@ func (rcv *KinCmdOptPolyTransData) Dist1() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// optional distance D1 (distance to shorten the start of the precorner, must be greater than zero)
@@ -99,7 +102,7 @@ func (rcv *KinCmdOptPolyTransData) Dist2() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// optional distance D2 (distance to shorten the start of the postcorner, must be greater than zero)
@@ -131,10 +134,10 @@ func KinCmdOptPolyTransDataAddPermType(builder *flatbuffers.Builder, permType fl
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(permType), 0)
 }
 func KinCmdOptPolyTransDataAddDist1(builder *flatbuffers.Builder, dist1 float64) {
-	builder.PrependFloat64Slot(1, dist1, 0.0)
+	builder.PrependFloat64Slot(1, dist1, 1.0)
 }
 func KinCmdOptPolyTransDataAddDist2(builder *flatbuffers.Builder, dist2 float64) {
-	builder.PrependFloat64Slot(2, dist2, 0.0)
+	builder.PrependFloat64Slot(2, dist2, 1.0)
 }
 func KinCmdOptPolyTransDataAddEps(builder *flatbuffers.Builder, eps float64) {
 	builder.PrependFloat64Slot(3, eps, 0.0)

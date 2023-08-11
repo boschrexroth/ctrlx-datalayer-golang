@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveRegisterT struct {
-	Request *SlaveRegisterRequestT
-	Response *SlaveRegisterResponseT
+	Request *SlaveRegisterRequestT `json:"request"`
+	Response *SlaveRegisterResponseT `json:"response"`
 }
 
 func (t *SlaveRegisterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,14 +8,17 @@ import (
 
 /// This table defines the unique identification of a diagnostic log in combination with the timestamp of the log.
 type DiagnosisIdentificationWithTimestampT struct {
-	DiagnosisIdentification *DiagnosisIdentificationT
-	Timestamp string
+	DiagnosisIdentification *DiagnosisIdentificationT `json:"diagnosisIdentification"`
+	Timestamp string `json:"timestamp"`
 }
 
 func (t *DiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	diagnosisIdentificationOffset := t.DiagnosisIdentification.Pack(builder)
-	timestampOffset := builder.CreateString(t.Timestamp)
+	timestampOffset := flatbuffers.UOffsetT(0)
+	if t.Timestamp != "" {
+		timestampOffset = builder.CreateString(t.Timestamp)
+	}
 	DiagnosisIdentificationWithTimestampStart(builder)
 	DiagnosisIdentificationWithTimestampAddDiagnosisIdentification(builder, diagnosisIdentificationOffset)
 	DiagnosisIdentificationWithTimestampAddTimestamp(builder, timestampOffset)

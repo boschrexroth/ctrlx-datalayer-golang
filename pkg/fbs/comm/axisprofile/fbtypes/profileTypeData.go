@@ -7,7 +7,7 @@ import (
 )
 
 type profileTypeDataT struct {
-	Type ProfileType
+	Type ProfileType `json:"type"`
 }
 
 func (t *profileTypeDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,18 +8,21 @@ import (
 
 /// Callable, executes a job defined by regarding app
 type CallableT struct {
-	Name string
-	Index uint32
-	Arguments []string
-	Id string
-	Alias string
-	Sync *SyncPointsT
-	Watchdog CallableWdgConfig
+	Name string `json:"name"`
+	Index uint32 `json:"index"`
+	Arguments []string `json:"arguments"`
+	Id string `json:"id"`
+	Alias string `json:"alias"`
+	Sync *SyncPointsT `json:"sync"`
+	Watchdog CallableWdgConfig `json:"watchdog"`
 }
 
 func (t *CallableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	argumentsOffset := flatbuffers.UOffsetT(0)
 	if t.Arguments != nil {
 		argumentsLength := len(t.Arguments)
@@ -33,8 +36,14 @@ func (t *CallableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		argumentsOffset = builder.EndVector(argumentsLength)
 	}
-	idOffset := builder.CreateString(t.Id)
-	aliasOffset := builder.CreateString(t.Alias)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	aliasOffset := flatbuffers.UOffsetT(0)
+	if t.Alias != "" {
+		aliasOffset = builder.CreateString(t.Alias)
+	}
 	syncOffset := t.Sync.Pack(builder)
 	CallableStart(builder)
 	CallableAddName(builder, nameOffset)

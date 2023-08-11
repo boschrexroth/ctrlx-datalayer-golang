@@ -7,15 +7,18 @@ import (
 )
 
 type CmdOpt_KinAxsDynLimT struct {
-	Base *CmdOpt_BaseT
-	AxsName string
-	Lim *Cmd_DynLimitsT
+	Base *CmdOpt_BaseT `json:"base"`
+	AxsName string `json:"axsName"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
 }
 
 func (t *CmdOpt_KinAxsDynLimT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	axsNameOffset := builder.CreateString(t.AxsName)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
 	limOffset := t.Lim.Pack(builder)
 	CmdOpt_KinAxsDynLimStart(builder)
 	CmdOpt_KinAxsDynLimAddBase(builder, baseOffset)

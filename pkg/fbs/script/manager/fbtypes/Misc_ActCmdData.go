@@ -7,15 +7,21 @@ import (
 )
 
 type Misc_ActCmdDataT struct {
-	SrcName string
-	SrcType string
-	SrcLine uint64
+	SrcName string `json:"srcName"`
+	SrcType string `json:"srcType"`
+	SrcLine uint64 `json:"srcLine"`
 }
 
 func (t *Misc_ActCmdDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	srcNameOffset := builder.CreateString(t.SrcName)
-	srcTypeOffset := builder.CreateString(t.SrcType)
+	srcNameOffset := flatbuffers.UOffsetT(0)
+	if t.SrcName != "" {
+		srcNameOffset = builder.CreateString(t.SrcName)
+	}
+	srcTypeOffset := flatbuffers.UOffsetT(0)
+	if t.SrcType != "" {
+		srcTypeOffset = builder.CreateString(t.SrcType)
+	}
 	Misc_ActCmdDataStart(builder)
 	Misc_ActCmdDataAddSrcName(builder, srcNameOffset)
 	Misc_ActCmdDataAddSrcType(builder, srcTypeOffset)

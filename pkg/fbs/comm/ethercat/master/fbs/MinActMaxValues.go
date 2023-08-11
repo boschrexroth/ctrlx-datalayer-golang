@@ -7,9 +7,9 @@ import (
 )
 
 type MinActMaxValuesT struct {
-	Minimum uint32
-	Actual uint32
-	Maximum uint32
+	Minimum uint32 `json:"minimum"`
+	Actual uint32 `json:"actual"`
+	Maximum uint32 `json:"maximum"`
 }
 
 func (t *MinActMaxValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

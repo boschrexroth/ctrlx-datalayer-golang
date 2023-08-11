@@ -7,21 +7,36 @@ import (
 )
 
 type BuildInfoTypeT struct {
-	BuildDate uint64
-	BuildNumber string
-	ManufacturerName string
-	ProductName string
-	ProductUri string
-	SoftwareVersion string
+	BuildDate uint64 `json:"buildDate"`
+	BuildNumber string `json:"buildNumber"`
+	ManufacturerName string `json:"manufacturerName"`
+	ProductName string `json:"productName"`
+	ProductUri string `json:"productUri"`
+	SoftwareVersion string `json:"softwareVersion"`
 }
 
 func (t *BuildInfoTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	buildNumberOffset := builder.CreateString(t.BuildNumber)
-	manufacturerNameOffset := builder.CreateString(t.ManufacturerName)
-	productNameOffset := builder.CreateString(t.ProductName)
-	productUriOffset := builder.CreateString(t.ProductUri)
-	softwareVersionOffset := builder.CreateString(t.SoftwareVersion)
+	buildNumberOffset := flatbuffers.UOffsetT(0)
+	if t.BuildNumber != "" {
+		buildNumberOffset = builder.CreateString(t.BuildNumber)
+	}
+	manufacturerNameOffset := flatbuffers.UOffsetT(0)
+	if t.ManufacturerName != "" {
+		manufacturerNameOffset = builder.CreateString(t.ManufacturerName)
+	}
+	productNameOffset := flatbuffers.UOffsetT(0)
+	if t.ProductName != "" {
+		productNameOffset = builder.CreateString(t.ProductName)
+	}
+	productUriOffset := flatbuffers.UOffsetT(0)
+	if t.ProductUri != "" {
+		productUriOffset = builder.CreateString(t.ProductUri)
+	}
+	softwareVersionOffset := flatbuffers.UOffsetT(0)
+	if t.SoftwareVersion != "" {
+		softwareVersionOffset = builder.CreateString(t.SoftwareVersion)
+	}
 	BuildInfoTypeStart(builder)
 	BuildInfoTypeAddBuildDate(builder, t.BuildDate)
 	BuildInfoTypeAddBuildNumber(builder, buildNumberOffset)

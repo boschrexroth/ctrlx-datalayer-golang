@@ -8,8 +8,8 @@ import (
 
 /// data of a single configuration parameter of an joint transformation when reading all data of an implemented joint transformation
 type KinStateJntTrafoDataAllParamT struct {
-	ReqAxes []*KinStateJntTrafoDataReqAxisT
-	Parameter []*KinStateJntTrafoDataParamT
+	ReqAxes []*KinStateJntTrafoDataReqAxisT `json:"reqAxes"`
+	Parameter []*KinStateJntTrafoDataParamT `json:"parameter"`
 }
 
 func (t *KinStateJntTrafoDataAllParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

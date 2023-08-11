@@ -8,14 +8,20 @@ import (
 
 /// This table defines the required elements to request the diagnostic text of a diagnostic log.
 type GetDetailedDiagnosisTextT struct {
-	DetailedDiagnosisNumber string
-	RelatedMainDiagnosisNumber string
+	DetailedDiagnosisNumber string `json:"detailedDiagnosisNumber"`
+	RelatedMainDiagnosisNumber string `json:"relatedMainDiagnosisNumber"`
 }
 
 func (t *GetDetailedDiagnosisTextT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	detailedDiagnosisNumberOffset := builder.CreateString(t.DetailedDiagnosisNumber)
-	relatedMainDiagnosisNumberOffset := builder.CreateString(t.RelatedMainDiagnosisNumber)
+	detailedDiagnosisNumberOffset := flatbuffers.UOffsetT(0)
+	if t.DetailedDiagnosisNumber != "" {
+		detailedDiagnosisNumberOffset = builder.CreateString(t.DetailedDiagnosisNumber)
+	}
+	relatedMainDiagnosisNumberOffset := flatbuffers.UOffsetT(0)
+	if t.RelatedMainDiagnosisNumber != "" {
+		relatedMainDiagnosisNumberOffset = builder.CreateString(t.RelatedMainDiagnosisNumber)
+	}
 	GetDetailedDiagnosisTextStart(builder)
 	GetDetailedDiagnosisTextAddDetailedDiagnosisNumber(builder, detailedDiagnosisNumberOffset)
 	GetDetailedDiagnosisTextAddRelatedMainDiagnosisNumber(builder, relatedMainDiagnosisNumberOffset)

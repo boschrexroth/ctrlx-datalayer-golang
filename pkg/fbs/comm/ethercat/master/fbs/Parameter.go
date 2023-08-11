@@ -7,8 +7,8 @@ import (
 )
 
 type ParameterT struct {
-	Request *ParameterRequestT
-	Response *ParameterResponseT
+	Request *ParameterRequestT `json:"request"`
+	Response *ParameterResponseT `json:"response"`
 }
 
 func (t *ParameterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

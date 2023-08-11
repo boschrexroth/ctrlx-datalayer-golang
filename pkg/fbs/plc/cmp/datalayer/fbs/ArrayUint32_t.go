@@ -7,7 +7,7 @@ import (
 )
 
 type ArrayUint32_tT struct {
-	Data []uint32
+	Data []uint32 `json:"data"`
 }
 
 func (t *ArrayUint32_tT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

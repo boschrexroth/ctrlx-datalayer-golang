@@ -7,13 +7,16 @@ import (
 )
 
 type profileT struct {
-	Name string
-	Type ProfileType
+	Name string `json:"name"`
+	Type ProfileType `json:"type"`
 }
 
 func (t *profileT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	profileStart(builder)
 	profileAddName(builder, nameOffset)
 	profileAddType(builder, t.Type)

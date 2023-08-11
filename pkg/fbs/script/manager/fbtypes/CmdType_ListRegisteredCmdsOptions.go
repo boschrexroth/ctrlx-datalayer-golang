@@ -4,27 +4,27 @@ package fbtypes
 
 import "strconv"
 
-type CmdTypeListRegisteredCmdsOptions int8
+type CmdType_ListRegisteredCmdsOptions int8
 
 const (
-	CmdType_ListRegisteredCmdsOptionsUNKNOWN    CmdTypeListRegisteredCmdsOptions = 0
-	CmdType_ListRegisteredCmdsOptionsCMD        CmdTypeListRegisteredCmdsOptions = 1
-	CmdType_ListRegisteredCmdsOptionsCMD_OPTION CmdTypeListRegisteredCmdsOptions = 2
+	CmdType_ListRegisteredCmdsOptionsUNKNOWN    CmdType_ListRegisteredCmdsOptions = 0
+	CmdType_ListRegisteredCmdsOptionsCMD        CmdType_ListRegisteredCmdsOptions = 1
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION CmdType_ListRegisteredCmdsOptions = 2
 )
 
-var EnumNamesCmdType_ListRegisteredCmdsOptions = map[CmdTypeListRegisteredCmdsOptions]string{
+var EnumNamesCmdType_ListRegisteredCmdsOptions = map[CmdType_ListRegisteredCmdsOptions]string{
 	CmdType_ListRegisteredCmdsOptionsUNKNOWN:    "UNKNOWN",
 	CmdType_ListRegisteredCmdsOptionsCMD:        "CMD",
 	CmdType_ListRegisteredCmdsOptionsCMD_OPTION: "CMD_OPTION",
 }
 
-var EnumValuesCmdType_ListRegisteredCmdsOptions = map[string]CmdTypeListRegisteredCmdsOptions{
+var EnumValuesCmdType_ListRegisteredCmdsOptions = map[string]CmdType_ListRegisteredCmdsOptions{
 	"UNKNOWN":    CmdType_ListRegisteredCmdsOptionsUNKNOWN,
 	"CMD":        CmdType_ListRegisteredCmdsOptionsCMD,
 	"CMD_OPTION": CmdType_ListRegisteredCmdsOptionsCMD_OPTION,
 }
 
-func (v CmdTypeListRegisteredCmdsOptions) String() string {
+func (v CmdType_ListRegisteredCmdsOptions) String() string {
 	if s, ok := EnumNamesCmdType_ListRegisteredCmdsOptions[v]; ok {
 		return s
 	}

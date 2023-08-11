@@ -8,7 +8,7 @@ import (
 
 /// preparation limits for kinematics
 type KinCfgDynamicsT struct {
-	FeedGroup *FeedGroupSettingsT
+	FeedGroup *FeedGroupSettingsT `json:"feedGroup"`
 }
 
 func (t *KinCfgDynamicsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

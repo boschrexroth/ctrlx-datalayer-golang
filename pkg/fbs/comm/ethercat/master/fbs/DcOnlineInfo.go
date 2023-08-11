@@ -7,7 +7,7 @@ import (
 )
 
 type DcOnlineInfoT struct {
-	Response *DcOnlineInfoResponseT
+	Response *DcOnlineInfoResponseT `json:"response"`
 }
 
 func (t *DcOnlineInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

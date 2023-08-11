@@ -3,22 +3,32 @@
 package fbtypes
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 /// informations of an axis that is part of a kinematics
 type KinAxsSingleT struct {
-	Meaning string
-	Name string
-	Dir string
-	AcsIndex byte
+	Meaning string `json:"meaning"`
+	Name string `json:"name"`
+	Dir string `json:"dir"`
+	AcsIndex byte `json:"acsIndex"`
 }
 
 func (t *KinAxsSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	meaningOffset := builder.CreateString(t.Meaning)
-	nameOffset := builder.CreateString(t.Name)
-	dirOffset := builder.CreateString(t.Dir)
+	meaningOffset := flatbuffers.UOffsetT(0)
+	if t.Meaning != "" {
+		meaningOffset = builder.CreateString(t.Meaning)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	dirOffset := flatbuffers.UOffsetT(0)
+	if t.Dir != "" {
+		dirOffset = builder.CreateString(t.Dir)
+	}
 	KinAxsSingleStart(builder)
 	KinAxsSingleAddMeaning(builder, meaningOffset)
 	KinAxsSingleAddName(builder, nameOffset)
@@ -78,6 +88,38 @@ func (rcv *KinAxsSingle) Meaning() []byte {
 }
 
 /// DEPRECATED; (geometric) meaning of the axis in the kinematics (only useful for simple Cartesian kinematics); use "acsIndex" for all other cases
+func KinAxsSingleKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &KinAxsSingle{}
+	obj2 := &KinAxsSingle{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Meaning()) < string(obj2.Meaning())
+}
+
+func (rcv *KinAxsSingle) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &KinAxsSingle{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Meaning(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// name of the axis
 func (rcv *KinAxsSingle) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

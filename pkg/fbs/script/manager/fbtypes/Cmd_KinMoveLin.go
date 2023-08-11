@@ -7,11 +7,11 @@ import (
 )
 
 type Cmd_KinMoveLinT struct {
-	Base *Cmd_BaseT
-	Pos []float64
-	CoordSys string
-	Lim *Cmd_DynLimitsT
-	Buffered bool
+	Base *Cmd_BaseT `json:"base"`
+	Pos []float64 `json:"pos"`
+	CoordSys string `json:"coordSys"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *Cmd_KinMoveLinT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -26,7 +26,10 @@ func (t *Cmd_KinMoveLinT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 		}
 		posOffset = builder.EndVector(posLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	limOffset := t.Lim.Pack(builder)
 	Cmd_KinMoveLinStart(builder)
 	Cmd_KinMoveLinAddBase(builder, baseOffset)

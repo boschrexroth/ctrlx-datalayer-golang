@@ -7,12 +7,15 @@ import (
 )
 
 type StringT struct {
-	Value string
+	Value string `json:"value"`
 }
 
 func (t *StringT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	valueOffset := builder.CreateString(t.Value)
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != "" {
+		valueOffset = builder.CreateString(t.Value)
+	}
 	StringStart(builder)
 	StringAddValue(builder, valueOffset)
 	return StringEnd(builder)

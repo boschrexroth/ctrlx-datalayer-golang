@@ -7,13 +7,13 @@ import (
 )
 
 type ParameterRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	DriveNumber byte
-	ElementFlags ElementFlags
-	Idn uint16
-	Data []byte
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	DriveNumber byte `json:"driveNumber"`
+	ElementFlags ElementFlags `json:"elementFlags"`
+	Idn uint16 `json:"idn"`
+	Data []byte `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *ParameterRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

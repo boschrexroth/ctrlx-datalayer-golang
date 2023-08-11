@@ -8,8 +8,8 @@ import (
 
 /// position of a kinematics
 type KinPosValuesT struct {
-	Pos []float64
-	Units []string
+	Pos []float64 `json:"pos"`
+	Units []string `json:"units"`
 }
 
 func (t *KinPosValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

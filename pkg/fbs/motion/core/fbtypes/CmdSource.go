@@ -8,17 +8,23 @@ import (
 
 /// command source (by which interface was this command inserted into the system (e.g. "PLC"))
 type CmdSourceT struct {
-	Type string
-	Name string
-	Line uint64
+	Type string `json:"type"`
+	Name string `json:"name"`
+	Line uint64 `json:"line"`
 }
 
 func (t *CmdSourceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	typeOffset := builder.CreateString(t.Type)
-	nameOffset := builder.CreateString(t.Name)
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	CmdSourceStart(builder)
-	CmdSourceAddType(builder, typeOffset)
+	CmdSourceAddType(builder, type_Offset)
 	CmdSourceAddName(builder, nameOffset)
 	CmdSourceAddLine(builder, t.Line)
 	return CmdSourceEnd(builder)

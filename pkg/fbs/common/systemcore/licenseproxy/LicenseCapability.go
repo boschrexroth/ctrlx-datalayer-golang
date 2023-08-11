@@ -7,20 +7,32 @@ import (
 )
 
 type LicenseCapabilityT struct {
-	Name string
-	Version string
-	Count int32
-	IsPermanent bool
-	StartDate string
-	FinalExpirationDate string
+	Name string `json:"name"`
+	Version string `json:"version"`
+	Count int32 `json:"count"`
+	IsPermanent bool `json:"isPermanent"`
+	StartDate string `json:"startDate"`
+	FinalExpirationDate string `json:"finalExpirationDate"`
 }
 
 func (t *LicenseCapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	versionOffset := builder.CreateString(t.Version)
-	startDateOffset := builder.CreateString(t.StartDate)
-	finalExpirationDateOffset := builder.CreateString(t.FinalExpirationDate)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
+	startDateOffset := flatbuffers.UOffsetT(0)
+	if t.StartDate != "" {
+		startDateOffset = builder.CreateString(t.StartDate)
+	}
+	finalExpirationDateOffset := flatbuffers.UOffsetT(0)
+	if t.FinalExpirationDate != "" {
+		finalExpirationDateOffset = builder.CreateString(t.FinalExpirationDate)
+	}
 	LicenseCapabilityStart(builder)
 	LicenseCapabilityAddName(builder, nameOffset)
 	LicenseCapabilityAddVersion(builder, versionOffset)

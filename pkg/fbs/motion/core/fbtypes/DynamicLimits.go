@@ -8,11 +8,11 @@ import (
 
 /// set of dynamic limits (for commands)
 type DynamicLimitsT struct {
-	Vel float64
-	Acc float64
-	Dec float64
-	JrkAcc float64
-	JrkDec float64
+	Vel float64 `json:"vel"`
+	Acc float64 `json:"acc"`
+	Dec float64 `json:"dec"`
+	JrkAcc float64 `json:"jrkAcc"`
+	JrkDec float64 `json:"jrkDec"`
 }
 
 func (t *DynamicLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -74,7 +74,7 @@ func (rcv *DynamicLimits) Vel() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// velocity limit (must be greater than zero)
@@ -88,7 +88,7 @@ func (rcv *DynamicLimits) Acc() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// acceleration limit (must be greater than zero)
@@ -102,7 +102,7 @@ func (rcv *DynamicLimits) Dec() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// deceleration limit (must be greater than zero)
@@ -142,13 +142,13 @@ func DynamicLimitsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }
 func DynamicLimitsAddVel(builder *flatbuffers.Builder, vel float64) {
-	builder.PrependFloat64Slot(0, vel, 0.0)
+	builder.PrependFloat64Slot(0, vel, 1.0)
 }
 func DynamicLimitsAddAcc(builder *flatbuffers.Builder, acc float64) {
-	builder.PrependFloat64Slot(1, acc, 0.0)
+	builder.PrependFloat64Slot(1, acc, 1.0)
 }
 func DynamicLimitsAddDec(builder *flatbuffers.Builder, dec float64) {
-	builder.PrependFloat64Slot(2, dec, 0.0)
+	builder.PrependFloat64Slot(2, dec, 1.0)
 }
 func DynamicLimitsAddJrkAcc(builder *flatbuffers.Builder, jrkAcc float64) {
 	builder.PrependFloat64Slot(3, jrkAcc, 0.0)

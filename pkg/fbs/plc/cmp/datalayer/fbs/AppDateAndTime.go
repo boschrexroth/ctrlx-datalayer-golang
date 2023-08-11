@@ -3,16 +3,20 @@
 package fbs
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type AppDateAndTimeT struct {
-	DateAndTime string
+	DateAndTime string `json:"dateAndTime"`
 }
 
 func (t *AppDateAndTimeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	dateAndTimeOffset := builder.CreateString(t.DateAndTime)
+	dateAndTimeOffset := flatbuffers.UOffsetT(0)
+	if t.DateAndTime != "" {
+		dateAndTimeOffset = builder.CreateString(t.DateAndTime)
+	}
 	AppDateAndTimeStart(builder)
 	AppDateAndTimeAddDateAndTime(builder, dateAndTimeOffset)
 	return AppDateAndTimeEnd(builder)
@@ -62,6 +66,38 @@ func (rcv *AppDateAndTime) DateAndTime() []byte {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
 	return nil
+}
+
+func AppDateAndTimeKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &AppDateAndTime{}
+	obj2 := &AppDateAndTime{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.DateAndTime()) < string(obj2.DateAndTime())
+}
+
+func (rcv *AppDateAndTime) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &AppDateAndTime{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.DateAndTime(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func AppDateAndTimeStart(builder *flatbuffers.Builder) {

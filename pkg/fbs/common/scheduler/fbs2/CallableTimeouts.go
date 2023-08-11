@@ -8,9 +8,9 @@ import (
 
 /// General settings for timeouts when switching callable operation states
 type CallableTimeoutsT struct {
-	Begin uint32
-	Execute uint32
-	End uint32
+	Begin uint32 `json:"begin"`
+	Execute uint32 `json:"execute"`
+	End uint32 `json:"end"`
 }
 
 func (t *CallableTimeoutsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

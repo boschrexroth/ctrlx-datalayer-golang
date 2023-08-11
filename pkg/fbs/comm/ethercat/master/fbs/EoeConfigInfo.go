@@ -7,8 +7,8 @@ import (
 )
 
 type EoeConfigInfoT struct {
-	Request *AddressedRequestT
-	Response *EoeConfigInfoResponseT
+	Request *AddressedRequestT `json:"request"`
+	Response *EoeConfigInfoResponseT `json:"response"`
 }
 
 func (t *EoeConfigInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

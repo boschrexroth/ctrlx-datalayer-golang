@@ -7,11 +7,11 @@ import (
 )
 
 type Cmd_KinJogT struct {
-	Base *Cmd_BaseT
-	Dir []float64
-	CoordSys string
-	Incr float64
-	Lim *Cmd_DynLimitsT
+	Base *Cmd_BaseT `json:"base"`
+	Dir []float64 `json:"dir"`
+	CoordSys string `json:"coordSys"`
+	Incr float64 `json:"incr"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
 }
 
 func (t *Cmd_KinJogT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -26,7 +26,10 @@ func (t *Cmd_KinJogT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		dirOffset = builder.EndVector(dirLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	limOffset := t.Lim.Pack(builder)
 	Cmd_KinJogStart(builder)
 	Cmd_KinJogAddBase(builder, baseOffset)

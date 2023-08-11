@@ -7,8 +7,8 @@ import (
 )
 
 type QueueingT struct {
-	QueueSize uint32
-	Behaviour QueueBehaviour
+	QueueSize uint32 `json:"queueSize"`
+	Behaviour QueueBehaviour `json:"behaviour"`
 }
 
 func (t *QueueingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

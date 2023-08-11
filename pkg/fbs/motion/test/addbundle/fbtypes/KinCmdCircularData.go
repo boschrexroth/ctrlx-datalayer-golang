@@ -10,10 +10,10 @@ import (
 
 /// just for test of additional bundle (motion extension API)
 type KinCmdCircularDataT struct {
-	CmdPos []float64
-	CenterPos []float64
-	Direction bool
-	Limits *motion__core__fbtypes.DynamicLimitsT
+	CmdPos []float64 `json:"cmdPos"`
+	CenterPos []float64 `json:"centerPos"`
+	Direction bool `json:"direction"`
+	Limits *motion__core__fbtypes.DynamicLimitsT `json:"limits"`
 }
 
 func (t *KinCmdCircularDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

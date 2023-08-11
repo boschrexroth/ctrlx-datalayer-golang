@@ -7,10 +7,10 @@ import (
 )
 
 type ModuleDataT struct {
-	ModuleType ModuleType
-	ModuleIndex uint16
-	ContainerType ContainerType
-	NumberElements uint16
+	ModuleType ModuleType `json:"moduleType"`
+	ModuleIndex uint16 `json:"moduleIndex"`
+	ContainerType ContainerType `json:"containerType"`
+	NumberElements uint16 `json:"numberElements"`
 }
 
 func (t *ModuleDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,18 +8,24 @@ import (
 
 /// Properties of a task
 type TaskT struct {
-	Name string
-	Priority uint32
-	Affinity uint32
-	Stacksize uint32
-	Event string
-	Cycletime uint32
+	Name string `json:"name"`
+	Priority uint32 `json:"priority"`
+	Affinity uint32 `json:"affinity"`
+	Stacksize uint32 `json:"stacksize"`
+	Event string `json:"event"`
+	Cycletime uint32 `json:"cycletime"`
 }
 
 func (t *TaskT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	eventOffset := builder.CreateString(t.Event)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	eventOffset := flatbuffers.UOffsetT(0)
+	if t.Event != "" {
+		eventOffset = builder.CreateString(t.Event)
+	}
 	TaskStart(builder)
 	TaskAddName(builder, nameOffset)
 	TaskAddPriority(builder, t.Priority)

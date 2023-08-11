@@ -8,10 +8,10 @@ import (
 
 /// axis braking distance
 type AxsBrakingDistanceExT struct {
-	SelectedTypes []BrakingDistanceType
-	DistanceUnit string
-	Distance float64
-	DistanceType BrakingDistanceType
+	SelectedTypes []BrakingDistanceType `json:"selectedTypes"`
+	DistanceUnit string `json:"distanceUnit"`
+	Distance float64 `json:"distance"`
+	DistanceType BrakingDistanceType `json:"distanceType"`
 }
 
 func (t *AxsBrakingDistanceExT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *AxsBrakingDistanceExT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 		}
 		selectedTypesOffset = builder.EndVector(selectedTypesLength)
 	}
-	distanceUnitOffset := builder.CreateString(t.DistanceUnit)
+	distanceUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DistanceUnit != "" {
+		distanceUnitOffset = builder.CreateString(t.DistanceUnit)
+	}
 	AxsBrakingDistanceExStart(builder)
 	AxsBrakingDistanceExAddSelectedTypes(builder, selectedTypesOffset)
 	AxsBrakingDistanceExAddDistanceUnit(builder, distanceUnitOffset)

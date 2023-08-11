@@ -7,7 +7,7 @@ import (
 )
 
 type profileScalingStrategyT struct {
-	Strategy ScalingStrategy
+	Strategy ScalingStrategy `json:"strategy"`
 }
 
 func (t *profileScalingStrategyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

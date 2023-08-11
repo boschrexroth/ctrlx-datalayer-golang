@@ -8,14 +8,20 @@ import (
 
 /// parameters for the command option SafeArea (monitoring of safe zones and work areas) for kinematics
 type KinCmdOptSafeAreaDataT struct {
-	PermType string
-	SafeArea string
+	PermType string `json:"permType"`
+	SafeArea string `json:"safeArea"`
 }
 
 func (t *KinCmdOptSafeAreaDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
-	safeAreaOffset := builder.CreateString(t.SafeArea)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
+	safeAreaOffset := flatbuffers.UOffsetT(0)
+	if t.SafeArea != "" {
+		safeAreaOffset = builder.CreateString(t.SafeArea)
+	}
 	KinCmdOptSafeAreaDataStart(builder)
 	KinCmdOptSafeAreaDataAddPermType(builder, permTypeOffset)
 	KinCmdOptSafeAreaDataAddSafeArea(builder, safeAreaOffset)

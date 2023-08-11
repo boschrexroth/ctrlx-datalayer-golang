@@ -8,19 +8,27 @@ import (
 
 /// data of a single axis zero point offset for a joint transformation
 type KinCfgJntTrafoSingleAxisOffsetT struct {
-	AxisName string
-	ZeroOffset float64
-	ZeroOffsetUnit string
+	AxisName string `json:"axisName"`
+	ZeroOffset float64 `json:"zeroOffset"`
+	ZeroOffsetUnit string `json:"zeroOffsetUnit"`
+	Valid bool `json:"valid"`
 }
 
 func (t *KinCfgJntTrafoSingleAxisOffsetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axisNameOffset := builder.CreateString(t.AxisName)
-	zeroOffsetUnitOffset := builder.CreateString(t.ZeroOffsetUnit)
+	axisNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxisName != "" {
+		axisNameOffset = builder.CreateString(t.AxisName)
+	}
+	zeroOffsetUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ZeroOffsetUnit != "" {
+		zeroOffsetUnitOffset = builder.CreateString(t.ZeroOffsetUnit)
+	}
 	KinCfgJntTrafoSingleAxisOffsetStart(builder)
 	KinCfgJntTrafoSingleAxisOffsetAddAxisName(builder, axisNameOffset)
 	KinCfgJntTrafoSingleAxisOffsetAddZeroOffset(builder, t.ZeroOffset)
 	KinCfgJntTrafoSingleAxisOffsetAddZeroOffsetUnit(builder, zeroOffsetUnitOffset)
+	KinCfgJntTrafoSingleAxisOffsetAddValid(builder, t.Valid)
 	return KinCfgJntTrafoSingleAxisOffsetEnd(builder)
 }
 
@@ -28,6 +36,7 @@ func (rcv *KinCfgJntTrafoSingleAxisOffset) UnPackTo(t *KinCfgJntTrafoSingleAxisO
 	t.AxisName = string(rcv.AxisName())
 	t.ZeroOffset = rcv.ZeroOffset()
 	t.ZeroOffsetUnit = string(rcv.ZeroOffsetUnit())
+	t.Valid = rcv.Valid()
 }
 
 func (rcv *KinCfgJntTrafoSingleAxisOffset) UnPack() *KinCfgJntTrafoSingleAxisOffsetT {
@@ -100,8 +109,24 @@ func (rcv *KinCfgJntTrafoSingleAxisOffset) ZeroOffsetUnit() []byte {
 }
 
 /// unit of zero point offset
+/// READ ONLY: indicates, if the information is valid; it can be invalid, when the axis with axisName does not exists;
+/// then, the informations here can not be used (especially unit scaling relies on axis configuration)
+func (rcv *KinCfgJntTrafoSingleAxisOffset) Valid() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// READ ONLY: indicates, if the information is valid; it can be invalid, when the axis with axisName does not exists;
+/// then, the informations here can not be used (especially unit scaling relies on axis configuration)
+func (rcv *KinCfgJntTrafoSingleAxisOffset) MutateValid(n bool) bool {
+	return rcv._tab.MutateBoolSlot(10, n)
+}
+
 func KinCfgJntTrafoSingleAxisOffsetStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinCfgJntTrafoSingleAxisOffsetAddAxisName(builder *flatbuffers.Builder, axisName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(axisName), 0)
@@ -111,6 +136,9 @@ func KinCfgJntTrafoSingleAxisOffsetAddZeroOffset(builder *flatbuffers.Builder, z
 }
 func KinCfgJntTrafoSingleAxisOffsetAddZeroOffsetUnit(builder *flatbuffers.Builder, zeroOffsetUnit flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(zeroOffsetUnit), 0)
+}
+func KinCfgJntTrafoSingleAxisOffsetAddValid(builder *flatbuffers.Builder, valid bool) {
+	builder.PrependBoolSlot(3, valid, false)
 }
 func KinCfgJntTrafoSingleAxisOffsetEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

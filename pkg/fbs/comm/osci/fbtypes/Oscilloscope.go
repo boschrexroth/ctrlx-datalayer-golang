@@ -7,8 +7,8 @@ import (
 )
 
 type OscilloscopeT struct {
-	Cfg *OscilloscopeCfgT
-	State *OscilloscopeStateT
+	Cfg *OscilloscopeCfgT `json:"cfg"`
+	State *OscilloscopeStateT `json:"state"`
 }
 
 func (t *OscilloscopeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

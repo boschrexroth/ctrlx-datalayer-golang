@@ -8,8 +8,8 @@ import (
 
 /// kinematic properties for axes
 type AxsCfgKinPropertiesT struct {
-	AccReserve float64
-	JrkReserve float64
+	AccReserve float64 `json:"accReserve"`
+	JrkReserve float64 `json:"jrkReserve"`
 }
 
 func (t *AxsCfgKinPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -6,8 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Type selector of system operation state
 type StateT struct {
-	State CurrentState
+	State CurrentState `json:"state"`
 }
 
 func (t *StateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -55,6 +56,7 @@ func (rcv *State) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Type selector of system operation state
 func (rcv *State) State() CurrentState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *State) State() CurrentState {
 	return 0
 }
 
+/// Type selector of system operation state
 func (rcv *State) MutateState(n CurrentState) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

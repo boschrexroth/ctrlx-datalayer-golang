@@ -7,8 +7,8 @@ import (
 )
 
 type SubscriptionDataT struct {
-	Properties *SubscriptionPropertiesT
-	Nodes []string
+	Properties *SubscriptionPropertiesT `json:"properties"`
+	Nodes []string `json:"nodes"`
 }
 
 func (t *SubscriptionDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

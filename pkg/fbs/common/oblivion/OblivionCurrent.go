@@ -7,9 +7,9 @@ import (
 )
 
 type OblivionCurrentT struct {
-	Count uint32
-	Bytes uint32
-	Unobserved uint32
+	Count uint32 `json:"count"`
+	Bytes uint32 `json:"bytes"`
+	Unobserved uint32 `json:"unobserved"`
 }
 
 func (t *OblivionCurrentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

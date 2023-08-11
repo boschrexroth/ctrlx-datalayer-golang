@@ -7,10 +7,10 @@ import (
 )
 
 type PortErrorCountersT struct {
-	InvalidFrameCounter byte
-	RxErrorCounter byte
-	FwdRxErrorCounter byte
-	LostLinkCounter byte
+	InvalidFrameCounter byte `json:"invalidFrameCounter"`
+	RxErrorCounter byte `json:"rxErrorCounter"`
+	FwdRxErrorCounter byte `json:"fwdRxErrorCounter"`
+	LostLinkCounter byte `json:"lostLinkCounter"`
 }
 
 func (t *PortErrorCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

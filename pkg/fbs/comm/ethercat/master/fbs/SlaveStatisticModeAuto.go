@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveStatisticModeAutoT struct {
-	Request *SlaveStatisticModeAutoRequestT
-	Response *SlaveStatisticModeAutoResponseT
+	Request *SlaveStatisticModeAutoRequestT `json:"request"`
+	Response *SlaveStatisticModeAutoResponseT `json:"response"`
 }
 
 func (t *SlaveStatisticModeAutoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

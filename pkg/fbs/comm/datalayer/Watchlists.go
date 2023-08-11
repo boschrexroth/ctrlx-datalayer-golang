@@ -7,7 +7,7 @@ import (
 )
 
 type WatchlistsT struct {
-	Watchlists []*WatchlistT
+	Watchlists []*WatchlistT `json:"watchlists"`
 }
 
 func (t *WatchlistsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

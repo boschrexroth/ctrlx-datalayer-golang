@@ -7,8 +7,8 @@ import (
 )
 
 type SDOT struct {
-	Request *SDORequestT
-	Response *SDOResponseT
+	Request *SDORequestT `json:"request"`
+	Response *SDOResponseT `json:"response"`
 }
 
 func (t *SDOT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

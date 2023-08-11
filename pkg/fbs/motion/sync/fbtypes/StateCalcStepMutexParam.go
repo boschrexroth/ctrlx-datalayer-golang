@@ -7,7 +7,7 @@ import (
 )
 
 type StateCalcStepMutexParamT struct {
-	MutexParam []*MutexGroupPart2T
+	MutexParam []*MutexGroupPart2T `json:"mutexParam"`
 }
 
 func (t *StateCalcStepMutexParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

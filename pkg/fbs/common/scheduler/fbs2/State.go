@@ -8,7 +8,7 @@ import (
 
 /// Type selector of operation state
 type StateT struct {
-	State CurrentState
+	State CurrentState `json:"state"`
 }
 
 func (t *StateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

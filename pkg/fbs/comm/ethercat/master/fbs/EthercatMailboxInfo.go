@@ -7,8 +7,8 @@ import (
 )
 
 type EthercatMailboxInfoT struct {
-	SizeIn uint32
-	SizeOut uint32
+	SizeIn uint32 `json:"sizeIn"`
+	SizeOut uint32 `json:"sizeOut"`
 }
 
 func (t *EthercatMailboxInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

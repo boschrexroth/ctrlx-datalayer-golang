@@ -8,13 +8,16 @@ import (
 
 /// parameters of the axis command add-to-kin
 type AxsCmdAddToKinDataT struct {
-	KinName string
-	Buffered bool
+	KinName string `json:"kinName"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdAddToKinDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	kinNameOffset := builder.CreateString(t.KinName)
+	kinNameOffset := flatbuffers.UOffsetT(0)
+	if t.KinName != "" {
+		kinNameOffset = builder.CreateString(t.KinName)
+	}
 	AxsCmdAddToKinDataStart(builder)
 	AxsCmdAddToKinDataAddKinName(builder, kinNameOffset)
 	AxsCmdAddToKinDataAddBuffered(builder, t.Buffered)

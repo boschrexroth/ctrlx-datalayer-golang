@@ -7,7 +7,7 @@ import (
 )
 
 type AppStateT struct {
-	State State
+	State State `json:"state"`
 }
 
 func (t *AppStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

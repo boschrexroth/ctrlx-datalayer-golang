@@ -7,7 +7,7 @@ import (
 )
 
 type ArrayOfUserTokenTypeT struct {
-	UserTokenArray []*UserTokenTypeT
+	UserTokenArray []*UserTokenTypeT `json:"userTokenArray"`
 }
 
 func (t *ArrayOfUserTokenTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

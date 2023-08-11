@@ -7,14 +7,20 @@ import (
 )
 
 type script_InstanceT struct {
-	Name string
-	Language string
+	Name string `json:"name"`
+	Language string `json:"language"`
 }
 
 func (t *script_InstanceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	languageOffset := builder.CreateString(t.Language)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	languageOffset := flatbuffers.UOffsetT(0)
+	if t.Language != "" {
+		languageOffset = builder.CreateString(t.Language)
+	}
 	script_InstanceStart(builder)
 	script_InstanceAddName(builder, nameOffset)
 	script_InstanceAddLanguage(builder, languageOffset)

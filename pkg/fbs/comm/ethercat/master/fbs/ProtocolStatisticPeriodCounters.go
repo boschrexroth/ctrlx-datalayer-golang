@@ -7,8 +7,8 @@ import (
 )
 
 type ProtocolStatisticPeriodCountersT struct {
-	Total *ProtocolStatisticCountersT
-	LastSecond *ProtocolStatisticCountersT
+	Total *ProtocolStatisticCountersT `json:"total"`
+	LastSecond *ProtocolStatisticCountersT `json:"lastSecond"`
 }
 
 func (t *ProtocolStatisticPeriodCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

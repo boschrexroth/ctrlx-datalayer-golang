@@ -4,7 +4,6 @@ package client
 
 import (
 	"strconv"
-
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -61,13 +60,16 @@ func (t *UserIdentityTokenUnionT) Pack(builder *flatbuffers.Builder) flatbuffers
 func (rcv UserIdentityTokenUnion) UnPack(table flatbuffers.Table) *UserIdentityTokenUnionT {
 	switch rcv {
 	case UserIdentityTokenUnionTokenAnonymous:
-		x := TokenAnonymous{_tab: table}
+		var x TokenAnonymous
+		x.Init(table.Bytes, table.Pos)
 		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenAnonymous, Value: x.UnPack() }
 	case UserIdentityTokenUnionTokenUserPassword:
-		x := TokenUserPassword{_tab: table}
+		var x TokenUserPassword
+		x.Init(table.Bytes, table.Pos)
 		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenUserPassword, Value: x.UnPack() }
 	case UserIdentityTokenUnionTokenCert:
-		x := TokenCert{_tab: table}
+		var x TokenCert
+		x.Init(table.Bytes, table.Pos)
 		return &UserIdentityTokenUnionT{ Type: UserIdentityTokenUnionTokenCert, Value: x.UnPack() }
 	}
 	return nil

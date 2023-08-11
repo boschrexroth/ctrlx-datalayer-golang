@@ -8,31 +8,49 @@ import (
 
 /// informations on the last diagnosis message of this motion object or of the system
 type DiagInfoT struct {
-	MainDiagCode uint32
-	DetailedDiagCode uint32
-	ObjName string
-	ObjURI string
-	Source string
-	AddInfo string
-	FirstMainDiagCode uint32
-	FirstDetailedDiagCode uint32
-	FirstSource string
-	FirstAddInfo string
+	MainDiagCode uint32 `json:"mainDiagCode"`
+	DetailedDiagCode uint32 `json:"detailedDiagCode"`
+	ObjName string `json:"objName"`
+	ObjUri string `json:"objURI"`
+	Source string `json:"source"`
+	AddInfo string `json:"addInfo"`
+	FirstMainDiagCode uint32 `json:"firstMainDiagCode"`
+	FirstDetailedDiagCode uint32 `json:"firstDetailedDiagCode"`
+	FirstSource string `json:"firstSource"`
+	FirstAddInfo string `json:"firstAddInfo"`
 }
 
 func (t *DiagInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objNameOffset := builder.CreateString(t.ObjName)
-	objURIOffset := builder.CreateString(t.ObjURI)
-	sourceOffset := builder.CreateString(t.Source)
-	addInfoOffset := builder.CreateString(t.AddInfo)
-	firstSourceOffset := builder.CreateString(t.FirstSource)
-	firstAddInfoOffset := builder.CreateString(t.FirstAddInfo)
+	objNameOffset := flatbuffers.UOffsetT(0)
+	if t.ObjName != "" {
+		objNameOffset = builder.CreateString(t.ObjName)
+	}
+	objUriOffset := flatbuffers.UOffsetT(0)
+	if t.ObjUri != "" {
+		objUriOffset = builder.CreateString(t.ObjUri)
+	}
+	sourceOffset := flatbuffers.UOffsetT(0)
+	if t.Source != "" {
+		sourceOffset = builder.CreateString(t.Source)
+	}
+	addInfoOffset := flatbuffers.UOffsetT(0)
+	if t.AddInfo != "" {
+		addInfoOffset = builder.CreateString(t.AddInfo)
+	}
+	firstSourceOffset := flatbuffers.UOffsetT(0)
+	if t.FirstSource != "" {
+		firstSourceOffset = builder.CreateString(t.FirstSource)
+	}
+	firstAddInfoOffset := flatbuffers.UOffsetT(0)
+	if t.FirstAddInfo != "" {
+		firstAddInfoOffset = builder.CreateString(t.FirstAddInfo)
+	}
 	DiagInfoStart(builder)
 	DiagInfoAddMainDiagCode(builder, t.MainDiagCode)
 	DiagInfoAddDetailedDiagCode(builder, t.DetailedDiagCode)
 	DiagInfoAddObjName(builder, objNameOffset)
-	DiagInfoAddObjURI(builder, objURIOffset)
+	DiagInfoAddObjUri(builder, objUriOffset)
 	DiagInfoAddSource(builder, sourceOffset)
 	DiagInfoAddAddInfo(builder, addInfoOffset)
 	DiagInfoAddFirstMainDiagCode(builder, t.FirstMainDiagCode)
@@ -46,7 +64,7 @@ func (rcv *DiagInfo) UnPackTo(t *DiagInfoT) {
 	t.MainDiagCode = rcv.MainDiagCode()
 	t.DetailedDiagCode = rcv.DetailedDiagCode()
 	t.ObjName = string(rcv.ObjName())
-	t.ObjURI = string(rcv.ObjURI())
+	t.ObjUri = string(rcv.ObjUri())
 	t.Source = string(rcv.Source())
 	t.AddInfo = string(rcv.AddInfo())
 	t.FirstMainDiagCode = rcv.FirstMainDiagCode()
@@ -128,7 +146,7 @@ func (rcv *DiagInfo) ObjName() []byte {
 
 /// name of the motion object
 /// URI of the motion object
-func (rcv *DiagInfo) ObjURI() []byte {
+func (rcv *DiagInfo) ObjUri() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -217,8 +235,8 @@ func DiagInfoAddDetailedDiagCode(builder *flatbuffers.Builder, detailedDiagCode 
 func DiagInfoAddObjName(builder *flatbuffers.Builder, objName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(objName), 0)
 }
-func DiagInfoAddObjURI(builder *flatbuffers.Builder, objURI flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(objURI), 0)
+func DiagInfoAddObjUri(builder *flatbuffers.Builder, objUri flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(objUri), 0)
 }
 func DiagInfoAddSource(builder *flatbuffers.Builder, source flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(source), 0)

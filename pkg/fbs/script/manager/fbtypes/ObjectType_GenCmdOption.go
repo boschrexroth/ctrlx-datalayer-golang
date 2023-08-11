@@ -4,27 +4,27 @@ package fbtypes
 
 import "strconv"
 
-type ObjectTypeGenCmdOption int8
+type ObjectType_GenCmdOption int8
 
 const (
-	ObjectType_GenCmdOptionUNKNOWN ObjectTypeGenCmdOption = 0
-	ObjectType_GenCmdOptionAXS     ObjectTypeGenCmdOption = 1
-	ObjectType_GenCmdOptionKIN     ObjectTypeGenCmdOption = 2
+	ObjectType_GenCmdOptionUNKNOWN ObjectType_GenCmdOption = 0
+	ObjectType_GenCmdOptionAXS     ObjectType_GenCmdOption = 1
+	ObjectType_GenCmdOptionKIN     ObjectType_GenCmdOption = 2
 )
 
-var EnumNamesObjectType_GenCmdOption = map[ObjectTypeGenCmdOption]string{
+var EnumNamesObjectType_GenCmdOption = map[ObjectType_GenCmdOption]string{
 	ObjectType_GenCmdOptionUNKNOWN: "UNKNOWN",
 	ObjectType_GenCmdOptionAXS:     "AXS",
 	ObjectType_GenCmdOptionKIN:     "KIN",
 }
 
-var EnumValuesObjectType_GenCmdOption = map[string]ObjectTypeGenCmdOption{
+var EnumValuesObjectType_GenCmdOption = map[string]ObjectType_GenCmdOption{
 	"UNKNOWN": ObjectType_GenCmdOptionUNKNOWN,
 	"AXS":     ObjectType_GenCmdOptionAXS,
 	"KIN":     ObjectType_GenCmdOptionKIN,
 }
 
-func (v ObjectTypeGenCmdOption) String() string {
+func (v ObjectType_GenCmdOption) String() string {
 	if s, ok := EnumNamesObjectType_GenCmdOption[v]; ok {
 		return s
 	}

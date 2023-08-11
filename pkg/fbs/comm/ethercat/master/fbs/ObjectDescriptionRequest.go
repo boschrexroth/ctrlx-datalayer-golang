@@ -7,10 +7,10 @@ import (
 )
 
 type ObjectDescriptionRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	ObjectIndex uint16
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	ObjectIndex uint16 `json:"objectIndex"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *ObjectDescriptionRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

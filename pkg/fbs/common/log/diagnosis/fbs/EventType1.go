@@ -8,7 +8,7 @@ import (
 
 /// This table defines the generic event type 1 that is used to evaluate specific diagnostic events.
 type EventType1T struct {
-	EventCounter uint64
+	EventCounter uint64 `json:"eventCounter"`
 }
 
 func (t *EventType1T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

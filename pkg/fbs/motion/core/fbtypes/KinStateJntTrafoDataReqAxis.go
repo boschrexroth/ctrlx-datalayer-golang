@@ -8,20 +8,32 @@ import (
 
 /// data of a single entry of a required axis of a joint transformation when reading all data of an implemented joint transformation
 type KinStateJntTrafoDataReqAxisT struct {
-	Name string
-	Description string
-	Image string
-	DocRef string
-	Type KinStateJntTrafoDataReqAxisType
-	Mandatory bool
+	Name string `json:"name"`
+	Description string `json:"description"`
+	Image string `json:"image"`
+	DocRef string `json:"docRef"`
+	Type KinStateJntTrafoDataReqAxisType `json:"type"`
+	Mandatory bool `json:"mandatory"`
 }
 
 func (t *KinStateJntTrafoDataReqAxisT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
-	imageOffset := builder.CreateString(t.Image)
-	docRefOffset := builder.CreateString(t.DocRef)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
+	imageOffset := flatbuffers.UOffsetT(0)
+	if t.Image != "" {
+		imageOffset = builder.CreateString(t.Image)
+	}
+	docRefOffset := flatbuffers.UOffsetT(0)
+	if t.DocRef != "" {
+		docRefOffset = builder.CreateString(t.DocRef)
+	}
 	KinStateJntTrafoDataReqAxisStart(builder)
 	KinStateJntTrafoDataReqAxisAddName(builder, nameOffset)
 	KinStateJntTrafoDataReqAxisAddDescription(builder, descriptionOffset)

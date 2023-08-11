@@ -7,13 +7,13 @@ import (
 )
 
 type SDORequestT struct {
-	AddressType Addresstype
-	Address uint16
-	ObjectIndex uint16
-	SubIndex byte
-	Flags SDOFlags
-	Data []byte
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	ObjectIndex uint16 `json:"objectIndex"`
+	SubIndex byte `json:"subIndex"`
+	Flags SDOFlags `json:"flags"`
+	Data []byte `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *SDORequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

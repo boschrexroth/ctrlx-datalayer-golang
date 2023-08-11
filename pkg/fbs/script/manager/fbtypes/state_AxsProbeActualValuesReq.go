@@ -8,14 +8,20 @@ import (
 
 /// currently the actual values of the probe
 type state_AxsProbeActualValuesReqT struct {
-	ObjName string
-	ProbeIndex string
+	ObjName string `json:"objName"`
+	ProbeIndex string `json:"probeIndex"`
 }
 
 func (t *state_AxsProbeActualValuesReqT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objNameOffset := builder.CreateString(t.ObjName)
-	probeIndexOffset := builder.CreateString(t.ProbeIndex)
+	objNameOffset := flatbuffers.UOffsetT(0)
+	if t.ObjName != "" {
+		objNameOffset = builder.CreateString(t.ObjName)
+	}
+	probeIndexOffset := flatbuffers.UOffsetT(0)
+	if t.ProbeIndex != "" {
+		probeIndexOffset = builder.CreateString(t.ProbeIndex)
+	}
 	state_AxsProbeActualValuesReqStart(builder)
 	state_AxsProbeActualValuesReqAddObjName(builder, objNameOffset)
 	state_AxsProbeActualValuesReqAddProbeIndex(builder, probeIndexOffset)

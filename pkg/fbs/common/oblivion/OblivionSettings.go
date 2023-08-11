@@ -7,12 +7,12 @@ import (
 )
 
 type OblivionSettingsT struct {
-	HashSize uint32
-	Ignore uint32
-	StackDepth uint32
-	RecordType RecordType
-	ObserveThread uint64
-	StackUsage bool
+	HashSize uint32 `json:"hashSize"`
+	Ignore uint32 `json:"ignore"`
+	StackDepth uint32 `json:"stackDepth"`
+	RecordType RecordType `json:"recordType"`
+	ObserveThread uint64 `json:"observeThread"`
+	StackUsage bool `json:"stackUsage"`
 }
 
 func (t *OblivionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

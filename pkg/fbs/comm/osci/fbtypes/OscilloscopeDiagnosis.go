@@ -7,14 +7,17 @@ import (
 )
 
 type OscilloscopeDiagnosisT struct {
-	MainDiagnosisCode uint32
-	DetailedDiagnosisCode uint32
-	DynamicDescription string
+	MainDiagnosisCode uint32 `json:"mainDiagnosisCode"`
+	DetailedDiagnosisCode uint32 `json:"detailedDiagnosisCode"`
+	DynamicDescription string `json:"dynamicDescription"`
 }
 
 func (t *OscilloscopeDiagnosisT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	dynamicDescriptionOffset := flatbuffers.UOffsetT(0)
+	if t.DynamicDescription != "" {
+		dynamicDescriptionOffset = builder.CreateString(t.DynamicDescription)
+	}
 	OscilloscopeDiagnosisStart(builder)
 	OscilloscopeDiagnosisAddMainDiagnosisCode(builder, t.MainDiagnosisCode)
 	OscilloscopeDiagnosisAddDetailedDiagnosisCode(builder, t.DetailedDiagnosisCode)

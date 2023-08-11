@@ -7,7 +7,7 @@ import (
 )
 
 type LicenseCapabilitiesT struct {
-	Capabilities []*LicenseCapabilityT
+	Capabilities []*LicenseCapabilityT `json:"capabilities"`
 }
 
 func (t *LicenseCapabilitiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

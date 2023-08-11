@@ -7,9 +7,9 @@ import (
 )
 
 type OscilloscopeStateT struct {
-	Opstate OscilloscopeStateEnum
-	Diagnosis *OscilloscopeDiagnosisT
-	BufferLevel float64
+	Opstate OscilloscopeStateEnum `json:"opstate"`
+	Diagnosis *OscilloscopeDiagnosisT `json:"diagnosis"`
+	BufferLevel float64 `json:"bufferLevel"`
 }
 
 func (t *OscilloscopeStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

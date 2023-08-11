@@ -8,7 +8,7 @@ import (
 
 /// Data of all axes that are currently added to the kinematics
 type KinAxsAllT struct {
-	Info []*KinAxsSingleT
+	Info []*KinAxsSingleT `json:"info"`
 }
 
 func (t *KinAxsAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -84,6 +84,15 @@ func (rcv *KinAxsAll) Info(obj *KinAxsSingle, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *KinAxsAll) InfoByKey(obj *KinAxsSingle, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

@@ -7,14 +7,20 @@ import (
 )
 
 type CheckOperationsT struct {
-	Address string
-	Token string
+	Address string `json:"address"`
+	Token string `json:"token"`
 }
 
 func (t *CheckOperationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	addressOffset := builder.CreateString(t.Address)
-	tokenOffset := builder.CreateString(t.Token)
+	addressOffset := flatbuffers.UOffsetT(0)
+	if t.Address != "" {
+		addressOffset = builder.CreateString(t.Address)
+	}
+	tokenOffset := flatbuffers.UOffsetT(0)
+	if t.Token != "" {
+		tokenOffset = builder.CreateString(t.Token)
+	}
 	CheckOperationsStart(builder)
 	CheckOperationsAddAddress(builder, addressOffset)
 	CheckOperationsAddToken(builder, tokenOffset)

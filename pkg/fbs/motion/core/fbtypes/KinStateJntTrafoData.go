@@ -8,7 +8,7 @@ import (
 
 /// data of all registered joint transformations when reading all data of implemented joint transformations
 type KinStateJntTrafoDataT struct {
-	JntTrafoData []*KinStateJntTrafoDataSingleT
+	JntTrafoData []*KinStateJntTrafoDataSingleT `json:"jntTrafoData"`
 }
 
 func (t *KinStateJntTrafoDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

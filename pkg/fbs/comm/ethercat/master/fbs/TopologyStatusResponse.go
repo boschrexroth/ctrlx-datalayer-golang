@@ -7,8 +7,8 @@ import (
 )
 
 type TopologyStatusResponseT struct {
-	State TopologyState
-	NumChanges uint32
+	State TopologyState `json:"state"`
+	NumChanges uint32 `json:"numChanges"`
 }
 
 func (t *TopologyStatusResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,7 +7,7 @@ import (
 )
 
 type CfgGlobalT struct {
-	InitScript *CfgInitScriptT
+	InitScript *CfgInitScriptT `json:"initScript"`
 }
 
 func (t *CfgGlobalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

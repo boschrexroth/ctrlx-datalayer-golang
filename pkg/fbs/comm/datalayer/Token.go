@@ -7,13 +7,13 @@ import (
 )
 
 type TokenT struct {
-	Claims []*ClaimT
-	Id string
-	Iat uint64
-	Exp uint64
-	Name string
-	Plchandle uint64
-	Scope []string
+	Claims []*ClaimT `json:"claims"`
+	Id string `json:"id"`
+	Iat uint64 `json:"iat"`
+	Exp uint64 `json:"exp"`
+	Name string `json:"name"`
+	Plchandle uint64 `json:"plchandle"`
+	Scope []string `json:"scope"`
 }
 
 func (t *TokenT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,8 +31,14 @@ func (t *TokenT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		claimsOffset = builder.EndVector(claimsLength)
 	}
-	idOffset := builder.CreateString(t.Id)
-	nameOffset := builder.CreateString(t.Name)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	scopeOffset := flatbuffers.UOffsetT(0)
 	if t.Scope != nil {
 		scopeLength := len(t.Scope)
@@ -120,6 +126,15 @@ func (rcv *Token) Claims(obj *Claim, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Token) ClaimsByKey(obj *Claim, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

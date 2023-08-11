@@ -7,11 +7,11 @@ import (
 )
 
 type SlaveEepromRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	EepromOffset uint16
-	Data []uint16
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	EepromOffset uint16 `json:"eepromOffset"`
+	Data []uint16 `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *SlaveEepromRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

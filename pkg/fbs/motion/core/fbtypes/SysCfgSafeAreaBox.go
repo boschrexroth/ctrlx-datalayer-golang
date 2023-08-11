@@ -8,15 +8,18 @@ import (
 
 /// configuration of the limits in a single dimension of the box of a single safe area
 type SysCfgSafeAreaBoxT struct {
-	Min float64
-	Max float64
-	Unit string
-	Active bool
+	Min float64 `json:"min"`
+	Max float64 `json:"max"`
+	Unit string `json:"unit"`
+	Active bool `json:"active"`
 }
 
 func (t *SysCfgSafeAreaBoxT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	unitOffset := builder.CreateString(t.Unit)
+	unitOffset := flatbuffers.UOffsetT(0)
+	if t.Unit != "" {
+		unitOffset = builder.CreateString(t.Unit)
+	}
 	SysCfgSafeAreaBoxStart(builder)
 	SysCfgSafeAreaBoxAddMin(builder, t.Min)
 	SysCfgSafeAreaBoxAddMax(builder, t.Max)

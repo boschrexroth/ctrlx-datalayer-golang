@@ -7,7 +7,7 @@ import (
 )
 
 type StackUsageT struct {
-	Stacks []*StackInfoT
+	Stacks []*StackInfoT `json:"stacks"`
 }
 
 func (t *StackUsageT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

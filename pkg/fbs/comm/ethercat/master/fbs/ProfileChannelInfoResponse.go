@@ -7,18 +7,21 @@ import (
 )
 
 type ProfileChannelInfoResponseT struct {
-	ProfileNo uint16
-	AddInfo uint16
-	DisplayName string
+	ProfileNo uint16 `json:"ProfileNo"`
+	AddInfo uint16 `json:"AddInfo"`
+	DisplayName string `json:"DisplayName"`
 }
 
 func (t *ProfileChannelInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	DisplayNameOffset := builder.CreateString(t.DisplayName)
+	displayNameOffset := flatbuffers.UOffsetT(0)
+	if t.DisplayName != "" {
+		displayNameOffset = builder.CreateString(t.DisplayName)
+	}
 	ProfileChannelInfoResponseStart(builder)
 	ProfileChannelInfoResponseAddProfileNo(builder, t.ProfileNo)
 	ProfileChannelInfoResponseAddAddInfo(builder, t.AddInfo)
-	ProfileChannelInfoResponseAddDisplayName(builder, DisplayNameOffset)
+	ProfileChannelInfoResponseAddDisplayName(builder, displayNameOffset)
 	return ProfileChannelInfoResponseEnd(builder)
 }
 
@@ -97,14 +100,14 @@ func (rcv *ProfileChannelInfoResponse) DisplayName() []byte {
 func ProfileChannelInfoResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func ProfileChannelInfoResponseAddProfileNo(builder *flatbuffers.Builder, ProfileNo uint16) {
-	builder.PrependUint16Slot(0, ProfileNo, 0)
+func ProfileChannelInfoResponseAddProfileNo(builder *flatbuffers.Builder, profileNo uint16) {
+	builder.PrependUint16Slot(0, profileNo, 0)
 }
-func ProfileChannelInfoResponseAddAddInfo(builder *flatbuffers.Builder, AddInfo uint16) {
-	builder.PrependUint16Slot(1, AddInfo, 0)
+func ProfileChannelInfoResponseAddAddInfo(builder *flatbuffers.Builder, addInfo uint16) {
+	builder.PrependUint16Slot(1, addInfo, 0)
 }
-func ProfileChannelInfoResponseAddDisplayName(builder *flatbuffers.Builder, DisplayName flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(DisplayName), 0)
+func ProfileChannelInfoResponseAddDisplayName(builder *flatbuffers.Builder, displayName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(displayName), 0)
 }
 func ProfileChannelInfoResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

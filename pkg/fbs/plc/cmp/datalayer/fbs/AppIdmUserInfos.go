@@ -7,7 +7,7 @@ import (
 )
 
 type AppIdmUserInfosT struct {
-	Info []*AppIdmUserInfoT
+	Info []*AppIdmUserInfoT `json:"info"`
 }
 
 func (t *AppIdmUserInfosT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

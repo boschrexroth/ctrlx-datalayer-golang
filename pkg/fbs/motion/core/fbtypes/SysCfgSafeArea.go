@@ -8,16 +8,22 @@ import (
 
 /// configuration of a single safe area or work area
 type SysCfgSafeAreaT struct {
-	Name string
-	CoordSystem string
-	Type SafeAreaType
-	Box []*SysCfgSafeAreaBoxT
+	Name string `json:"name"`
+	CoordSystem string `json:"coordSystem"`
+	Type SafeAreaType `json:"type"`
+	Box []*SysCfgSafeAreaBoxT `json:"box"`
 }
 
 func (t *SysCfgSafeAreaT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	coordSystemOffset := builder.CreateString(t.CoordSystem)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	coordSystemOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSystem != "" {
+		coordSystemOffset = builder.CreateString(t.CoordSystem)
+	}
 	boxOffset := flatbuffers.UOffsetT(0)
 	if t.Box != nil {
 		boxLength := len(t.Box)

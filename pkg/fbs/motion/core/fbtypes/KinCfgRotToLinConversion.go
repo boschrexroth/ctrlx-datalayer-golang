@@ -8,15 +8,21 @@ import (
 
 /// common configuration of orientation. Conversion factor for the relation between linear values and rotation values.
 type KinCfgRotToLinConversionT struct {
-	Factor float64
-	UnitLin string
-	UnitRot string
+	Factor float64 `json:"factor"`
+	UnitLin string `json:"unit_lin"`
+	UnitRot string `json:"unit_rot"`
 }
 
 func (t *KinCfgRotToLinConversionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	unitLinOffset := builder.CreateString(t.UnitLin)
-	unitRotOffset := builder.CreateString(t.UnitRot)
+	unitLinOffset := flatbuffers.UOffsetT(0)
+	if t.UnitLin != "" {
+		unitLinOffset = builder.CreateString(t.UnitLin)
+	}
+	unitRotOffset := flatbuffers.UOffsetT(0)
+	if t.UnitRot != "" {
+		unitRotOffset = builder.CreateString(t.UnitRot)
+	}
 	KinCfgRotToLinConversionStart(builder)
 	KinCfgRotToLinConversionAddFactor(builder, t.Factor)
 	KinCfgRotToLinConversionAddUnitLin(builder, unitLinOffset)

@@ -7,10 +7,10 @@ import (
 )
 
 type Cmd_KinMoveDirectT struct {
-	Base *Cmd_BaseT
-	Pos []float64
-	CoordSys string
-	Buffered bool
+	Base *Cmd_BaseT `json:"base"`
+	Pos []float64 `json:"pos"`
+	CoordSys string `json:"coordSys"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *Cmd_KinMoveDirectT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *Cmd_KinMoveDirectT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		}
 		posOffset = builder.EndVector(posLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	Cmd_KinMoveDirectStart(builder)
 	Cmd_KinMoveDirectAddBase(builder, baseOffset)
 	Cmd_KinMoveDirectAddPos(builder, posOffset)

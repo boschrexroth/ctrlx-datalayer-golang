@@ -8,7 +8,7 @@ import (
 
 /// This table defines the state of one diagnostic log in the pending diagnostics.
 type PendingDiagnosticStateT struct {
-	PendingDiagnosticState State
+	PendingDiagnosticState State `json:"pendingDiagnosticState"`
 }
 
 func (t *PendingDiagnosticStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

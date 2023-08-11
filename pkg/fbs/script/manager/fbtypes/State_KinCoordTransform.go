@@ -7,15 +7,18 @@ import (
 )
 
 type State_KinCoordTransformT struct {
-	ObjName string
-	PosIn []float64
-	CoordSysIn string
-	CoordSysOut string
+	ObjName string `json:"objName"`
+	PosIn []float64 `json:"posIn"`
+	CoordSysIn string `json:"coordSysIn"`
+	CoordSysOut string `json:"coordSysOut"`
 }
 
 func (t *State_KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objNameOffset := builder.CreateString(t.ObjName)
+	objNameOffset := flatbuffers.UOffsetT(0)
+	if t.ObjName != "" {
+		objNameOffset = builder.CreateString(t.ObjName)
+	}
 	posInOffset := flatbuffers.UOffsetT(0)
 	if t.PosIn != nil {
 		posInLength := len(t.PosIn)
@@ -25,8 +28,14 @@ func (t *State_KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffer
 		}
 		posInOffset = builder.EndVector(posInLength)
 	}
-	coordSysInOffset := builder.CreateString(t.CoordSysIn)
-	coordSysOutOffset := builder.CreateString(t.CoordSysOut)
+	coordSysInOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSysIn != "" {
+		coordSysInOffset = builder.CreateString(t.CoordSysIn)
+	}
+	coordSysOutOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSysOut != "" {
+		coordSysOutOffset = builder.CreateString(t.CoordSysOut)
+	}
 	State_KinCoordTransformStart(builder)
 	State_KinCoordTransformAddObjName(builder, objNameOffset)
 	State_KinCoordTransformAddPosIn(builder, posInOffset)

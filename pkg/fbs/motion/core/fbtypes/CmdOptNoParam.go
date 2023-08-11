@@ -8,12 +8,15 @@ import (
 
 /// parameters for all command options, that have no parameters (except the perm. type)
 type CmdOptNoParamT struct {
-	PermType string
+	PermType string `json:"permType"`
 }
 
 func (t *CmdOptNoParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	CmdOptNoParamStart(builder)
 	CmdOptNoParamAddPermType(builder, permTypeOffset)
 	return CmdOptNoParamEnd(builder)

@@ -7,13 +7,16 @@ import (
 )
 
 type DiagramCfgT struct {
-	Name string
-	Channels []*ViewChannelT
+	Name string `json:"name"`
+	Channels []*ViewChannelT `json:"channels"`
 }
 
 func (t *DiagramCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	channelsOffset := flatbuffers.UOffsetT(0)
 	if t.Channels != nil {
 		channelsLength := len(t.Channels)

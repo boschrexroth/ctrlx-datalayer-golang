@@ -8,8 +8,8 @@ import (
 
 /// configuration of realtime input buffer system
 type RealtimeConfigT struct {
-	DefaultInputAcessType AccessType
-	NTelBufConfig *NTelBufferConfigT
+	DefaultInputAcessType AccessType `json:"defaultInputAcessType"`
+	NTelBufConfig *NTelBufferConfigT `json:"nTelBufConfig"`
 }
 
 func (t *RealtimeConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

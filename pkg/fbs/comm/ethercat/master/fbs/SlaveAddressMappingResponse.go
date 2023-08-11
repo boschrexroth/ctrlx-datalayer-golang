@@ -7,33 +7,33 @@ import (
 )
 
 type SlaveAddressMappingResponseT struct {
-	AddressMappingEntryList []*AddressMappingEntryT
+	AddressMappingEntryList []*AddressMappingEntryT `json:"AddressMappingEntryList"`
 }
 
 func (t *SlaveAddressMappingResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	AddressMappingEntryListOffset := flatbuffers.UOffsetT(0)
+	addressMappingEntryListOffset := flatbuffers.UOffsetT(0)
 	if t.AddressMappingEntryList != nil {
-		AddressMappingEntryListLength := len(t.AddressMappingEntryList)
-		AddressMappingEntryListOffsets := make([]flatbuffers.UOffsetT, AddressMappingEntryListLength)
-		for j := 0; j < AddressMappingEntryListLength; j++ {
-			AddressMappingEntryListOffsets[j] = t.AddressMappingEntryList[j].Pack(builder)
+		addressMappingEntryListLength := len(t.AddressMappingEntryList)
+		addressMappingEntryListOffsets := make([]flatbuffers.UOffsetT, addressMappingEntryListLength)
+		for j := 0; j < addressMappingEntryListLength; j++ {
+			addressMappingEntryListOffsets[j] = t.AddressMappingEntryList[j].Pack(builder)
 		}
-		SlaveAddressMappingResponseStartAddressMappingEntryListVector(builder, AddressMappingEntryListLength)
-		for j := AddressMappingEntryListLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(AddressMappingEntryListOffsets[j])
+		SlaveAddressMappingResponseStartAddressMappingEntryListVector(builder, addressMappingEntryListLength)
+		for j := addressMappingEntryListLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(addressMappingEntryListOffsets[j])
 		}
-		AddressMappingEntryListOffset = builder.EndVector(AddressMappingEntryListLength)
+		addressMappingEntryListOffset = builder.EndVector(addressMappingEntryListLength)
 	}
 	SlaveAddressMappingResponseStart(builder)
-	SlaveAddressMappingResponseAddAddressMappingEntryList(builder, AddressMappingEntryListOffset)
+	SlaveAddressMappingResponseAddAddressMappingEntryList(builder, addressMappingEntryListOffset)
 	return SlaveAddressMappingResponseEnd(builder)
 }
 
 func (rcv *SlaveAddressMappingResponse) UnPackTo(t *SlaveAddressMappingResponseT) {
-	AddressMappingEntryListLength := rcv.AddressMappingEntryListLength()
-	t.AddressMappingEntryList = make([]*AddressMappingEntryT, AddressMappingEntryListLength)
-	for j := 0; j < AddressMappingEntryListLength; j++ {
+	addressMappingEntryListLength := rcv.AddressMappingEntryListLength()
+	t.AddressMappingEntryList = make([]*AddressMappingEntryT, addressMappingEntryListLength)
+	for j := 0; j < addressMappingEntryListLength; j++ {
 		x := AddressMappingEntry{}
 		rcv.AddressMappingEntryList(&x, j)
 		t.AddressMappingEntryList[j] = x.UnPack()
@@ -97,8 +97,8 @@ func (rcv *SlaveAddressMappingResponse) AddressMappingEntryListLength() int {
 func SlaveAddressMappingResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }
-func SlaveAddressMappingResponseAddAddressMappingEntryList(builder *flatbuffers.Builder, AddressMappingEntryList flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(AddressMappingEntryList), 0)
+func SlaveAddressMappingResponseAddAddressMappingEntryList(builder *flatbuffers.Builder, addressMappingEntryList flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(addressMappingEntryList), 0)
 }
 func SlaveAddressMappingResponseStartAddressMappingEntryListVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)

@@ -7,18 +7,21 @@ import (
 )
 
 type ServerStatusTypeT struct {
-	BuildInfo *BuildInfoTypeT
-	CurrentTime uint32
-	SecondsTillShutdown uint32
-	ShutdownReason string
-	StartTime uint32
-	State EnumServerState
+	BuildInfo *BuildInfoTypeT `json:"buildInfo"`
+	CurrentTime uint32 `json:"currentTime"`
+	SecondsTillShutdown uint32 `json:"secondsTillShutdown"`
+	ShutdownReason string `json:"shutdownReason"`
+	StartTime uint32 `json:"startTime"`
+	State EnumServerState `json:"state"`
 }
 
 func (t *ServerStatusTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	buildInfoOffset := t.BuildInfo.Pack(builder)
-	shutdownReasonOffset := builder.CreateString(t.ShutdownReason)
+	shutdownReasonOffset := flatbuffers.UOffsetT(0)
+	if t.ShutdownReason != "" {
+		shutdownReasonOffset = builder.CreateString(t.ShutdownReason)
+	}
 	ServerStatusTypeStart(builder)
 	ServerStatusTypeAddBuildInfo(builder, buildInfoOffset)
 	ServerStatusTypeAddCurrentTime(builder, t.CurrentTime)

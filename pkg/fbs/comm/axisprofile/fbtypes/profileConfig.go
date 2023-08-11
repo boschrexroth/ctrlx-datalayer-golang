@@ -7,25 +7,34 @@ import (
 )
 
 type profileConfigT struct {
-	DeviceAddress uint32
-	InputBuffer string
-	OutputBuffer string
-	ProfileBasicData *profileT
-	InputMapping *valueMappingT
-	OutputMapping *valueMappingT
-	ScalingInfo *profileScalingCfgT
-	DeviceName string
+	DeviceAddress uint32 `json:"deviceAddress"`
+	InputBuffer string `json:"inputBuffer"`
+	OutputBuffer string `json:"outputBuffer"`
+	ProfileBasicData *profileT `json:"profileBasicData"`
+	InputMapping *valueMappingT `json:"inputMapping"`
+	OutputMapping *valueMappingT `json:"outputMapping"`
+	ScalingInfo *profileScalingCfgT `json:"scalingInfo"`
+	DeviceName string `json:"deviceName"`
 }
 
 func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	inputBufferOffset := builder.CreateString(t.InputBuffer)
-	outputBufferOffset := builder.CreateString(t.OutputBuffer)
+	inputBufferOffset := flatbuffers.UOffsetT(0)
+	if t.InputBuffer != "" {
+		inputBufferOffset = builder.CreateString(t.InputBuffer)
+	}
+	outputBufferOffset := flatbuffers.UOffsetT(0)
+	if t.OutputBuffer != "" {
+		outputBufferOffset = builder.CreateString(t.OutputBuffer)
+	}
 	profileBasicDataOffset := t.ProfileBasicData.Pack(builder)
 	inputMappingOffset := t.InputMapping.Pack(builder)
 	outputMappingOffset := t.OutputMapping.Pack(builder)
 	scalingInfoOffset := t.ScalingInfo.Pack(builder)
-	deviceNameOffset := builder.CreateString(t.DeviceName)
+	deviceNameOffset := flatbuffers.UOffsetT(0)
+	if t.DeviceName != "" {
+		deviceNameOffset = builder.CreateString(t.DeviceName)
+	}
 	profileConfigStart(builder)
 	profileConfigAddDeviceAddress(builder, t.DeviceAddress)
 	profileConfigAddInputBuffer(builder, inputBufferOffset)

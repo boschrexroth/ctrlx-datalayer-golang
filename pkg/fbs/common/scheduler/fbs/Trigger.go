@@ -8,7 +8,7 @@ import (
 
 /// Type selector of trigger sources of Scheduler
 type TriggerT struct {
-	Trigger CurrentTrigger
+	Trigger CurrentTrigger `json:"trigger"`
 }
 
 func (t *TriggerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,16 +8,22 @@ import (
 
 /// configuration for E-Stop dynamic limitation
 type AxsCfgEstopDynamicLimitsT struct {
-	Dec float64
-	JrkDec float64
-	DecUnit string
-	JrkDecUnit string
+	Dec float64 `json:"dec"`
+	JrkDec float64 `json:"jrkDec"`
+	DecUnit string `json:"decUnit"`
+	JrkDecUnit string `json:"jrkDecUnit"`
 }
 
 func (t *AxsCfgEstopDynamicLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	decUnitOffset := builder.CreateString(t.DecUnit)
-	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	decUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DecUnit != "" {
+		decUnitOffset = builder.CreateString(t.DecUnit)
+	}
+	jrkDecUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkDecUnit != "" {
+		jrkDecUnitOffset = builder.CreateString(t.JrkDecUnit)
+	}
 	AxsCfgEstopDynamicLimitsStart(builder)
 	AxsCfgEstopDynamicLimitsAddDec(builder, t.Dec)
 	AxsCfgEstopDynamicLimitsAddJrkDec(builder, t.JrkDec)

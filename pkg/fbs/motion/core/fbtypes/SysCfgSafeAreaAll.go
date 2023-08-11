@@ -8,7 +8,7 @@ import (
 
 /// configuration of all safe areas and work areas for the whole motion system
 type SysCfgSafeAreaAllT struct {
-	SafeAreas []*SysCfgSafeAreaT
+	SafeAreas []*SysCfgSafeAreaT `json:"safeAreas"`
 }
 
 func (t *SysCfgSafeAreaAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

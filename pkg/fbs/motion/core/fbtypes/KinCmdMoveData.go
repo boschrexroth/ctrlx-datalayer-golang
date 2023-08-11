@@ -8,10 +8,10 @@ import (
 
 /// parameters for the move linear commands for a kinematics
 type KinCmdMoveDataT struct {
-	KinPos []float64
-	CoordSys string
-	Lim *DynamicLimitsT
-	Buffered bool
+	KinPos []float64 `json:"kinPos"`
+	CoordSys string `json:"coordSys"`
+	Lim *DynamicLimitsT `json:"lim"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *KinCmdMoveDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *KinCmdMoveDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 		}
 		kinPosOffset = builder.EndVector(kinPosLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	limOffset := t.Lim.Pack(builder)
 	KinCmdMoveDataStart(builder)
 	KinCmdMoveDataAddKinPos(builder, kinPosOffset)

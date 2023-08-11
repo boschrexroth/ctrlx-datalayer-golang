@@ -8,9 +8,9 @@ import (
 
 /// parameters for the move direct commands for a kinematics
 type KinCmdMoveDirectDataT struct {
-	KinPos []float64
-	CoordSys string
-	Buffered bool
+	KinPos []float64 `json:"kinPos"`
+	CoordSys string `json:"coordSys"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *KinCmdMoveDirectDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,7 +24,10 @@ func (t *KinCmdMoveDirectDataT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 		}
 		kinPosOffset = builder.EndVector(kinPosLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	KinCmdMoveDirectDataStart(builder)
 	KinCmdMoveDirectDataAddKinPos(builder, kinPosOffset)
 	KinCmdMoveDirectDataAddCoordSys(builder, coordSysOffset)

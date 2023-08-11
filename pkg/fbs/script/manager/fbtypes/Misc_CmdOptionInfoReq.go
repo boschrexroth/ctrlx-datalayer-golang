@@ -7,14 +7,17 @@ import (
 )
 
 type Misc_CmdOptionInfoReqT struct {
-	CmdName string
-	ObjType ObjectTypeCmdOptionInfoReq
-	CmdType CmdTypeCmdOptionInfoReq
+	CmdName string `json:"cmdName"`
+	ObjType ObjectType_CmdOptionInfoReq `json:"objType"`
+	CmdType CmdType_CmdOptionInfoReq `json:"cmdType"`
 }
 
 func (t *Misc_CmdOptionInfoReqT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	cmdNameOffset := builder.CreateString(t.CmdName)
+	cmdNameOffset := flatbuffers.UOffsetT(0)
+	if t.CmdName != "" {
+		cmdNameOffset = builder.CreateString(t.CmdName)
+	}
 	Misc_CmdOptionInfoReqStart(builder)
 	Misc_CmdOptionInfoReqAddCmdName(builder, cmdNameOffset)
 	Misc_CmdOptionInfoReqAddObjType(builder, t.ObjType)
@@ -70,27 +73,27 @@ func (rcv *Misc_CmdOptionInfoReq) CmdName() []byte {
 	return nil
 }
 
-func (rcv *Misc_CmdOptionInfoReq) ObjType() ObjectTypeCmdOptionInfoReq {
+func (rcv *Misc_CmdOptionInfoReq) ObjType() ObjectType_CmdOptionInfoReq {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return ObjectTypeCmdOptionInfoReq(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return ObjectType_CmdOptionInfoReq(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Misc_CmdOptionInfoReq) MutateObjType(n ObjectTypeCmdOptionInfoReq) bool {
+func (rcv *Misc_CmdOptionInfoReq) MutateObjType(n ObjectType_CmdOptionInfoReq) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
-func (rcv *Misc_CmdOptionInfoReq) CmdType() CmdTypeCmdOptionInfoReq {
+func (rcv *Misc_CmdOptionInfoReq) CmdType() CmdType_CmdOptionInfoReq {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return CmdTypeCmdOptionInfoReq(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return CmdType_CmdOptionInfoReq(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Misc_CmdOptionInfoReq) MutateCmdType(n CmdTypeCmdOptionInfoReq) bool {
+func (rcv *Misc_CmdOptionInfoReq) MutateCmdType(n CmdType_CmdOptionInfoReq) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
@@ -100,10 +103,10 @@ func Misc_CmdOptionInfoReqStart(builder *flatbuffers.Builder) {
 func Misc_CmdOptionInfoReqAddCmdName(builder *flatbuffers.Builder, cmdName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(cmdName), 0)
 }
-func Misc_CmdOptionInfoReqAddObjType(builder *flatbuffers.Builder, objType ObjectTypeCmdOptionInfoReq) {
+func Misc_CmdOptionInfoReqAddObjType(builder *flatbuffers.Builder, objType ObjectType_CmdOptionInfoReq) {
 	builder.PrependInt8Slot(1, int8(objType), 0)
 }
-func Misc_CmdOptionInfoReqAddCmdType(builder *flatbuffers.Builder, cmdType CmdTypeCmdOptionInfoReq) {
+func Misc_CmdOptionInfoReqAddCmdType(builder *flatbuffers.Builder, cmdType CmdType_CmdOptionInfoReq) {
 	builder.PrependInt8Slot(2, int8(cmdType), 0)
 }
 func Misc_CmdOptionInfoReqEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

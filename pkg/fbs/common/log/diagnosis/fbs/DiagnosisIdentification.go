@@ -8,16 +8,25 @@ import (
 
 /// This table defines all diagnostic elements that are required to uniquely identify a diagnostic log.
 type DiagnosisIdentificationT struct {
-	MainDiagnosisNumber string
-	DetailedDiagnosisNumber string
-	Entity string
+	MainDiagnosisNumber string `json:"mainDiagnosisNumber"`
+	DetailedDiagnosisNumber string `json:"detailedDiagnosisNumber"`
+	Entity string `json:"entity"`
 }
 
 func (t *DiagnosisIdentificationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	mainDiagnosisNumberOffset := builder.CreateString(t.MainDiagnosisNumber)
-	detailedDiagnosisNumberOffset := builder.CreateString(t.DetailedDiagnosisNumber)
-	entityOffset := builder.CreateString(t.Entity)
+	mainDiagnosisNumberOffset := flatbuffers.UOffsetT(0)
+	if t.MainDiagnosisNumber != "" {
+		mainDiagnosisNumberOffset = builder.CreateString(t.MainDiagnosisNumber)
+	}
+	detailedDiagnosisNumberOffset := flatbuffers.UOffsetT(0)
+	if t.DetailedDiagnosisNumber != "" {
+		detailedDiagnosisNumberOffset = builder.CreateString(t.DetailedDiagnosisNumber)
+	}
+	entityOffset := flatbuffers.UOffsetT(0)
+	if t.Entity != "" {
+		entityOffset = builder.CreateString(t.Entity)
+	}
 	DiagnosisIdentificationStart(builder)
 	DiagnosisIdentificationAddMainDiagnosisNumber(builder, mainDiagnosisNumberOffset)
 	DiagnosisIdentificationAddDetailedDiagnosisNumber(builder, detailedDiagnosisNumberOffset)

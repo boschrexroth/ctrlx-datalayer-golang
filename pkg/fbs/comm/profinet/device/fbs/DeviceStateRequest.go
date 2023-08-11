@@ -7,7 +7,7 @@ import (
 )
 
 type DeviceStateRequestT struct {
-	NewState ProfinetState
+	NewState ProfinetState `json:"newState"`
 }
 
 func (t *DeviceStateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,16 +7,19 @@ import (
 )
 
 type SubscriptionPropertiesT struct {
-	Id string
-	KeepaliveInterval uint32
-	PublishInterval uint32
-	Rules []*PropertyT
-	ErrorInterval uint32
+	Id string `json:"id"`
+	KeepaliveInterval uint32 `json:"keepaliveInterval"`
+	PublishInterval uint32 `json:"publishInterval"`
+	Rules []*PropertyT `json:"rules"`
+	ErrorInterval uint32 `json:"errorInterval"`
 }
 
 func (t *SubscriptionPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
 	rulesOffset := flatbuffers.UOffsetT(0)
 	if t.Rules != nil {
 		rulesLength := len(t.Rules)

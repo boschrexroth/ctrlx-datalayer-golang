@@ -4,27 +4,27 @@ package fbtypes
 
 import "strconv"
 
-type ObjectTypeListRegisteredCmdsOptions int8
+type ObjectType_ListRegisteredCmdsOptions int8
 
 const (
-	ObjectType_ListRegisteredCmdsOptionsUNKNOWN ObjectTypeListRegisteredCmdsOptions = 0
-	ObjectType_ListRegisteredCmdsOptionsAXS     ObjectTypeListRegisteredCmdsOptions = 1
-	ObjectType_ListRegisteredCmdsOptionsKIN     ObjectTypeListRegisteredCmdsOptions = 2
+	ObjectType_ListRegisteredCmdsOptionsUNKNOWN ObjectType_ListRegisteredCmdsOptions = 0
+	ObjectType_ListRegisteredCmdsOptionsAXS     ObjectType_ListRegisteredCmdsOptions = 1
+	ObjectType_ListRegisteredCmdsOptionsKIN     ObjectType_ListRegisteredCmdsOptions = 2
 )
 
-var EnumNamesObjectType_ListRegisteredCmdsOptions = map[ObjectTypeListRegisteredCmdsOptions]string{
+var EnumNamesObjectType_ListRegisteredCmdsOptions = map[ObjectType_ListRegisteredCmdsOptions]string{
 	ObjectType_ListRegisteredCmdsOptionsUNKNOWN: "UNKNOWN",
 	ObjectType_ListRegisteredCmdsOptionsAXS:     "AXS",
 	ObjectType_ListRegisteredCmdsOptionsKIN:     "KIN",
 }
 
-var EnumValuesObjectType_ListRegisteredCmdsOptions = map[string]ObjectTypeListRegisteredCmdsOptions{
+var EnumValuesObjectType_ListRegisteredCmdsOptions = map[string]ObjectType_ListRegisteredCmdsOptions{
 	"UNKNOWN": ObjectType_ListRegisteredCmdsOptionsUNKNOWN,
 	"AXS":     ObjectType_ListRegisteredCmdsOptionsAXS,
 	"KIN":     ObjectType_ListRegisteredCmdsOptionsKIN,
 }
 
-func (v ObjectTypeListRegisteredCmdsOptions) String() string {
+func (v ObjectType_ListRegisteredCmdsOptions) String() string {
 	if s, ok := EnumNamesObjectType_ListRegisteredCmdsOptions[v]; ok {
 		return s
 	}

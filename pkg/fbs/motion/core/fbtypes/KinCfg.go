@@ -8,20 +8,23 @@ import (
 
 /// complete configuration of a single kinematics
 type KinCfgT struct {
-	ObjectType string
-	Limits *KinCfgLimitsT
-	AxsCfg []*KinCfgAxsT
-	Mcs *KinCfgJntTrafoAllSetsT
-	Units *UnitCfgKinT
-	PrepLimits *KinCfgPrepLimitsT
-	RtInputs *RTInputsCfgT
-	Dynamics *KinCfgDynamicsT
-	Geometry *KinGeoCfgT
+	ObjectType string `json:"objectType"`
+	Limits *KinCfgLimitsT `json:"limits"`
+	AxsCfg []*KinCfgAxsT `json:"axsCfg"`
+	Mcs *KinCfgJntTrafoAllSetsT `json:"mcs"`
+	Units *UnitCfgKinT `json:"units"`
+	PrepLimits *KinCfgPrepLimitsT `json:"prepLimits"`
+	RtInputs *RTInputsCfgT `json:"rtInputs"`
+	Dynamics *KinCfgDynamicsT `json:"dynamics"`
+	Geometry *KinGeoCfgT `json:"geometry"`
 }
 
 func (t *KinCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objectTypeOffset := builder.CreateString(t.ObjectType)
+	objectTypeOffset := flatbuffers.UOffsetT(0)
+	if t.ObjectType != "" {
+		objectTypeOffset = builder.CreateString(t.ObjectType)
+	}
 	limitsOffset := t.Limits.Pack(builder)
 	axsCfgOffset := flatbuffers.UOffsetT(0)
 	if t.AxsCfg != nil {

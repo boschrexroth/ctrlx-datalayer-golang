@@ -8,25 +8,40 @@ import (
 
 /// all configured limits of this kinematics
 type KinCfgLimitsT struct {
-	Vel float64
-	Acc float64
-	Dec float64
-	JrkAcc float64
-	JrkDec float64
-	VelUnit string
-	AccUnit string
-	DecUnit string
-	JrkAccUnit string
-	JrkDecUnit string
+	Vel float64 `json:"vel"`
+	Acc float64 `json:"acc"`
+	Dec float64 `json:"dec"`
+	JrkAcc float64 `json:"jrkAcc"`
+	JrkDec float64 `json:"jrkDec"`
+	VelUnit string `json:"velUnit"`
+	AccUnit string `json:"accUnit"`
+	DecUnit string `json:"decUnit"`
+	JrkAccUnit string `json:"jrkAccUnit"`
+	JrkDecUnit string `json:"jrkDecUnit"`
 }
 
 func (t *KinCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	velUnitOffset := builder.CreateString(t.VelUnit)
-	accUnitOffset := builder.CreateString(t.AccUnit)
-	decUnitOffset := builder.CreateString(t.DecUnit)
-	jrkAccUnitOffset := builder.CreateString(t.JrkAccUnit)
-	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	velUnitOffset := flatbuffers.UOffsetT(0)
+	if t.VelUnit != "" {
+		velUnitOffset = builder.CreateString(t.VelUnit)
+	}
+	accUnitOffset := flatbuffers.UOffsetT(0)
+	if t.AccUnit != "" {
+		accUnitOffset = builder.CreateString(t.AccUnit)
+	}
+	decUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DecUnit != "" {
+		decUnitOffset = builder.CreateString(t.DecUnit)
+	}
+	jrkAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkAccUnit != "" {
+		jrkAccUnitOffset = builder.CreateString(t.JrkAccUnit)
+	}
+	jrkDecUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkDecUnit != "" {
+		jrkDecUnitOffset = builder.CreateString(t.JrkDecUnit)
+	}
 	KinCfgLimitsStart(builder)
 	KinCfgLimitsAddVel(builder, t.Vel)
 	KinCfgLimitsAddAcc(builder, t.Acc)

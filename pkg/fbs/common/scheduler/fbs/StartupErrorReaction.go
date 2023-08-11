@@ -8,7 +8,7 @@ import (
 
 /// Error reaction in case of not all configured components are available on startup
 type StartupErrorReactionT struct {
-	ErrorReaction CurrentErrorReaction
+	ErrorReaction CurrentErrorReaction `json:"errorReaction"`
 }
 
 func (t *StartupErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

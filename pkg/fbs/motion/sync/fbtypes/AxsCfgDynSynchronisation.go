@@ -8,7 +8,7 @@ import (
 
 /// Configuration of the dynamic synchronisation behavior of a single axis
 type AxsCfgDynSynchronisationT struct {
-	Limits *AxsCfgDynSynchronisationLimT
+	Limits *AxsCfgDynSynchronisationLimT `json:"limits"`
 }
 
 func (t *AxsCfgDynSynchronisationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

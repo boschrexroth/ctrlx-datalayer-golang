@@ -7,16 +7,19 @@ import (
 )
 
 type dummyFbsT struct {
-	DummyByte int8
-	DummyStr string
-	DummyInt int32
-	DummyDouble float64
-	DummyDoublePtr []float64
+	DummyByte int8 `json:"dummyByte"`
+	DummyStr string `json:"dummyStr"`
+	DummyInt int32 `json:"dummyInt"`
+	DummyDouble float64 `json:"dummyDouble"`
+	DummyDoublePtr []float64 `json:"dummyDoublePtr"`
 }
 
 func (t *dummyFbsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	dummyStrOffset := builder.CreateString(t.DummyStr)
+	dummyStrOffset := flatbuffers.UOffsetT(0)
+	if t.DummyStr != "" {
+		dummyStrOffset = builder.CreateString(t.DummyStr)
+	}
 	dummyDoublePtrOffset := flatbuffers.UOffsetT(0)
 	if t.DummyDoublePtr != nil {
 		dummyDoublePtrLength := len(t.DummyDoublePtr)

@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveStatisticModeSingleShotTriggerT struct {
-	Request *SlaveStatisticModeSingleShotTriggerRequestT
-	Response *SlaveStatisticModeSingleShotTriggerResponseT
+	Request *SlaveStatisticModeSingleShotTriggerRequestT `json:"request"`
+	Response *SlaveStatisticModeSingleShotTriggerResponseT `json:"response"`
 }
 
 func (t *SlaveStatisticModeSingleShotTriggerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

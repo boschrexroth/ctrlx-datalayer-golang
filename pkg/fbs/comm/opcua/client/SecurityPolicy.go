@@ -7,7 +7,7 @@ import (
 )
 
 type SecurityPolicyT struct {
-	SecurityPolicy EnumSecurityPolicy
+	SecurityPolicy EnumSecurityPolicy `json:"securityPolicy"`
 }
 
 func (t *SecurityPolicyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

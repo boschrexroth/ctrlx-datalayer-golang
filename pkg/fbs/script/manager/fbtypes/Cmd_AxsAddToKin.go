@@ -7,15 +7,18 @@ import (
 )
 
 type Cmd_AxsAddToKinT struct {
-	Base *Cmd_BaseT
-	KinName string
-	Buffered bool
+	Base *Cmd_BaseT `json:"base"`
+	KinName string `json:"kinName"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *Cmd_AxsAddToKinT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	kinNameOffset := builder.CreateString(t.KinName)
+	kinNameOffset := flatbuffers.UOffsetT(0)
+	if t.KinName != "" {
+		kinNameOffset = builder.CreateString(t.KinName)
+	}
 	Cmd_AxsAddToKinStart(builder)
 	Cmd_AxsAddToKinAddBase(builder, baseOffset)
 	Cmd_AxsAddToKinAddKinName(builder, kinNameOffset)

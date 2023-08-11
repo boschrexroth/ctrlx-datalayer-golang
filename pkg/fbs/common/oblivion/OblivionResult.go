@@ -7,7 +7,7 @@ import (
 )
 
 type OblivionResultT struct {
-	Unfreed []*OblivionResultItemT
+	Unfreed []*OblivionResultItemT `json:"unfreed"`
 }
 
 func (t *OblivionResultT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -74,6 +74,7 @@ func (rcv *OblivionResult) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// all observed items
 func (rcv *OblivionResult) Unfreed(obj *OblivionResultItem, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +95,7 @@ func (rcv *OblivionResult) UnfreedLength() int {
 	return 0
 }
 
+/// all observed items
 func OblivionResultStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

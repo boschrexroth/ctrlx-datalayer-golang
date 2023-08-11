@@ -7,7 +7,7 @@ import (
 )
 
 type TimeT struct {
-	Value uint64
+	Value uint64 `json:"value"`
 }
 
 func (t *TimeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

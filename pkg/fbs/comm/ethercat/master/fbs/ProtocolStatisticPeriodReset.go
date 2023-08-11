@@ -7,8 +7,8 @@ import (
 )
 
 type ProtocolStatisticPeriodResetT struct {
-	Total *ProtocolStatisticResetFlagsT
-	LastSecond *ProtocolStatisticResetFlagsT
+	Total *ProtocolStatisticResetFlagsT `json:"total"`
+	LastSecond *ProtocolStatisticResetFlagsT `json:"lastSecond"`
 }
 
 func (t *ProtocolStatisticPeriodResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

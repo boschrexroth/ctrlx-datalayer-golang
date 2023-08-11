@@ -7,11 +7,11 @@ import (
 )
 
 type State_AxsActValuesT struct {
-	Pos float64
-	DistLeft float64
-	Vel float64
-	Acc float64
-	Torque float64
+	Pos float64 `json:"pos"`
+	DistLeft float64 `json:"distLeft"`
+	Vel float64 `json:"vel"`
+	Acc float64 `json:"acc"`
+	Torque float64 `json:"torque"`
 }
 
 func (t *State_AxsActValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

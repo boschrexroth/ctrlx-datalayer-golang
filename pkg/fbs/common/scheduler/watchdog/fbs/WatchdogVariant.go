@@ -4,7 +4,6 @@ package fbs
 
 import (
 	"strconv"
-
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -51,7 +50,8 @@ func (t *WatchdogVariantT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 func (rcv WatchdogVariant) UnPack(table flatbuffers.Table) *WatchdogVariantT {
 	switch rcv {
 	case WatchdogVariantCyclic:
-		x := Cyclic{_tab: table}
+		var x Cyclic
+		x.Init(table.Bytes, table.Pos)
 		return &WatchdogVariantT{ Type: WatchdogVariantCyclic, Value: x.UnPack() }
 	}
 	return nil

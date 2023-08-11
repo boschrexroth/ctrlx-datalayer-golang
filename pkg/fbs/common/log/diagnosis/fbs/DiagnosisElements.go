@@ -8,7 +8,7 @@ import (
 
 /// This table defines a list of main or detailed diagnostics that should be registered.
 type DiagnosisElementsT struct {
-	DiagnosisElements []*DiagnosisElementT
+	DiagnosisElements []*DiagnosisElementT `json:"diagnosisElements"`
 }
 
 func (t *DiagnosisElementsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,7 +7,7 @@ import (
 )
 
 type ExceptionsT struct {
-	Exceptions []*ExceptionT
+	Exceptions []*ExceptionT `json:"exceptions"`
 }
 
 func (t *ExceptionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

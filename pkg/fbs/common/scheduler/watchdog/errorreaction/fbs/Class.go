@@ -8,7 +8,7 @@ import (
 
 /// Criticality of task watchdog error which cause a pre-defined error reaction
 type ClassT struct {
-	Type CurrentClass
+	Type CurrentClass `json:"type"`
 }
 
 func (t *ClassT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

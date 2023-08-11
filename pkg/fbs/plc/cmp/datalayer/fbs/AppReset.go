@@ -7,7 +7,7 @@ import (
 )
 
 type AppResetT struct {
-	Reset Reset
+	Reset Reset `json:"reset"`
 }
 
 func (t *AppResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

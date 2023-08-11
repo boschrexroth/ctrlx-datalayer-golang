@@ -4,7 +4,6 @@ package fbs
 
 import (
 	"strconv"
-
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -53,7 +52,8 @@ func (t *ControlsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 func (rcv Controls) UnPack(table flatbuffers.Table) *ControlsT {
 	switch rcv {
 	case ControlsDebug:
-		x := Debug{_tab: table}
+		var x Debug
+		x.Init(table.Bytes, table.Pos)
 		return &ControlsT{ Type: ControlsDebug, Value: x.UnPack() }
 	}
 	return nil

@@ -8,15 +8,18 @@ import (
 
 /// This table holds the enabling state of messages, warnings and errors of one trace unit.
 type EnablingStateT struct {
-	UnitName string
-	Messages bool
-	Warnings bool
-	Errors bool
+	UnitName string `json:"unitName"`
+	Messages bool `json:"messages"`
+	Warnings bool `json:"warnings"`
+	Errors bool `json:"errors"`
 }
 
 func (t *EnablingStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	unitNameOffset := builder.CreateString(t.UnitName)
+	unitNameOffset := flatbuffers.UOffsetT(0)
+	if t.UnitName != "" {
+		unitNameOffset = builder.CreateString(t.UnitName)
+	}
 	EnablingStateStart(builder)
 	EnablingStateAddUnitName(builder, unitNameOffset)
 	EnablingStateAddMessages(builder, t.Messages)
