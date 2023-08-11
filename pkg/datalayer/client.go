@@ -221,8 +221,8 @@ func (c *Client) PingSync() Result {
 
 // CreateSync creates an object. This function is synchronous.
 // Parameter address is an address of the node to create object in.
-// Parameter variant is a data of the object.
-// It returns the status of function call or a variant result of write or a tuple (Result, Variant).
+// Parameter data is a data of the object, result of write.
+// It returns the status of function call.
 func (c *Client) CreateSync(address string, data *Variant) Result {
 	if data == nil {
 		return ResultMissingArgument
