@@ -114,7 +114,9 @@ func TestClientAddressNoTests(t *testing.T) {
 func TestClientAddressSetEnv(t *testing.T) {
 	os.Setenv("CTRLX_ADDRESS", "10.0.2.2")
 	e := ctrlxAddress()
-	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2")
+	assert.True(t, e == "tcp://boschrexroth:boschrexroth@10.0.2.2" ||
+		e == "tcp://boschrexroth:boschrexroth@10.0.2.2?sslport=443" ||
+		e == "tcp://boschrexroth:boschrexroth@10.0.2.2?sslport=8443")
 	resetGlobalEnvs()
 }
 

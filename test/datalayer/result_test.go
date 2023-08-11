@@ -224,3 +224,8 @@ func TestResult(t *testing.T) {
 		assert.Equal(t, tc.expectedString, tc.result.String())
 	}
 }
+
+func TestResultAsError(t *testing.T) {
+	result := datalayer.ResultFailed
+	assert.Error(t, result)
+}
