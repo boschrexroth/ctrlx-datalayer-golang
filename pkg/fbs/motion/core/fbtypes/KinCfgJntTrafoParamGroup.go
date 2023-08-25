@@ -8,13 +8,16 @@ import (
 
 /// configuration of a single parameter group of a joint transformation
 type KinCfgJntTrafoParamGroupT struct {
-	Name string
-	Param []*KinCfgJntTrafoSingleParamT
+	Name string `json:"name"`
+	Param []*KinCfgJntTrafoSingleParamT `json:"param"`
 }
 
 func (t *KinCfgJntTrafoParamGroupT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	paramOffset := flatbuffers.UOffsetT(0)
 	if t.Param != nil {
 		paramLength := len(t.Param)

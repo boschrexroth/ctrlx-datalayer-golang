@@ -7,15 +7,18 @@ import (
 )
 
 type Cmd_AxsAddToGantryT struct {
-	Base *Cmd_BaseT
-	MasterName string
-	Buffered bool
+	Base *Cmd_BaseT `json:"base"`
+	MasterName string `json:"masterName"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *Cmd_AxsAddToGantryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	masterNameOffset := builder.CreateString(t.MasterName)
+	masterNameOffset := flatbuffers.UOffsetT(0)
+	if t.MasterName != "" {
+		masterNameOffset = builder.CreateString(t.MasterName)
+	}
 	Cmd_AxsAddToGantryStart(builder)
 	Cmd_AxsAddToGantryAddBase(builder, baseOffset)
 	Cmd_AxsAddToGantryAddMasterName(builder, masterNameOffset)

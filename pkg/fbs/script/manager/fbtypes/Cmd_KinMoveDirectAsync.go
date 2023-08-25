@@ -7,11 +7,11 @@ import (
 )
 
 type Cmd_KinMoveDirectAsyncT struct {
-	Base *Cmd_BaseT
-	Pos []float64
-	CoordSys string
-	DynLimFactors *Cmd_DynLimitsT
-	Buffered bool
+	Base *Cmd_BaseT `json:"base"`
+	Pos []float64 `json:"pos"`
+	CoordSys string `json:"coordSys"`
+	DynLimFactors *Cmd_DynLimitsT `json:"dynLimFactors"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *Cmd_KinMoveDirectAsyncT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -26,7 +26,10 @@ func (t *Cmd_KinMoveDirectAsyncT) Pack(builder *flatbuffers.Builder) flatbuffers
 		}
 		posOffset = builder.EndVector(posLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	dynLimFactorsOffset := t.DynLimFactors.Pack(builder)
 	Cmd_KinMoveDirectAsyncStart(builder)
 	Cmd_KinMoveDirectAsyncAddBase(builder, baseOffset)

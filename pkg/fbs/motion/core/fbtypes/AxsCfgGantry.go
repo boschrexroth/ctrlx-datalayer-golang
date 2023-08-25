@@ -8,9 +8,9 @@ import (
 
 /// configuration for gantry coupling function of a single axis
 type AxsCfgGantryT struct {
-	IsMember bool
-	MoveAllowed bool
-	MultiBrakeDyn bool
+	IsMember bool `json:"isMember"`
+	MoveAllowed bool `json:"moveAllowed"`
+	MultiBrakeDyn bool `json:"multiBrakeDyn"`
 }
 
 func (t *AxsCfgGantryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

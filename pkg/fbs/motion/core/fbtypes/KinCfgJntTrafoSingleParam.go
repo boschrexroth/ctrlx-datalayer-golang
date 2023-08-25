@@ -8,18 +8,27 @@ import (
 
 /// configuration of a single parameter of a joint transformation
 type KinCfgJntTrafoSingleParamT struct {
-	Name string
-	ValueDouble float64
-	ValueInt int64
-	ValueString string
-	Unit string
+	Name string `json:"name"`
+	ValueDouble float64 `json:"valueDouble"`
+	ValueInt int64 `json:"valueInt"`
+	ValueString string `json:"valueString"`
+	Unit string `json:"unit"`
 }
 
 func (t *KinCfgJntTrafoSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	valueStringOffset := builder.CreateString(t.ValueString)
-	unitOffset := builder.CreateString(t.Unit)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	valueStringOffset := flatbuffers.UOffsetT(0)
+	if t.ValueString != "" {
+		valueStringOffset = builder.CreateString(t.ValueString)
+	}
+	unitOffset := flatbuffers.UOffsetT(0)
+	if t.Unit != "" {
+		unitOffset = builder.CreateString(t.Unit)
+	}
 	KinCfgJntTrafoSingleParamStart(builder)
 	KinCfgJntTrafoSingleParamAddName(builder, nameOffset)
 	KinCfgJntTrafoSingleParamAddValueDouble(builder, t.ValueDouble)

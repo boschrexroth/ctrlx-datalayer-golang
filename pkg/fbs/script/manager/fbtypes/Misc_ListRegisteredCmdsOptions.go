@@ -7,8 +7,8 @@ import (
 )
 
 type Misc_ListRegisteredCmdsOptionsT struct {
-	ObjType ObjectTypeListRegisteredCmdsOptions
-	CmdType CmdTypeListRegisteredCmdsOptions
+	ObjType ObjectType_ListRegisteredCmdsOptions `json:"objType"`
+	CmdType CmdType_ListRegisteredCmdsOptions `json:"cmdType"`
 }
 
 func (t *Misc_ListRegisteredCmdsOptionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -58,37 +58,37 @@ func (rcv *Misc_ListRegisteredCmdsOptions) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Misc_ListRegisteredCmdsOptions) ObjType() ObjectTypeListRegisteredCmdsOptions {
+func (rcv *Misc_ListRegisteredCmdsOptions) ObjType() ObjectType_ListRegisteredCmdsOptions {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return ObjectTypeListRegisteredCmdsOptions(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return ObjectType_ListRegisteredCmdsOptions(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Misc_ListRegisteredCmdsOptions) MutateObjType(n ObjectTypeListRegisteredCmdsOptions) bool {
+func (rcv *Misc_ListRegisteredCmdsOptions) MutateObjType(n ObjectType_ListRegisteredCmdsOptions) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
-func (rcv *Misc_ListRegisteredCmdsOptions) CmdType() CmdTypeListRegisteredCmdsOptions {
+func (rcv *Misc_ListRegisteredCmdsOptions) CmdType() CmdType_ListRegisteredCmdsOptions {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return CmdTypeListRegisteredCmdsOptions(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return CmdType_ListRegisteredCmdsOptions(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Misc_ListRegisteredCmdsOptions) MutateCmdType(n CmdTypeListRegisteredCmdsOptions) bool {
+func (rcv *Misc_ListRegisteredCmdsOptions) MutateCmdType(n CmdType_ListRegisteredCmdsOptions) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
 func Misc_ListRegisteredCmdsOptionsStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-func Misc_ListRegisteredCmdsOptionsAddObjType(builder *flatbuffers.Builder, objType ObjectTypeListRegisteredCmdsOptions) {
+func Misc_ListRegisteredCmdsOptionsAddObjType(builder *flatbuffers.Builder, objType ObjectType_ListRegisteredCmdsOptions) {
 	builder.PrependInt8Slot(0, int8(objType), 0)
 }
-func Misc_ListRegisteredCmdsOptionsAddCmdType(builder *flatbuffers.Builder, cmdType CmdTypeListRegisteredCmdsOptions) {
+func Misc_ListRegisteredCmdsOptionsAddCmdType(builder *flatbuffers.Builder, cmdType CmdType_ListRegisteredCmdsOptions) {
 	builder.PrependInt8Slot(1, int8(cmdType), 0)
 }
 func Misc_ListRegisteredCmdsOptionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

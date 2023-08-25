@@ -7,7 +7,7 @@ import (
 )
 
 type PropertyListT struct {
-	Properties []*PropertyT
+	Properties []*PropertyT `json:"properties"`
 }
 
 func (t *PropertyListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -82,6 +82,15 @@ func (rcv *PropertyList) Properties(obj *Property, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *PropertyList) PropertiesByKey(obj *Property, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

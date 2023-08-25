@@ -7,7 +7,7 @@ import (
 )
 
 type NumConfiguredMailboxSlavesResponseT struct {
-	NumSlaves uint32
+	NumSlaves uint32 `json:"numSlaves"`
 }
 
 func (t *NumConfiguredMailboxSlavesResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

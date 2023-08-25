@@ -8,7 +8,7 @@ import (
 
 /// Configuration of the error reaction behavior of a single axis
 type AxsCfgErrReactionT struct {
-	SlaveLimitsExceeded *AxsCfgErrReactionSlaveLimExceededT
+	SlaveLimitsExceeded *AxsCfgErrReactionSlaveLimExceededT `json:"slaveLimitsExceeded"`
 }
 
 func (t *AxsCfgErrReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

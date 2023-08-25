@@ -7,7 +7,7 @@ import (
 )
 
 type DataChangeFilterT struct {
-	DeadBandValue float32
+	DeadBandValue float32 `json:"deadBandValue"`
 }
 
 func (t *DataChangeFilterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

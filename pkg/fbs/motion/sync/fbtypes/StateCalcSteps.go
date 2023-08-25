@@ -8,7 +8,7 @@ import (
 
 /// all supported calculation steps
 type StateCalcStepsT struct {
-	Steps []*StateCalcSingleStepT
+	Steps []*StateCalcSingleStepT `json:"steps"`
 }
 
 func (t *StateCalcStepsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

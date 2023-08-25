@@ -8,18 +8,18 @@ import (
 
 /// parameters of the get collision guard state function
 type GetCollisionGuardStateParamsT struct {
-	EmergencyDist float64
-	MinDist float64
-	SlowDownDist float64
-	SyncDist float64
-	ActPos float64
-	TargetPos float64
-	ActBrakingDist float64
-	NeighborPos float64
-	NeighborTargetPos float64
-	NeighborBrakingDist float64
-	HysteresisDist float64
-	PrevState CollisionGuardState
+	EmergencyDist float64 `json:"emergencyDist"`
+	MinDist float64 `json:"minDist"`
+	SlowDownDist float64 `json:"slowDownDist"`
+	SyncDist float64 `json:"syncDist"`
+	ActPos float64 `json:"actPos"`
+	TargetPos float64 `json:"targetPos"`
+	ActBrakingDist float64 `json:"actBrakingDist"`
+	NeighborPos float64 `json:"neighborPos"`
+	NeighborTargetPos float64 `json:"neighborTargetPos"`
+	NeighborBrakingDist float64 `json:"neighborBrakingDist"`
+	HysteresisDist float64 `json:"hysteresisDist"`
+	PrevState CollisionGuardState `json:"prevState"`
 }
 
 func (t *GetCollisionGuardStateParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

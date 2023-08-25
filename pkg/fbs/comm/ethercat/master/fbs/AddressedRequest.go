@@ -7,8 +7,8 @@ import (
 )
 
 type AddressedRequestT struct {
-	AddressType Addresstype
-	Address uint16
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
 }
 
 func (t *AddressedRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

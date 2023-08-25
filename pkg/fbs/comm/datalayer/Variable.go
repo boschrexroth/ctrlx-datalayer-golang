@@ -3,27 +3,34 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type VariableT struct {
-	Name string
-	Bitoffset uint32
-	Bitsize uint32
-	Type string
-	Metadata *MetadataT
+	Name string `json:"name"`
+	Bitoffset uint32 `json:"bitoffset"`
+	Bitsize uint32 `json:"bitsize"`
+	Type string `json:"type"`
+	Metadata *MetadataT `json:"metadata"`
 }
 
 func (t *VariableT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	typeOffset := builder.CreateString(t.Type)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
 	metadataOffset := t.Metadata.Pack(builder)
 	VariableStart(builder)
 	VariableAddName(builder, nameOffset)
 	VariableAddBitoffset(builder, t.Bitoffset)
 	VariableAddBitsize(builder, t.Bitsize)
-	VariableAddType(builder, typeOffset)
+	VariableAddType(builder, type_Offset)
 	VariableAddMetadata(builder, metadataOffset)
 	return VariableEnd(builder)
 }
@@ -80,6 +87,38 @@ func (rcv *Variable) Name() []byte {
 }
 
 /// Name of the variable
+func VariableKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Variable{}
+	obj2 := &Variable{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Name()) < string(obj2.Name())
+}
+
+func (rcv *Variable) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &Variable{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Name(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// Offset (in bits) of variable in memory
 func (rcv *Variable) Bitoffset() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

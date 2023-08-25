@@ -8,8 +8,8 @@ import (
 
 /// configuration of the product coordinate system of this kinematics
 type SysCfgPcsAllT struct {
-	Sets []*SysCfgPcsSetT
-	Groups []*SysCfgPcsGroupT
+	Sets []*SysCfgPcsSetT `json:"sets"`
+	Groups []*SysCfgPcsGroupT `json:"groups"`
 }
 
 func (t *SysCfgPcsAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -110,6 +110,15 @@ func (rcv *SysCfgPcsAll) Sets(obj *SysCfgPcsSet, j int) bool {
 	return false
 }
 
+func (rcv *SysCfgPcsAll) SetsByKey(obj *SysCfgPcsSet, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
 func (rcv *SysCfgPcsAll) SetsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -128,6 +137,15 @@ func (rcv *SysCfgPcsAll) Groups(obj *SysCfgPcsGroup, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *SysCfgPcsAll) GroupsByKey(obj *SysCfgPcsGroup, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

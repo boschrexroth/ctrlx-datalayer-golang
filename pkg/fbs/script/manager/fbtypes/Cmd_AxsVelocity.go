@@ -7,11 +7,11 @@ import (
 )
 
 type Cmd_AxsVelocityT struct {
-	Base *Cmd_BaseT
-	Vel float64
-	DriveVelMode bool
-	Buffered bool
-	Lim *Cmd_DynLimitsT
+	Base *Cmd_BaseT `json:"base"`
+	Vel float64 `json:"vel"`
+	DriveVelMode bool `json:"driveVelMode"`
+	Buffered bool `json:"buffered"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
 }
 
 func (t *Cmd_AxsVelocityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

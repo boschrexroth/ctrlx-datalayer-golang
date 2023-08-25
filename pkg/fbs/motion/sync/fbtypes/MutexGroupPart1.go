@@ -8,7 +8,7 @@ import (
 
 /// The first group of optional parameters, which mutually exclude each other
 type MutexGroupPart1T struct {
-	GroupPart1 []string
+	GroupPart1 []string `json:"groupPart1"`
 }
 
 func (t *MutexGroupPart1T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,13 +8,16 @@ import (
 
 /// parameters for the command wait for signal
 type CmdOptionSetSignalT struct {
-	PermType string
-	SignalId uint32
+	PermType string `json:"permType"`
+	SignalId uint32 `json:"signalId"`
 }
 
 func (t *CmdOptionSetSignalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	CmdOptionSetSignalStart(builder)
 	CmdOptionSetSignalAddPermType(builder, permTypeOffset)
 	CmdOptionSetSignalAddSignalId(builder, t.SignalId)

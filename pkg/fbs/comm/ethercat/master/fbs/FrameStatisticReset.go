@@ -7,7 +7,7 @@ import (
 )
 
 type FrameStatisticResetT struct {
-	Request *FrameStatisticResetRequestT
+	Request *FrameStatisticResetRequestT `json:"request"`
 }
 
 func (t *FrameStatisticResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

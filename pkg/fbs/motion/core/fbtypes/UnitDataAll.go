@@ -8,7 +8,7 @@ import (
 
 /// Data of all supported units
 type UnitDataAllT struct {
-	Supported []*UnitDataSingleT
+	Supported []*UnitDataSingleT `json:"supported"`
 }
 
 func (t *UnitDataAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

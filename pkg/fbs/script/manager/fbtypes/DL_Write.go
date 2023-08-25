@@ -7,18 +7,24 @@ import (
 )
 
 type DL_WriteT struct {
-	Path string
-	Type int32
-	S string
-	I int64
-	B bool
-	D float64
+	Path string `json:"path"`
+	Type int32 `json:"type"`
+	S string `json:"s"`
+	I int64 `json:"i"`
+	B bool `json:"b"`
+	D float64 `json:"d"`
 }
 
 func (t *DL_WriteT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	pathOffset := builder.CreateString(t.Path)
-	sOffset := builder.CreateString(t.S)
+	pathOffset := flatbuffers.UOffsetT(0)
+	if t.Path != "" {
+		pathOffset = builder.CreateString(t.Path)
+	}
+	sOffset := flatbuffers.UOffsetT(0)
+	if t.S != "" {
+		sOffset = builder.CreateString(t.S)
+	}
 	DL_WriteStart(builder)
 	DL_WriteAddPath(builder, pathOffset)
 	DL_WriteAddType(builder, t.Type)

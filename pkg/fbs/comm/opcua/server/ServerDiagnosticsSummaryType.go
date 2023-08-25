@@ -7,18 +7,18 @@ import (
 )
 
 type ServerDiagnosticsSummaryTypeT struct {
-	CumulatedSessionCount uint32
-	CumulatedSubscriptionCount uint32
-	CurrentSessonCount uint32
-	CurrentSubscriptionCount uint32
-	PublishingIntervalCount uint32
-	RejectedRequestsCount uint32
-	RejectedSessionCount uint32
-	SecurityRejectedRequestsCount uint32
-	SecurityRejectedSessionCount uint32
-	ServerViewCount uint32
-	SessionAbortCount uint32
-	SessionTimeoutCount uint32
+	CumulatedSessionCount uint32 `json:"cumulatedSessionCount"`
+	CumulatedSubscriptionCount uint32 `json:"cumulatedSubscriptionCount"`
+	CurrentSessonCount uint32 `json:"currentSessonCount"`
+	CurrentSubscriptionCount uint32 `json:"currentSubscriptionCount"`
+	PublishingIntervalCount uint32 `json:"publishingIntervalCount"`
+	RejectedRequestsCount uint32 `json:"rejectedRequestsCount"`
+	RejectedSessionCount uint32 `json:"rejectedSessionCount"`
+	SecurityRejectedRequestsCount uint32 `json:"securityRejectedRequestsCount"`
+	SecurityRejectedSessionCount uint32 `json:"securityRejectedSessionCount"`
+	ServerViewCount uint32 `json:"serverViewCount"`
+	SessionAbortCount uint32 `json:"sessionAbortCount"`
+	SessionTimeoutCount uint32 `json:"sessionTimeoutCount"`
 }
 
 func (t *ServerDiagnosticsSummaryTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

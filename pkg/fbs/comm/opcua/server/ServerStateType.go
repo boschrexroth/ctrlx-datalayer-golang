@@ -7,7 +7,7 @@ import (
 )
 
 type ServerStateTypeT struct {
-	State EnumServerState
+	State EnumServerState `json:"state"`
 }
 
 func (t *ServerStateTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

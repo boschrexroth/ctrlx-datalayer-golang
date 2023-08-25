@@ -3,18 +3,25 @@
 package remote
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ConfigItemT struct {
-	Name string
-	Address string
+	Name string `json:"name"`
+	Address string `json:"address"`
 }
 
 func (t *ConfigItemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	addressOffset := builder.CreateString(t.Address)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	addressOffset := flatbuffers.UOffsetT(0)
+	if t.Address != "" {
+		addressOffset = builder.CreateString(t.Address)
+	}
 	ConfigItemStart(builder)
 	ConfigItemAddName(builder, nameOffset)
 	ConfigItemAddAddress(builder, addressOffset)
@@ -70,6 +77,38 @@ func (rcv *ConfigItem) Name() []byte {
 }
 
 /// name of the remote connection
+func ConfigItemKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &ConfigItem{}
+	obj2 := &ConfigItem{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Name()) < string(obj2.Name())
+}
+
+func (rcv *ConfigItem) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &ConfigItem{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Name(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// remote data layer connection string
 func (rcv *ConfigItem) Address() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

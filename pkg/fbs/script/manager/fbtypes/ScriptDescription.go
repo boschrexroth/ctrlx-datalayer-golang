@@ -7,19 +7,28 @@ import (
 )
 
 type ScriptDescriptionT struct {
-	Language string
-	Version string
-	Executable string
-	FileEnding []string
-	License string
-	LicenseVersion string
+	Language string `json:"language"`
+	Version string `json:"version"`
+	Executable string `json:"executable"`
+	FileEnding []string `json:"fileEnding"`
+	License string `json:"license"`
+	LicenseVersion string `json:"licenseVersion"`
 }
 
 func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	languageOffset := builder.CreateString(t.Language)
-	versionOffset := builder.CreateString(t.Version)
-	executableOffset := builder.CreateString(t.Executable)
+	languageOffset := flatbuffers.UOffsetT(0)
+	if t.Language != "" {
+		languageOffset = builder.CreateString(t.Language)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
+	executableOffset := flatbuffers.UOffsetT(0)
+	if t.Executable != "" {
+		executableOffset = builder.CreateString(t.Executable)
+	}
 	fileEndingOffset := flatbuffers.UOffsetT(0)
 	if t.FileEnding != nil {
 		fileEndingLength := len(t.FileEnding)
@@ -33,8 +42,14 @@ func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		}
 		fileEndingOffset = builder.EndVector(fileEndingLength)
 	}
-	licenseOffset := builder.CreateString(t.License)
-	licenseVersionOffset := builder.CreateString(t.LicenseVersion)
+	licenseOffset := flatbuffers.UOffsetT(0)
+	if t.License != "" {
+		licenseOffset = builder.CreateString(t.License)
+	}
+	licenseVersionOffset := flatbuffers.UOffsetT(0)
+	if t.LicenseVersion != "" {
+		licenseVersionOffset = builder.CreateString(t.LicenseVersion)
+	}
 	ScriptDescriptionStart(builder)
 	ScriptDescriptionAddLanguage(builder, languageOffset)
 	ScriptDescriptionAddVersion(builder, versionOffset)

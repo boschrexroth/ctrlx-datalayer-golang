@@ -3,28 +3,32 @@
 package fbs
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type AppTaskInfoT struct {
-	Name string
-	Priority uint32
-	Watchdog bool
-	WatchdogTime uint32
-	CycleTime uint32
-	AverageCycleTime uint32
-	MaxCycleTime uint32
-	MinCycleTime uint32
-	CycleCount uint32
-	WatchdogSensitivity uint32
-	Interval uint32
-	TaskType TaskType
-	OsHandle uint64
+	Name string `json:"name"`
+	Priority uint32 `json:"priority"`
+	Watchdog bool `json:"watchdog"`
+	WatchdogTime uint32 `json:"watchdogTime"`
+	CycleTime uint32 `json:"cycleTime"`
+	AverageCycleTime uint32 `json:"averageCycleTime"`
+	MaxCycleTime uint32 `json:"maxCycleTime"`
+	MinCycleTime uint32 `json:"minCycleTime"`
+	CycleCount uint32 `json:"cycleCount"`
+	WatchdogSensitivity uint32 `json:"watchdogSensitivity"`
+	Interval uint32 `json:"interval"`
+	TaskType TaskType `json:"taskType"`
+	OsHandle uint64 `json:"osHandle"`
 }
 
 func (t *AppTaskInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	AppTaskInfoStart(builder)
 	AppTaskInfoAddName(builder, nameOffset)
 	AppTaskInfoAddPriority(builder, t.Priority)
@@ -98,6 +102,38 @@ func (rcv *AppTaskInfo) Name() []byte {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
 	return nil
+}
+
+func AppTaskInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &AppTaskInfo{}
+	obj2 := &AppTaskInfo{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Name()) < string(obj2.Name())
+}
+
+func (rcv *AppTaskInfo) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &AppTaskInfo{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Name(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func (rcv *AppTaskInfo) Priority() uint32 {

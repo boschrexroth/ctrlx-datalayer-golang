@@ -7,18 +7,30 @@ import (
 )
 
 type InstancesCreateRequestT struct {
-	InstanceName string
-	Port string
-	LinkLayer string
-	Arguments string
+	InstanceName string `json:"instanceName"`
+	Port string `json:"port"`
+	LinkLayer string `json:"linkLayer"`
+	Arguments string `json:"arguments"`
 }
 
 func (t *InstancesCreateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	instanceNameOffset := builder.CreateString(t.InstanceName)
-	portOffset := builder.CreateString(t.Port)
-	linkLayerOffset := builder.CreateString(t.LinkLayer)
-	argumentsOffset := builder.CreateString(t.Arguments)
+	instanceNameOffset := flatbuffers.UOffsetT(0)
+	if t.InstanceName != "" {
+		instanceNameOffset = builder.CreateString(t.InstanceName)
+	}
+	portOffset := flatbuffers.UOffsetT(0)
+	if t.Port != "" {
+		portOffset = builder.CreateString(t.Port)
+	}
+	linkLayerOffset := flatbuffers.UOffsetT(0)
+	if t.LinkLayer != "" {
+		linkLayerOffset = builder.CreateString(t.LinkLayer)
+	}
+	argumentsOffset := flatbuffers.UOffsetT(0)
+	if t.Arguments != "" {
+		argumentsOffset = builder.CreateString(t.Arguments)
+	}
 	InstancesCreateRequestStart(builder)
 	InstancesCreateRequestAddInstanceName(builder, instanceNameOffset)
 	InstancesCreateRequestAddPort(builder, portOffset)

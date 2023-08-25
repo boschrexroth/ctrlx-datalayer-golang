@@ -8,14 +8,17 @@ import (
 
 /// parameters of the collision avoidance function
 type CollisionAvoidanceT struct {
-	AxsName string
-	Enable bool
-	Params *GetCollisionGuardStateParamsT
+	AxsName string `json:"axsName"`
+	Enable bool `json:"enable"`
+	Params *GetCollisionGuardStateParamsT `json:"params"`
 }
 
 func (t *CollisionAvoidanceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsNameOffset := builder.CreateString(t.AxsName)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
 	paramsOffset := t.Params.Pack(builder)
 	CollisionAvoidanceStart(builder)
 	CollisionAvoidanceAddAxsName(builder, axsNameOffset)

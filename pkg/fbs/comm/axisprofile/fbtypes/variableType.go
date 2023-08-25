@@ -7,24 +7,30 @@ import "strconv"
 type variableType int8
 
 const (
-	variableTypeBASE     variableType = 0
-	variableTypeVELOCITY variableType = 1
-	variableTypeHOMING   variableType = 2
-	variableTypePROBE    variableType = 3
+	variableTypeUNKNOWN      variableType = -1
+	variableTypeBASE         variableType = 0
+	variableTypeVELOCITY     variableType = 1
+	variableTypeHOMING       variableType = 2
+	variableTypePROBE        variableType = 3
+	variableTypeTORQUE_FORCE variableType = 4
 )
 
 var EnumNamesvariableType = map[variableType]string{
-	variableTypeBASE:     "BASE",
-	variableTypeVELOCITY: "VELOCITY",
-	variableTypeHOMING:   "HOMING",
-	variableTypePROBE:    "PROBE",
+	variableTypeUNKNOWN:      "UNKNOWN",
+	variableTypeBASE:         "BASE",
+	variableTypeVELOCITY:     "VELOCITY",
+	variableTypeHOMING:       "HOMING",
+	variableTypePROBE:        "PROBE",
+	variableTypeTORQUE_FORCE: "TORQUE_FORCE",
 }
 
 var EnumValuesvariableType = map[string]variableType{
-	"BASE":     variableTypeBASE,
-	"VELOCITY": variableTypeVELOCITY,
-	"HOMING":   variableTypeHOMING,
-	"PROBE":    variableTypePROBE,
+	"UNKNOWN":      variableTypeUNKNOWN,
+	"BASE":         variableTypeBASE,
+	"VELOCITY":     variableTypeVELOCITY,
+	"HOMING":       variableTypeHOMING,
+	"PROBE":        variableTypePROBE,
+	"TORQUE_FORCE": variableTypeTORQUE_FORCE,
 }
 
 func (v variableType) String() string {

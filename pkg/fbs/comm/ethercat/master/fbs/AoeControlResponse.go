@@ -7,8 +7,8 @@ import (
 )
 
 type AoeControlResponseT struct {
-	ErrorCode uint32
-	CmdResult uint32
+	ErrorCode uint32 `json:"errorCode"`
+	CmdResult uint32 `json:"cmdResult"`
 }
 
 func (t *AoeControlResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

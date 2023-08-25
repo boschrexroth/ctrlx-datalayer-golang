@@ -7,13 +7,16 @@ import (
 )
 
 type AppLoadApplicationsT struct {
-	Path string
-	Files []string
+	Path string `json:"path"`
+	Files []string `json:"files"`
 }
 
 func (t *AppLoadApplicationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	pathOffset := builder.CreateString(t.Path)
+	pathOffset := flatbuffers.UOffsetT(0)
+	if t.Path != "" {
+		pathOffset = builder.CreateString(t.Path)
+	}
 	filesOffset := flatbuffers.UOffsetT(0)
 	if t.Files != nil {
 		filesLength := len(t.Files)

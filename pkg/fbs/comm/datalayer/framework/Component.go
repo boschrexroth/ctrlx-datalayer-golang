@@ -3,23 +3,33 @@
 package framework
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ComponentT struct {
-	Name string
-	Id string
-	Active bool
-	State string
-	Interfaces []*Interface_T
-	Dependencies []*DependencyT
+	Name string `json:"name"`
+	Id string `json:"id"`
+	Active bool `json:"active"`
+	State string `json:"state"`
+	Interfaces []*Interface_T `json:"interfaces"`
+	Dependencies []*DependencyT `json:"dependencies"`
 }
 
 func (t *ComponentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	idOffset := builder.CreateString(t.Id)
-	stateOffset := builder.CreateString(t.State)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	stateOffset := flatbuffers.UOffsetT(0)
+	if t.State != "" {
+		stateOffset = builder.CreateString(t.State)
+	}
 	interfacesOffset := flatbuffers.UOffsetT(0)
 	if t.Interfaces != nil {
 		interfacesLength := len(t.Interfaces)
@@ -119,6 +129,38 @@ func (rcv *Component) Name() []byte {
 	return nil
 }
 
+func ComponentKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Component{}
+	obj2 := &Component{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Name()) < string(obj2.Name())
+}
+
+func (rcv *Component) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &Component{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Name(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 func (rcv *Component) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -159,6 +201,15 @@ func (rcv *Component) Interfaces(obj *Interface_, j int) bool {
 	return false
 }
 
+func (rcv *Component) InterfacesByKey(obj *Interface_, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
 func (rcv *Component) InterfacesLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -175,6 +226,15 @@ func (rcv *Component) Dependencies(obj *Dependency, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Component) DependenciesByKey(obj *Dependency, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

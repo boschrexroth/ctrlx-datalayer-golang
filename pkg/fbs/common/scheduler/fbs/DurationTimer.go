@@ -8,7 +8,7 @@ import (
 
 /// Type selector of duration measurement
 type DurationTimerT struct {
-	Timer Timer
+	Timer Timer `json:"timer"`
 }
 
 func (t *DurationTimerT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

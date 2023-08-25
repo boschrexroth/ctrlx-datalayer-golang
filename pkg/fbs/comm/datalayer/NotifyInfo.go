@@ -7,14 +7,17 @@ import (
 )
 
 type NotifyInfoT struct {
-	Node string
-	Timestamp uint64
-	NotifyType NotifyType
+	Node string `json:"node"`
+	Timestamp uint64 `json:"timestamp"`
+	NotifyType NotifyType `json:"notifyType"`
 }
 
 func (t *NotifyInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nodeOffset := builder.CreateString(t.Node)
+	nodeOffset := flatbuffers.UOffsetT(0)
+	if t.Node != "" {
+		nodeOffset = builder.CreateString(t.Node)
+	}
 	NotifyInfoStart(builder)
 	NotifyInfoAddNode(builder, nodeOffset)
 	NotifyInfoAddTimestamp(builder, t.Timestamp)

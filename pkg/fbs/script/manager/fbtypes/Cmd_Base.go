@@ -7,15 +7,21 @@ import (
 )
 
 type Cmd_BaseT struct {
-	Name string
-	Source string
-	Line uint64
+	Name string `json:"name"`
+	Source string `json:"source"`
+	Line uint64 `json:"line"`
 }
 
 func (t *Cmd_BaseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	sourceOffset := builder.CreateString(t.Source)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	sourceOffset := flatbuffers.UOffsetT(0)
+	if t.Source != "" {
+		sourceOffset = builder.CreateString(t.Source)
+	}
 	Cmd_BaseStart(builder)
 	Cmd_BaseAddName(builder, nameOffset)
 	Cmd_BaseAddSource(builder, sourceOffset)

@@ -8,14 +8,17 @@ import (
 
 /// configuration of a single calculation pipeline
 type CalcPipelineCfgT struct {
-	Name string
-	Generic bool
-	Steps []*CalcStepCfgT
+	Name string `json:"name"`
+	Generic bool `json:"generic"`
+	Steps []*CalcStepCfgT `json:"steps"`
 }
 
 func (t *CalcPipelineCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	stepsOffset := flatbuffers.UOffsetT(0)
 	if t.Steps != nil {
 		stepsLength := len(t.Steps)

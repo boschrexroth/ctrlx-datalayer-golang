@@ -7,13 +7,13 @@ import (
 )
 
 type DcOnlineInfoResponseT struct {
-	SyncMode SyncMode
-	CycleTime uint32
-	SyncShiftTime uint32
-	SyncWindowMonitoring bool
-	DeviationLimit uint32
-	ContinuousDelayCompensation bool
-	SystemTime uint64
+	SyncMode SyncMode `json:"syncMode"`
+	CycleTime uint32 `json:"cycleTime"`
+	SyncShiftTime uint32 `json:"syncShiftTime"`
+	SyncWindowMonitoring bool `json:"syncWindowMonitoring"`
+	DeviationLimit uint32 `json:"deviationLimit"`
+	ContinuousDelayCompensation bool `json:"continuousDelayCompensation"`
+	SystemTime uint64 `json:"systemTime"`
 }
 
 func (t *DcOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

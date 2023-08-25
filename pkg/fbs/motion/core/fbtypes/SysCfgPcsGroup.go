@@ -3,18 +3,22 @@
 package fbtypes
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 /// configuration of a single group of sets for a product coordinate system
 type SysCfgPcsGroupT struct {
-	GroupName string
-	Sets []string
+	GroupName string `json:"groupName"`
+	Sets []string `json:"sets"`
 }
 
 func (t *SysCfgPcsGroupT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	groupNameOffset := builder.CreateString(t.GroupName)
+	groupNameOffset := flatbuffers.UOffsetT(0)
+	if t.GroupName != "" {
+		groupNameOffset = builder.CreateString(t.GroupName)
+	}
 	setsOffset := flatbuffers.UOffsetT(0)
 	if t.Sets != nil {
 		setsLength := len(t.Sets)
@@ -87,6 +91,38 @@ func (rcv *SysCfgPcsGroup) GroupName() []byte {
 }
 
 /// name of the group (required for load/save)
+func SysCfgPcsGroupKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &SysCfgPcsGroup{}
+	obj2 := &SysCfgPcsGroup{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.GroupName()) < string(obj2.GroupName())
+}
+
+func (rcv *SysCfgPcsGroup) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &SysCfgPcsGroup{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.GroupName(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// vector of PCS sets in this group (sequence matters!)
 func (rcv *SysCfgPcsGroup) Sets(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

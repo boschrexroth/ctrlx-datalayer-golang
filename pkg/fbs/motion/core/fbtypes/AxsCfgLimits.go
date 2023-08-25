@@ -8,34 +8,58 @@ import (
 
 /// configured limits of a single axis
 type AxsCfgLimitsT struct {
-	PosMin float64
-	PosMax float64
-	VelPos float64
-	VelNeg float64
-	Acc float64
-	Dec float64
-	JrkAcc float64
-	JrkDec float64
-	PosMinUnit string
-	PosMaxUnit string
-	VelPosUnit string
-	VelNegUnit string
-	AccUnit string
-	DecUnit string
-	JrkAccUnit string
-	JrkDecUnit string
+	PosMin float64 `json:"posMin"`
+	PosMax float64 `json:"posMax"`
+	VelPos float64 `json:"velPos"`
+	VelNeg float64 `json:"velNeg"`
+	Acc float64 `json:"acc"`
+	Dec float64 `json:"dec"`
+	JrkAcc float64 `json:"jrkAcc"`
+	JrkDec float64 `json:"jrkDec"`
+	PosMinUnit string `json:"posMinUnit"`
+	PosMaxUnit string `json:"posMaxUnit"`
+	VelPosUnit string `json:"velPosUnit"`
+	VelNegUnit string `json:"velNegUnit"`
+	AccUnit string `json:"accUnit"`
+	DecUnit string `json:"decUnit"`
+	JrkAccUnit string `json:"jrkAccUnit"`
+	JrkDecUnit string `json:"jrkDecUnit"`
 }
 
 func (t *AxsCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	posMinUnitOffset := builder.CreateString(t.PosMinUnit)
-	posMaxUnitOffset := builder.CreateString(t.PosMaxUnit)
-	velPosUnitOffset := builder.CreateString(t.VelPosUnit)
-	velNegUnitOffset := builder.CreateString(t.VelNegUnit)
-	accUnitOffset := builder.CreateString(t.AccUnit)
-	decUnitOffset := builder.CreateString(t.DecUnit)
-	jrkAccUnitOffset := builder.CreateString(t.JrkAccUnit)
-	jrkDecUnitOffset := builder.CreateString(t.JrkDecUnit)
+	posMinUnitOffset := flatbuffers.UOffsetT(0)
+	if t.PosMinUnit != "" {
+		posMinUnitOffset = builder.CreateString(t.PosMinUnit)
+	}
+	posMaxUnitOffset := flatbuffers.UOffsetT(0)
+	if t.PosMaxUnit != "" {
+		posMaxUnitOffset = builder.CreateString(t.PosMaxUnit)
+	}
+	velPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.VelPosUnit != "" {
+		velPosUnitOffset = builder.CreateString(t.VelPosUnit)
+	}
+	velNegUnitOffset := flatbuffers.UOffsetT(0)
+	if t.VelNegUnit != "" {
+		velNegUnitOffset = builder.CreateString(t.VelNegUnit)
+	}
+	accUnitOffset := flatbuffers.UOffsetT(0)
+	if t.AccUnit != "" {
+		accUnitOffset = builder.CreateString(t.AccUnit)
+	}
+	decUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DecUnit != "" {
+		decUnitOffset = builder.CreateString(t.DecUnit)
+	}
+	jrkAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkAccUnit != "" {
+		jrkAccUnitOffset = builder.CreateString(t.JrkAccUnit)
+	}
+	jrkDecUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkDecUnit != "" {
+		jrkDecUnitOffset = builder.CreateString(t.JrkDecUnit)
+	}
 	AxsCfgLimitsStart(builder)
 	AxsCfgLimitsAddPosMin(builder, t.PosMin)
 	AxsCfgLimitsAddPosMax(builder, t.PosMax)

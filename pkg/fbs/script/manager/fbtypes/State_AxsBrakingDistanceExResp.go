@@ -7,8 +7,8 @@ import (
 )
 
 type State_AxsBrakingDistanceExRespT struct {
-	BrakingDistance float64
-	DistanceType BrakingDistanceTypeResp
+	BrakingDistance float64 `json:"brakingDistance"`
+	DistanceType BrakingDistanceTypeResp `json:"distanceType"`
 }
 
 func (t *State_AxsBrakingDistanceExRespT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

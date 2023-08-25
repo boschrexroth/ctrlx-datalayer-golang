@@ -7,11 +7,11 @@ import (
 )
 
 type SubscriptionSettingsT struct {
-	MinimumPublishInterval uint32
-	MinimumSampleInterval uint64
-	MaximumBufferSize uint32
-	MinimumErrorInterval uint32
-	MaximumRTSubscribedNodes uint32
+	MinimumPublishInterval uint32 `json:"minimumPublishInterval"`
+	MinimumSampleInterval uint64 `json:"minimumSampleInterval"`
+	MaximumBufferSize uint32 `json:"maximumBufferSize"`
+	MinimumErrorInterval uint32 `json:"minimumErrorInterval"`
+	MaximumRtsubscribedNodes uint32 `json:"maximumRTSubscribedNodes"`
 }
 
 func (t *SubscriptionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -21,7 +21,7 @@ func (t *SubscriptionSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	SubscriptionSettingsAddMinimumSampleInterval(builder, t.MinimumSampleInterval)
 	SubscriptionSettingsAddMaximumBufferSize(builder, t.MaximumBufferSize)
 	SubscriptionSettingsAddMinimumErrorInterval(builder, t.MinimumErrorInterval)
-	SubscriptionSettingsAddMaximumRTSubscribedNodes(builder, t.MaximumRTSubscribedNodes)
+	SubscriptionSettingsAddMaximumRtsubscribedNodes(builder, t.MaximumRtsubscribedNodes)
 	return SubscriptionSettingsEnd(builder)
 }
 
@@ -30,7 +30,7 @@ func (rcv *SubscriptionSettings) UnPackTo(t *SubscriptionSettingsT) {
 	t.MinimumSampleInterval = rcv.MinimumSampleInterval()
 	t.MaximumBufferSize = rcv.MaximumBufferSize()
 	t.MinimumErrorInterval = rcv.MinimumErrorInterval()
-	t.MaximumRTSubscribedNodes = rcv.MaximumRTSubscribedNodes()
+	t.MaximumRtsubscribedNodes = rcv.MaximumRtsubscribedNodes()
 }
 
 func (rcv *SubscriptionSettings) UnPack() *SubscriptionSettingsT {
@@ -124,7 +124,7 @@ func (rcv *SubscriptionSettings) MutateMinimumErrorInterval(n uint32) bool {
 }
 
 /// Maximum allowed count of RT Subscriptions to addresses
-func (rcv *SubscriptionSettings) MaximumRTSubscribedNodes() uint32 {
+func (rcv *SubscriptionSettings) MaximumRtsubscribedNodes() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -133,7 +133,7 @@ func (rcv *SubscriptionSettings) MaximumRTSubscribedNodes() uint32 {
 }
 
 /// Maximum allowed count of RT Subscriptions to addresses
-func (rcv *SubscriptionSettings) MutateMaximumRTSubscribedNodes(n uint32) bool {
+func (rcv *SubscriptionSettings) MutateMaximumRtsubscribedNodes(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
@@ -152,8 +152,8 @@ func SubscriptionSettingsAddMaximumBufferSize(builder *flatbuffers.Builder, maxi
 func SubscriptionSettingsAddMinimumErrorInterval(builder *flatbuffers.Builder, minimumErrorInterval uint32) {
 	builder.PrependUint32Slot(3, minimumErrorInterval, 10000)
 }
-func SubscriptionSettingsAddMaximumRTSubscribedNodes(builder *flatbuffers.Builder, maximumRTSubscribedNodes uint32) {
-	builder.PrependUint32Slot(4, maximumRTSubscribedNodes, 50)
+func SubscriptionSettingsAddMaximumRtsubscribedNodes(builder *flatbuffers.Builder, maximumRtsubscribedNodes uint32) {
+	builder.PrependUint32Slot(4, maximumRtsubscribedNodes, 50)
 }
 func SubscriptionSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

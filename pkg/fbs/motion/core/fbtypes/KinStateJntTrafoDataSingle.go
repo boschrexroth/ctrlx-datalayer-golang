@@ -8,25 +8,64 @@ import (
 
 /// data of a single registered joint transformation when reading all data of an implemented joint transformation
 type KinStateJntTrafoDataSingleT struct {
-	Id string
-	Name string
-	Description string
-	Image string
-	DocRef string
-	Version string
-	Pow POWType
-	Parameters *KinStateJntTrafoDataAllParamT
+	Id string `json:"id"`
+	Name string `json:"name"`
+	Description string `json:"description"`
+	Image string `json:"image"`
+	DocRef string `json:"docRef"`
+	Version string `json:"version"`
+	Pow POWType `json:"pow"`
+	Parameters *KinStateJntTrafoDataAllParamT `json:"parameters"`
+	License string `json:"license"`
+	Icon string `json:"icon"`
+	LicenseInstalled bool `json:"licenseInstalled"`
+	PosCapability string `json:"posCapability"`
+	OriCapability string `json:"oriCapability"`
 }
 
 func (t *KinStateJntTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
-	imageOffset := builder.CreateString(t.Image)
-	docRefOffset := builder.CreateString(t.DocRef)
-	versionOffset := builder.CreateString(t.Version)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
+	imageOffset := flatbuffers.UOffsetT(0)
+	if t.Image != "" {
+		imageOffset = builder.CreateString(t.Image)
+	}
+	docRefOffset := flatbuffers.UOffsetT(0)
+	if t.DocRef != "" {
+		docRefOffset = builder.CreateString(t.DocRef)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
 	parametersOffset := t.Parameters.Pack(builder)
+	licenseOffset := flatbuffers.UOffsetT(0)
+	if t.License != "" {
+		licenseOffset = builder.CreateString(t.License)
+	}
+	iconOffset := flatbuffers.UOffsetT(0)
+	if t.Icon != "" {
+		iconOffset = builder.CreateString(t.Icon)
+	}
+	posCapabilityOffset := flatbuffers.UOffsetT(0)
+	if t.PosCapability != "" {
+		posCapabilityOffset = builder.CreateString(t.PosCapability)
+	}
+	oriCapabilityOffset := flatbuffers.UOffsetT(0)
+	if t.OriCapability != "" {
+		oriCapabilityOffset = builder.CreateString(t.OriCapability)
+	}
 	KinStateJntTrafoDataSingleStart(builder)
 	KinStateJntTrafoDataSingleAddId(builder, idOffset)
 	KinStateJntTrafoDataSingleAddName(builder, nameOffset)
@@ -36,6 +75,11 @@ func (t *KinStateJntTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuf
 	KinStateJntTrafoDataSingleAddVersion(builder, versionOffset)
 	KinStateJntTrafoDataSingleAddPow(builder, t.Pow)
 	KinStateJntTrafoDataSingleAddParameters(builder, parametersOffset)
+	KinStateJntTrafoDataSingleAddLicense(builder, licenseOffset)
+	KinStateJntTrafoDataSingleAddIcon(builder, iconOffset)
+	KinStateJntTrafoDataSingleAddLicenseInstalled(builder, t.LicenseInstalled)
+	KinStateJntTrafoDataSingleAddPosCapability(builder, posCapabilityOffset)
+	KinStateJntTrafoDataSingleAddOriCapability(builder, oriCapabilityOffset)
 	return KinStateJntTrafoDataSingleEnd(builder)
 }
 
@@ -48,6 +92,11 @@ func (rcv *KinStateJntTrafoDataSingle) UnPackTo(t *KinStateJntTrafoDataSingleT) 
 	t.Version = string(rcv.Version())
 	t.Pow = rcv.Pow()
 	t.Parameters = rcv.Parameters(nil).UnPack()
+	t.License = string(rcv.License())
+	t.Icon = string(rcv.Icon())
+	t.LicenseInstalled = rcv.LicenseInstalled()
+	t.PosCapability = string(rcv.PosCapability())
+	t.OriCapability = string(rcv.OriCapability())
 }
 
 func (rcv *KinStateJntTrafoDataSingle) UnPack() *KinStateJntTrafoDataSingleT {
@@ -173,8 +222,62 @@ func (rcv *KinStateJntTrafoDataSingle) Parameters(obj *KinStateJntTrafoDataAllPa
 }
 
 /// All configuration parameters of the joint transformation
+/// Licence information of the joint transformation
+func (rcv *KinStateJntTrafoDataSingle) License() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Licence information of the joint transformation
+/// Icon image (link) of the joint transformation
+func (rcv *KinStateJntTrafoDataSingle) Icon() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Icon image (link) of the joint transformation
+/// is the require license installed on the system?
+func (rcv *KinStateJntTrafoDataSingle) LicenseInstalled() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// is the require license installed on the system?
+func (rcv *KinStateJntTrafoDataSingle) MutateLicenseInstalled(n bool) bool {
+	return rcv._tab.MutateBoolSlot(24, n)
+}
+
+/// Position capability of this joint transformation (NO_POS, POS_3D, POS_XY, POS_ZX, POS_YZ, POS_X, POS_Y, POS_Z)
+func (rcv *KinStateJntTrafoDataSingle) PosCapability() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Position capability of this joint transformation (NO_POS, POS_3D, POS_XY, POS_ZX, POS_YZ, POS_X, POS_Y, POS_Z)
+/// Orientation capability of this joint transformation (NO_ORI, ORI_3D, ORI_2D, ORI_1D_X, ORI_1D_Y, ORI_1D_Z)
+func (rcv *KinStateJntTrafoDataSingle) OriCapability() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Orientation capability of this joint transformation (NO_ORI, ORI_3D, ORI_2D, ORI_1D_X, ORI_1D_Y, ORI_1D_Z)
 func KinStateJntTrafoDataSingleStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(13)
 }
 func KinStateJntTrafoDataSingleAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -199,6 +302,21 @@ func KinStateJntTrafoDataSingleAddPow(builder *flatbuffers.Builder, pow POWType)
 }
 func KinStateJntTrafoDataSingleAddParameters(builder *flatbuffers.Builder, parameters flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(parameters), 0)
+}
+func KinStateJntTrafoDataSingleAddLicense(builder *flatbuffers.Builder, license flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(license), 0)
+}
+func KinStateJntTrafoDataSingleAddIcon(builder *flatbuffers.Builder, icon flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(icon), 0)
+}
+func KinStateJntTrafoDataSingleAddLicenseInstalled(builder *flatbuffers.Builder, licenseInstalled bool) {
+	builder.PrependBoolSlot(10, licenseInstalled, false)
+}
+func KinStateJntTrafoDataSingleAddPosCapability(builder *flatbuffers.Builder, posCapability flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(posCapability), 0)
+}
+func KinStateJntTrafoDataSingleAddOriCapability(builder *flatbuffers.Builder, oriCapability flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(oriCapability), 0)
 }
 func KinStateJntTrafoDataSingleEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

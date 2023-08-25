@@ -7,7 +7,7 @@ import (
 )
 
 type InterfaceList_T struct {
-	Interfaces []*Interface_T
+	Interfaces []*Interface_T `json:"interfaces"`
 }
 
 func (t *InterfaceList_T) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -82,6 +82,15 @@ func (rcv *InterfaceList_) Interfaces(obj *Interface_, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *InterfaceList_) InterfacesByKey(obj *Interface_, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

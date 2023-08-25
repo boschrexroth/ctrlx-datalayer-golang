@@ -7,18 +7,21 @@ import "strconv"
 type RecordType uint32
 
 const (
-	RecordTypeStack  RecordType = 0
-	RecordTypeThread RecordType = 1
+	RecordTypeStack       RecordType = 0
+	RecordTypeThread      RecordType = 1
+	RecordTypeThreadAlloc RecordType = 2
 )
 
 var EnumNamesRecordType = map[RecordType]string{
-	RecordTypeStack:  "Stack",
-	RecordTypeThread: "Thread",
+	RecordTypeStack:       "Stack",
+	RecordTypeThread:      "Thread",
+	RecordTypeThreadAlloc: "ThreadAlloc",
 }
 
 var EnumValuesRecordType = map[string]RecordType{
-	"Stack":  RecordTypeStack,
-	"Thread": RecordTypeThread,
+	"Stack":       RecordTypeStack,
+	"Thread":      RecordTypeThread,
+	"ThreadAlloc": RecordTypeThreadAlloc,
 }
 
 func (v RecordType) String() string {

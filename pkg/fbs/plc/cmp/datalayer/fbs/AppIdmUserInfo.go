@@ -7,13 +7,16 @@ import (
 )
 
 type AppIdmUserInfoT struct {
-	User string
-	Userhandles []uint64
+	User string `json:"user"`
+	Userhandles []uint64 `json:"userhandles"`
 }
 
 func (t *AppIdmUserInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	userOffset := builder.CreateString(t.User)
+	userOffset := flatbuffers.UOffsetT(0)
+	if t.User != "" {
+		userOffset = builder.CreateString(t.User)
+	}
 	userhandlesOffset := flatbuffers.UOffsetT(0)
 	if t.Userhandles != nil {
 		userhandlesLength := len(t.Userhandles)

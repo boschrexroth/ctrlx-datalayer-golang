@@ -8,7 +8,7 @@ import (
 
 /// configuration of all parameters of a single calculation step
 type AxsCfgCalcStepParamAllT struct {
-	Params []*AxsCfgCalcStepParamT
+	Params []*AxsCfgCalcStepParamT `json:"params"`
 }
 
 func (t *AxsCfgCalcStepParamAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

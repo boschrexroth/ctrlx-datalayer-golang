@@ -7,9 +7,9 @@ import (
 )
 
 type CyclicT struct {
-	ErrorCount uint32
-	Reset bool
-	ErrorReaction *ErrorReactionT
+	ErrorCount uint32 `json:"errorCount"`
+	Reset bool `json:"reset"`
+	ErrorReaction *ErrorReactionT `json:"errorReaction"`
 }
 
 func (t *CyclicT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

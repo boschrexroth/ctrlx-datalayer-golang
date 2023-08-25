@@ -7,17 +7,26 @@ import (
 )
 
 type InterfaceT struct {
-	Port string
-	Device string
-	LinkLayer string
-	CapabilityList []*CapabilityT
+	Port string `json:"port"`
+	Device string `json:"device"`
+	LinkLayer string `json:"linkLayer"`
+	CapabilityList []*CapabilityT `json:"capabilityList"`
 }
 
 func (t *InterfaceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	portOffset := builder.CreateString(t.Port)
-	deviceOffset := builder.CreateString(t.Device)
-	linkLayerOffset := builder.CreateString(t.LinkLayer)
+	portOffset := flatbuffers.UOffsetT(0)
+	if t.Port != "" {
+		portOffset = builder.CreateString(t.Port)
+	}
+	deviceOffset := flatbuffers.UOffsetT(0)
+	if t.Device != "" {
+		deviceOffset = builder.CreateString(t.Device)
+	}
+	linkLayerOffset := flatbuffers.UOffsetT(0)
+	if t.LinkLayer != "" {
+		linkLayerOffset = builder.CreateString(t.LinkLayer)
+	}
 	capabilityListOffset := flatbuffers.UOffsetT(0)
 	if t.CapabilityList != nil {
 		capabilityListLength := len(t.CapabilityList)

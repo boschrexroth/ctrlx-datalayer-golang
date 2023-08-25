@@ -7,33 +7,33 @@ import (
 )
 
 type SlaveOnlineInfoResponseT struct {
-	AutoIncAddr uint16
-	EthercatAddr uint16
-	StationAlias uint16
-	IdentifyValue uint16
-	SlaveHandle uint32
-	PortSlaveHandles []uint32
-	SlaveIdentity *EthercatIdentityInfoT
-	EscType byte
-	EscRevision byte
-	EscBuild uint16
-	EscFeatures uint16
-	PortDescriptor byte
-	Reserved01 byte
-	AlStatus uint16
-	AlStatusCode uint16
-	MbxProtocols uint16
-	DlStatus uint16
-	PortState uint16
-	PreviousPort uint16
-	SystemTimeDifference uint32
-	SlaveDelay uint32
-	PropagationDelay uint32
-	Reserved02 []uint32
-	DcSupport bool
-	Dc64Support bool
-	IsRefClock bool
-	LineCrossed bool
+	AutoIncAddr uint16 `json:"autoIncAddr"`
+	EthercatAddr uint16 `json:"ethercatAddr"`
+	StationAlias uint16 `json:"stationAlias"`
+	IdentifyValue uint16 `json:"identifyValue"`
+	SlaveHandle uint32 `json:"slaveHandle"`
+	PortSlaveHandles []uint32 `json:"portSlaveHandles"`
+	SlaveIdentity *EthercatIdentityInfoT `json:"slaveIdentity"`
+	EscType byte `json:"escType"`
+	EscRevision byte `json:"escRevision"`
+	EscBuild uint16 `json:"escBuild"`
+	EscFeatures uint16 `json:"escFeatures"`
+	PortDescriptor byte `json:"portDescriptor"`
+	Reserved01 byte `json:"reserved01"`
+	AlStatus uint16 `json:"alStatus"`
+	AlStatusCode uint16 `json:"alStatusCode"`
+	MbxProtocols uint16 `json:"mbxProtocols"`
+	DlStatus uint16 `json:"dlStatus"`
+	PortState uint16 `json:"portState"`
+	PreviousPort uint16 `json:"previousPort"`
+	SystemTimeDifference uint32 `json:"systemTimeDifference"`
+	SlaveDelay uint32 `json:"slaveDelay"`
+	PropagationDelay uint32 `json:"propagationDelay"`
+	Reserved02 []uint32 `json:"reserved02"`
+	DcSupport bool `json:"dcSupport"`
+	Dc64Support bool `json:"dc64Support"`
+	IsRefClock bool `json:"isRefClock"`
+	LineCrossed bool `json:"lineCrossed"`
 }
 
 func (t *SlaveOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

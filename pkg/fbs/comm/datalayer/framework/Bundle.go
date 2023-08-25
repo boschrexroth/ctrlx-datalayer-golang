@@ -7,21 +7,30 @@ import (
 )
 
 type BundleT struct {
-	Name string
-	Version string
-	Location string
-	Id int64
-	Components []*ComponentT
-	State string
-	Active bool
-	Installed bool
+	Name string `json:"name"`
+	Version string `json:"version"`
+	Location string `json:"location"`
+	Id int64 `json:"id"`
+	Components []*ComponentT `json:"components"`
+	State string `json:"state"`
+	Active bool `json:"active"`
+	Installed bool `json:"installed"`
 }
 
 func (t *BundleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	versionOffset := builder.CreateString(t.Version)
-	locationOffset := builder.CreateString(t.Location)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
+	locationOffset := flatbuffers.UOffsetT(0)
+	if t.Location != "" {
+		locationOffset = builder.CreateString(t.Location)
+	}
 	componentsOffset := flatbuffers.UOffsetT(0)
 	if t.Components != nil {
 		componentsLength := len(t.Components)
@@ -35,7 +44,10 @@ func (t *BundleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		componentsOffset = builder.EndVector(componentsLength)
 	}
-	stateOffset := builder.CreateString(t.State)
+	stateOffset := flatbuffers.UOffsetT(0)
+	if t.State != "" {
+		stateOffset = builder.CreateString(t.State)
+	}
 	BundleStart(builder)
 	BundleAddName(builder, nameOffset)
 	BundleAddVersion(builder, versionOffset)
@@ -143,6 +155,15 @@ func (rcv *Bundle) Components(obj *Component, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Bundle) ComponentsByKey(obj *Component, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

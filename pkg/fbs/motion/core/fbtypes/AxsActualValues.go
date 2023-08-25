@@ -8,25 +8,40 @@ import (
 
 /// actual values from the drives
 type AxsActualValuesT struct {
-	ActualPos float64
-	ActualVel float64
-	ActualAcc float64
-	ActualTorque float64
-	DistLeft float64
-	ActualPosUnit string
-	ActualVelUnit string
-	ActualAccUnit string
-	ActualTorqueUnit string
-	DistLeftUnit string
+	ActualPos float64 `json:"actualPos"`
+	ActualVel float64 `json:"actualVel"`
+	ActualAcc float64 `json:"actualAcc"`
+	ActualTorque float64 `json:"actualTorque"`
+	DistLeft float64 `json:"distLeft"`
+	ActualPosUnit string `json:"actualPosUnit"`
+	ActualVelUnit string `json:"actualVelUnit"`
+	ActualAccUnit string `json:"actualAccUnit"`
+	ActualTorqueUnit string `json:"actualTorqueUnit"`
+	DistLeftUnit string `json:"distLeftUnit"`
 }
 
 func (t *AxsActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	actualPosUnitOffset := builder.CreateString(t.ActualPosUnit)
-	actualVelUnitOffset := builder.CreateString(t.ActualVelUnit)
-	actualAccUnitOffset := builder.CreateString(t.ActualAccUnit)
-	actualTorqueUnitOffset := builder.CreateString(t.ActualTorqueUnit)
-	distLeftUnitOffset := builder.CreateString(t.DistLeftUnit)
+	actualPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualPosUnit != "" {
+		actualPosUnitOffset = builder.CreateString(t.ActualPosUnit)
+	}
+	actualVelUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualVelUnit != "" {
+		actualVelUnitOffset = builder.CreateString(t.ActualVelUnit)
+	}
+	actualAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualAccUnit != "" {
+		actualAccUnitOffset = builder.CreateString(t.ActualAccUnit)
+	}
+	actualTorqueUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualTorqueUnit != "" {
+		actualTorqueUnitOffset = builder.CreateString(t.ActualTorqueUnit)
+	}
+	distLeftUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DistLeftUnit != "" {
+		distLeftUnitOffset = builder.CreateString(t.DistLeftUnit)
+	}
 	AxsActualValuesStart(builder)
 	AxsActualValuesAddActualPos(builder, t.ActualPos)
 	AxsActualValuesAddActualVel(builder, t.ActualVel)

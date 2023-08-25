@@ -7,10 +7,10 @@ import (
 )
 
 type SessionConfigurationT struct {
-	UserToken *UserIdentityTokenT
-	MessageSecurityMode *MessageSecurityModeT
-	SecurityPolicy *SecurityPolicyT
-	LocaleIds []string
+	UserToken *UserIdentityTokenT `json:"userToken"`
+	MessageSecurityMode *MessageSecurityModeT `json:"messageSecurityMode"`
+	SecurityPolicy *SecurityPolicyT `json:"securityPolicy"`
+	LocaleIds []string `json:"localeIds"`
 }
 
 func (t *SessionConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,15 +7,18 @@ import (
 )
 
 type TriggerCfgT struct {
-	TriggerType TriggerTypeEnumFb
-	Name string
-	Level float64
-	PreTrigger float64
+	TriggerType TriggerTypeEnumFb `json:"triggerType"`
+	Name string `json:"name"`
+	Level float64 `json:"level"`
+	PreTrigger float64 `json:"preTrigger"`
 }
 
 func (t *TriggerCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	TriggerCfgStart(builder)
 	TriggerCfgAddTriggerType(builder, t.TriggerType)
 	TriggerCfgAddName(builder, nameOffset)

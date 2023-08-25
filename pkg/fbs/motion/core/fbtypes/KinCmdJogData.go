@@ -8,10 +8,10 @@ import (
 
 /// parameters for the jog commands for a kinematics
 type KinCmdJogDataT struct {
-	JogDir []float64
-	CoordSys string
-	JogIncrement float64
-	Lim *DynamicLimitsT
+	JogDir []float64 `json:"jogDir"`
+	CoordSys string `json:"coordSys"`
+	JogIncrement float64 `json:"jogIncrement"`
+	Lim *DynamicLimitsT `json:"lim"`
 }
 
 func (t *KinCmdJogDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *KinCmdJogDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 		}
 		jogDirOffset = builder.EndVector(jogDirLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	limOffset := t.Lim.Pack(builder)
 	KinCmdJogDataStart(builder)
 	KinCmdJogDataAddJogDir(builder, jogDirOffset)

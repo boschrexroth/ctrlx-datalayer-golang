@@ -8,7 +8,7 @@ import (
 
 /// validation of a calculation pipeline
 type PipelineValidationT struct {
-	Validations []*SinglePipelineValidationT
+	Validations []*SinglePipelineValidationT `json:"validations"`
 }
 
 func (t *PipelineValidationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

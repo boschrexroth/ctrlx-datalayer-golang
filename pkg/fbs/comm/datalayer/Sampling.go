@@ -7,7 +7,7 @@ import (
 )
 
 type SamplingT struct {
-	SamplingInterval uint64
+	SamplingInterval uint64 `json:"samplingInterval"`
 }
 
 func (t *SamplingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

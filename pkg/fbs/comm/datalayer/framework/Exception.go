@@ -7,20 +7,32 @@ import (
 )
 
 type ExceptionT struct {
-	Date string
-	Name string
-	Signal string
-	Code string
-	Register *RegisterT
-	Stack []*StackentryT
+	Date string `json:"date"`
+	Name string `json:"name"`
+	Signal string `json:"signal"`
+	Code string `json:"code"`
+	Register *RegisterT `json:"register"`
+	Stack []*StackentryT `json:"stack"`
 }
 
 func (t *ExceptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	dateOffset := builder.CreateString(t.Date)
-	nameOffset := builder.CreateString(t.Name)
-	signalOffset := builder.CreateString(t.Signal)
-	codeOffset := builder.CreateString(t.Code)
+	dateOffset := flatbuffers.UOffsetT(0)
+	if t.Date != "" {
+		dateOffset = builder.CreateString(t.Date)
+	}
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	signalOffset := flatbuffers.UOffsetT(0)
+	if t.Signal != "" {
+		signalOffset = builder.CreateString(t.Signal)
+	}
+	codeOffset := flatbuffers.UOffsetT(0)
+	if t.Code != "" {
+		codeOffset = builder.CreateString(t.Code)
+	}
 	registerOffset := t.Register.Pack(builder)
 	stackOffset := flatbuffers.UOffsetT(0)
 	if t.Stack != nil {
@@ -147,6 +159,15 @@ func (rcv *Exception) Stack(obj *Stackentry, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Exception) StackByKey(obj *Stackentry, key uint32) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

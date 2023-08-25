@@ -7,13 +7,16 @@ import (
 )
 
 type RecChannelT struct {
-	Name string
-	Slices []*RecSliceT
+	Name string `json:"name"`
+	Slices []*RecSliceT `json:"slices"`
 }
 
 func (t *RecChannelT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	slicesOffset := flatbuffers.UOffsetT(0)
 	if t.Slices != nil {
 		slicesLength := len(t.Slices)

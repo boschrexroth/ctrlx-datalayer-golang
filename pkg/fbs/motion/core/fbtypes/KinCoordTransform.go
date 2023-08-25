@@ -8,10 +8,10 @@ import (
 
 /// coordinate transformation based on the currently active transformations of the kinematics
 type KinCoordTransformT struct {
-	InPos []float64
-	InCoordSys string
-	OutPos []float64
-	OutCoordSys string
+	InPos []float64 `json:"inPos"`
+	InCoordSys string `json:"inCoordSys"`
+	OutPos []float64 `json:"outPos"`
+	OutCoordSys string `json:"outCoordSys"`
 }
 
 func (t *KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		}
 		inPosOffset = builder.EndVector(inPosLength)
 	}
-	inCoordSysOffset := builder.CreateString(t.InCoordSys)
+	inCoordSysOffset := flatbuffers.UOffsetT(0)
+	if t.InCoordSys != "" {
+		inCoordSysOffset = builder.CreateString(t.InCoordSys)
+	}
 	outPosOffset := flatbuffers.UOffsetT(0)
 	if t.OutPos != nil {
 		outPosLength := len(t.OutPos)
@@ -35,7 +38,10 @@ func (t *KinCoordTransformT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		}
 		outPosOffset = builder.EndVector(outPosLength)
 	}
-	outCoordSysOffset := builder.CreateString(t.OutCoordSys)
+	outCoordSysOffset := flatbuffers.UOffsetT(0)
+	if t.OutCoordSys != "" {
+		outCoordSysOffset = builder.CreateString(t.OutCoordSys)
+	}
 	KinCoordTransformStart(builder)
 	KinCoordTransformAddInPos(builder, inPosOffset)
 	KinCoordTransformAddInCoordSys(builder, inCoordSysOffset)

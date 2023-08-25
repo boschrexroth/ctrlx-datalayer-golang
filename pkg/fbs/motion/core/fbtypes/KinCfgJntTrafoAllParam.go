@@ -8,9 +8,9 @@ import (
 
 /// configuration parameter of a single joint transformation
 type KinCfgJntTrafoAllParamT struct {
-	AxisAssignment *KinCfgJntTrafoAxisAssignmentT
-	Groups []*KinCfgJntTrafoParamGroupT
-	AxisOffsets *KinCfgJntTrafoAxisOffsetsT
+	AxisAssignment *KinCfgJntTrafoAxisAssignmentT `json:"axisAssignment"`
+	Groups []*KinCfgJntTrafoParamGroupT `json:"groups"`
+	AxisOffsets *KinCfgJntTrafoAxisOffsetsT `json:"axisOffsets"`
 }
 
 func (t *KinCfgJntTrafoAllParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

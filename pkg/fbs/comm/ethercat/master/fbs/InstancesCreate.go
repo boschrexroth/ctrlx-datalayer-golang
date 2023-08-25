@@ -7,7 +7,7 @@ import (
 )
 
 type InstancesCreateT struct {
-	Request *InstancesCreateRequestT
+	Request *InstancesCreateRequestT `json:"request"`
 }
 
 func (t *InstancesCreateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

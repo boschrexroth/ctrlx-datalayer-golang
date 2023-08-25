@@ -7,13 +7,16 @@ import (
 )
 
 type GlobalCfgT struct {
-	InitScript string
-	InitScriptParam []string
+	InitScript string `json:"initScript"`
+	InitScriptParam []string `json:"initScriptParam"`
 }
 
 func (t *GlobalCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	initScriptOffset := builder.CreateString(t.InitScript)
+	initScriptOffset := flatbuffers.UOffsetT(0)
+	if t.InitScript != "" {
+		initScriptOffset = builder.CreateString(t.InitScript)
+	}
 	initScriptParamOffset := flatbuffers.UOffsetT(0)
 	if t.InitScriptParam != nil {
 		initScriptParamLength := len(t.InitScriptParam)

@@ -8,9 +8,9 @@ import (
 
 /// parameters of the axis probe command
 type cmd_AxsProbeT struct {
-	Base *Cmd_BaseT
-	BaseData *cmd_AxsProbeBaseT
-	CfgData *CfgProbeDataT
+	Base *Cmd_BaseT `json:"base"`
+	BaseData *cmd_AxsProbeBaseT `json:"baseData"`
+	CfgData *CfgProbeDataT `json:"cfgData"`
 }
 
 func (t *cmd_AxsProbeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

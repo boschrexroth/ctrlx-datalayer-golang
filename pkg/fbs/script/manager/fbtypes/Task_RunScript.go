@@ -7,13 +7,16 @@ import (
 )
 
 type Task_RunScriptT struct {
-	Name string
-	Param []string
+	Name string `json:"name"`
+	Param []string `json:"param"`
 }
 
 func (t *Task_RunScriptT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	paramOffset := flatbuffers.UOffsetT(0)
 	if t.Param != nil {
 		paramLength := len(t.Param)

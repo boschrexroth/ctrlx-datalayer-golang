@@ -7,7 +7,7 @@ import (
 )
 
 type NumConfiguredSlavesT struct {
-	Response *NumConfiguredSlavesResponseT
+	Response *NumConfiguredSlavesResponseT `json:"response"`
 }
 
 func (t *NumConfiguredSlavesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

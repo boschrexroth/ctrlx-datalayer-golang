@@ -8,7 +8,7 @@ import (
 
 /// all currently acquired licenses (motion must be in state RUNNING)
 type AcquiredLicensesT struct {
-	Licenses []*SingleLicenseT
+	Licenses []*SingleLicenseT `json:"licenses"`
 }
 
 func (t *AcquiredLicensesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

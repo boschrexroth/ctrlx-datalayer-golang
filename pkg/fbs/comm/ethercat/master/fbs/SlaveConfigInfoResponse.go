@@ -7,36 +7,39 @@ import (
 )
 
 type SlaveConfigInfoResponseT struct {
-	AutoIncAddr uint16
-	EthercatAddr uint16
-	IdentifyAdo uint16
-	IdentifyValue uint16
-	SlaveHandle uint32
-	HcGroupIdx uint32
-	PreviousEthercatAddr uint16
-	PreviousPort uint16
-	SlaveIdentity *EthercatIdentityInfoT
-	SlaveName string
-	MbxProtocols uint32
-	MbxStandard *EthercatMailboxInfoT
-	MbxBootstrap *EthercatMailboxInfoT
-	ProcessDataIn []*EthercatMemoryInfoT
-	ProcessDataOut []*EthercatMemoryInfoT
-	NumProcessVarsIn uint16
-	NumProcessVarsOut uint16
-	PortDescriptor byte
-	Reserved01 []byte
-	WkcStateDiagOffsIn []uint16
-	WkcStateDiagOffsOut []uint16
-	Reserved02 []uint32
-	IsPresent bool
-	IsHcGroupPresent bool
-	DcSupport bool
+	AutoIncAddr uint16 `json:"autoIncAddr"`
+	EthercatAddr uint16 `json:"ethercatAddr"`
+	IdentifyAdo uint16 `json:"identifyAdo"`
+	IdentifyValue uint16 `json:"identifyValue"`
+	SlaveHandle uint32 `json:"slaveHandle"`
+	HcGroupIdx uint32 `json:"hcGroupIdx"`
+	PreviousEthercatAddr uint16 `json:"previousEthercatAddr"`
+	PreviousPort uint16 `json:"previousPort"`
+	SlaveIdentity *EthercatIdentityInfoT `json:"slaveIdentity"`
+	SlaveName string `json:"slaveName"`
+	MbxProtocols uint32 `json:"mbxProtocols"`
+	MbxStandard *EthercatMailboxInfoT `json:"mbxStandard"`
+	MbxBootstrap *EthercatMailboxInfoT `json:"mbxBootstrap"`
+	ProcessDataIn []*EthercatMemoryInfoT `json:"processDataIn"`
+	ProcessDataOut []*EthercatMemoryInfoT `json:"processDataOut"`
+	NumProcessVarsIn uint16 `json:"numProcessVarsIn"`
+	NumProcessVarsOut uint16 `json:"numProcessVarsOut"`
+	PortDescriptor byte `json:"portDescriptor"`
+	Reserved01 []byte `json:"reserved01"`
+	WkcStateDiagOffsIn []uint16 `json:"wkcStateDiagOffsIn"`
+	WkcStateDiagOffsOut []uint16 `json:"wkcStateDiagOffsOut"`
+	Reserved02 []uint32 `json:"reserved02"`
+	IsPresent bool `json:"isPresent"`
+	IsHcGroupPresent bool `json:"isHcGroupPresent"`
+	DcSupport bool `json:"dcSupport"`
 }
 
 func (t *SlaveConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	slaveNameOffset := builder.CreateString(t.SlaveName)
+	slaveNameOffset := flatbuffers.UOffsetT(0)
+	if t.SlaveName != "" {
+		slaveNameOffset = builder.CreateString(t.SlaveName)
+	}
 	processDataInOffset := flatbuffers.UOffsetT(0)
 	if t.ProcessDataIn != nil {
 		processDataInLength := len(t.ProcessDataIn)

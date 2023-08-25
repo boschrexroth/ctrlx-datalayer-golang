@@ -7,7 +7,7 @@ import (
 )
 
 type profileDeviceScalingTypeT struct {
-	ScalingType deviceScalingType
+	ScalingType deviceScalingType `json:"scalingType"`
 }
 
 func (t *profileDeviceScalingTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

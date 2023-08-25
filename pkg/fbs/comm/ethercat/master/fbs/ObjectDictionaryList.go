@@ -7,8 +7,8 @@ import (
 )
 
 type ObjectDictionaryListT struct {
-	Request *ObjectDictionaryListRequestT
-	Response *ObjectDictionaryListResponseT
+	Request *ObjectDictionaryListRequestT `json:"request"`
+	Response *ObjectDictionaryListResponseT `json:"response"`
 }
 
 func (t *ObjectDictionaryListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -3,32 +3,36 @@
 package fbtypes
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 /// configuration of a single set for the product coordiate system of a kinematics
 type SysCfgPcsSetT struct {
-	SetName string
-	OffsetXYZ []float64
-	Orientation []float64
-	OffsetAux []float64
-	RelativeToPCS bool
-	OffsetXYZUnits []string
-	OrientationUnits []string
-	OffsetAuxUnits []string
+	SetName string `json:"setName"`
+	OffsetXyz []float64 `json:"offsetXYZ"`
+	Orientation []float64 `json:"orientation"`
+	OffsetAux []float64 `json:"offsetAux"`
+	RelativeToPcs bool `json:"relativeToPCS"`
+	OffsetXyzunits []string `json:"offsetXYZUnits"`
+	OrientationUnits []string `json:"orientationUnits"`
+	OffsetAuxUnits []string `json:"offsetAuxUnits"`
 }
 
 func (t *SysCfgPcsSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	setNameOffset := builder.CreateString(t.SetName)
-	offsetXYZOffset := flatbuffers.UOffsetT(0)
-	if t.OffsetXYZ != nil {
-		offsetXYZLength := len(t.OffsetXYZ)
-		SysCfgPcsSetStartOffsetXYZVector(builder, offsetXYZLength)
-		for j := offsetXYZLength - 1; j >= 0; j-- {
-			builder.PrependFloat64(t.OffsetXYZ[j])
+	setNameOffset := flatbuffers.UOffsetT(0)
+	if t.SetName != "" {
+		setNameOffset = builder.CreateString(t.SetName)
+	}
+	offsetXyzOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetXyz != nil {
+		offsetXyzLength := len(t.OffsetXyz)
+		SysCfgPcsSetStartOffsetXyzVector(builder, offsetXyzLength)
+		for j := offsetXyzLength - 1; j >= 0; j-- {
+			builder.PrependFloat64(t.OffsetXyz[j])
 		}
-		offsetXYZOffset = builder.EndVector(offsetXYZLength)
+		offsetXyzOffset = builder.EndVector(offsetXyzLength)
 	}
 	orientationOffset := flatbuffers.UOffsetT(0)
 	if t.Orientation != nil {
@@ -48,18 +52,18 @@ func (t *SysCfgPcsSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		}
 		offsetAuxOffset = builder.EndVector(offsetAuxLength)
 	}
-	offsetXYZUnitsOffset := flatbuffers.UOffsetT(0)
-	if t.OffsetXYZUnits != nil {
-		offsetXYZUnitsLength := len(t.OffsetXYZUnits)
-		offsetXYZUnitsOffsets := make([]flatbuffers.UOffsetT, offsetXYZUnitsLength)
-		for j := 0; j < offsetXYZUnitsLength; j++ {
-			offsetXYZUnitsOffsets[j] = builder.CreateString(t.OffsetXYZUnits[j])
+	offsetXyzunitsOffset := flatbuffers.UOffsetT(0)
+	if t.OffsetXyzunits != nil {
+		offsetXyzunitsLength := len(t.OffsetXyzunits)
+		offsetXyzunitsOffsets := make([]flatbuffers.UOffsetT, offsetXyzunitsLength)
+		for j := 0; j < offsetXyzunitsLength; j++ {
+			offsetXyzunitsOffsets[j] = builder.CreateString(t.OffsetXyzunits[j])
 		}
-		SysCfgPcsSetStartOffsetXYZUnitsVector(builder, offsetXYZUnitsLength)
-		for j := offsetXYZUnitsLength - 1; j >= 0; j-- {
-			builder.PrependUOffsetT(offsetXYZUnitsOffsets[j])
+		SysCfgPcsSetStartOffsetXyzunitsVector(builder, offsetXyzunitsLength)
+		for j := offsetXyzunitsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(offsetXyzunitsOffsets[j])
 		}
-		offsetXYZUnitsOffset = builder.EndVector(offsetXYZUnitsLength)
+		offsetXyzunitsOffset = builder.EndVector(offsetXyzunitsLength)
 	}
 	orientationUnitsOffset := flatbuffers.UOffsetT(0)
 	if t.OrientationUnits != nil {
@@ -89,11 +93,11 @@ func (t *SysCfgPcsSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	}
 	SysCfgPcsSetStart(builder)
 	SysCfgPcsSetAddSetName(builder, setNameOffset)
-	SysCfgPcsSetAddOffsetXYZ(builder, offsetXYZOffset)
+	SysCfgPcsSetAddOffsetXyz(builder, offsetXyzOffset)
 	SysCfgPcsSetAddOrientation(builder, orientationOffset)
 	SysCfgPcsSetAddOffsetAux(builder, offsetAuxOffset)
-	SysCfgPcsSetAddRelativeToPCS(builder, t.RelativeToPCS)
-	SysCfgPcsSetAddOffsetXYZUnits(builder, offsetXYZUnitsOffset)
+	SysCfgPcsSetAddRelativeToPcs(builder, t.RelativeToPcs)
+	SysCfgPcsSetAddOffsetXyzunits(builder, offsetXyzunitsOffset)
 	SysCfgPcsSetAddOrientationUnits(builder, orientationUnitsOffset)
 	SysCfgPcsSetAddOffsetAuxUnits(builder, offsetAuxUnitsOffset)
 	return SysCfgPcsSetEnd(builder)
@@ -101,10 +105,10 @@ func (t *SysCfgPcsSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 
 func (rcv *SysCfgPcsSet) UnPackTo(t *SysCfgPcsSetT) {
 	t.SetName = string(rcv.SetName())
-	offsetXYZLength := rcv.OffsetXYZLength()
-	t.OffsetXYZ = make([]float64, offsetXYZLength)
-	for j := 0; j < offsetXYZLength; j++ {
-		t.OffsetXYZ[j] = rcv.OffsetXYZ(j)
+	offsetXyzLength := rcv.OffsetXyzLength()
+	t.OffsetXyz = make([]float64, offsetXyzLength)
+	for j := 0; j < offsetXyzLength; j++ {
+		t.OffsetXyz[j] = rcv.OffsetXyz(j)
 	}
 	orientationLength := rcv.OrientationLength()
 	t.Orientation = make([]float64, orientationLength)
@@ -116,11 +120,11 @@ func (rcv *SysCfgPcsSet) UnPackTo(t *SysCfgPcsSetT) {
 	for j := 0; j < offsetAuxLength; j++ {
 		t.OffsetAux[j] = rcv.OffsetAux(j)
 	}
-	t.RelativeToPCS = rcv.RelativeToPCS()
-	offsetXYZUnitsLength := rcv.OffsetXYZUnitsLength()
-	t.OffsetXYZUnits = make([]string, offsetXYZUnitsLength)
-	for j := 0; j < offsetXYZUnitsLength; j++ {
-		t.OffsetXYZUnits[j] = string(rcv.OffsetXYZUnits(j))
+	t.RelativeToPcs = rcv.RelativeToPcs()
+	offsetXyzunitsLength := rcv.OffsetXyzunitsLength()
+	t.OffsetXyzunits = make([]string, offsetXyzunitsLength)
+	for j := 0; j < offsetXyzunitsLength; j++ {
+		t.OffsetXyzunits[j] = string(rcv.OffsetXyzunits(j))
 	}
 	orientationUnitsLength := rcv.OrientationUnitsLength()
 	t.OrientationUnits = make([]string, orientationUnitsLength)
@@ -178,8 +182,40 @@ func (rcv *SysCfgPcsSet) SetName() []byte {
 }
 
 /// name of the set (required for load/save)
+func SysCfgPcsSetKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &SysCfgPcsSet{}
+	obj2 := &SysCfgPcsSet{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.SetName()) < string(obj2.SetName())
+}
+
+func (rcv *SysCfgPcsSet) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &SysCfgPcsSet{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.SetName(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// XYZ offsets (must be exactly three values)
-func (rcv *SysCfgPcsSet) OffsetXYZ(j int) float64 {
+func (rcv *SysCfgPcsSet) OffsetXyz(j int) float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -188,7 +224,7 @@ func (rcv *SysCfgPcsSet) OffsetXYZ(j int) float64 {
 	return 0
 }
 
-func (rcv *SysCfgPcsSet) OffsetXYZLength() int {
+func (rcv *SysCfgPcsSet) OffsetXyzLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -197,7 +233,7 @@ func (rcv *SysCfgPcsSet) OffsetXYZLength() int {
 }
 
 /// XYZ offsets (must be exactly three values)
-func (rcv *SysCfgPcsSet) MutateOffsetXYZ(j int, n float64) bool {
+func (rcv *SysCfgPcsSet) MutateOffsetXyz(j int, n float64) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -263,7 +299,7 @@ func (rcv *SysCfgPcsSet) MutateOffsetAux(j int, n float64) bool {
 }
 
 /// is this set relative to an other pcs set?
-func (rcv *SysCfgPcsSet) RelativeToPCS() bool {
+func (rcv *SysCfgPcsSet) RelativeToPcs() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -272,12 +308,12 @@ func (rcv *SysCfgPcsSet) RelativeToPCS() bool {
 }
 
 /// is this set relative to an other pcs set?
-func (rcv *SysCfgPcsSet) MutateRelativeToPCS(n bool) bool {
+func (rcv *SysCfgPcsSet) MutateRelativeToPcs(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }
 
 /// Units for XYZ offsets (must be exactly three values)
-func (rcv *SysCfgPcsSet) OffsetXYZUnits(j int) []byte {
+func (rcv *SysCfgPcsSet) OffsetXyzunits(j int) []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -286,7 +322,7 @@ func (rcv *SysCfgPcsSet) OffsetXYZUnits(j int) []byte {
 	return nil
 }
 
-func (rcv *SysCfgPcsSet) OffsetXYZUnitsLength() int {
+func (rcv *SysCfgPcsSet) OffsetXyzunitsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -339,10 +375,10 @@ func SysCfgPcsSetStart(builder *flatbuffers.Builder) {
 func SysCfgPcsSetAddSetName(builder *flatbuffers.Builder, setName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(setName), 0)
 }
-func SysCfgPcsSetAddOffsetXYZ(builder *flatbuffers.Builder, offsetXYZ flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(offsetXYZ), 0)
+func SysCfgPcsSetAddOffsetXyz(builder *flatbuffers.Builder, offsetXyz flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(offsetXyz), 0)
 }
-func SysCfgPcsSetStartOffsetXYZVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func SysCfgPcsSetStartOffsetXyzVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(8, numElems, 8)
 }
 func SysCfgPcsSetAddOrientation(builder *flatbuffers.Builder, orientation flatbuffers.UOffsetT) {
@@ -357,13 +393,13 @@ func SysCfgPcsSetAddOffsetAux(builder *flatbuffers.Builder, offsetAux flatbuffer
 func SysCfgPcsSetStartOffsetAuxVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(8, numElems, 8)
 }
-func SysCfgPcsSetAddRelativeToPCS(builder *flatbuffers.Builder, relativeToPCS bool) {
-	builder.PrependBoolSlot(4, relativeToPCS, false)
+func SysCfgPcsSetAddRelativeToPcs(builder *flatbuffers.Builder, relativeToPcs bool) {
+	builder.PrependBoolSlot(4, relativeToPcs, false)
 }
-func SysCfgPcsSetAddOffsetXYZUnits(builder *flatbuffers.Builder, offsetXYZUnits flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(offsetXYZUnits), 0)
+func SysCfgPcsSetAddOffsetXyzunits(builder *flatbuffers.Builder, offsetXyzunits flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(offsetXyzunits), 0)
 }
-func SysCfgPcsSetStartOffsetXYZUnitsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func SysCfgPcsSetStartOffsetXyzunitsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func SysCfgPcsSetAddOrientationUnits(builder *flatbuffers.Builder, orientationUnits flatbuffers.UOffsetT) {

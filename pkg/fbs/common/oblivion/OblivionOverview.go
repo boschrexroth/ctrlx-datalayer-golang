@@ -7,9 +7,9 @@ import (
 )
 
 type OblivionOverviewT struct {
-	Active bool
-	Current *OblivionCurrentT
-	Total *OblivionTotalT
+	Active bool `json:"active"`
+	Current *OblivionCurrentT `json:"current"`
+	Total *OblivionTotalT `json:"total"`
 }
 
 func (t *OblivionOverviewT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

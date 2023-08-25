@@ -8,18 +8,27 @@ import (
 
 /// Parameters of the runCalculationPipeline function
 type State_AxsRunCalculationPipelineDataT struct {
-	AxsName string
-	PipelineName string
-	SyncMode SyncMode
-	MasterName string
-	Inputs []float64
+	AxsName string `json:"axsName"`
+	PipelineName string `json:"pipelineName"`
+	SyncMode SyncMode `json:"syncMode"`
+	MasterName string `json:"masterName"`
+	Inputs []float64 `json:"inputs"`
 }
 
 func (t *State_AxsRunCalculationPipelineDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsNameOffset := builder.CreateString(t.AxsName)
-	pipelineNameOffset := builder.CreateString(t.PipelineName)
-	masterNameOffset := builder.CreateString(t.MasterName)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
+	pipelineNameOffset := flatbuffers.UOffsetT(0)
+	if t.PipelineName != "" {
+		pipelineNameOffset = builder.CreateString(t.PipelineName)
+	}
+	masterNameOffset := flatbuffers.UOffsetT(0)
+	if t.MasterName != "" {
+		masterNameOffset = builder.CreateString(t.MasterName)
+	}
 	inputsOffset := flatbuffers.UOffsetT(0)
 	if t.Inputs != nil {
 		inputsLength := len(t.Inputs)

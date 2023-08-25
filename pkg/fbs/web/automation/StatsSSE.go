@@ -7,24 +7,24 @@ import (
 )
 
 type StatsSSET struct {
-	OpenSubscriptions uint32
-	OpenSSE uint32
-	RequestsSSE uint32
+	OpenSubscriptions uint32 `json:"openSubscriptions"`
+	OpenSse uint32 `json:"openSSE"`
+	RequestsSse uint32 `json:"requestsSSE"`
 }
 
 func (t *StatsSSET) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	StatsSSEStart(builder)
 	StatsSSEAddOpenSubscriptions(builder, t.OpenSubscriptions)
-	StatsSSEAddOpenSSE(builder, t.OpenSSE)
-	StatsSSEAddRequestsSSE(builder, t.RequestsSSE)
+	StatsSSEAddOpenSse(builder, t.OpenSse)
+	StatsSSEAddRequestsSse(builder, t.RequestsSse)
 	return StatsSSEEnd(builder)
 }
 
 func (rcv *StatsSSE) UnPackTo(t *StatsSSET) {
 	t.OpenSubscriptions = rcv.OpenSubscriptions()
-	t.OpenSSE = rcv.OpenSSE()
-	t.RequestsSSE = rcv.RequestsSSE()
+	t.OpenSse = rcv.OpenSse()
+	t.RequestsSse = rcv.RequestsSse()
 }
 
 func (rcv *StatsSSE) UnPack() *StatsSSET {
@@ -73,7 +73,7 @@ func (rcv *StatsSSE) MutateOpenSubscriptions(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
-func (rcv *StatsSSE) OpenSSE() uint32 {
+func (rcv *StatsSSE) OpenSse() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -81,11 +81,11 @@ func (rcv *StatsSSE) OpenSSE() uint32 {
 	return 0
 }
 
-func (rcv *StatsSSE) MutateOpenSSE(n uint32) bool {
+func (rcv *StatsSSE) MutateOpenSse(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
-func (rcv *StatsSSE) RequestsSSE() uint32 {
+func (rcv *StatsSSE) RequestsSse() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -93,7 +93,7 @@ func (rcv *StatsSSE) RequestsSSE() uint32 {
 	return 0
 }
 
-func (rcv *StatsSSE) MutateRequestsSSE(n uint32) bool {
+func (rcv *StatsSSE) MutateRequestsSse(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
@@ -103,11 +103,11 @@ func StatsSSEStart(builder *flatbuffers.Builder) {
 func StatsSSEAddOpenSubscriptions(builder *flatbuffers.Builder, openSubscriptions uint32) {
 	builder.PrependUint32Slot(0, openSubscriptions, 0)
 }
-func StatsSSEAddOpenSSE(builder *flatbuffers.Builder, openSSE uint32) {
-	builder.PrependUint32Slot(1, openSSE, 0)
+func StatsSSEAddOpenSse(builder *flatbuffers.Builder, openSse uint32) {
+	builder.PrependUint32Slot(1, openSse, 0)
 }
-func StatsSSEAddRequestsSSE(builder *flatbuffers.Builder, requestsSSE uint32) {
-	builder.PrependUint32Slot(2, requestsSSE, 0)
+func StatsSSEAddRequestsSse(builder *flatbuffers.Builder, requestsSse uint32) {
+	builder.PrependUint32Slot(2, requestsSse, 0)
 }
 func StatsSSEEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

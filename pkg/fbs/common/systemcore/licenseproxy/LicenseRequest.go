@@ -7,14 +7,20 @@ import (
 )
 
 type LicenseRequestT struct {
-	Name string
-	Version string
+	Name string `json:"name"`
+	Version string `json:"version"`
 }
 
 func (t *LicenseRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	versionOffset := builder.CreateString(t.Version)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
 	LicenseRequestStart(builder)
 	LicenseRequestAddName(builder, nameOffset)
 	LicenseRequestAddVersion(builder, versionOffset)

@@ -11,16 +11,16 @@ import (
 
 /// General settings of Scheduler, startup behavior, callables, tasks and timing
 type AdminT struct {
-	StartupState CurrentState
-	StartupTimeout uint32
-	StartupErrorReaction common__scheduler__fbs.CurrentErrorReaction
-	TriggerSource common__scheduler__fbs.CurrentTrigger
-	ControlDebug *common__scheduler__controls__fbs.ControlsT
-	CpuInfo *CpuInfoT
-	HardwareWatchdogRequired bool
-	WatchdogDefaultValue common__scheduler__fbs.CallableWdgConfig
-	Utilization *UtilizationThresholdT
-	CallableTimeouts *CallableTimeoutsT
+	StartupState CurrentState `json:"startupState"`
+	StartupTimeout uint32 `json:"startupTimeout"`
+	StartupErrorReaction common__scheduler__fbs.CurrentErrorReaction `json:"startupErrorReaction"`
+	TriggerSource common__scheduler__fbs.CurrentTrigger `json:"triggerSource"`
+	ControlDebug *common__scheduler__controls__fbs.ControlsT `json:"controlDebug"`
+	CpuInfo *CpuInfoT `json:"cpuInfo"`
+	HardwareWatchdogRequired bool `json:"hardwareWatchdogRequired"`
+	WatchdogDefaultValue common__scheduler__fbs.CallableWdgConfig `json:"watchdogDefaultValue"`
+	Utilization *UtilizationThresholdT `json:"utilization"`
+	CallableTimeouts *CallableTimeoutsT `json:"callableTimeouts"`
 }
 
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

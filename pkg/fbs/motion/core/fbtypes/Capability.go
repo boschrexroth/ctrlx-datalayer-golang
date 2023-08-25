@@ -8,15 +8,18 @@ import (
 
 /// Response for a single capability
 type CapabilityT struct {
-	Count uint32
-	MainDiag uint32
-	DetailDiag uint32
-	AddInfo string
+	Count uint32 `json:"count"`
+	MainDiag uint32 `json:"mainDiag"`
+	DetailDiag uint32 `json:"detailDiag"`
+	AddInfo string `json:"addInfo"`
 }
 
 func (t *CapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	addInfoOffset := builder.CreateString(t.AddInfo)
+	addInfoOffset := flatbuffers.UOffsetT(0)
+	if t.AddInfo != "" {
+		addInfoOffset = builder.CreateString(t.AddInfo)
+	}
 	CapabilityStart(builder)
 	CapabilityAddCount(builder, t.Count)
 	CapabilityAddMainDiag(builder, t.MainDiag)

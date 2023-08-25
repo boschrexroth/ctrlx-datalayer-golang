@@ -7,14 +7,17 @@ import (
 )
 
 type SlaveAddressMappingRequestT struct {
-	Address *AddressedRequestT
-	SlaveName string
+	Address *AddressedRequestT `json:"address"`
+	SlaveName string `json:"slaveName"`
 }
 
 func (t *SlaveAddressMappingRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	addressOffset := t.Address.Pack(builder)
-	slaveNameOffset := builder.CreateString(t.SlaveName)
+	slaveNameOffset := flatbuffers.UOffsetT(0)
+	if t.SlaveName != "" {
+		slaveNameOffset = builder.CreateString(t.SlaveName)
+	}
 	SlaveAddressMappingRequestStart(builder)
 	SlaveAddressMappingRequestAddAddress(builder, addressOffset)
 	SlaveAddressMappingRequestAddSlaveName(builder, slaveNameOffset)

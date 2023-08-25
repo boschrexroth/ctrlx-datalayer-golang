@@ -7,10 +7,10 @@ import (
 )
 
 type SecConfigTypeT struct {
-	PolicyId uint32
-	ModeNone bool
-	ModeSign bool
-	ModeSignAndEncrypt bool
+	PolicyId uint32 `json:"policyId"`
+	ModeNone bool `json:"modeNone"`
+	ModeSign bool `json:"modeSign"`
+	ModeSignAndEncrypt bool `json:"modeSignAndEncrypt"`
 }
 
 func (t *SecConfigTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

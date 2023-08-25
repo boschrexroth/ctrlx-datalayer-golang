@@ -8,13 +8,16 @@ import (
 
 /// parameters for the command option SafeArea (monitoring of safe zones and work areas) for kinematics
 type KinCmdOptAxsDynLimDataT struct {
-	AxsName string
-	Lim *DynamicLimitsT
+	AxsName string `json:"axsName"`
+	Lim *DynamicLimitsT `json:"lim"`
 }
 
 func (t *KinCmdOptAxsDynLimDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsNameOffset := builder.CreateString(t.AxsName)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
 	limOffset := t.Lim.Pack(builder)
 	KinCmdOptAxsDynLimDataStart(builder)
 	KinCmdOptAxsDynLimDataAddAxsName(builder, axsNameOffset)

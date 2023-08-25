@@ -3,24 +3,40 @@
 package fbs
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type AppProjectInfoT struct {
-	Name string
-	Title string
-	Version string
-	Author string
-	Description string
+	Name string `json:"name"`
+	Title string `json:"title"`
+	Version string `json:"version"`
+	Author string `json:"author"`
+	Description string `json:"description"`
 }
 
 func (t *AppProjectInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	titleOffset := builder.CreateString(t.Title)
-	versionOffset := builder.CreateString(t.Version)
-	authorOffset := builder.CreateString(t.Author)
-	descriptionOffset := builder.CreateString(t.Description)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	titleOffset := flatbuffers.UOffsetT(0)
+	if t.Title != "" {
+		titleOffset = builder.CreateString(t.Title)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
+	authorOffset := flatbuffers.UOffsetT(0)
+	if t.Author != "" {
+		authorOffset = builder.CreateString(t.Author)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
 	AppProjectInfoStart(builder)
 	AppProjectInfoAddName(builder, nameOffset)
 	AppProjectInfoAddTitle(builder, titleOffset)
@@ -78,6 +94,38 @@ func (rcv *AppProjectInfo) Name() []byte {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
 	return nil
+}
+
+func AppProjectInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &AppProjectInfo{}
+	obj2 := &AppProjectInfo{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Name()) < string(obj2.Name())
+}
+
+func (rcv *AppProjectInfo) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &AppProjectInfo{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Name(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func (rcv *AppProjectInfo) Title() []byte {

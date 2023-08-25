@@ -7,7 +7,7 @@ import (
 )
 
 type MailboxStatisticCountersT struct {
-	Response *MailboxStatisticCountersResponseT
+	Response *MailboxStatisticCountersResponseT `json:"response"`
 }
 
 func (t *MailboxStatisticCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

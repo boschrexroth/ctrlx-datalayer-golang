@@ -9,9 +9,9 @@ import (
 )
 
 type ErrorReactionT struct {
-	Class *common__scheduler__watchdog__errorreaction__fbs.ClassT
-	Configuration *common__scheduler__watchdog__errorreaction__fbs.ConfigurationT
-	MaxConsecutiveErrors uint32
+	Class *common__scheduler__watchdog__errorreaction__fbs.ClassT `json:"class"`
+	Configuration *common__scheduler__watchdog__errorreaction__fbs.ConfigurationT `json:"configuration"`
+	MaxConsecutiveErrors uint32 `json:"maxConsecutiveErrors"`
 }
 
 func (t *ErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

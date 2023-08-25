@@ -8,7 +8,7 @@ import (
 
 /// parameters for the command set signal
 type CmdResetSignalT struct {
-	SignalId uint32
+	SignalId uint32 `json:"signalId"`
 }
 
 func (t *CmdResetSignalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

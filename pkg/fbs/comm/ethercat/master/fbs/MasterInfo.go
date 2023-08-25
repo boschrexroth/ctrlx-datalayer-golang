@@ -7,7 +7,7 @@ import (
 )
 
 type MasterInfoT struct {
-	Response *MasterInfoResponseT
+	Response *MasterInfoResponseT `json:"response"`
 }
 
 func (t *MasterInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

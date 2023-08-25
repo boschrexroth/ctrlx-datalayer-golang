@@ -7,7 +7,7 @@ import (
 )
 
 type FeedGroupSettingsT struct {
-	Type FeedGroup
+	Type FeedGroup `json:"type"`
 }
 
 func (t *FeedGroupSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

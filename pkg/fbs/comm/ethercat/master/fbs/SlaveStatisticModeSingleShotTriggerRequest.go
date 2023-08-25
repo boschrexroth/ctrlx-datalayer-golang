@@ -7,7 +7,7 @@ import (
 )
 
 type SlaveStatisticModeSingleShotTriggerRequestT struct {
-	Force bool
+	Force bool `json:"force"`
 }
 
 func (t *SlaveStatisticModeSingleShotTriggerRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

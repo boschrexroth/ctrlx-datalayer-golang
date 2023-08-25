@@ -7,14 +7,20 @@ import (
 )
 
 type CapabilityT struct {
-	Name string
-	Value string
+	Name string `json:"name"`
+	Value string `json:"value"`
 }
 
 func (t *CapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	valueOffset := builder.CreateString(t.Value)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != "" {
+		valueOffset = builder.CreateString(t.Value)
+	}
 	CapabilityStart(builder)
 	CapabilityAddName(builder, nameOffset)
 	CapabilityAddValue(builder, valueOffset)

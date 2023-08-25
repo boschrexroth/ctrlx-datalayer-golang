@@ -7,7 +7,7 @@ import (
 )
 
 type CapableInterfacesT struct {
-	InterfaceList []*InterfaceT
+	InterfaceList []*InterfaceT `json:"interfaceList"`
 }
 
 func (t *CapableInterfacesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

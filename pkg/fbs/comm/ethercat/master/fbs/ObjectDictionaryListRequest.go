@@ -7,10 +7,10 @@ import (
 )
 
 type ObjectDictionaryListRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	ListType ObjectDictionaryListType
-	MaxElements uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	ListType ObjectDictionaryListType `json:"listType"`
+	MaxElements uint32 `json:"maxElements"`
 }
 
 func (t *ObjectDictionaryListRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

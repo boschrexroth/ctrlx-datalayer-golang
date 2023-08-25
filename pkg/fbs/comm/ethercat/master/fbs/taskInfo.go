@@ -9,8 +9,8 @@ import (
 )
 
 type taskInfoT struct {
-	Task *common__scheduler__fbs.TaskT
-	Counter uint64
+	Task *common__scheduler__fbs.TaskT `json:"task"`
+	Counter uint64 `json:"counter"`
 }
 
 func (t *taskInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

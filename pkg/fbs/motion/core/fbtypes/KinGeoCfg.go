@@ -8,19 +8,23 @@ import (
 
 /// common configuration of orientation
 type KinGeoCfgT struct {
-	Orientation *KinOriCfgT
+	Orientation *KinOriCfgT `json:"orientation"`
+	Singularity *KinCfgSingularityT `json:"singularity"`
 }
 
 func (t *KinGeoCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	orientationOffset := t.Orientation.Pack(builder)
+	singularityOffset := t.Singularity.Pack(builder)
 	KinGeoCfgStart(builder)
 	KinGeoCfgAddOrientation(builder, orientationOffset)
+	KinGeoCfgAddSingularity(builder, singularityOffset)
 	return KinGeoCfgEnd(builder)
 }
 
 func (rcv *KinGeoCfg) UnPackTo(t *KinGeoCfgT) {
 	t.Orientation = rcv.Orientation(nil).UnPack()
+	t.Singularity = rcv.Singularity(nil).UnPack()
 }
 
 func (rcv *KinGeoCfg) UnPack() *KinGeoCfgT {
@@ -72,11 +76,29 @@ func (rcv *KinGeoCfg) Orientation(obj *KinOriCfg) *KinOriCfg {
 }
 
 /// orientation config
+/// configuration for singularity handling
+func (rcv *KinGeoCfg) Singularity(obj *KinCfgSingularity) *KinCfgSingularity {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinCfgSingularity)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration for singularity handling
 func KinGeoCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func KinGeoCfgAddOrientation(builder *flatbuffers.Builder, orientation flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(orientation), 0)
+}
+func KinGeoCfgAddSingularity(builder *flatbuffers.Builder, singularity flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(singularity), 0)
 }
 func KinGeoCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

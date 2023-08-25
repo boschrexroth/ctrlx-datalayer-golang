@@ -4,27 +4,27 @@ package fbtypes
 
 import "strconv"
 
-type ObjectTypeCmdOptionInfoReq int8
+type ObjectType_CmdOptionInfoReq int8
 
 const (
-	ObjectType_CmdOptionInfoReqUNKNOWN ObjectTypeCmdOptionInfoReq = 0
-	ObjectType_CmdOptionInfoReqAXS     ObjectTypeCmdOptionInfoReq = 1
-	ObjectType_CmdOptionInfoReqKIN     ObjectTypeCmdOptionInfoReq = 2
+	ObjectType_CmdOptionInfoReqUNKNOWN ObjectType_CmdOptionInfoReq = 0
+	ObjectType_CmdOptionInfoReqAXS     ObjectType_CmdOptionInfoReq = 1
+	ObjectType_CmdOptionInfoReqKIN     ObjectType_CmdOptionInfoReq = 2
 )
 
-var EnumNamesObjectType_CmdOptionInfoReq = map[ObjectTypeCmdOptionInfoReq]string{
+var EnumNamesObjectType_CmdOptionInfoReq = map[ObjectType_CmdOptionInfoReq]string{
 	ObjectType_CmdOptionInfoReqUNKNOWN: "UNKNOWN",
 	ObjectType_CmdOptionInfoReqAXS:     "AXS",
 	ObjectType_CmdOptionInfoReqKIN:     "KIN",
 }
 
-var EnumValuesObjectType_CmdOptionInfoReq = map[string]ObjectTypeCmdOptionInfoReq{
+var EnumValuesObjectType_CmdOptionInfoReq = map[string]ObjectType_CmdOptionInfoReq{
 	"UNKNOWN": ObjectType_CmdOptionInfoReqUNKNOWN,
 	"AXS":     ObjectType_CmdOptionInfoReqAXS,
 	"KIN":     ObjectType_CmdOptionInfoReqKIN,
 }
 
-func (v ObjectTypeCmdOptionInfoReq) String() string {
+func (v ObjectType_CmdOptionInfoReq) String() string {
 	if s, ok := EnumNamesObjectType_CmdOptionInfoReq[v]; ok {
 		return s
 	}

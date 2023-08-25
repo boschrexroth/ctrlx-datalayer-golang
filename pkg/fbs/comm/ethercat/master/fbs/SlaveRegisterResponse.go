@@ -7,7 +7,7 @@ import (
 )
 
 type SlaveRegisterResponseT struct {
-	Data []byte
+	Data []byte `json:"data"`
 }
 
 func (t *SlaveRegisterResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

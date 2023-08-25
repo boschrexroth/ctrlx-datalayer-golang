@@ -8,26 +8,49 @@ import (
 
 /// data of a single configuration parameter of a joint transformation when reading all data of an implemented joint transformation
 type KinStateJntTrafoDataParamT struct {
-	Name string
-	Description string
-	Image string
-	DocRef string
-	Group string
-	UnitValueType string
-	UnitObjType string
-	Values []string
-	Type VarType
+	Name string `json:"name"`
+	Description string `json:"description"`
+	Image string `json:"image"`
+	DocRef string `json:"docRef"`
+	Group string `json:"group"`
+	UnitValueType string `json:"unitValueType"`
+	UnitObjType string `json:"unitObjType"`
+	Values []string `json:"values"`
+	Type VarType `json:"type"`
+	Mandatory bool `json:"mandatory"`
+	Subgroup string `json:"subgroup"`
 }
 
 func (t *KinStateJntTrafoDataParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
-	imageOffset := builder.CreateString(t.Image)
-	docRefOffset := builder.CreateString(t.DocRef)
-	groupOffset := builder.CreateString(t.Group)
-	unitValueTypeOffset := builder.CreateString(t.UnitValueType)
-	unitObjTypeOffset := builder.CreateString(t.UnitObjType)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
+	imageOffset := flatbuffers.UOffsetT(0)
+	if t.Image != "" {
+		imageOffset = builder.CreateString(t.Image)
+	}
+	docRefOffset := flatbuffers.UOffsetT(0)
+	if t.DocRef != "" {
+		docRefOffset = builder.CreateString(t.DocRef)
+	}
+	groupOffset := flatbuffers.UOffsetT(0)
+	if t.Group != "" {
+		groupOffset = builder.CreateString(t.Group)
+	}
+	unitValueTypeOffset := flatbuffers.UOffsetT(0)
+	if t.UnitValueType != "" {
+		unitValueTypeOffset = builder.CreateString(t.UnitValueType)
+	}
+	unitObjTypeOffset := flatbuffers.UOffsetT(0)
+	if t.UnitObjType != "" {
+		unitObjTypeOffset = builder.CreateString(t.UnitObjType)
+	}
 	valuesOffset := flatbuffers.UOffsetT(0)
 	if t.Values != nil {
 		valuesLength := len(t.Values)
@@ -41,6 +64,10 @@ func (t *KinStateJntTrafoDataParamT) Pack(builder *flatbuffers.Builder) flatbuff
 		}
 		valuesOffset = builder.EndVector(valuesLength)
 	}
+	subgroupOffset := flatbuffers.UOffsetT(0)
+	if t.Subgroup != "" {
+		subgroupOffset = builder.CreateString(t.Subgroup)
+	}
 	KinStateJntTrafoDataParamStart(builder)
 	KinStateJntTrafoDataParamAddName(builder, nameOffset)
 	KinStateJntTrafoDataParamAddDescription(builder, descriptionOffset)
@@ -51,6 +78,8 @@ func (t *KinStateJntTrafoDataParamT) Pack(builder *flatbuffers.Builder) flatbuff
 	KinStateJntTrafoDataParamAddUnitObjType(builder, unitObjTypeOffset)
 	KinStateJntTrafoDataParamAddValues(builder, valuesOffset)
 	KinStateJntTrafoDataParamAddType(builder, t.Type)
+	KinStateJntTrafoDataParamAddMandatory(builder, t.Mandatory)
+	KinStateJntTrafoDataParamAddSubgroup(builder, subgroupOffset)
 	return KinStateJntTrafoDataParamEnd(builder)
 }
 
@@ -68,6 +97,8 @@ func (rcv *KinStateJntTrafoDataParam) UnPackTo(t *KinStateJntTrafoDataParamT) {
 		t.Values[j] = string(rcv.Values(j))
 	}
 	t.Type = rcv.Type()
+	t.Mandatory = rcv.Mandatory()
+	t.Subgroup = string(rcv.Subgroup())
 }
 
 func (rcv *KinStateJntTrafoDataParam) UnPack() *KinStateJntTrafoDataParamT {
@@ -207,8 +238,32 @@ func (rcv *KinStateJntTrafoDataParam) MutateType(n VarType) bool {
 	return rcv._tab.MutateInt8Slot(20, int8(n))
 }
 
+/// Is this parameter mandatory?
+func (rcv *KinStateJntTrafoDataParam) Mandatory() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+/// Is this parameter mandatory?
+func (rcv *KinStateJntTrafoDataParam) MutateMandatory(n bool) bool {
+	return rcv._tab.MutateBoolSlot(22, n)
+}
+
+/// SubGroup of the parameter (for advanced grouping in the HMI)
+func (rcv *KinStateJntTrafoDataParam) Subgroup() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// SubGroup of the parameter (for advanced grouping in the HMI)
 func KinStateJntTrafoDataParamStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(11)
 }
 func KinStateJntTrafoDataParamAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -239,6 +294,12 @@ func KinStateJntTrafoDataParamStartValuesVector(builder *flatbuffers.Builder, nu
 }
 func KinStateJntTrafoDataParamAddType(builder *flatbuffers.Builder, type_ VarType) {
 	builder.PrependInt8Slot(8, int8(type_), 1)
+}
+func KinStateJntTrafoDataParamAddMandatory(builder *flatbuffers.Builder, mandatory bool) {
+	builder.PrependBoolSlot(9, mandatory, true)
+}
+func KinStateJntTrafoDataParamAddSubgroup(builder *flatbuffers.Builder, subgroup flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(subgroup), 0)
 }
 func KinStateJntTrafoDataParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

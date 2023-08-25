@@ -7,7 +7,7 @@ import (
 )
 
 type StateT struct {
-	State ConnectionState
+	State ConnectionState `json:"state"`
 }
 
 func (t *StateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

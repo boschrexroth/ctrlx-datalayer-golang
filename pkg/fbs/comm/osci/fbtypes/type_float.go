@@ -7,7 +7,7 @@ import (
 )
 
 type type_floatT struct {
-	Value float32
+	Value float32 `json:"value"`
 }
 
 func (t *type_floatT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,9 +7,9 @@ import (
 )
 
 type Cmd_AxsAbortT struct {
-	Base *Cmd_BaseT
-	Dec float64
-	JrkDec float64
+	Base *Cmd_BaseT `json:"base"`
+	Dec float64 `json:"dec"`
+	JrkDec float64 `json:"jrkDec"`
 }
 
 func (t *Cmd_AxsAbortT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

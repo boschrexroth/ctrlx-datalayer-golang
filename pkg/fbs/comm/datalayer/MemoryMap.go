@@ -7,9 +7,9 @@ import (
 )
 
 type MemoryMapT struct {
-	Variables []*VariableT
-	Revision uint32
-	DisableInputImage bool
+	Variables []*VariableT `json:"variables"`
+	Revision uint32 `json:"revision"`
+	DisableInputImage bool `json:"disableInputImage"`
 }
 
 func (t *MemoryMapT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -89,6 +89,15 @@ func (rcv *MemoryMap) Variables(obj *Variable, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *MemoryMap) VariablesByKey(obj *Variable, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

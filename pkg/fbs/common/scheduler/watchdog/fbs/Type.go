@@ -8,7 +8,7 @@ import (
 
 /// Type of watchdog of the task
 type TypeT struct {
-	Type CurrentType
+	Type CurrentType `json:"type"`
 }
 
 func (t *TypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

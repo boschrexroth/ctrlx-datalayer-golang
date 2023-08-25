@@ -7,13 +7,16 @@ import (
 )
 
 type StackentryT struct {
-	Frame uint32
-	Stack string
+	Frame uint32 `json:"frame"`
+	Stack string `json:"stack"`
 }
 
 func (t *StackentryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	stackOffset := builder.CreateString(t.Stack)
+	stackOffset := flatbuffers.UOffsetT(0)
+	if t.Stack != "" {
+		stackOffset = builder.CreateString(t.Stack)
+	}
 	StackentryStart(builder)
 	StackentryAddFrame(builder, t.Frame)
 	StackentryAddStack(builder, stackOffset)
@@ -69,6 +72,43 @@ func (rcv *Stackentry) Frame() uint32 {
 
 func (rcv *Stackentry) MutateFrame(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
+}
+
+func StackentryKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Stackentry{}
+	obj2 := &Stackentry{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return obj1.Frame() < obj2.Frame()
+}
+
+func (rcv *Stackentry) LookupByKey(key uint32, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &Stackentry{}
+		obj.Init(buf, tableOffset)
+		val := obj.Frame()
+		comp := 0
+		if val > key {
+			comp = 1
+		} else if val < key {
+			comp = -1
+		}
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func (rcv *Stackentry) Stack() []byte {

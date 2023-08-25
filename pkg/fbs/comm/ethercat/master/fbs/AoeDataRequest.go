@@ -7,14 +7,14 @@ import (
 )
 
 type AoeDataRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	TargetNetId []byte
-	TargetPort uint16
-	IndexGroup uint32
-	IndexOffset uint32
-	Data []byte
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	TargetNetId []byte `json:"targetNetId"`
+	TargetPort uint16 `json:"targetPort"`
+	IndexGroup uint32 `json:"indexGroup"`
+	IndexOffset uint32 `json:"indexOffset"`
+	Data []byte `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *AoeDataRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

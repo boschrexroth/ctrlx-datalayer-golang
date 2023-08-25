@@ -8,10 +8,10 @@ import (
 
 /// parameters of the axis velocity command
 type AxsCmdVelDataT struct {
-	AxsVel float64
-	DriveVelMode bool
-	Buffered bool
-	Lim *DynamicLimitsT
+	AxsVel float64 `json:"axsVel"`
+	DriveVelMode bool `json:"driveVelMode"`
+	Buffered bool `json:"buffered"`
+	Lim *DynamicLimitsT `json:"lim"`
 }
 
 func (t *AxsCmdVelDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -72,7 +72,7 @@ func (rcv *AxsCmdVelData) AxsVel() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// commanded target velocity (can be negative)
@@ -100,7 +100,7 @@ func (rcv *AxsCmdVelData) Buffered() bool {
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
-	return false
+	return true
 }
 
 /// should this be a buffered command?
@@ -127,13 +127,13 @@ func AxsCmdVelDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }
 func AxsCmdVelDataAddAxsVel(builder *flatbuffers.Builder, axsVel float64) {
-	builder.PrependFloat64Slot(0, axsVel, 0.0)
+	builder.PrependFloat64Slot(0, axsVel, 1.0)
 }
 func AxsCmdVelDataAddDriveVelMode(builder *flatbuffers.Builder, driveVelMode bool) {
 	builder.PrependBoolSlot(1, driveVelMode, false)
 }
 func AxsCmdVelDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
-	builder.PrependBoolSlot(2, buffered, false)
+	builder.PrependBoolSlot(2, buffered, true)
 }
 func AxsCmdVelDataAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(lim), 0)

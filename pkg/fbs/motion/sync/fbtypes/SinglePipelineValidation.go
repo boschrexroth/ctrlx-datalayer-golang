@@ -8,16 +8,22 @@ import (
 
 /// single result of the validation of a calculation pipeline
 type SinglePipelineValidationT struct {
-	MainDiag uint32
-	DetailDiag uint32
-	Uri string
-	AddInfo string
+	MainDiag uint32 `json:"mainDiag"`
+	DetailDiag uint32 `json:"detailDiag"`
+	Uri string `json:"uri"`
+	AddInfo string `json:"addInfo"`
 }
 
 func (t *SinglePipelineValidationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	uriOffset := builder.CreateString(t.Uri)
-	addInfoOffset := builder.CreateString(t.AddInfo)
+	uriOffset := flatbuffers.UOffsetT(0)
+	if t.Uri != "" {
+		uriOffset = builder.CreateString(t.Uri)
+	}
+	addInfoOffset := flatbuffers.UOffsetT(0)
+	if t.AddInfo != "" {
+		addInfoOffset = builder.CreateString(t.AddInfo)
+	}
 	SinglePipelineValidationStart(builder)
 	SinglePipelineValidationAddMainDiag(builder, t.MainDiag)
 	SinglePipelineValidationAddDetailDiag(builder, t.DetailDiag)

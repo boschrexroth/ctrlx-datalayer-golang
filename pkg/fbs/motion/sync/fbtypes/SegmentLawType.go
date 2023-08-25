@@ -8,237 +8,172 @@ import "strconv"
 type SegmentLawType uint32
 
 const (
-	/// ctrlX, MLC, CamBuilder - Points-table with interpolation based on #points (0-100 Spline Interpolation, 101-... Linear Interpolation)
-	SegmentLawTypeSEG_LAW_TABLE_AUTO       SegmentLawType = 0
-	/// ctrlX, MLC, CamBuilder - Inclined sine curve
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_RR_POLY5         SegmentLawType = 256
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_RG_POLY5         SegmentLawType = 512
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_RG_POLY7         SegmentLawType = 768
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_GR_POLY5         SegmentLawType = 1024
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_GR_POLY7         SegmentLawType = 1280
-	/// ctrlX, MLC, CamBuilder - Constant velocity
-	SegmentLawTypeSEG_LAW_GG_LINEAR        SegmentLawType = 1536
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_GG_POLY5         SegmentLawType = 1792
-	/// ctrlX, MLC, CamBuilder - Standstill
-	SegmentLawTypeSEG_LAW_RR_LINEAR        SegmentLawType = 2048
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_RR_POLY7         SegmentLawType = 2304
-	/// ctrlX, MLC, CamBuilder - Sine curve
-	SegmentLawTypeSEG_LAW_RR_SINUS         SegmentLawType = 2560
-	/// ctrlX, MLC, CamBuilder - Sinusoid of Gutman
-	SegmentLawTypeSEG_LAW_RR_SINUSGUTMAN   SegmentLawType = 2816
-	/// ctrlX, MLC, CamBuilder - Acceleration-optimal inclined sine curve
-	SegmentLawTypeSEG_LAW_RR_SINUSACC      SegmentLawType = 3072
-	/// ctrlX, MLC, CamBuilder - Torque-inclined sine curve
-	SegmentLawTypeSEG_LAW_RR_SINUSTOR      SegmentLawType = 3328
-	/// ctrlX, MLC, CamBuilder - Modified acceleration trapezoid
-	SegmentLawTypeSEG_LAW_RR_MOD_TRAPEZ    SegmentLawType = 3584
-	/// ctrlX, MLC, CamBuilder - Modified sine curve
-	SegmentLawTypeSEG_LAW_RR_MOD_SIN       SegmentLawType = 3840
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_GG_POLY7         SegmentLawType = 4096
-	/// ctrlX, MLC, CamBuilder - Modified sine curve
-	SegmentLawTypeSEG_LAW_GG_MOD_SIN       SegmentLawType = 4352
-	/// ctrlX, MLC, CamBuilder - Velocity-limited polynomial 5th order
-	SegmentLawTypeSEG_LAW_RR_POLY5VLIM     SegmentLawType = 4608
-	/// ctrlX, MLC, CamBuilder - Quadratic parabola
-	SegmentLawTypeSEG_LAW_RR_PARABOLA      SegmentLawType = 4864
-	/// ctrlX, MLC, CamBuilder - Polynomial 8th order
-	SegmentLawTypeSEG_LAW_RR_POLY8         SegmentLawType = 5120
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_BB_POLY5         SegmentLawType = 8192
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_BB_POLY7         SegmentLawType = 8448
-	/// RESERVED (not impl.)   - Polynomial 8th order
-	SegmentLawTypeSEG_LAW_BB_POLY8         SegmentLawType = 8704
-	/// EXPERIMENTAL (done)    - Modified acceleration trapezoid
-	SegmentLawTypeSEG_LAW_RU_MOD_TRAPEZ    SegmentLawType = 12288
-	/// EXPERIMENTAL (in work) - Harmonic combination
-	SegmentLawTypeSEG_LAW_RU_HARMONIC      SegmentLawType = 12544
-	/// EXPERIMENTAL (done)    - Modified acceleration trapezoid
-	SegmentLawTypeSEG_LAW_UR_MOD_TRAPEZ    SegmentLawType = 12800
-	/// EXPERIMENTAL (in work) - Harmonic combination
-	SegmentLawTypeSEG_LAW_UR_HARMONIC      SegmentLawType = 13056
-	/// EXPERIMENTAL (in work) - Harmonic combination
-	SegmentLawTypeSEG_LAW_GU_HARMONIC      SegmentLawType = 13312
-	/// EXPERIMENTAL (in work) - Harmonic combination
-	SegmentLawTypeSEG_LAW_UG_HARMONIC      SegmentLawType = 13568
-	/// EXPERIMENTAL (in work) - Sine
-	SegmentLawTypeSEG_LAW_UU_SIN           SegmentLawType = 13824
-	/// EXPERIMENTAL (in work) - Sine-linear-combination
-	SegmentLawTypeSEG_LAW_UU_SINLIN        SegmentLawType = 14080
-	/// ctrlX, MLC, CamBuilder - Polynomial 5th order
-	SegmentLawTypeSEG_LAW_POLY5            SegmentLawType = 16384
-	/// ctrlX, MLC, CamBuilder - Polynomial 7th order
-	SegmentLawTypeSEG_LAW_POLY7            SegmentLawType = 16640
-	/// ctrlX, MLC, CamBuilder - Polynomial 2nd order
-	SegmentLawTypeSEG_LAW_POLY2            SegmentLawType = 16896
-	/// ctrlX, MLC, CamBuilder - Polynomial 3rd order
-	SegmentLawTypeSEG_LAW_POLY3            SegmentLawType = 17152
-	/// ctrlX, MLC, CamBuilder - Polynomial 4th order
-	SegmentLawTypeSEG_LAW_POLY4            SegmentLawType = 17408
-	/// ctrlX, MLC, CamBuilder - Polynomial 8th order
-	SegmentLawTypeSEG_LAW_POLY8            SegmentLawType = 17664
-	/// IndraSize
-	SegmentLawTypeSEG_LAW_POLY4_TYPE2      SegmentLawType = 17920
-	/// IndraSize
-	SegmentLawTypeSEG_LAW_POLY8_TYPE2      SegmentLawType = 18176
-	/// ctrlX, MLC, CamBuilder - Acceleration-limited (trapezoid profile)
-	SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_ACC SegmentLawType = 20480
-	/// EXPERIMENTAL (in work) - Velocity-limited (trapezoid profile)
-	SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_VEL SegmentLawType = 20736
-	/// ctrlX, MLC, CamBuilder - Velocity-limited polynomial 5th order
-	SegmentLawTypeSEG_LAW_BB_POLY5VLIM     SegmentLawType = 24576
-	/// ctrlX, MLC, CamBuilder - Free of harmonics polynomial 5th order
-	SegmentLawTypeSEG_LAW_BB_POLY5OSC      SegmentLawType = 24832
-	/// ctrlX, MLC, CamBuilder - Acceleration-limited motion (trapezoid profile)
-	SegmentLawTypeSEG_LAW_INT_ACC          SegmentLawType = 28672
-	/// ctrlX, MLC, CamBuilder - Acceleration-limited motion (sinusoid profile)
-	SegmentLawTypeSEG_LAW_INT_SIN          SegmentLawType = 28928
-	/// ctrlX, MLC, CamBuilder - Jerk-limited motion
-	SegmentLawTypeSEG_LAW_INT_JRK          SegmentLawType = 29184
-	/// ctrlX, MLC, CamBuilder - Linear Acceleration
-	SegmentLawTypeSEG_LAW_ACAM             SegmentLawType = 32768
-	/// ctrlX, MLC, CamBuilder - Linear Velocity
-	SegmentLawTypeSEG_LAW_VCAM             SegmentLawType = 33024
-	/// ctrlX, MLC, CamBuilder - Velocity 2nd order (Start acceleration zero)
-	SegmentLawTypeSEG_LAW_VCAM2_A          SegmentLawType = 33280
-	/// ctrlX, MLC, CamBuilder - Velocity 2nd order (End acceleration zero)
-	SegmentLawTypeSEG_LAW_VCAM2_B          SegmentLawType = 33536
-	/// EXPERIMENTAL (in work) - Velocity and overshoot limited retract movement
-	SegmentLawTypeSEG_LAW_SCALEDCAM        SegmentLawType = 33792
-	///             CamBuilder - Points-table without interpolation
-	SegmentLawTypeSEG_LAW_TABLE            SegmentLawType = 40960
-	///             CamBuilder - Points-table with linear interpolation
-	SegmentLawTypeSEG_LAW_TABLE_LIN        SegmentLawType = 41216
-	///             CamBuilder - Points-table with spline interpolation
-	SegmentLawTypeSEG_LAW_TABLE_SPLINE     SegmentLawType = 41472
-	/// RESERVED (not impl.)
-	SegmentLawTypeSEG_LAW_TABLE_SCALED     SegmentLawType = 41728
+	/// Rest in rest, inclined sine curve
+	SegmentLawTypeREST_IN_REST_INCLINED_SINE         SegmentLawType = 0
+	/// Rest in rest, polynomial 5th order
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_5          SegmentLawType = 1
+	/// Rest in velocity, polynomial 5th order
+	SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_5      SegmentLawType = 2
+	/// Rest in velocity, polynomial 7th order
+	SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_7      SegmentLawType = 3
+	/// Velocity in rest, polynomial 5th order
+	SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_5      SegmentLawType = 4
+	/// Velocity in rest, polynomial 7th order
+	SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_7      SegmentLawType = 5
+	/// Velocity in velocity, constant velocity
+	SegmentLawTypeVELOCITY_IN_VELOCITY_LINEAR        SegmentLawType = 6
+	/// Velocity in velocity, polynomial 5th order
+	SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_5  SegmentLawType = 7
+	/// Rest in rest, standstill
+	SegmentLawTypeREST_IN_REST_LINEAR                SegmentLawType = 8
+	/// Rest in rest, polynomial 7th order
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_7          SegmentLawType = 9
+	/// Rest in rest, sine curve
+	SegmentLawTypeREST_IN_REST_SINE                  SegmentLawType = 10
+	/// Rest in rest, sinusoid of Gutman
+	SegmentLawTypeREST_IN_REST_SINE_GUTMAN           SegmentLawType = 11
+	/// Rest in rest, acceleration-optimal inclined sine curve
+	SegmentLawTypeREST_IN_REST_SINE_ACC              SegmentLawType = 12
+	/// Rest in rest, torque-inclined sine curve
+	SegmentLawTypeREST_IN_REST_SINE_TORQUE           SegmentLawType = 13
+	/// Rest in rest, modified acceleration trapezoid
+	SegmentLawTypeREST_IN_REST_MOD_TRAPEZ            SegmentLawType = 14
+	/// Rest in rest, modified sine curve
+	SegmentLawTypeREST_IN_REST_MOD_SINE              SegmentLawType = 15
+	/// Velocity in velocity, polynomial 7th order
+	SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_7  SegmentLawType = 16
+	/// Velocity in velocity, modified sine curve
+	SegmentLawTypeVELOCITY_IN_VELOCITY_MOD_SINE      SegmentLawType = 17
+	/// Rest in rest, velocity-limited polynomial 5th order
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_5_VLIM     SegmentLawType = 18
+	/// Rest in rest, quadratic parabola
+	SegmentLawTypeREST_IN_REST_PARABOLA              SegmentLawType = 19
+	/// Rest in rest, polynomial 8th order
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_8          SegmentLawType = 20
+	/// Motion in motion, polynomial 5th order
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5      SegmentLawType = 21
+	/// Motion in motion, polynomial 7th order
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_7      SegmentLawType = 22
+	/// Polynomial 5th order
+	SegmentLawTypeCOMMON_POLYNOMIAL_5                SegmentLawType = 23
+	/// Polynomial 7th order
+	SegmentLawTypeCOMMON_POLYNOMIAL_7                SegmentLawType = 24
+	/// Polynomial 2nd order
+	SegmentLawTypeCOMMON_POLYNOMIAL_2                SegmentLawType = 25
+	/// Polynomial 3rd order
+	SegmentLawTypeCOMMON_POLYNOMIAL_3                SegmentLawType = 26
+	/// Polynomial 4th order
+	SegmentLawTypeCOMMON_POLYNOMIAL_4                SegmentLawType = 27
+	/// Polynomial 8th order
+	SegmentLawTypeCOMMON_POLYNOMIAL_8                SegmentLawType = 28
+	/// Velocity in velocity, Acceleration-limited (trapezoid profile)
+	SegmentLawTypeVELOCITY_IN_VELOCITY_TRAPEZ_ALIM   SegmentLawType = 29
+	/// Motion in motion, Velocity-limited polynomial 5th order
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_VLIM SegmentLawType = 30
+	/// Motion in motion, Free of harmonics polynomial 5th order
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_SLIM SegmentLawType = 31
+	/// Acceleration-limited motion (trapezoid profile)
+	SegmentLawTypeFIT_VEL_TRAPEZE_ALIM               SegmentLawType = 32
+	/// Acceleration-limited motion (sinusoid profile)
+	SegmentLawTypeFIT_SINE_TRAPEZE_ALIM              SegmentLawType = 33
+	/// Jerk-limited motion
+	SegmentLawTypeFIT_ACC_TRAPEZE_JLIM               SegmentLawType = 34
+	/// Linear Acceleration
+	SegmentLawTypeMOTION_IN_MOTION_ACAM              SegmentLawType = 35
+	/// Linear Velocity
+	SegmentLawTypeMOTION_IN_MOTION_VCAM              SegmentLawType = 36
+	/// Velocity 2nd order (Start acceleration zero)
+	SegmentLawTypeMOTION_IN_MOTION_VCAM2_A           SegmentLawType = 37
+	/// Velocity 2nd order (End acceleration zero)
+	SegmentLawTypeMOTION_IN_MOTION_VCAM2_B           SegmentLawType = 38
+	/// Points-table with interpolation
+	SegmentLawTypePOINTS_TABLE_AUTO                  SegmentLawType = 39
 )
 
 var EnumNamesSegmentLawType = map[SegmentLawType]string{
-	SegmentLawTypeSEG_LAW_TABLE_AUTO:       "SEG_LAW_TABLE_AUTO",
-	SegmentLawTypeSEG_LAW_RR_POLY5:         "SEG_LAW_RR_POLY5",
-	SegmentLawTypeSEG_LAW_RG_POLY5:         "SEG_LAW_RG_POLY5",
-	SegmentLawTypeSEG_LAW_RG_POLY7:         "SEG_LAW_RG_POLY7",
-	SegmentLawTypeSEG_LAW_GR_POLY5:         "SEG_LAW_GR_POLY5",
-	SegmentLawTypeSEG_LAW_GR_POLY7:         "SEG_LAW_GR_POLY7",
-	SegmentLawTypeSEG_LAW_GG_LINEAR:        "SEG_LAW_GG_LINEAR",
-	SegmentLawTypeSEG_LAW_GG_POLY5:         "SEG_LAW_GG_POLY5",
-	SegmentLawTypeSEG_LAW_RR_LINEAR:        "SEG_LAW_RR_LINEAR",
-	SegmentLawTypeSEG_LAW_RR_POLY7:         "SEG_LAW_RR_POLY7",
-	SegmentLawTypeSEG_LAW_RR_SINUS:         "SEG_LAW_RR_SINUS",
-	SegmentLawTypeSEG_LAW_RR_SINUSGUTMAN:   "SEG_LAW_RR_SINUSGUTMAN",
-	SegmentLawTypeSEG_LAW_RR_SINUSACC:      "SEG_LAW_RR_SINUSACC",
-	SegmentLawTypeSEG_LAW_RR_SINUSTOR:      "SEG_LAW_RR_SINUSTOR",
-	SegmentLawTypeSEG_LAW_RR_MOD_TRAPEZ:    "SEG_LAW_RR_MOD_TRAPEZ",
-	SegmentLawTypeSEG_LAW_RR_MOD_SIN:       "SEG_LAW_RR_MOD_SIN",
-	SegmentLawTypeSEG_LAW_GG_POLY7:         "SEG_LAW_GG_POLY7",
-	SegmentLawTypeSEG_LAW_GG_MOD_SIN:       "SEG_LAW_GG_MOD_SIN",
-	SegmentLawTypeSEG_LAW_RR_POLY5VLIM:     "SEG_LAW_RR_POLY5VLIM",
-	SegmentLawTypeSEG_LAW_RR_PARABOLA:      "SEG_LAW_RR_PARABOLA",
-	SegmentLawTypeSEG_LAW_RR_POLY8:         "SEG_LAW_RR_POLY8",
-	SegmentLawTypeSEG_LAW_BB_POLY5:         "SEG_LAW_BB_POLY5",
-	SegmentLawTypeSEG_LAW_BB_POLY7:         "SEG_LAW_BB_POLY7",
-	SegmentLawTypeSEG_LAW_BB_POLY8:         "SEG_LAW_BB_POLY8",
-	SegmentLawTypeSEG_LAW_RU_MOD_TRAPEZ:    "SEG_LAW_RU_MOD_TRAPEZ",
-	SegmentLawTypeSEG_LAW_RU_HARMONIC:      "SEG_LAW_RU_HARMONIC",
-	SegmentLawTypeSEG_LAW_UR_MOD_TRAPEZ:    "SEG_LAW_UR_MOD_TRAPEZ",
-	SegmentLawTypeSEG_LAW_UR_HARMONIC:      "SEG_LAW_UR_HARMONIC",
-	SegmentLawTypeSEG_LAW_GU_HARMONIC:      "SEG_LAW_GU_HARMONIC",
-	SegmentLawTypeSEG_LAW_UG_HARMONIC:      "SEG_LAW_UG_HARMONIC",
-	SegmentLawTypeSEG_LAW_UU_SIN:           "SEG_LAW_UU_SIN",
-	SegmentLawTypeSEG_LAW_UU_SINLIN:        "SEG_LAW_UU_SINLIN",
-	SegmentLawTypeSEG_LAW_POLY5:            "SEG_LAW_POLY5",
-	SegmentLawTypeSEG_LAW_POLY7:            "SEG_LAW_POLY7",
-	SegmentLawTypeSEG_LAW_POLY2:            "SEG_LAW_POLY2",
-	SegmentLawTypeSEG_LAW_POLY3:            "SEG_LAW_POLY3",
-	SegmentLawTypeSEG_LAW_POLY4:            "SEG_LAW_POLY4",
-	SegmentLawTypeSEG_LAW_POLY8:            "SEG_LAW_POLY8",
-	SegmentLawTypeSEG_LAW_POLY4_TYPE2:      "SEG_LAW_POLY4_TYPE2",
-	SegmentLawTypeSEG_LAW_POLY8_TYPE2:      "SEG_LAW_POLY8_TYPE2",
-	SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_ACC: "SEG_LAW_GG_VELTRAPEZ_ACC",
-	SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_VEL: "SEG_LAW_GG_VELTRAPEZ_VEL",
-	SegmentLawTypeSEG_LAW_BB_POLY5VLIM:     "SEG_LAW_BB_POLY5VLIM",
-	SegmentLawTypeSEG_LAW_BB_POLY5OSC:      "SEG_LAW_BB_POLY5OSC",
-	SegmentLawTypeSEG_LAW_INT_ACC:          "SEG_LAW_INT_ACC",
-	SegmentLawTypeSEG_LAW_INT_SIN:          "SEG_LAW_INT_SIN",
-	SegmentLawTypeSEG_LAW_INT_JRK:          "SEG_LAW_INT_JRK",
-	SegmentLawTypeSEG_LAW_ACAM:             "SEG_LAW_ACAM",
-	SegmentLawTypeSEG_LAW_VCAM:             "SEG_LAW_VCAM",
-	SegmentLawTypeSEG_LAW_VCAM2_A:          "SEG_LAW_VCAM2_A",
-	SegmentLawTypeSEG_LAW_VCAM2_B:          "SEG_LAW_VCAM2_B",
-	SegmentLawTypeSEG_LAW_SCALEDCAM:        "SEG_LAW_SCALEDCAM",
-	SegmentLawTypeSEG_LAW_TABLE:            "SEG_LAW_TABLE",
-	SegmentLawTypeSEG_LAW_TABLE_LIN:        "SEG_LAW_TABLE_LIN",
-	SegmentLawTypeSEG_LAW_TABLE_SPLINE:     "SEG_LAW_TABLE_SPLINE",
-	SegmentLawTypeSEG_LAW_TABLE_SCALED:     "SEG_LAW_TABLE_SCALED",
+	SegmentLawTypeREST_IN_REST_INCLINED_SINE:         "REST_IN_REST_INCLINED_SINE",
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_5:          "REST_IN_REST_POLYNOMIAL_5",
+	SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_5:      "REST_IN_VELOCITY_POLYNOMIAL_5",
+	SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_7:      "REST_IN_VELOCITY_POLYNOMIAL_7",
+	SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_5:      "VELOCITY_IN_REST_POLYNOMIAL_5",
+	SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_7:      "VELOCITY_IN_REST_POLYNOMIAL_7",
+	SegmentLawTypeVELOCITY_IN_VELOCITY_LINEAR:        "VELOCITY_IN_VELOCITY_LINEAR",
+	SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_5:  "VELOCITY_IN_VELOCITY_POLYNOMIAL_5",
+	SegmentLawTypeREST_IN_REST_LINEAR:                "REST_IN_REST_LINEAR",
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_7:          "REST_IN_REST_POLYNOMIAL_7",
+	SegmentLawTypeREST_IN_REST_SINE:                  "REST_IN_REST_SINE",
+	SegmentLawTypeREST_IN_REST_SINE_GUTMAN:           "REST_IN_REST_SINE_GUTMAN",
+	SegmentLawTypeREST_IN_REST_SINE_ACC:              "REST_IN_REST_SINE_ACC",
+	SegmentLawTypeREST_IN_REST_SINE_TORQUE:           "REST_IN_REST_SINE_TORQUE",
+	SegmentLawTypeREST_IN_REST_MOD_TRAPEZ:            "REST_IN_REST_MOD_TRAPEZ",
+	SegmentLawTypeREST_IN_REST_MOD_SINE:              "REST_IN_REST_MOD_SINE",
+	SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_7:  "VELOCITY_IN_VELOCITY_POLYNOMIAL_7",
+	SegmentLawTypeVELOCITY_IN_VELOCITY_MOD_SINE:      "VELOCITY_IN_VELOCITY_MOD_SINE",
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_5_VLIM:     "REST_IN_REST_POLYNOMIAL_5_VLIM",
+	SegmentLawTypeREST_IN_REST_PARABOLA:              "REST_IN_REST_PARABOLA",
+	SegmentLawTypeREST_IN_REST_POLYNOMIAL_8:          "REST_IN_REST_POLYNOMIAL_8",
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5:      "MOTION_IN_MOTION_POLYNOMIAL_5",
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_7:      "MOTION_IN_MOTION_POLYNOMIAL_7",
+	SegmentLawTypeCOMMON_POLYNOMIAL_5:                "COMMON_POLYNOMIAL_5",
+	SegmentLawTypeCOMMON_POLYNOMIAL_7:                "COMMON_POLYNOMIAL_7",
+	SegmentLawTypeCOMMON_POLYNOMIAL_2:                "COMMON_POLYNOMIAL_2",
+	SegmentLawTypeCOMMON_POLYNOMIAL_3:                "COMMON_POLYNOMIAL_3",
+	SegmentLawTypeCOMMON_POLYNOMIAL_4:                "COMMON_POLYNOMIAL_4",
+	SegmentLawTypeCOMMON_POLYNOMIAL_8:                "COMMON_POLYNOMIAL_8",
+	SegmentLawTypeVELOCITY_IN_VELOCITY_TRAPEZ_ALIM:   "VELOCITY_IN_VELOCITY_TRAPEZ_ALIM",
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_VLIM: "MOTION_IN_MOTION_POLYNOMIAL_5_VLIM",
+	SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_SLIM: "MOTION_IN_MOTION_POLYNOMIAL_5_SLIM",
+	SegmentLawTypeFIT_VEL_TRAPEZE_ALIM:               "FIT_VEL_TRAPEZE_ALIM",
+	SegmentLawTypeFIT_SINE_TRAPEZE_ALIM:              "FIT_SINE_TRAPEZE_ALIM",
+	SegmentLawTypeFIT_ACC_TRAPEZE_JLIM:               "FIT_ACC_TRAPEZE_JLIM",
+	SegmentLawTypeMOTION_IN_MOTION_ACAM:              "MOTION_IN_MOTION_ACAM",
+	SegmentLawTypeMOTION_IN_MOTION_VCAM:              "MOTION_IN_MOTION_VCAM",
+	SegmentLawTypeMOTION_IN_MOTION_VCAM2_A:           "MOTION_IN_MOTION_VCAM2_A",
+	SegmentLawTypeMOTION_IN_MOTION_VCAM2_B:           "MOTION_IN_MOTION_VCAM2_B",
+	SegmentLawTypePOINTS_TABLE_AUTO:                  "POINTS_TABLE_AUTO",
 }
 
 var EnumValuesSegmentLawType = map[string]SegmentLawType{
-	"SEG_LAW_TABLE_AUTO":       SegmentLawTypeSEG_LAW_TABLE_AUTO,
-	"SEG_LAW_RR_POLY5":         SegmentLawTypeSEG_LAW_RR_POLY5,
-	"SEG_LAW_RG_POLY5":         SegmentLawTypeSEG_LAW_RG_POLY5,
-	"SEG_LAW_RG_POLY7":         SegmentLawTypeSEG_LAW_RG_POLY7,
-	"SEG_LAW_GR_POLY5":         SegmentLawTypeSEG_LAW_GR_POLY5,
-	"SEG_LAW_GR_POLY7":         SegmentLawTypeSEG_LAW_GR_POLY7,
-	"SEG_LAW_GG_LINEAR":        SegmentLawTypeSEG_LAW_GG_LINEAR,
-	"SEG_LAW_GG_POLY5":         SegmentLawTypeSEG_LAW_GG_POLY5,
-	"SEG_LAW_RR_LINEAR":        SegmentLawTypeSEG_LAW_RR_LINEAR,
-	"SEG_LAW_RR_POLY7":         SegmentLawTypeSEG_LAW_RR_POLY7,
-	"SEG_LAW_RR_SINUS":         SegmentLawTypeSEG_LAW_RR_SINUS,
-	"SEG_LAW_RR_SINUSGUTMAN":   SegmentLawTypeSEG_LAW_RR_SINUSGUTMAN,
-	"SEG_LAW_RR_SINUSACC":      SegmentLawTypeSEG_LAW_RR_SINUSACC,
-	"SEG_LAW_RR_SINUSTOR":      SegmentLawTypeSEG_LAW_RR_SINUSTOR,
-	"SEG_LAW_RR_MOD_TRAPEZ":    SegmentLawTypeSEG_LAW_RR_MOD_TRAPEZ,
-	"SEG_LAW_RR_MOD_SIN":       SegmentLawTypeSEG_LAW_RR_MOD_SIN,
-	"SEG_LAW_GG_POLY7":         SegmentLawTypeSEG_LAW_GG_POLY7,
-	"SEG_LAW_GG_MOD_SIN":       SegmentLawTypeSEG_LAW_GG_MOD_SIN,
-	"SEG_LAW_RR_POLY5VLIM":     SegmentLawTypeSEG_LAW_RR_POLY5VLIM,
-	"SEG_LAW_RR_PARABOLA":      SegmentLawTypeSEG_LAW_RR_PARABOLA,
-	"SEG_LAW_RR_POLY8":         SegmentLawTypeSEG_LAW_RR_POLY8,
-	"SEG_LAW_BB_POLY5":         SegmentLawTypeSEG_LAW_BB_POLY5,
-	"SEG_LAW_BB_POLY7":         SegmentLawTypeSEG_LAW_BB_POLY7,
-	"SEG_LAW_BB_POLY8":         SegmentLawTypeSEG_LAW_BB_POLY8,
-	"SEG_LAW_RU_MOD_TRAPEZ":    SegmentLawTypeSEG_LAW_RU_MOD_TRAPEZ,
-	"SEG_LAW_RU_HARMONIC":      SegmentLawTypeSEG_LAW_RU_HARMONIC,
-	"SEG_LAW_UR_MOD_TRAPEZ":    SegmentLawTypeSEG_LAW_UR_MOD_TRAPEZ,
-	"SEG_LAW_UR_HARMONIC":      SegmentLawTypeSEG_LAW_UR_HARMONIC,
-	"SEG_LAW_GU_HARMONIC":      SegmentLawTypeSEG_LAW_GU_HARMONIC,
-	"SEG_LAW_UG_HARMONIC":      SegmentLawTypeSEG_LAW_UG_HARMONIC,
-	"SEG_LAW_UU_SIN":           SegmentLawTypeSEG_LAW_UU_SIN,
-	"SEG_LAW_UU_SINLIN":        SegmentLawTypeSEG_LAW_UU_SINLIN,
-	"SEG_LAW_POLY5":            SegmentLawTypeSEG_LAW_POLY5,
-	"SEG_LAW_POLY7":            SegmentLawTypeSEG_LAW_POLY7,
-	"SEG_LAW_POLY2":            SegmentLawTypeSEG_LAW_POLY2,
-	"SEG_LAW_POLY3":            SegmentLawTypeSEG_LAW_POLY3,
-	"SEG_LAW_POLY4":            SegmentLawTypeSEG_LAW_POLY4,
-	"SEG_LAW_POLY8":            SegmentLawTypeSEG_LAW_POLY8,
-	"SEG_LAW_POLY4_TYPE2":      SegmentLawTypeSEG_LAW_POLY4_TYPE2,
-	"SEG_LAW_POLY8_TYPE2":      SegmentLawTypeSEG_LAW_POLY8_TYPE2,
-	"SEG_LAW_GG_VELTRAPEZ_ACC": SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_ACC,
-	"SEG_LAW_GG_VELTRAPEZ_VEL": SegmentLawTypeSEG_LAW_GG_VELTRAPEZ_VEL,
-	"SEG_LAW_BB_POLY5VLIM":     SegmentLawTypeSEG_LAW_BB_POLY5VLIM,
-	"SEG_LAW_BB_POLY5OSC":      SegmentLawTypeSEG_LAW_BB_POLY5OSC,
-	"SEG_LAW_INT_ACC":          SegmentLawTypeSEG_LAW_INT_ACC,
-	"SEG_LAW_INT_SIN":          SegmentLawTypeSEG_LAW_INT_SIN,
-	"SEG_LAW_INT_JRK":          SegmentLawTypeSEG_LAW_INT_JRK,
-	"SEG_LAW_ACAM":             SegmentLawTypeSEG_LAW_ACAM,
-	"SEG_LAW_VCAM":             SegmentLawTypeSEG_LAW_VCAM,
-	"SEG_LAW_VCAM2_A":          SegmentLawTypeSEG_LAW_VCAM2_A,
-	"SEG_LAW_VCAM2_B":          SegmentLawTypeSEG_LAW_VCAM2_B,
-	"SEG_LAW_SCALEDCAM":        SegmentLawTypeSEG_LAW_SCALEDCAM,
-	"SEG_LAW_TABLE":            SegmentLawTypeSEG_LAW_TABLE,
-	"SEG_LAW_TABLE_LIN":        SegmentLawTypeSEG_LAW_TABLE_LIN,
-	"SEG_LAW_TABLE_SPLINE":     SegmentLawTypeSEG_LAW_TABLE_SPLINE,
-	"SEG_LAW_TABLE_SCALED":     SegmentLawTypeSEG_LAW_TABLE_SCALED,
+	"REST_IN_REST_INCLINED_SINE":         SegmentLawTypeREST_IN_REST_INCLINED_SINE,
+	"REST_IN_REST_POLYNOMIAL_5":          SegmentLawTypeREST_IN_REST_POLYNOMIAL_5,
+	"REST_IN_VELOCITY_POLYNOMIAL_5":      SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_5,
+	"REST_IN_VELOCITY_POLYNOMIAL_7":      SegmentLawTypeREST_IN_VELOCITY_POLYNOMIAL_7,
+	"VELOCITY_IN_REST_POLYNOMIAL_5":      SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_5,
+	"VELOCITY_IN_REST_POLYNOMIAL_7":      SegmentLawTypeVELOCITY_IN_REST_POLYNOMIAL_7,
+	"VELOCITY_IN_VELOCITY_LINEAR":        SegmentLawTypeVELOCITY_IN_VELOCITY_LINEAR,
+	"VELOCITY_IN_VELOCITY_POLYNOMIAL_5":  SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_5,
+	"REST_IN_REST_LINEAR":                SegmentLawTypeREST_IN_REST_LINEAR,
+	"REST_IN_REST_POLYNOMIAL_7":          SegmentLawTypeREST_IN_REST_POLYNOMIAL_7,
+	"REST_IN_REST_SINE":                  SegmentLawTypeREST_IN_REST_SINE,
+	"REST_IN_REST_SINE_GUTMAN":           SegmentLawTypeREST_IN_REST_SINE_GUTMAN,
+	"REST_IN_REST_SINE_ACC":              SegmentLawTypeREST_IN_REST_SINE_ACC,
+	"REST_IN_REST_SINE_TORQUE":           SegmentLawTypeREST_IN_REST_SINE_TORQUE,
+	"REST_IN_REST_MOD_TRAPEZ":            SegmentLawTypeREST_IN_REST_MOD_TRAPEZ,
+	"REST_IN_REST_MOD_SINE":              SegmentLawTypeREST_IN_REST_MOD_SINE,
+	"VELOCITY_IN_VELOCITY_POLYNOMIAL_7":  SegmentLawTypeVELOCITY_IN_VELOCITY_POLYNOMIAL_7,
+	"VELOCITY_IN_VELOCITY_MOD_SINE":      SegmentLawTypeVELOCITY_IN_VELOCITY_MOD_SINE,
+	"REST_IN_REST_POLYNOMIAL_5_VLIM":     SegmentLawTypeREST_IN_REST_POLYNOMIAL_5_VLIM,
+	"REST_IN_REST_PARABOLA":              SegmentLawTypeREST_IN_REST_PARABOLA,
+	"REST_IN_REST_POLYNOMIAL_8":          SegmentLawTypeREST_IN_REST_POLYNOMIAL_8,
+	"MOTION_IN_MOTION_POLYNOMIAL_5":      SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5,
+	"MOTION_IN_MOTION_POLYNOMIAL_7":      SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_7,
+	"COMMON_POLYNOMIAL_5":                SegmentLawTypeCOMMON_POLYNOMIAL_5,
+	"COMMON_POLYNOMIAL_7":                SegmentLawTypeCOMMON_POLYNOMIAL_7,
+	"COMMON_POLYNOMIAL_2":                SegmentLawTypeCOMMON_POLYNOMIAL_2,
+	"COMMON_POLYNOMIAL_3":                SegmentLawTypeCOMMON_POLYNOMIAL_3,
+	"COMMON_POLYNOMIAL_4":                SegmentLawTypeCOMMON_POLYNOMIAL_4,
+	"COMMON_POLYNOMIAL_8":                SegmentLawTypeCOMMON_POLYNOMIAL_8,
+	"VELOCITY_IN_VELOCITY_TRAPEZ_ALIM":   SegmentLawTypeVELOCITY_IN_VELOCITY_TRAPEZ_ALIM,
+	"MOTION_IN_MOTION_POLYNOMIAL_5_VLIM": SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_VLIM,
+	"MOTION_IN_MOTION_POLYNOMIAL_5_SLIM": SegmentLawTypeMOTION_IN_MOTION_POLYNOMIAL_5_SLIM,
+	"FIT_VEL_TRAPEZE_ALIM":               SegmentLawTypeFIT_VEL_TRAPEZE_ALIM,
+	"FIT_SINE_TRAPEZE_ALIM":              SegmentLawTypeFIT_SINE_TRAPEZE_ALIM,
+	"FIT_ACC_TRAPEZE_JLIM":               SegmentLawTypeFIT_ACC_TRAPEZE_JLIM,
+	"MOTION_IN_MOTION_ACAM":              SegmentLawTypeMOTION_IN_MOTION_ACAM,
+	"MOTION_IN_MOTION_VCAM":              SegmentLawTypeMOTION_IN_MOTION_VCAM,
+	"MOTION_IN_MOTION_VCAM2_A":           SegmentLawTypeMOTION_IN_MOTION_VCAM2_A,
+	"MOTION_IN_MOTION_VCAM2_B":           SegmentLawTypeMOTION_IN_MOTION_VCAM2_B,
+	"POINTS_TABLE_AUTO":                  SegmentLawTypePOINTS_TABLE_AUTO,
 }
 
 func (v SegmentLawType) String() string {

@@ -8,8 +8,8 @@ import (
 
 /// This table defines the enabling states of all trace units for a specific device.
 type EnablingStatesT struct {
-	EnablingStates []*EnablingStateT
-	MachineIdentification string
+	EnablingStates []*EnablingStateT `json:"enablingStates"`
+	MachineIdentification string `json:"machineIdentification"`
 }
 
 func (t *EnablingStatesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -27,7 +27,10 @@ func (t *EnablingStatesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 		}
 		enablingStatesOffset = builder.EndVector(enablingStatesLength)
 	}
-	machineIdentificationOffset := builder.CreateString(t.MachineIdentification)
+	machineIdentificationOffset := flatbuffers.UOffsetT(0)
+	if t.MachineIdentification != "" {
+		machineIdentificationOffset = builder.CreateString(t.MachineIdentification)
+	}
 	EnablingStatesStart(builder)
 	EnablingStatesAddEnablingStates(builder, enablingStatesOffset)
 	EnablingStatesAddMachineIdentification(builder, machineIdentificationOffset)

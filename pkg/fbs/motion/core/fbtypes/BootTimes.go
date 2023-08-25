@@ -8,16 +8,22 @@ import (
 
 /// return type of requests of the times of the last booting
 type BootTimesT struct {
-	Elapsed float64
-	ElapsedThread float64
-	StartedTimeStamp string
-	EndedTimeStamp string
+	Elapsed float64 `json:"elapsed"`
+	ElapsedThread float64 `json:"elapsedThread"`
+	StartedTimeStamp string `json:"startedTimeStamp"`
+	EndedTimeStamp string `json:"endedTimeStamp"`
 }
 
 func (t *BootTimesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	startedTimeStampOffset := builder.CreateString(t.StartedTimeStamp)
-	endedTimeStampOffset := builder.CreateString(t.EndedTimeStamp)
+	startedTimeStampOffset := flatbuffers.UOffsetT(0)
+	if t.StartedTimeStamp != "" {
+		startedTimeStampOffset = builder.CreateString(t.StartedTimeStamp)
+	}
+	endedTimeStampOffset := flatbuffers.UOffsetT(0)
+	if t.EndedTimeStamp != "" {
+		endedTimeStampOffset = builder.CreateString(t.EndedTimeStamp)
+	}
 	BootTimesStart(builder)
 	BootTimesAddElapsed(builder, t.Elapsed)
 	BootTimesAddElapsedThread(builder, t.ElapsedThread)

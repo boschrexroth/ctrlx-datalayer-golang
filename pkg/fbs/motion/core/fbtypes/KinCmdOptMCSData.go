@@ -8,14 +8,20 @@ import (
 
 /// parameters for the command option MCS (machine coordinate system a.k.a. joint transformation) for kinematics
 type KinCmdOptMCSDataT struct {
-	PermType string
-	SetName string
+	PermType string `json:"permType"`
+	SetName string `json:"setName"`
 }
 
 func (t *KinCmdOptMCSDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
-	setNameOffset := builder.CreateString(t.SetName)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
+	setNameOffset := flatbuffers.UOffsetT(0)
+	if t.SetName != "" {
+		setNameOffset = builder.CreateString(t.SetName)
+	}
 	KinCmdOptMCSDataStart(builder)
 	KinCmdOptMCSDataAddPermType(builder, permTypeOffset)
 	KinCmdOptMCSDataAddSetName(builder, setNameOffset)

@@ -7,30 +7,51 @@ import (
 )
 
 type ProblemT struct {
-	Type string
-	Title string
-	Status int32
-	Detail string
-	Instance string
-	MainDiagnosisCode string
-	DetailedDiagnosisCode string
-	DynamicDescription string
-	Severity Severity
-	Links []string
-	Entity string
-	MoreInfo []byte
-	Cause []*ProblemT
+	Type string `json:"type"`
+	Title string `json:"title"`
+	Status int32 `json:"status"`
+	Detail string `json:"detail"`
+	Instance string `json:"instance"`
+	MainDiagnosisCode string `json:"mainDiagnosisCode"`
+	DetailedDiagnosisCode string `json:"detailedDiagnosisCode"`
+	DynamicDescription string `json:"dynamicDescription"`
+	Severity Severity `json:"severity"`
+	Links []string `json:"links"`
+	Entity string `json:"entity"`
+	MoreInfo []byte `json:"moreInfo"`
+	Cause []*ProblemT `json:"cause"`
 }
 
 func (t *ProblemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	typeOffset := builder.CreateString(t.Type)
-	titleOffset := builder.CreateString(t.Title)
-	detailOffset := builder.CreateString(t.Detail)
-	instanceOffset := builder.CreateString(t.Instance)
-	mainDiagnosisCodeOffset := builder.CreateString(t.MainDiagnosisCode)
-	detailedDiagnosisCodeOffset := builder.CreateString(t.DetailedDiagnosisCode)
-	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
+	titleOffset := flatbuffers.UOffsetT(0)
+	if t.Title != "" {
+		titleOffset = builder.CreateString(t.Title)
+	}
+	detailOffset := flatbuffers.UOffsetT(0)
+	if t.Detail != "" {
+		detailOffset = builder.CreateString(t.Detail)
+	}
+	instanceOffset := flatbuffers.UOffsetT(0)
+	if t.Instance != "" {
+		instanceOffset = builder.CreateString(t.Instance)
+	}
+	mainDiagnosisCodeOffset := flatbuffers.UOffsetT(0)
+	if t.MainDiagnosisCode != "" {
+		mainDiagnosisCodeOffset = builder.CreateString(t.MainDiagnosisCode)
+	}
+	detailedDiagnosisCodeOffset := flatbuffers.UOffsetT(0)
+	if t.DetailedDiagnosisCode != "" {
+		detailedDiagnosisCodeOffset = builder.CreateString(t.DetailedDiagnosisCode)
+	}
+	dynamicDescriptionOffset := flatbuffers.UOffsetT(0)
+	if t.DynamicDescription != "" {
+		dynamicDescriptionOffset = builder.CreateString(t.DynamicDescription)
+	}
 	linksOffset := flatbuffers.UOffsetT(0)
 	if t.Links != nil {
 		linksLength := len(t.Links)
@@ -44,7 +65,10 @@ func (t *ProblemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		linksOffset = builder.EndVector(linksLength)
 	}
-	entityOffset := builder.CreateString(t.Entity)
+	entityOffset := flatbuffers.UOffsetT(0)
+	if t.Entity != "" {
+		entityOffset = builder.CreateString(t.Entity)
+	}
 	moreInfoOffset := flatbuffers.UOffsetT(0)
 	if t.MoreInfo != nil {
 		moreInfoOffset = builder.CreateByteString(t.MoreInfo)
@@ -63,7 +87,7 @@ func (t *ProblemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		causeOffset = builder.EndVector(causeLength)
 	}
 	ProblemStart(builder)
-	ProblemAddType(builder, typeOffset)
+	ProblemAddType(builder, type_Offset)
 	ProblemAddTitle(builder, titleOffset)
 	ProblemAddStatus(builder, t.Status)
 	ProblemAddDetail(builder, detailOffset)

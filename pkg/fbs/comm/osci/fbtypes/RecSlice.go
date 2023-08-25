@@ -7,7 +7,7 @@ import (
 )
 
 type RecSliceT struct {
-	Values []*RecValueT
+	Values []*RecValueT `json:"values"`
 }
 
 func (t *RecSliceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

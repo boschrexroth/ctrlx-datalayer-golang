@@ -8,8 +8,8 @@ import (
 
 /// Timing histogram
 type HistogramT struct {
-	Scale uint64
-	Values []uint64
+	Scale uint64 `json:"scale"`
+	Values []uint64 `json:"values"`
 }
 
 func (t *HistogramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

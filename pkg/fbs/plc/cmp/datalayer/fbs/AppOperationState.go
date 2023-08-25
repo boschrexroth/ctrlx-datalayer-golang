@@ -7,28 +7,28 @@ import (
 )
 
 type AppOperationStateT struct {
-	ProgramLoaded bool
-	DownloadActive bool
-	OnlineChangeActive bool
-	StoreBootprojectActive bool
-	ForceVariablesActive bool
-	Exception bool
-	InitializeActive bool
-	StoreBootprojectOnlyActive bool
-	ExitActive bool
-	Deleted bool
-	ResetActive bool
-	RetainMismatch bool
-	BootprojectValid bool
-	LoadBootprojectActive bool
-	FlowControlActive bool
-	RunInFlash bool
-	ResetOutputs bool
-	CoreDumpLoaded bool
-	ExecutenPointsActive bool
-	CoreDumpCreating bool
-	SingelCycleActive bool
-	ResetDisabled bool
+	ProgramLoaded bool `json:"programLoaded"`
+	DownloadActive bool `json:"downloadActive"`
+	OnlineChangeActive bool `json:"onlineChangeActive"`
+	StoreBootprojectActive bool `json:"storeBootprojectActive"`
+	ForceVariablesActive bool `json:"forceVariablesActive"`
+	Exception bool `json:"exception"`
+	InitializeActive bool `json:"initializeActive"`
+	StoreBootprojectOnlyActive bool `json:"storeBootprojectOnlyActive"`
+	ExitActive bool `json:"exitActive"`
+	Deleted bool `json:"deleted"`
+	ResetActive bool `json:"resetActive"`
+	RetainMismatch bool `json:"retainMismatch"`
+	BootprojectValid bool `json:"bootprojectValid"`
+	LoadBootprojectActive bool `json:"loadBootprojectActive"`
+	FlowControlActive bool `json:"flowControlActive"`
+	RunInFlash bool `json:"runInFlash"`
+	ResetOutputs bool `json:"resetOutputs"`
+	CoreDumpLoaded bool `json:"coreDumpLoaded"`
+	ExecutenPointsActive bool `json:"executenPointsActive"`
+	CoreDumpCreating bool `json:"coreDumpCreating"`
+	SingelCycleActive bool `json:"singelCycleActive"`
+	ResetDisabled bool `json:"resetDisabled"`
 }
 
 func (t *AppOperationStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

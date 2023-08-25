@@ -7,14 +7,20 @@ import (
 )
 
 type Misc_CmdOptionInfoRespT struct {
-	Bfbs string
-	Description string
+	Bfbs string `json:"bfbs"`
+	Description string `json:"description"`
 }
 
 func (t *Misc_CmdOptionInfoRespT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	bfbsOffset := builder.CreateString(t.Bfbs)
-	descriptionOffset := builder.CreateString(t.Description)
+	bfbsOffset := flatbuffers.UOffsetT(0)
+	if t.Bfbs != "" {
+		bfbsOffset = builder.CreateString(t.Bfbs)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
 	Misc_CmdOptionInfoRespStart(builder)
 	Misc_CmdOptionInfoRespAddBfbs(builder, bfbsOffset)
 	Misc_CmdOptionInfoRespAddDescription(builder, descriptionOffset)

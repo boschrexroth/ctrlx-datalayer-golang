@@ -7,15 +7,15 @@ import (
 )
 
 type FrameStatisticCountersResponseT struct {
-	NumTxFrames uint32
-	NumRxFrames uint32
-	NumCyclicFrames uint32
-	NumCyclicDatagrams uint32
-	NumAcyclicFrames uint32
-	NumAcyclicDatagrams uint32
-	NumLostFrames uint32
-	NumLostCyclicFrames uint32
-	NumLostAcyclicFrames uint32
+	NumTxFrames uint32 `json:"numTxFrames"`
+	NumRxFrames uint32 `json:"numRxFrames"`
+	NumCyclicFrames uint32 `json:"numCyclicFrames"`
+	NumCyclicDatagrams uint32 `json:"numCyclicDatagrams"`
+	NumAcyclicFrames uint32 `json:"numAcyclicFrames"`
+	NumAcyclicDatagrams uint32 `json:"numAcyclicDatagrams"`
+	NumLostFrames uint32 `json:"numLostFrames"`
+	NumLostCyclicFrames uint32 `json:"numLostCyclicFrames"`
+	NumLostAcyclicFrames uint32 `json:"numLostAcyclicFrames"`
 }
 
 func (t *FrameStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

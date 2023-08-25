@@ -8,14 +8,14 @@ import (
 
 /// currently interpolated values
 type KinIpoValuesT struct {
-	IpoPos []float64
-	IpoVel float64
-	IpoAcc float64
-	IpoJrk float64
-	IpoPosUnits []string
-	IpoVelUnits string
-	IpoAccUnits string
-	IpoJrkUnits string
+	IpoPos []float64 `json:"ipoPos"`
+	IpoVel float64 `json:"ipoVel"`
+	IpoAcc float64 `json:"ipoAcc"`
+	IpoJrk float64 `json:"ipoJrk"`
+	IpoPosUnits []string `json:"ipoPosUnits"`
+	IpoVelUnits string `json:"ipoVelUnits"`
+	IpoAccUnits string `json:"ipoAccUnits"`
+	IpoJrkUnits string `json:"ipoJrkUnits"`
 }
 
 func (t *KinIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -42,9 +42,18 @@ func (t *KinIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		}
 		ipoPosUnitsOffset = builder.EndVector(ipoPosUnitsLength)
 	}
-	ipoVelUnitsOffset := builder.CreateString(t.IpoVelUnits)
-	ipoAccUnitsOffset := builder.CreateString(t.IpoAccUnits)
-	ipoJrkUnitsOffset := builder.CreateString(t.IpoJrkUnits)
+	ipoVelUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.IpoVelUnits != "" {
+		ipoVelUnitsOffset = builder.CreateString(t.IpoVelUnits)
+	}
+	ipoAccUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.IpoAccUnits != "" {
+		ipoAccUnitsOffset = builder.CreateString(t.IpoAccUnits)
+	}
+	ipoJrkUnitsOffset := flatbuffers.UOffsetT(0)
+	if t.IpoJrkUnits != "" {
+		ipoJrkUnitsOffset = builder.CreateString(t.IpoJrkUnits)
+	}
 	KinIpoValuesStart(builder)
 	KinIpoValuesAddIpoPos(builder, ipoPosOffset)
 	KinIpoValuesAddIpoVel(builder, t.IpoVel)

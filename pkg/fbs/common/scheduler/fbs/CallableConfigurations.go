@@ -8,7 +8,7 @@ import (
 
 /// Callable configurations of a callable factory
 type CallableConfigurationsT struct {
-	Configurations []*CallableConfigurationT
+	Configurations []*CallableConfigurationT `json:"configurations"`
 }
 
 func (t *CallableConfigurationsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

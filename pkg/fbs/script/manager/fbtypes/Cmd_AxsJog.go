@@ -7,16 +7,19 @@ import (
 )
 
 type Cmd_AxsJogT struct {
-	Base *Cmd_BaseT
-	Dir string
-	Incr float64
-	Lim *Cmd_DynLimitsT
+	Base *Cmd_BaseT `json:"base"`
+	Dir string `json:"dir"`
+	Incr float64 `json:"incr"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
 }
 
 func (t *Cmd_AxsJogT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	dirOffset := builder.CreateString(t.Dir)
+	dirOffset := flatbuffers.UOffsetT(0)
+	if t.Dir != "" {
+		dirOffset = builder.CreateString(t.Dir)
+	}
 	limOffset := t.Lim.Pack(builder)
 	Cmd_AxsJogStart(builder)
 	Cmd_AxsJogAddBase(builder, baseOffset)

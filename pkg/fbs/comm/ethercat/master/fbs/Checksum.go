@@ -7,7 +7,7 @@ import (
 )
 
 type ChecksumT struct {
-	Response *ChecksumResponseT
+	Response *ChecksumResponseT `json:"response"`
 }
 
 func (t *ChecksumT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,7 +7,7 @@ import (
 )
 
 type EntryDescriptionResponseT struct {
-	Data []byte
+	Data []byte `json:"data"`
 }
 
 func (t *EntryDescriptionResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

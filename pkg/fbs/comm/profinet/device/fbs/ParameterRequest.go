@@ -7,8 +7,8 @@ import (
 )
 
 type ParameterRequestT struct {
-	Eidn uint32
-	Data []byte
+	Eidn uint32 `json:"eidn"`
+	Data []byte `json:"data"`
 }
 
 func (t *ParameterRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

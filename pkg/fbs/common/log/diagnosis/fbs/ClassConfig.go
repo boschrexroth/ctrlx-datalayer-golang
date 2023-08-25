@@ -8,7 +8,7 @@ import (
 
 /// This table defines which log class is selected.
 type ClassConfigT struct {
-	ClassConfig Class
+	ClassConfig Class `json:"classConfig"`
 }
 
 func (t *ClassConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,9 +7,9 @@ import (
 )
 
 type ChangeEventsT struct {
-	ValueChange DataChangeTrigger
-	BrowselistChange bool
-	MetadataChange bool
+	ValueChange DataChangeTrigger `json:"valueChange"`
+	BrowselistChange bool `json:"browselistChange"`
+	MetadataChange bool `json:"metadataChange"`
 }
 
 func (t *ChangeEventsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

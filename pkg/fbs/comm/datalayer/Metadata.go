@@ -7,26 +7,38 @@ import (
 )
 
 type MetadataT struct {
-	NodeClass NodeClass
-	Operations *AllowedOperationsT
-	Description string
-	DescriptionUrl string
-	DisplayName string
-	DisplayFormat DisplayFormat
-	Unit string
-	Extensions []*ExtensionT
-	References []*ReferenceT
-	Descriptions []*LocaleTextT
-	DisplayNames []*LocaleTextT
+	NodeClass NodeClass `json:"nodeClass"`
+	Operations *AllowedOperationsT `json:"operations"`
+	Description string `json:"description"`
+	DescriptionUrl string `json:"descriptionUrl"`
+	DisplayName string `json:"displayName"`
+	DisplayFormat DisplayFormat `json:"displayFormat"`
+	Unit string `json:"unit"`
+	Extensions []*ExtensionT `json:"extensions"`
+	References []*ReferenceT `json:"references"`
+	Descriptions []*LocaleTextT `json:"descriptions"`
+	DisplayNames []*LocaleTextT `json:"displayNames"`
 }
 
 func (t *MetadataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	operationsOffset := t.Operations.Pack(builder)
-	descriptionOffset := builder.CreateString(t.Description)
-	descriptionUrlOffset := builder.CreateString(t.DescriptionUrl)
-	displayNameOffset := builder.CreateString(t.DisplayName)
-	unitOffset := builder.CreateString(t.Unit)
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
+	descriptionUrlOffset := flatbuffers.UOffsetT(0)
+	if t.DescriptionUrl != "" {
+		descriptionUrlOffset = builder.CreateString(t.DescriptionUrl)
+	}
+	displayNameOffset := flatbuffers.UOffsetT(0)
+	if t.DisplayName != "" {
+		displayNameOffset = builder.CreateString(t.DisplayName)
+	}
+	unitOffset := flatbuffers.UOffsetT(0)
+	if t.Unit != "" {
+		unitOffset = builder.CreateString(t.Unit)
+	}
 	extensionsOffset := flatbuffers.UOffsetT(0)
 	if t.Extensions != nil {
 		extensionsLength := len(t.Extensions)
@@ -251,6 +263,15 @@ func (rcv *Metadata) Extensions(obj *Extension, j int) bool {
 	return false
 }
 
+func (rcv *Metadata) ExtensionsByKey(obj *Extension, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
 func (rcv *Metadata) ExtensionsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -267,6 +288,15 @@ func (rcv *Metadata) References(obj *Reference, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Metadata) ReferencesByKey(obj *Reference, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }
@@ -291,6 +321,15 @@ func (rcv *Metadata) Descriptions(obj *LocaleText, j int) bool {
 	return false
 }
 
+func (rcv *Metadata) DescriptionsByKey(obj *LocaleText, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
 func (rcv *Metadata) DescriptionsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -307,6 +346,15 @@ func (rcv *Metadata) DisplayNames(obj *LocaleText, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Metadata) DisplayNamesByKey(obj *LocaleText, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

@@ -3,19 +3,26 @@
 package fbtypes
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 /// Single entry of the general unit configuration for a motion object
 type UnitCfgObjSingleT struct {
-	ValueType string
-	Abbreviation string
+	ValueType string `json:"valueType"`
+	Abbreviation string `json:"abbreviation"`
 }
 
 func (t *UnitCfgObjSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	valueTypeOffset := builder.CreateString(t.ValueType)
-	abbreviationOffset := builder.CreateString(t.Abbreviation)
+	valueTypeOffset := flatbuffers.UOffsetT(0)
+	if t.ValueType != "" {
+		valueTypeOffset = builder.CreateString(t.ValueType)
+	}
+	abbreviationOffset := flatbuffers.UOffsetT(0)
+	if t.Abbreviation != "" {
+		abbreviationOffset = builder.CreateString(t.Abbreviation)
+	}
 	UnitCfgObjSingleStart(builder)
 	UnitCfgObjSingleAddValueType(builder, valueTypeOffset)
 	UnitCfgObjSingleAddAbbreviation(builder, abbreviationOffset)
@@ -71,6 +78,38 @@ func (rcv *UnitCfgObjSingle) ValueType() []byte {
 }
 
 /// the unit value type of the entry (position, velocity, jerk, ...)
+func UnitCfgObjSingleKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &UnitCfgObjSingle{}
+	obj2 := &UnitCfgObjSingle{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.ValueType()) < string(obj2.ValueType())
+}
+
+func (rcv *UnitCfgObjSingle) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &UnitCfgObjSingle{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.ValueType(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// abbreviation of the unit (as it will being used in flatbuffers and files)
 func (rcv *UnitCfgObjSingle) Abbreviation() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

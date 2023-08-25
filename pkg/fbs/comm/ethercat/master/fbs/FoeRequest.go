@@ -7,13 +7,13 @@ import (
 )
 
 type FoeRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	Data []byte
-	MaxLength uint32
-	Filename string
-	Password uint32
-	Timeout uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	Data []byte `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
+	Filename string `json:"filename"`
+	Password uint32 `json:"password"`
+	Timeout uint32 `json:"timeout"`
 }
 
 func (t *FoeRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -22,7 +22,10 @@ func (t *FoeRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t.Data != nil {
 		dataOffset = builder.CreateByteString(t.Data)
 	}
-	filenameOffset := builder.CreateString(t.Filename)
+	filenameOffset := flatbuffers.UOffsetT(0)
+	if t.Filename != "" {
+		filenameOffset = builder.CreateString(t.Filename)
+	}
 	FoeRequestStart(builder)
 	FoeRequestAddAddressType(builder, t.AddressType)
 	FoeRequestAddAddress(builder, t.Address)

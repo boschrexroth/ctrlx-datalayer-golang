@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveOnlineInfoT struct {
-	Request *AddressedRequestT
-	Response *SlaveOnlineInfoResponseT
+	Request *AddressedRequestT `json:"request"`
+	Response *SlaveOnlineInfoResponseT `json:"response"`
 }
 
 func (t *SlaveOnlineInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

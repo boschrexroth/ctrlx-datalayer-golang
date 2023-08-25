@@ -7,8 +7,8 @@ import (
 )
 
 type ProtocolStatisticResetFlagsT struct {
-	NumRequests bool
-	NumBytes bool
+	NumRequests bool `json:"numRequests"`
+	NumBytes bool `json:"numBytes"`
 }
 
 func (t *ProtocolStatisticResetFlagsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

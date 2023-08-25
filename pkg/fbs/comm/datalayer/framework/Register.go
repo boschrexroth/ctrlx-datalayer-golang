@@ -7,27 +7,36 @@ import (
 )
 
 type RegisterT struct {
-	IP string
-	SP string
-	BP string
+	Ip string `json:"IP"`
+	Sp string `json:"SP"`
+	Bp string `json:"BP"`
 }
 
 func (t *RegisterT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	IPOffset := builder.CreateString(t.IP)
-	SPOffset := builder.CreateString(t.SP)
-	BPOffset := builder.CreateString(t.BP)
+	ipOffset := flatbuffers.UOffsetT(0)
+	if t.Ip != "" {
+		ipOffset = builder.CreateString(t.Ip)
+	}
+	spOffset := flatbuffers.UOffsetT(0)
+	if t.Sp != "" {
+		spOffset = builder.CreateString(t.Sp)
+	}
+	bpOffset := flatbuffers.UOffsetT(0)
+	if t.Bp != "" {
+		bpOffset = builder.CreateString(t.Bp)
+	}
 	RegisterStart(builder)
-	RegisterAddIP(builder, IPOffset)
-	RegisterAddSP(builder, SPOffset)
-	RegisterAddBP(builder, BPOffset)
+	RegisterAddIp(builder, ipOffset)
+	RegisterAddSp(builder, spOffset)
+	RegisterAddBp(builder, bpOffset)
 	return RegisterEnd(builder)
 }
 
 func (rcv *Register) UnPackTo(t *RegisterT) {
-	t.IP = string(rcv.IP())
-	t.SP = string(rcv.SP())
-	t.BP = string(rcv.BP())
+	t.Ip = string(rcv.Ip())
+	t.Sp = string(rcv.Sp())
+	t.Bp = string(rcv.Bp())
 }
 
 func (rcv *Register) UnPack() *RegisterT {
@@ -64,7 +73,7 @@ func (rcv *Register) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Register) IP() []byte {
+func (rcv *Register) Ip() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -72,7 +81,7 @@ func (rcv *Register) IP() []byte {
 	return nil
 }
 
-func (rcv *Register) SP() []byte {
+func (rcv *Register) Sp() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -80,7 +89,7 @@ func (rcv *Register) SP() []byte {
 	return nil
 }
 
-func (rcv *Register) BP() []byte {
+func (rcv *Register) Bp() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -91,14 +100,14 @@ func (rcv *Register) BP() []byte {
 func RegisterStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func RegisterAddIP(builder *flatbuffers.Builder, IP flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(IP), 0)
+func RegisterAddIp(builder *flatbuffers.Builder, ip flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(ip), 0)
 }
-func RegisterAddSP(builder *flatbuffers.Builder, SP flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(SP), 0)
+func RegisterAddSp(builder *flatbuffers.Builder, sp flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(sp), 0)
 }
-func RegisterAddBP(builder *flatbuffers.Builder, BP flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(BP), 0)
+func RegisterAddBp(builder *flatbuffers.Builder, bp flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(bp), 0)
 }
 func RegisterEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

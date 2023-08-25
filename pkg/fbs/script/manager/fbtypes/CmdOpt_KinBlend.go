@@ -7,9 +7,9 @@ import (
 )
 
 type CmdOpt_KinBlendT struct {
-	Base *CmdOpt_BaseT
-	Dist1 float64
-	Dist2 float64
+	Base *CmdOpt_BaseT `json:"base"`
+	Dist1 float64 `json:"dist1"`
+	Dist2 float64 `json:"dist2"`
 }
 
 func (t *CmdOpt_KinBlendT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,13 +8,16 @@ import (
 
 /// parameters for the command option FeedGroup (modify the resulting path parameter based on a given feedGroup) for kinematics
 type KinCmdOptFeedGroupDataT struct {
-	PermType string
-	Type FeedGroup
+	PermType string `json:"permType"`
+	Type FeedGroup `json:"type"`
 }
 
 func (t *KinCmdOptFeedGroupDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	KinCmdOptFeedGroupDataStart(builder)
 	KinCmdOptFeedGroupDataAddPermType(builder, permTypeOffset)
 	KinCmdOptFeedGroupDataAddType(builder, t.Type)

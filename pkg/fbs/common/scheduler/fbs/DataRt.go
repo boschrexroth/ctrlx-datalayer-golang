@@ -8,8 +8,8 @@ import (
 
 /// Information about the current cycle of the task (related to real-time usage)
 type DataRtT struct {
-	StartTime uint64
-	Counter uint64
+	StartTime uint64 `json:"startTime"`
+	Counter uint64 `json:"counter"`
 }
 
 func (t *DataRtT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

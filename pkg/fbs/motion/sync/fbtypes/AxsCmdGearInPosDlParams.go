@@ -8,17 +8,17 @@ import (
 
 /// GearInPos calculation pipeline parameters, that are stored in the Datalayer RT, for the axis GearInPosEx command
 type AxsCmdGearInPosDlParamsT struct {
-	SoiMasterOffsetDlIdx int32
-	SoiMasterOffsetVelDlIdx int32
-	SoiMasterOffsetAccDlIdx int32
-	SoiSlaveOffsetDlIdx int32
-	SoiSlaveOffsetVelDlIdx int32
-	SoiSlaveOffsetAccDlIdx int32
-	FofMasterOffsetDlIdx int32
-	FofMasterOffsetTimeConstantDlIdx int32
-	FofSlaveOffsetDlIdx int32
-	FofSlaveOffsetTimeConstantDlIdx int32
-	FineAdjustDlIdx int32
+	SoiMasterOffsetDlIdx int32 `json:"soiMasterOffsetDlIdx"`
+	SoiMasterOffsetVelDlIdx int32 `json:"soiMasterOffsetVelDlIdx"`
+	SoiMasterOffsetAccDlIdx int32 `json:"soiMasterOffsetAccDlIdx"`
+	SoiSlaveOffsetDlIdx int32 `json:"soiSlaveOffsetDlIdx"`
+	SoiSlaveOffsetVelDlIdx int32 `json:"soiSlaveOffsetVelDlIdx"`
+	SoiSlaveOffsetAccDlIdx int32 `json:"soiSlaveOffsetAccDlIdx"`
+	FofMasterOffsetDlIdx int32 `json:"fofMasterOffsetDlIdx"`
+	FofMasterOffsetTimeConstantDlIdx int32 `json:"fofMasterOffsetTimeConstantDlIdx"`
+	FofSlaveOffsetDlIdx int32 `json:"fofSlaveOffsetDlIdx"`
+	FofSlaveOffsetTimeConstantDlIdx int32 `json:"fofSlaveOffsetTimeConstantDlIdx"`
+	FineAdjustDlIdx int32 `json:"fineAdjustDlIdx"`
 }
 
 func (t *AxsCmdGearInPosDlParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

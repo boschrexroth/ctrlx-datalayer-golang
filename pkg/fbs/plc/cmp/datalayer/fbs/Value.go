@@ -4,7 +4,6 @@ package fbs
 
 import (
 	"strconv"
-
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -156,70 +155,92 @@ func (t *ValueT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 func (rcv Value) UnPack(table flatbuffers.Table) *ValueT {
 	switch rcv {
 	case ValueBool_t:
-		x := Bool_t{_tab: table}
+		var x Bool_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueBool_t, Value: x.UnPack() }
 	case ValueArrayBool_t:
-		x := ArrayBool_t{_tab: table}
+		var x ArrayBool_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayBool_t, Value: x.UnPack() }
 	case ValueInt8_t:
-		x := Int8_t{_tab: table}
+		var x Int8_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueInt8_t, Value: x.UnPack() }
 	case ValueInt16_t:
-		x := Int16_t{_tab: table}
+		var x Int16_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueInt16_t, Value: x.UnPack() }
 	case ValueInt32_t:
-		x := Int32_t{_tab: table}
+		var x Int32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueInt32_t, Value: x.UnPack() }
 	case ValueInt64_t:
-		x := Int64_t{_tab: table}
+		var x Int64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueInt64_t, Value: x.UnPack() }
 	case ValueUint8_t:
-		x := Uint8_t{_tab: table}
+		var x Uint8_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueUint8_t, Value: x.UnPack() }
 	case ValueUint16_t:
-		x := Uint16_t{_tab: table}
+		var x Uint16_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueUint16_t, Value: x.UnPack() }
 	case ValueUint32_t:
-		x := Uint32_t{_tab: table}
+		var x Uint32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueUint32_t, Value: x.UnPack() }
 	case ValueUint64_t:
-		x := Uint64_t{_tab: table}
+		var x Uint64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueUint64_t, Value: x.UnPack() }
 	case ValueFloat32_t:
-		x := Float32_t{_tab: table}
+		var x Float32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueFloat32_t, Value: x.UnPack() }
 	case ValueFloat64_t:
-		x := Float64_t{_tab: table}
+		var x Float64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueFloat64_t, Value: x.UnPack() }
 	case ValueArrayInt8_t:
-		x := ArrayInt8_t{_tab: table}
+		var x ArrayInt8_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayInt8_t, Value: x.UnPack() }
 	case ValueArrayInt16_t:
-		x := ArrayInt16_t{_tab: table}
+		var x ArrayInt16_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayInt16_t, Value: x.UnPack() }
 	case ValueArrayInt32_t:
-		x := ArrayInt32_t{_tab: table}
+		var x ArrayInt32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayInt32_t, Value: x.UnPack() }
 	case ValueArrayUint64_t:
-		x := ArrayUint64_t{_tab: table}
+		var x ArrayUint64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayUint64_t, Value: x.UnPack() }
 	case ValueArrayUint8_t:
-		x := ArrayUint8_t{_tab: table}
+		var x ArrayUint8_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayUint8_t, Value: x.UnPack() }
 	case ValueArrayUint16_t:
-		x := ArrayUint16_t{_tab: table}
+		var x ArrayUint16_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayUint16_t, Value: x.UnPack() }
 	case ValueArrayUint32_t:
-		x := ArrayUint32_t{_tab: table}
+		var x ArrayUint32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayUint32_t, Value: x.UnPack() }
 	case ValueArrayInt64_t:
-		x := ArrayInt64_t{_tab: table}
+		var x ArrayInt64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayInt64_t, Value: x.UnPack() }
 	case ValueArrayFloat32_t:
-		x := ArrayFloat32_t{_tab: table}
+		var x ArrayFloat32_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayFloat32_t, Value: x.UnPack() }
 	case ValueArrayFloat64_t:
-		x := ArrayFloat64_t{_tab: table}
+		var x ArrayFloat64_t
+		x.Init(table.Bytes, table.Pos)
 		return &ValueT{ Type: ValueArrayFloat64_t, Value: x.UnPack() }
 	}
 	return nil

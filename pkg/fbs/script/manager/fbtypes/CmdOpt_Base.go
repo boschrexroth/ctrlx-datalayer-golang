@@ -7,14 +7,17 @@ import (
 )
 
 type CmdOpt_BaseT struct {
-	Base *Cmd_BaseT
-	PermType string
+	Base *Cmd_BaseT `json:"base"`
+	PermType string `json:"permType"`
 }
 
 func (t *CmdOpt_BaseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	CmdOpt_BaseStart(builder)
 	CmdOpt_BaseAddBase(builder, baseOffset)
 	CmdOpt_BaseAddPermType(builder, permTypeOffset)

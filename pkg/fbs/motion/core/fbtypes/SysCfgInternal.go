@@ -8,17 +8,17 @@ import (
 
 /// internal system configuration items
 type SysCfgInternalT struct {
-	Save bool
-	UseIpoIVAJ bool
-	TimeMeasurement bool
-	DriveResetTimeout float64
+	Save bool `json:"save"`
+	UseIpoIvaj bool `json:"useIpoIVAJ"`
+	TimeMeasurement bool `json:"timeMeasurement"`
+	DriveResetTimeout float64 `json:"driveResetTimeout"`
 }
 
 func (t *SysCfgInternalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	SysCfgInternalStart(builder)
 	SysCfgInternalAddSave(builder, t.Save)
-	SysCfgInternalAddUseIpoIVAJ(builder, t.UseIpoIVAJ)
+	SysCfgInternalAddUseIpoIvaj(builder, t.UseIpoIvaj)
 	SysCfgInternalAddTimeMeasurement(builder, t.TimeMeasurement)
 	SysCfgInternalAddDriveResetTimeout(builder, t.DriveResetTimeout)
 	return SysCfgInternalEnd(builder)
@@ -26,7 +26,7 @@ func (t *SysCfgInternalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 
 func (rcv *SysCfgInternal) UnPackTo(t *SysCfgInternalT) {
 	t.Save = rcv.Save()
-	t.UseIpoIVAJ = rcv.UseIpoIVAJ()
+	t.UseIpoIvaj = rcv.UseIpoIvaj()
 	t.TimeMeasurement = rcv.TimeMeasurement()
 	t.DriveResetTimeout = rcv.DriveResetTimeout()
 }
@@ -80,7 +80,7 @@ func (rcv *SysCfgInternal) MutateSave(n bool) bool {
 }
 
 /// use the new ipo IVAJ?
-func (rcv *SysCfgInternal) UseIpoIVAJ() bool {
+func (rcv *SysCfgInternal) UseIpoIvaj() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -89,7 +89,7 @@ func (rcv *SysCfgInternal) UseIpoIVAJ() bool {
 }
 
 /// use the new ipo IVAJ?
-func (rcv *SysCfgInternal) MutateUseIpoIVAJ(n bool) bool {
+func (rcv *SysCfgInternal) MutateUseIpoIvaj(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
@@ -127,8 +127,8 @@ func SysCfgInternalStart(builder *flatbuffers.Builder) {
 func SysCfgInternalAddSave(builder *flatbuffers.Builder, save bool) {
 	builder.PrependBoolSlot(0, save, false)
 }
-func SysCfgInternalAddUseIpoIVAJ(builder *flatbuffers.Builder, useIpoIVAJ bool) {
-	builder.PrependBoolSlot(1, useIpoIVAJ, false)
+func SysCfgInternalAddUseIpoIvaj(builder *flatbuffers.Builder, useIpoIvaj bool) {
+	builder.PrependBoolSlot(1, useIpoIvaj, false)
 }
 func SysCfgInternalAddTimeMeasurement(builder *flatbuffers.Builder, timeMeasurement bool) {
 	builder.PrependBoolSlot(2, timeMeasurement, false)

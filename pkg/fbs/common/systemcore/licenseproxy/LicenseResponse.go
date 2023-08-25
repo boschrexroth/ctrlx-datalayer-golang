@@ -7,22 +7,37 @@ import (
 )
 
 type LicenseResponseT struct {
-	Name string
-	Version string
-	Id string
-	IsPermanent bool
-	StartDate string
-	EndDate string
-	Tampered bool
+	Name string `json:"name"`
+	Version string `json:"version"`
+	Id string `json:"id"`
+	IsPermanent bool `json:"isPermanent"`
+	StartDate string `json:"startDate"`
+	EndDate string `json:"endDate"`
+	Tampered bool `json:"tampered"`
 }
 
 func (t *LicenseResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	versionOffset := builder.CreateString(t.Version)
-	idOffset := builder.CreateString(t.Id)
-	startDateOffset := builder.CreateString(t.StartDate)
-	endDateOffset := builder.CreateString(t.EndDate)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	versionOffset := flatbuffers.UOffsetT(0)
+	if t.Version != "" {
+		versionOffset = builder.CreateString(t.Version)
+	}
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	startDateOffset := flatbuffers.UOffsetT(0)
+	if t.StartDate != "" {
+		startDateOffset = builder.CreateString(t.StartDate)
+	}
+	endDateOffset := flatbuffers.UOffsetT(0)
+	if t.EndDate != "" {
+		endDateOffset = builder.CreateString(t.EndDate)
+	}
 	LicenseResponseStart(builder)
 	LicenseResponseAddName(builder, nameOffset)
 	LicenseResponseAddVersion(builder, versionOffset)

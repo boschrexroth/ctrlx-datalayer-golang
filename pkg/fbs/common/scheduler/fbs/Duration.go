@@ -8,10 +8,10 @@ import (
 
 /// Duration measurement of execution of a task
 type DurationT struct {
-	Minimum uint64
-	Maximum uint64
-	Average uint64
-	Active bool
+	Minimum uint64 `json:"minimum"`
+	Maximum uint64 `json:"maximum"`
+	Average uint64 `json:"average"`
+	Active bool `json:"active"`
 }
 
 func (t *DurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

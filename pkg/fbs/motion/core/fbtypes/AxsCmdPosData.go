@@ -8,9 +8,10 @@ import (
 
 /// parameters of the axis position commands
 type AxsCmdPosDataT struct {
-	AxsPos float64
-	Buffered bool
-	Lim *DynamicLimitsT
+	AxsPos float64 `json:"axsPos"`
+	Buffered bool `json:"buffered"`
+	Lim *DynamicLimitsT `json:"lim"`
+	Direction CmdPosAbsDir `json:"direction"`
 }
 
 func (t *AxsCmdPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -20,6 +21,7 @@ func (t *AxsCmdPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 	AxsCmdPosDataAddAxsPos(builder, t.AxsPos)
 	AxsCmdPosDataAddBuffered(builder, t.Buffered)
 	AxsCmdPosDataAddLim(builder, limOffset)
+	AxsCmdPosDataAddDirection(builder, t.Direction)
 	return AxsCmdPosDataEnd(builder)
 }
 
@@ -27,6 +29,7 @@ func (rcv *AxsCmdPosData) UnPackTo(t *AxsCmdPosDataT) {
 	t.AxsPos = rcv.AxsPos()
 	t.Buffered = rcv.Buffered()
 	t.Lim = rcv.Lim(nil).UnPack()
+	t.Direction = rcv.Direction()
 }
 
 func (rcv *AxsCmdPosData) UnPack() *AxsCmdPosDataT {
@@ -83,7 +86,7 @@ func (rcv *AxsCmdPosData) Buffered() bool {
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
-	return false
+	return true
 }
 
 /// should this be a buffered command?
@@ -106,17 +109,34 @@ func (rcv *AxsCmdPosData) Lim(obj *DynamicLimits) *DynamicLimits {
 }
 
 /// dynamic limits for the motion of this command
+/// Selected direction for PosAbs with modulo axis (ignored in all other cases)
+func (rcv *AxsCmdPosData) Direction() CmdPosAbsDir {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return CmdPosAbsDir(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+/// Selected direction for PosAbs with modulo axis (ignored in all other cases)
+func (rcv *AxsCmdPosData) MutateDirection(n CmdPosAbsDir) bool {
+	return rcv._tab.MutateInt8Slot(10, int8(n))
+}
+
 func AxsCmdPosDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func AxsCmdPosDataAddAxsPos(builder *flatbuffers.Builder, axsPos float64) {
 	builder.PrependFloat64Slot(0, axsPos, 0.0)
 }
 func AxsCmdPosDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
-	builder.PrependBoolSlot(1, buffered, false)
+	builder.PrependBoolSlot(1, buffered, true)
 }
 func AxsCmdPosDataAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(lim), 0)
+}
+func AxsCmdPosDataAddDirection(builder *flatbuffers.Builder, direction CmdPosAbsDir) {
+	builder.PrependInt8Slot(3, int8(direction), 0)
 }
 func AxsCmdPosDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

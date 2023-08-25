@@ -7,10 +7,10 @@ import (
 )
 
 type SubscriptionStatisticsT struct {
-	NumberClients uint32
-	NumberSubscriptions uint32
-	NumberSubscribedNodes uint32
-	NumberRTSubscribedNodes uint32
+	NumberClients uint32 `json:"numberClients"`
+	NumberSubscriptions uint32 `json:"numberSubscriptions"`
+	NumberSubscribedNodes uint32 `json:"numberSubscribedNodes"`
+	NumberRtsubscribedNodes uint32 `json:"numberRTSubscribedNodes"`
 }
 
 func (t *SubscriptionStatisticsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -19,7 +19,7 @@ func (t *SubscriptionStatisticsT) Pack(builder *flatbuffers.Builder) flatbuffers
 	SubscriptionStatisticsAddNumberClients(builder, t.NumberClients)
 	SubscriptionStatisticsAddNumberSubscriptions(builder, t.NumberSubscriptions)
 	SubscriptionStatisticsAddNumberSubscribedNodes(builder, t.NumberSubscribedNodes)
-	SubscriptionStatisticsAddNumberRTSubscribedNodes(builder, t.NumberRTSubscribedNodes)
+	SubscriptionStatisticsAddNumberRtsubscribedNodes(builder, t.NumberRtsubscribedNodes)
 	return SubscriptionStatisticsEnd(builder)
 }
 
@@ -27,7 +27,7 @@ func (rcv *SubscriptionStatistics) UnPackTo(t *SubscriptionStatisticsT) {
 	t.NumberClients = rcv.NumberClients()
 	t.NumberSubscriptions = rcv.NumberSubscriptions()
 	t.NumberSubscribedNodes = rcv.NumberSubscribedNodes()
-	t.NumberRTSubscribedNodes = rcv.NumberRTSubscribedNodes()
+	t.NumberRtsubscribedNodes = rcv.NumberRtsubscribedNodes()
 }
 
 func (rcv *SubscriptionStatistics) UnPack() *SubscriptionStatisticsT {
@@ -107,7 +107,7 @@ func (rcv *SubscriptionStatistics) MutateNumberSubscribedNodes(n uint32) bool {
 }
 
 /// Number of realtime subscribed nodes
-func (rcv *SubscriptionStatistics) NumberRTSubscribedNodes() uint32 {
+func (rcv *SubscriptionStatistics) NumberRtsubscribedNodes() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -116,7 +116,7 @@ func (rcv *SubscriptionStatistics) NumberRTSubscribedNodes() uint32 {
 }
 
 /// Number of realtime subscribed nodes
-func (rcv *SubscriptionStatistics) MutateNumberRTSubscribedNodes(n uint32) bool {
+func (rcv *SubscriptionStatistics) MutateNumberRtsubscribedNodes(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
@@ -132,8 +132,8 @@ func SubscriptionStatisticsAddNumberSubscriptions(builder *flatbuffers.Builder, 
 func SubscriptionStatisticsAddNumberSubscribedNodes(builder *flatbuffers.Builder, numberSubscribedNodes uint32) {
 	builder.PrependUint32Slot(2, numberSubscribedNodes, 0)
 }
-func SubscriptionStatisticsAddNumberRTSubscribedNodes(builder *flatbuffers.Builder, numberRTSubscribedNodes uint32) {
-	builder.PrependUint32Slot(3, numberRTSubscribedNodes, 0)
+func SubscriptionStatisticsAddNumberRtsubscribedNodes(builder *flatbuffers.Builder, numberRtsubscribedNodes uint32) {
+	builder.PrependUint32Slot(3, numberRtsubscribedNodes, 0)
 }
 func SubscriptionStatisticsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

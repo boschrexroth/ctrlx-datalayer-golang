@@ -7,14 +7,20 @@ import (
 )
 
 type State_KinGetPosT struct {
-	ObjName string
-	CoordSysOut string
+	ObjName string `json:"objName"`
+	CoordSysOut string `json:"coordSysOut"`
 }
 
 func (t *State_KinGetPosT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objNameOffset := builder.CreateString(t.ObjName)
-	coordSysOutOffset := builder.CreateString(t.CoordSysOut)
+	objNameOffset := flatbuffers.UOffsetT(0)
+	if t.ObjName != "" {
+		objNameOffset = builder.CreateString(t.ObjName)
+	}
+	coordSysOutOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSysOut != "" {
+		coordSysOutOffset = builder.CreateString(t.CoordSysOut)
+	}
 	State_KinGetPosStart(builder)
 	State_KinGetPosAddObjName(builder, objNameOffset)
 	State_KinGetPosAddCoordSysOut(builder, coordSysOutOffset)

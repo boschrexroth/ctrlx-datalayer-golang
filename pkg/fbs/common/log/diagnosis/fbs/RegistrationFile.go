@@ -8,17 +8,26 @@ import (
 
 /// This table defines the structure of the registration json file that is needed to register diagnostics.
 type RegistrationFileT struct {
-	Language string
-	Product string
-	Component string
-	MainDiagnostics []*MainDiagnosticT
+	Language string `json:"language"`
+	Product string `json:"product"`
+	Component string `json:"component"`
+	MainDiagnostics []*MainDiagnosticT `json:"mainDiagnostics"`
 }
 
 func (t *RegistrationFileT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	languageOffset := builder.CreateString(t.Language)
-	productOffset := builder.CreateString(t.Product)
-	componentOffset := builder.CreateString(t.Component)
+	languageOffset := flatbuffers.UOffsetT(0)
+	if t.Language != "" {
+		languageOffset = builder.CreateString(t.Language)
+	}
+	productOffset := flatbuffers.UOffsetT(0)
+	if t.Product != "" {
+		productOffset = builder.CreateString(t.Product)
+	}
+	componentOffset := flatbuffers.UOffsetT(0)
+	if t.Component != "" {
+		componentOffset = builder.CreateString(t.Component)
+	}
 	mainDiagnosticsOffset := flatbuffers.UOffsetT(0)
 	if t.MainDiagnostics != nil {
 		mainDiagnosticsLength := len(t.MainDiagnostics)

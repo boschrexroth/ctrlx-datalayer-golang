@@ -7,13 +7,16 @@ import (
 )
 
 type WatchlistT struct {
-	Name string
-	Items []string
+	Name string `json:"name"`
+	Items []string `json:"items"`
 }
 
 func (t *WatchlistT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	itemsOffset := flatbuffers.UOffsetT(0)
 	if t.Items != nil {
 		itemsLength := len(t.Items)

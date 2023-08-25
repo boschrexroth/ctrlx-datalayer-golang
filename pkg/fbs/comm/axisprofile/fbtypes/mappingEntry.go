@@ -3,29 +3,36 @@
 package fbtypes
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type mappingEntryT struct {
-	ValueID string
-	DatalayerURI string
-	ProfileVar variableType
+	ValueId string `json:"valueID"`
+	DatalayerUri string `json:"datalayerURI"`
+	ProfileVar variableType `json:"profileVar"`
 }
 
 func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	valueIDOffset := builder.CreateString(t.ValueID)
-	datalayerURIOffset := builder.CreateString(t.DatalayerURI)
+	valueIdOffset := flatbuffers.UOffsetT(0)
+	if t.ValueId != "" {
+		valueIdOffset = builder.CreateString(t.ValueId)
+	}
+	datalayerUriOffset := flatbuffers.UOffsetT(0)
+	if t.DatalayerUri != "" {
+		datalayerUriOffset = builder.CreateString(t.DatalayerUri)
+	}
 	mappingEntryStart(builder)
-	mappingEntryAddValueID(builder, valueIDOffset)
-	mappingEntryAddDatalayerURI(builder, datalayerURIOffset)
+	mappingEntryAddValueId(builder, valueIdOffset)
+	mappingEntryAddDatalayerUri(builder, datalayerUriOffset)
 	mappingEntryAddProfileVar(builder, t.ProfileVar)
 	return mappingEntryEnd(builder)
 }
 
 func (rcv *mappingEntry) UnPackTo(t *mappingEntryT) {
-	t.ValueID = string(rcv.ValueID())
-	t.DatalayerURI = string(rcv.DatalayerURI())
+	t.ValueId = string(rcv.ValueId())
+	t.DatalayerUri = string(rcv.DatalayerUri())
 	t.ProfileVar = rcv.ProfileVar()
 }
 
@@ -63,7 +70,7 @@ func (rcv *mappingEntry) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *mappingEntry) ValueID() []byte {
+func (rcv *mappingEntry) ValueId() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -71,7 +78,39 @@ func (rcv *mappingEntry) ValueID() []byte {
 	return nil
 }
 
-func (rcv *mappingEntry) DatalayerURI() []byte {
+func mappingEntryKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &mappingEntry{}
+	obj2 := &mappingEntry{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.ValueId()) < string(obj2.ValueId())
+}
+
+func (rcv *mappingEntry) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &mappingEntry{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.ValueId(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
+func (rcv *mappingEntry) DatalayerUri() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -94,11 +133,11 @@ func (rcv *mappingEntry) MutateProfileVar(n variableType) bool {
 func mappingEntryStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func mappingEntryAddValueID(builder *flatbuffers.Builder, valueID flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(valueID), 0)
+func mappingEntryAddValueId(builder *flatbuffers.Builder, valueId flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(valueId), 0)
 }
-func mappingEntryAddDatalayerURI(builder *flatbuffers.Builder, datalayerURI flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(datalayerURI), 0)
+func mappingEntryAddDatalayerUri(builder *flatbuffers.Builder, datalayerUri flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(datalayerUri), 0)
 }
 func mappingEntryAddProfileVar(builder *flatbuffers.Builder, profileVar variableType) {
 	builder.PrependInt8Slot(2, int8(profileVar), 0)

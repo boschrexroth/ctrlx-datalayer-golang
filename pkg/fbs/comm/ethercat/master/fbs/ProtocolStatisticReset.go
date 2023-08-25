@@ -7,8 +7,8 @@ import (
 )
 
 type ProtocolStatisticResetT struct {
-	Read *ProtocolStatisticPeriodResetT
-	Write *ProtocolStatisticPeriodResetT
+	Read *ProtocolStatisticPeriodResetT `json:"read"`
+	Write *ProtocolStatisticPeriodResetT `json:"write"`
 }
 
 func (t *ProtocolStatisticResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

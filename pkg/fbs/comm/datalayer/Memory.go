@@ -7,15 +7,18 @@ import (
 )
 
 type MemoryT struct {
-	Type MemoryType
-	Id string
-	SizeBytes uint32
-	AccessType AccessType
+	Type MemoryType `json:"type"`
+	Id string `json:"id"`
+	SizeBytes uint32 `json:"sizeBytes"`
+	AccessType AccessType `json:"accessType"`
 }
 
 func (t *MemoryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
 	MemoryStart(builder)
 	MemoryAddType(builder, t.Type)
 	MemoryAddId(builder, idOffset)

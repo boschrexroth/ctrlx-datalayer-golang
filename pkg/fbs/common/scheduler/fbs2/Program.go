@@ -11,10 +11,10 @@ import (
 
 /// Composition of callables executed by the task in given sequence
 type ProgramT struct {
-	Task *common__scheduler__fbs.TaskT
-	Callables []*common__scheduler__fbs.CallableT
-	Watchdog *common__scheduler__watchdog__fbs.WatchdogT
-	Sequence []string
+	Task *common__scheduler__fbs.TaskT `json:"task"`
+	Callables []*common__scheduler__fbs.CallableT `json:"callables"`
+	Watchdog *common__scheduler__watchdog__fbs.WatchdogT `json:"watchdog"`
+	Sequence []string `json:"sequence"`
 }
 
 func (t *ProgramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

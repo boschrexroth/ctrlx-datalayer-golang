@@ -8,9 +8,9 @@ import (
 
 /// Switching progress (initial / current / target) of Scheduler operation state
 type StateSwitchingInfoT struct {
-	Initial CurrentState
-	Current CurrentState
-	Target CurrentState
+	Initial CurrentState `json:"initial"`
+	Current CurrentState `json:"current"`
+	Target CurrentState `json:"target"`
 }
 
 func (t *StateSwitchingInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

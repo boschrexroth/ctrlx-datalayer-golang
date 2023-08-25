@@ -7,7 +7,7 @@ import (
 )
 
 type SelectableDeviceConfigsT struct {
-	DeviceConfigsList []*DeviceConfigT
+	DeviceConfigsList []*DeviceConfigT `json:"deviceConfigsList"`
 }
 
 func (t *SelectableDeviceConfigsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,7 +7,7 @@ import (
 )
 
 type LinkLayerOnlineInfoT struct {
-	Response *LinkLayerOnlineInfoResponseT
+	Response *LinkLayerOnlineInfoResponseT `json:"response"`
 }
 
 func (t *LinkLayerOnlineInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,7 +8,7 @@ import (
 
 /// data of a all axis assignments for a joint transformation
 type KinCfgJntTrafoAxisAssignmentT struct {
-	Assignment []*KinCfgJntTrafoSingleAxisAssignmentT
+	Assignment []*KinCfgJntTrafoSingleAxisAssignmentT `json:"assignment"`
 }
 
 func (t *KinCfgJntTrafoAxisAssignmentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

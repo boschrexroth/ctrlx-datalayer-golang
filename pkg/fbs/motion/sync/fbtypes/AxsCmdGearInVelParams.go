@@ -8,10 +8,10 @@ import (
 
 /// GearInVel calculation pipeline parameters for the axis GearInVel command
 type AxsCmdGearInVelParamsT struct {
-	SlaveVelOffset float64
-	RatioNumerator int32
-	RatioDenominator int32
-	FineAdjust float64
+	SlaveVelOffset float64 `json:"slaveVelOffset"`
+	RatioNumerator int32 `json:"ratioNumerator"`
+	RatioDenominator int32 `json:"ratioDenominator"`
+	FineAdjust float64 `json:"fineAdjust"`
 }
 
 func (t *AxsCmdGearInVelParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

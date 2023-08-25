@@ -7,15 +7,21 @@ import (
 )
 
 type DebugChannelT struct {
-	Name string
-	Address string
-	IsTrigger bool
+	Name string `json:"name"`
+	Address string `json:"address"`
+	IsTrigger bool `json:"isTrigger"`
 }
 
 func (t *DebugChannelT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	addressOffset := builder.CreateString(t.Address)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	addressOffset := flatbuffers.UOffsetT(0)
+	if t.Address != "" {
+		addressOffset = builder.CreateString(t.Address)
+	}
 	DebugChannelStart(builder)
 	DebugChannelAddName(builder, nameOffset)
 	DebugChannelAddAddress(builder, addressOffset)

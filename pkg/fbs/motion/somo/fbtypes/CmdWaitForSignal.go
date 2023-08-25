@@ -8,8 +8,8 @@ import (
 
 /// parameters for the command wait for signal
 type CmdWaitForSignalT struct {
-	SignalId uint32
-	AutoReset bool
+	SignalId uint32 `json:"signalId"`
+	AutoReset bool `json:"autoReset"`
 }
 
 func (t *CmdWaitForSignalT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

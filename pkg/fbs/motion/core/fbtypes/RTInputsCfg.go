@@ -8,8 +8,8 @@ import (
 
 /// common configuration of real-time inputs
 type RTInputsCfgT struct {
-	DoubleArraySize uint32
-	Int64ArraySize uint32
+	DoubleArraySize uint32 `json:"doubleArraySize"`
+	Int64ArraySize uint32 `json:"int64ArraySize"`
 }
 
 func (t *RTInputsCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

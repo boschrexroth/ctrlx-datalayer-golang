@@ -7,17 +7,23 @@ import (
 )
 
 type ClientConfigurationT struct {
-	Name string
-	EndpointUrl string
-	SessionConfiguration *SessionConfigurationT
-	TimeoutConfiguration *TimeoutConfigurationT
-	Persistent bool
+	Name string `json:"name"`
+	EndpointUrl string `json:"endpointUrl"`
+	SessionConfiguration *SessionConfigurationT `json:"sessionConfiguration"`
+	TimeoutConfiguration *TimeoutConfigurationT `json:"timeoutConfiguration"`
+	Persistent bool `json:"persistent"`
 }
 
 func (t *ClientConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	endpointUrlOffset := builder.CreateString(t.EndpointUrl)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	endpointUrlOffset := flatbuffers.UOffsetT(0)
+	if t.EndpointUrl != "" {
+		endpointUrlOffset = builder.CreateString(t.EndpointUrl)
+	}
 	sessionConfigurationOffset := t.SessionConfiguration.Pack(builder)
 	timeoutConfigurationOffset := t.TimeoutConfiguration.Pack(builder)
 	ClientConfigurationStart(builder)

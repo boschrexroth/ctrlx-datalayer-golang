@@ -8,14 +8,17 @@ import (
 
 /// This table defines the elements of a main or detailed diagnostics that should be registered.
 type DiagnosisElementT struct {
-	DiagnosisNumber uint32
-	Version byte
-	TextEnglish string
+	DiagnosisNumber uint32 `json:"diagnosisNumber"`
+	Version byte `json:"version"`
+	TextEnglish string `json:"textEnglish"`
 }
 
 func (t *DiagnosisElementT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	textEnglishOffset := builder.CreateString(t.TextEnglish)
+	textEnglishOffset := flatbuffers.UOffsetT(0)
+	if t.TextEnglish != "" {
+		textEnglishOffset = builder.CreateString(t.TextEnglish)
+	}
 	DiagnosisElementStart(builder)
 	DiagnosisElementAddDiagnosisNumber(builder, t.DiagnosisNumber)
 	DiagnosisElementAddVersion(builder, t.Version)

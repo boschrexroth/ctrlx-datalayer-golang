@@ -8,8 +8,8 @@ import (
 
 /// get informations of all active commands and commands that were recently executed of a single motion object
 type allDebugCmdInfoT struct {
-	MainCmds []*debugCmdInfoT
-	AddCmds []*debugCmdInfoT
+	MainCmds []*debugCmdInfoT `json:"mainCmds"`
+	AddCmds []*debugCmdInfoT `json:"addCmds"`
 }
 
 func (t *allDebugCmdInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

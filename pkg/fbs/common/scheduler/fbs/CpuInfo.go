@@ -7,21 +7,21 @@ import (
 )
 
 type CpuInfoT struct {
-	CpuCoresTotal []uint32
-	CpuCoresActive []uint32
-	CpuCoresRealtime []uint32
-	CpuCoresNonRealtime []uint32
-	CpuCoreRealtimeMax int32
-	CpuCoreRealtimeMin int32
-	CpuCoreRealtimeDefault int32
-	CpuCoreNonRealtimeMax int32
-	CpuCoreNonRealtimeMin int32
-	CpuCoreNonRealtimeDefault int32
-	VariationId string
-	CpuCoreHwWdg uint32
-	CpuCorePtpTimer uint32
-	CpuCoreScheduler uint32
-	CpuCoreAutomation uint32
+	CpuCoresTotal []uint32 `json:"cpuCoresTotal"`
+	CpuCoresActive []uint32 `json:"cpuCoresActive"`
+	CpuCoresRealtime []uint32 `json:"cpuCoresRealtime"`
+	CpuCoresNonRealtime []uint32 `json:"cpuCoresNonRealtime"`
+	CpuCoreRealtimeMax int32 `json:"cpuCoreRealtimeMax"`
+	CpuCoreRealtimeMin int32 `json:"cpuCoreRealtimeMin"`
+	CpuCoreRealtimeDefault int32 `json:"cpuCoreRealtimeDefault"`
+	CpuCoreNonRealtimeMax int32 `json:"cpuCoreNonRealtimeMax"`
+	CpuCoreNonRealtimeMin int32 `json:"cpuCoreNonRealtimeMin"`
+	CpuCoreNonRealtimeDefault int32 `json:"cpuCoreNonRealtimeDefault"`
+	VariationId string `json:"variationId"`
+	CpuCoreHwWdg uint32 `json:"cpuCoreHwWdg"`
+	CpuCorePtpTimer uint32 `json:"cpuCorePtpTimer"`
+	CpuCoreScheduler uint32 `json:"cpuCoreScheduler"`
+	CpuCoreAutomation uint32 `json:"cpuCoreAutomation"`
 }
 
 func (t *CpuInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -62,7 +62,10 @@ func (t *CpuInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		cpuCoresNonRealtimeOffset = builder.EndVector(cpuCoresNonRealtimeLength)
 	}
-	variationIdOffset := builder.CreateString(t.VariationId)
+	variationIdOffset := flatbuffers.UOffsetT(0)
+	if t.VariationId != "" {
+		variationIdOffset = builder.CreateString(t.VariationId)
+	}
 	CpuInfoStart(builder)
 	CpuInfoAddCpuCoresTotal(builder, cpuCoresTotalOffset)
 	CpuInfoAddCpuCoresActive(builder, cpuCoresActiveOffset)

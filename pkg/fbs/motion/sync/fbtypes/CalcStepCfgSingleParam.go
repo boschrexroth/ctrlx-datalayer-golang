@@ -8,16 +8,22 @@ import (
 
 /// configuration of a single parameter of a calculation step
 type CalcStepCfgSingleParamT struct {
-	Name string
-	ValueDouble float64
-	ValueInt int64
-	ValueString string
+	Name string `json:"name"`
+	ValueDouble float64 `json:"valueDouble"`
+	ValueInt int64 `json:"valueInt"`
+	ValueString string `json:"valueString"`
 }
 
 func (t *CalcStepCfgSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	valueStringOffset := builder.CreateString(t.ValueString)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	valueStringOffset := flatbuffers.UOffsetT(0)
+	if t.ValueString != "" {
+		valueStringOffset = builder.CreateString(t.ValueString)
+	}
 	CalcStepCfgSingleParamStart(builder)
 	CalcStepCfgSingleParamAddName(builder, nameOffset)
 	CalcStepCfgSingleParamAddValueDouble(builder, t.ValueDouble)

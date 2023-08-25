@@ -7,17 +7,34 @@ import (
 )
 
 type ServerSettingsT struct {
-	ServerIdlePingTimeout uint32
-	ServerWaitResponseTimeout uint32
-	ServerMaxMessageSize uint32
-	DebugAddress string
-	ServerMaxRtSize uint32
-	ServerEmulatedNvramSize uint32
+	ServerIdlePingTimeout uint32 `json:"serverIdlePingTimeout"`
+	ServerWaitResponseTimeout uint32 `json:"serverWaitResponseTimeout"`
+	ServerMaxMessageSize uint32 `json:"serverMaxMessageSize"`
+	DebugAddress string `json:"debugAddress"`
+	ServerMaxRtSize uint32 `json:"serverMaxRtSize"`
+	ServerEmulatedNvramSize uint32 `json:"serverEmulatedNvramSize"`
+	ExperimentalFeatures []string `json:"experimentalFeatures"`
 }
 
 func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	debugAddressOffset := builder.CreateString(t.DebugAddress)
+	debugAddressOffset := flatbuffers.UOffsetT(0)
+	if t.DebugAddress != "" {
+		debugAddressOffset = builder.CreateString(t.DebugAddress)
+	}
+	experimentalFeaturesOffset := flatbuffers.UOffsetT(0)
+	if t.ExperimentalFeatures != nil {
+		experimentalFeaturesLength := len(t.ExperimentalFeatures)
+		experimentalFeaturesOffsets := make([]flatbuffers.UOffsetT, experimentalFeaturesLength)
+		for j := 0; j < experimentalFeaturesLength; j++ {
+			experimentalFeaturesOffsets[j] = builder.CreateString(t.ExperimentalFeatures[j])
+		}
+		ServerSettingsStartExperimentalFeaturesVector(builder, experimentalFeaturesLength)
+		for j := experimentalFeaturesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(experimentalFeaturesOffsets[j])
+		}
+		experimentalFeaturesOffset = builder.EndVector(experimentalFeaturesLength)
+	}
 	ServerSettingsStart(builder)
 	ServerSettingsAddServerIdlePingTimeout(builder, t.ServerIdlePingTimeout)
 	ServerSettingsAddServerWaitResponseTimeout(builder, t.ServerWaitResponseTimeout)
@@ -25,6 +42,7 @@ func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	ServerSettingsAddDebugAddress(builder, debugAddressOffset)
 	ServerSettingsAddServerMaxRtSize(builder, t.ServerMaxRtSize)
 	ServerSettingsAddServerEmulatedNvramSize(builder, t.ServerEmulatedNvramSize)
+	ServerSettingsAddExperimentalFeatures(builder, experimentalFeaturesOffset)
 	return ServerSettingsEnd(builder)
 }
 
@@ -35,6 +53,11 @@ func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
 	t.DebugAddress = string(rcv.DebugAddress())
 	t.ServerMaxRtSize = rcv.ServerMaxRtSize()
 	t.ServerEmulatedNvramSize = rcv.ServerEmulatedNvramSize()
+	experimentalFeaturesLength := rcv.ExperimentalFeaturesLength()
+	t.ExperimentalFeatures = make([]string, experimentalFeaturesLength)
+	for j := 0; j < experimentalFeaturesLength; j++ {
+		t.ExperimentalFeatures[j] = string(rcv.ExperimentalFeatures(j))
+	}
 }
 
 func (rcv *ServerSettings) UnPack() *ServerSettingsT {
@@ -151,8 +174,27 @@ func (rcv *ServerSettings) MutateServerEmulatedNvramSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+/// Add the names of the experimental feature you want to enable here
+func (rcv *ServerSettings) ExperimentalFeatures(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *ServerSettings) ExperimentalFeaturesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// Add the names of the experimental feature you want to enable here
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
@@ -171,6 +213,12 @@ func ServerSettingsAddServerMaxRtSize(builder *flatbuffers.Builder, serverMaxRtS
 }
 func ServerSettingsAddServerEmulatedNvramSize(builder *flatbuffers.Builder, serverEmulatedNvramSize uint32) {
 	builder.PrependUint32Slot(5, serverEmulatedNvramSize, 122880)
+}
+func ServerSettingsAddExperimentalFeatures(builder *flatbuffers.Builder, experimentalFeatures flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(experimentalFeatures), 0)
+}
+func ServerSettingsStartExperimentalFeaturesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

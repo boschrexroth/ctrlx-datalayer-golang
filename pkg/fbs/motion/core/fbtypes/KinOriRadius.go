@@ -9,15 +9,21 @@ import (
 /// DEPRECATED; Do not use! Values in this structure are ignored.
 /// common configuration of orientation. Effective radius as factor for the relation between position to orientation.
 type KinOriRadiusT struct {
-	Radius float64
-	UnitLin string
-	UnitRot string
+	Radius float64 `json:"radius"`
+	UnitLin string `json:"unit_lin"`
+	UnitRot string `json:"unit_rot"`
 }
 
 func (t *KinOriRadiusT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	unitLinOffset := builder.CreateString(t.UnitLin)
-	unitRotOffset := builder.CreateString(t.UnitRot)
+	unitLinOffset := flatbuffers.UOffsetT(0)
+	if t.UnitLin != "" {
+		unitLinOffset = builder.CreateString(t.UnitLin)
+	}
+	unitRotOffset := flatbuffers.UOffsetT(0)
+	if t.UnitRot != "" {
+		unitRotOffset = builder.CreateString(t.UnitRot)
+	}
 	KinOriRadiusStart(builder)
 	KinOriRadiusAddRadius(builder, t.Radius)
 	KinOriRadiusAddUnitLin(builder, unitLinOffset)

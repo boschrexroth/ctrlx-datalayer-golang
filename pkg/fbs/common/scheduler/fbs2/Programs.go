@@ -8,8 +8,8 @@ import (
 
 /// Composition of programs and available callables factories
 type ProgramsT struct {
-	Programs []*ProgramT
-	CallablePool []string
+	Programs []*ProgramT `json:"programs"`
+	CallablePool []string `json:"callablePool"`
 }
 
 func (t *ProgramsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

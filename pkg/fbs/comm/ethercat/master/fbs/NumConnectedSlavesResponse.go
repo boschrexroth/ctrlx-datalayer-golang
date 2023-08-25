@@ -7,7 +7,7 @@ import (
 )
 
 type NumConnectedSlavesResponseT struct {
-	NumSlaves uint32
+	NumSlaves uint32 `json:"numSlaves"`
 }
 
 func (t *NumConnectedSlavesResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

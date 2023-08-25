@@ -7,11 +7,11 @@ import (
 )
 
 type SlaveRegisterRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	RegisterOffset uint16
-	Data []byte
-	MaxLength uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	RegisterOffset uint16 `json:"registerOffset"`
+	Data []byte `json:"data"`
+	MaxLength uint32 `json:"maxLength"`
 }
 
 func (t *SlaveRegisterRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

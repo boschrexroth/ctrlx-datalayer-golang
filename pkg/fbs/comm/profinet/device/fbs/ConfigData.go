@@ -7,15 +7,21 @@ import (
 )
 
 type ConfigDataT struct {
-	Name string
-	Description string
-	ConfigdataVector []*ModuleDataT
+	Name string `json:"name"`
+	Description string `json:"description"`
+	ConfigdataVector []*ModuleDataT `json:"configdataVector"`
 }
 
 func (t *ConfigDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
 	configdataVectorOffset := flatbuffers.UOffsetT(0)
 	if t.ConfigdataVector != nil {
 		configdataVectorLength := len(t.ConfigdataVector)

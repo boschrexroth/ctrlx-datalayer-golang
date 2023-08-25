@@ -8,7 +8,7 @@ import (
 
 /// system function configuration items
 type SysCfgFunctionT struct {
-	IgnoreAxisProfiles bool
+	IgnoreAxisProfiles bool `json:"ignoreAxisProfiles"`
 }
 
 func (t *SysCfgFunctionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

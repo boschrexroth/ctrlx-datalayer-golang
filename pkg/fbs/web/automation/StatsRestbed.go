@@ -7,7 +7,7 @@ import (
 )
 
 type StatsRestbedT struct {
-	OpenSessions uint32
+	OpenSessions uint32 `json:"openSessions"`
 }
 
 func (t *StatsRestbedT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

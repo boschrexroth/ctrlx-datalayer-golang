@@ -8,17 +8,20 @@ import (
 
 /// parameters of the axis GearInPos command
 type AxsCmdGearInPosDataT struct {
-	Master string
-	SyncSource SyncSource
-	SyncMode SyncMode
-	SyncDirection SyncDirection
-	Parameters *AxsCmdGearInPosParamsT
-	Buffered bool
+	Master string `json:"master"`
+	SyncSource SyncSource `json:"syncSource"`
+	SyncMode SyncMode `json:"syncMode"`
+	SyncDirection SyncDirection `json:"syncDirection"`
+	Parameters *AxsCmdGearInPosParamsT `json:"parameters"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdGearInPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterOffset := builder.CreateString(t.Master)
+	masterOffset := flatbuffers.UOffsetT(0)
+	if t.Master != "" {
+		masterOffset = builder.CreateString(t.Master)
+	}
 	parametersOffset := t.Parameters.Pack(builder)
 	AxsCmdGearInPosDataStart(builder)
 	AxsCmdGearInPosDataAddMaster(builder, masterOffset)

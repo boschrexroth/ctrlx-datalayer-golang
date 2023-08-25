@@ -7,18 +7,24 @@ import (
 )
 
 type DiagnosisT struct {
-	MainDiagnosisCode uint32
-	DetailedDiagnosisCode uint32
-	DynamicDescription string
-	Entity string
-	MoreInfo []*DiagMoreInfoT
-	Cause []*DiagnosisT
+	MainDiagnosisCode uint32 `json:"mainDiagnosisCode"`
+	DetailedDiagnosisCode uint32 `json:"detailedDiagnosisCode"`
+	DynamicDescription string `json:"dynamicDescription"`
+	Entity string `json:"entity"`
+	MoreInfo []*DiagMoreInfoT `json:"moreInfo"`
+	Cause []*DiagnosisT `json:"cause"`
 }
 
 func (t *DiagnosisT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
-	entityOffset := builder.CreateString(t.Entity)
+	dynamicDescriptionOffset := flatbuffers.UOffsetT(0)
+	if t.DynamicDescription != "" {
+		dynamicDescriptionOffset = builder.CreateString(t.DynamicDescription)
+	}
+	entityOffset := flatbuffers.UOffsetT(0)
+	if t.Entity != "" {
+		entityOffset = builder.CreateString(t.Entity)
+	}
 	moreInfoOffset := flatbuffers.UOffsetT(0)
 	if t.MoreInfo != nil {
 		moreInfoLength := len(t.MoreInfo)
@@ -167,6 +173,15 @@ func (rcv *Diagnosis) MoreInfo(obj *DiagMoreInfo, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Diagnosis) MoreInfoByKey(obj *DiagMoreInfo, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

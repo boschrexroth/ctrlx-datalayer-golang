@@ -8,15 +8,21 @@ import (
 
 /// This table defines the elements of one detailed diagnostics that should be registered.
 type DetailedDiagnosticT struct {
-	Number string
-	Version uint32
-	Text string
+	Number string `json:"number"`
+	Version uint32 `json:"version"`
+	Text string `json:"text"`
 }
 
 func (t *DetailedDiagnosticT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	numberOffset := builder.CreateString(t.Number)
-	textOffset := builder.CreateString(t.Text)
+	numberOffset := flatbuffers.UOffsetT(0)
+	if t.Number != "" {
+		numberOffset = builder.CreateString(t.Number)
+	}
+	textOffset := flatbuffers.UOffsetT(0)
+	if t.Text != "" {
+		textOffset = builder.CreateString(t.Text)
+	}
 	DetailedDiagnosticStart(builder)
 	DetailedDiagnosticAddNumber(builder, numberOffset)
 	DetailedDiagnosticAddVersion(builder, t.Version)

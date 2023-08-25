@@ -7,8 +7,8 @@ import (
 )
 
 type CmdOpt_KinFeedGroupT struct {
-	Base *CmdOpt_BaseT
-	FeedGroup FeedGroup
+	Base *CmdOpt_BaseT `json:"base"`
+	FeedGroup FeedGroup `json:"feedGroup"`
 }
 
 func (t *CmdOpt_KinFeedGroupT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

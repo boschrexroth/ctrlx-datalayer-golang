@@ -7,7 +7,7 @@ import (
 )
 
 type UserIdentityTokenT struct {
-	UserIdentityToken *UserIdentityTokenUnionT
+	UserIdentityToken *UserIdentityTokenUnionT `json:"userIdentityToken"`
 }
 
 func (t *UserIdentityTokenT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

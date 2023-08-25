@@ -7,10 +7,10 @@ import (
 )
 
 type SlaveStatisticCountersResponseT struct {
-	AlStatusCode uint16
-	ProcUnitErrorCounter byte
-	PdiErrorCounter byte
-	PortErrorCounters []*PortErrorCountersT
+	AlStatusCode uint16 `json:"alStatusCode"`
+	ProcUnitErrorCounter byte `json:"procUnitErrorCounter"`
+	PdiErrorCounter byte `json:"pdiErrorCounter"`
+	PortErrorCounters []*PortErrorCountersT `json:"portErrorCounters"`
 }
 
 func (t *SlaveStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

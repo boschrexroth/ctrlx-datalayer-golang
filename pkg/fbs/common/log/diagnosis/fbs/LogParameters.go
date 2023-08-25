@@ -9,29 +9,56 @@ import (
 /// This table defines all elements that can be used to set a diagnostic log.
 /// It is used for diagnostic messages, warnings and errors.
 type LogParametersT struct {
-	MainDiagnosisCode string
-	DetailedDiagnosisCode string
-	UserId string
-	Entity string
-	Origin string
-	UnitName string
-	FileName string
-	FunctionName string
-	LineNumber uint32
-	DynamicDescription string
+	MainDiagnosisCode string `json:"mainDiagnosisCode"`
+	DetailedDiagnosisCode string `json:"detailedDiagnosisCode"`
+	UserId string `json:"userId"`
+	Entity string `json:"entity"`
+	Origin string `json:"origin"`
+	UnitName string `json:"unitName"`
+	FileName string `json:"fileName"`
+	FunctionName string `json:"functionName"`
+	LineNumber uint32 `json:"lineNumber"`
+	DynamicDescription string `json:"dynamicDescription"`
 }
 
 func (t *LogParametersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	mainDiagnosisCodeOffset := builder.CreateString(t.MainDiagnosisCode)
-	detailedDiagnosisCodeOffset := builder.CreateString(t.DetailedDiagnosisCode)
-	userIdOffset := builder.CreateString(t.UserId)
-	entityOffset := builder.CreateString(t.Entity)
-	originOffset := builder.CreateString(t.Origin)
-	unitNameOffset := builder.CreateString(t.UnitName)
-	fileNameOffset := builder.CreateString(t.FileName)
-	functionNameOffset := builder.CreateString(t.FunctionName)
-	dynamicDescriptionOffset := builder.CreateString(t.DynamicDescription)
+	mainDiagnosisCodeOffset := flatbuffers.UOffsetT(0)
+	if t.MainDiagnosisCode != "" {
+		mainDiagnosisCodeOffset = builder.CreateString(t.MainDiagnosisCode)
+	}
+	detailedDiagnosisCodeOffset := flatbuffers.UOffsetT(0)
+	if t.DetailedDiagnosisCode != "" {
+		detailedDiagnosisCodeOffset = builder.CreateString(t.DetailedDiagnosisCode)
+	}
+	userIdOffset := flatbuffers.UOffsetT(0)
+	if t.UserId != "" {
+		userIdOffset = builder.CreateString(t.UserId)
+	}
+	entityOffset := flatbuffers.UOffsetT(0)
+	if t.Entity != "" {
+		entityOffset = builder.CreateString(t.Entity)
+	}
+	originOffset := flatbuffers.UOffsetT(0)
+	if t.Origin != "" {
+		originOffset = builder.CreateString(t.Origin)
+	}
+	unitNameOffset := flatbuffers.UOffsetT(0)
+	if t.UnitName != "" {
+		unitNameOffset = builder.CreateString(t.UnitName)
+	}
+	fileNameOffset := flatbuffers.UOffsetT(0)
+	if t.FileName != "" {
+		fileNameOffset = builder.CreateString(t.FileName)
+	}
+	functionNameOffset := flatbuffers.UOffsetT(0)
+	if t.FunctionName != "" {
+		functionNameOffset = builder.CreateString(t.FunctionName)
+	}
+	dynamicDescriptionOffset := flatbuffers.UOffsetT(0)
+	if t.DynamicDescription != "" {
+		dynamicDescriptionOffset = builder.CreateString(t.DynamicDescription)
+	}
 	LogParametersStart(builder)
 	LogParametersAddMainDiagnosisCode(builder, mainDiagnosisCodeOffset)
 	LogParametersAddDetailedDiagnosisCode(builder, detailedDiagnosisCodeOffset)

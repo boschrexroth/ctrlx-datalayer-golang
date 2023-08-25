@@ -9,9 +9,9 @@ import (
 )
 
 type ProgramT struct {
-	Task *TaskT
-	Callables []*CallableT
-	Watchdog *common__scheduler__watchdog__fbs.WatchdogT
+	Task *TaskT `json:"task"`
+	Callables []*CallableT `json:"callables"`
+	Watchdog *common__scheduler__watchdog__fbs.WatchdogT `json:"watchdog"`
 }
 
 func (t *ProgramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

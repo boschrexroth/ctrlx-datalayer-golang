@@ -7,8 +7,8 @@ import (
 )
 
 type ProtocolStatisticCountersT struct {
-	NumRequests uint32
-	NumBytes uint32
+	NumRequests uint32 `json:"numRequests"`
+	NumBytes uint32 `json:"numBytes"`
 }
 
 func (t *ProtocolStatisticCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

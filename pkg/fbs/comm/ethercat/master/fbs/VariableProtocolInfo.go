@@ -7,8 +7,8 @@ import (
 )
 
 type VariableProtocolInfoT struct {
-	Coe *CoeVariableInfoT
-	Soe *SoeVariableInfoT
+	Coe *CoeVariableInfoT `json:"coe"`
+	Soe *SoeVariableInfoT `json:"soe"`
 }
 
 func (t *VariableProtocolInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

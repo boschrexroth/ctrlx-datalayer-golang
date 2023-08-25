@@ -7,7 +7,7 @@ import (
 )
 
 type ScopesT struct {
-	Scopes []*ScopeT
+	Scopes []*ScopeT `json:"scopes"`
 }
 
 func (t *ScopesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -83,6 +83,15 @@ func (rcv *Scopes) Scopes(obj *Scope, j int) bool {
 		x = rcv._tab.Indirect(x)
 		obj.Init(rcv._tab.Bytes, x)
 		return true
+	}
+	return false
+}
+
+func (rcv *Scopes) ScopesByKey(obj *Scope, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
 	}
 	return false
 }

@@ -6,9 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// configuration of all calculation pipelines of a single axis
+/// configuration of all calculation pipelines
 type AxsCfgCalcPipelineAllT struct {
-	Pipelines []*AxsCfgCalcPipelineT
+	Pipelines []*AxsCfgCalcPipelineT `json:"pipelines"`
 }
 
 func (t *AxsCfgCalcPipelineAllT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

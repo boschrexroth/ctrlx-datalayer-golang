@@ -7,27 +7,39 @@ import (
 )
 
 type LinkLayerOnlineInfoResponseT struct {
-	Port string
-	LinkLayer string
-	Arguments string
-	Message string
-	MacAddress []byte
-	FrameRepeatCntSupport bool
-	LinkSpeed uint32
-	LinkMode LinkMode
-	LinkStatus LinkStatus
-	RefClockWidth uint32
-	SystemTime uint64
-	PhysicalErrorCnt uint32
-	TelegramErrorCnt uint32
+	Port string `json:"port"`
+	LinkLayer string `json:"linkLayer"`
+	Arguments string `json:"arguments"`
+	Message string `json:"message"`
+	MacAddress []byte `json:"macAddress"`
+	FrameRepeatCntSupport bool `json:"frameRepeatCntSupport"`
+	LinkSpeed uint32 `json:"linkSpeed"`
+	LinkMode LinkMode `json:"linkMode"`
+	LinkStatus LinkStatus `json:"linkStatus"`
+	RefClockWidth uint32 `json:"refClockWidth"`
+	SystemTime uint64 `json:"systemTime"`
+	PhysicalErrorCnt uint32 `json:"physicalErrorCnt"`
+	TelegramErrorCnt uint32 `json:"telegramErrorCnt"`
 }
 
 func (t *LinkLayerOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	portOffset := builder.CreateString(t.Port)
-	linkLayerOffset := builder.CreateString(t.LinkLayer)
-	argumentsOffset := builder.CreateString(t.Arguments)
-	messageOffset := builder.CreateString(t.Message)
+	portOffset := flatbuffers.UOffsetT(0)
+	if t.Port != "" {
+		portOffset = builder.CreateString(t.Port)
+	}
+	linkLayerOffset := flatbuffers.UOffsetT(0)
+	if t.LinkLayer != "" {
+		linkLayerOffset = builder.CreateString(t.LinkLayer)
+	}
+	argumentsOffset := flatbuffers.UOffsetT(0)
+	if t.Arguments != "" {
+		argumentsOffset = builder.CreateString(t.Arguments)
+	}
+	messageOffset := flatbuffers.UOffsetT(0)
+	if t.Message != "" {
+		messageOffset = builder.CreateString(t.Message)
+	}
 	macAddressOffset := flatbuffers.UOffsetT(0)
 	if t.MacAddress != nil {
 		macAddressOffset = builder.CreateByteString(t.MacAddress)

@@ -7,7 +7,7 @@ import (
 )
 
 type type_longT struct {
-	Value int64
+	Value int64 `json:"value"`
 }
 
 func (t *type_longT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

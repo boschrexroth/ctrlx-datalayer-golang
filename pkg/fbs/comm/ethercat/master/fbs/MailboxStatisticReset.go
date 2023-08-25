@@ -7,8 +7,8 @@ import (
 )
 
 type MailboxStatisticResetT struct {
-	Request *MailboxStatisticResetRequestT
-	Response *MailboxStatisticResetResponseT
+	Request *MailboxStatisticResetRequestT `json:"request"`
+	Response *MailboxStatisticResetResponseT `json:"response"`
 }
 
 func (t *MailboxStatisticResetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

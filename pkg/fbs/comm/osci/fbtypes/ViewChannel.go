@@ -7,16 +7,22 @@ import (
 )
 
 type ViewChannelT struct {
-	Source string
-	Color string
-	Visible bool
-	ConnectionType ConnectionTypeEnumFb
+	Source string `json:"source"`
+	Color string `json:"color"`
+	Visible bool `json:"visible"`
+	ConnectionType ConnectionTypeEnumFb `json:"connectionType"`
 }
 
 func (t *ViewChannelT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	sourceOffset := builder.CreateString(t.Source)
-	colorOffset := builder.CreateString(t.Color)
+	sourceOffset := flatbuffers.UOffsetT(0)
+	if t.Source != "" {
+		sourceOffset = builder.CreateString(t.Source)
+	}
+	colorOffset := flatbuffers.UOffsetT(0)
+	if t.Color != "" {
+		colorOffset = builder.CreateString(t.Color)
+	}
 	ViewChannelStart(builder)
 	ViewChannelAddSource(builder, sourceOffset)
 	ViewChannelAddColor(builder, colorOffset)

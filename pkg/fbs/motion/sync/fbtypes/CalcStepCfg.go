@@ -8,15 +8,18 @@ import (
 
 /// configuration of a single calculation step
 type CalcStepCfgT struct {
-	StepID uint32
-	Type string
-	Inputs []string
-	Parameter []*CalcStepCfgSingleParamT
+	StepId uint32 `json:"stepID"`
+	Type string `json:"type"`
+	Inputs []string `json:"inputs"`
+	Parameter []*CalcStepCfgSingleParamT `json:"parameter"`
 }
 
 func (t *CalcStepCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	typeOffset := builder.CreateString(t.Type)
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
 	inputsOffset := flatbuffers.UOffsetT(0)
 	if t.Inputs != nil {
 		inputsLength := len(t.Inputs)
@@ -44,15 +47,15 @@ func (t *CalcStepCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		parameterOffset = builder.EndVector(parameterLength)
 	}
 	CalcStepCfgStart(builder)
-	CalcStepCfgAddStepID(builder, t.StepID)
-	CalcStepCfgAddType(builder, typeOffset)
+	CalcStepCfgAddStepId(builder, t.StepId)
+	CalcStepCfgAddType(builder, type_Offset)
 	CalcStepCfgAddInputs(builder, inputsOffset)
 	CalcStepCfgAddParameter(builder, parameterOffset)
 	return CalcStepCfgEnd(builder)
 }
 
 func (rcv *CalcStepCfg) UnPackTo(t *CalcStepCfgT) {
-	t.StepID = rcv.StepID()
+	t.StepId = rcv.StepId()
 	t.Type = string(rcv.Type())
 	inputsLength := rcv.InputsLength()
 	t.Inputs = make([]string, inputsLength)
@@ -103,7 +106,7 @@ func (rcv *CalcStepCfg) Table() flatbuffers.Table {
 }
 
 /// ID of the calculation step
-func (rcv *CalcStepCfg) StepID() uint32 {
+func (rcv *CalcStepCfg) StepId() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -112,7 +115,7 @@ func (rcv *CalcStepCfg) StepID() uint32 {
 }
 
 /// ID of the calculation step
-func (rcv *CalcStepCfg) MutateStepID(n uint32) bool {
+func (rcv *CalcStepCfg) MutateStepId(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
@@ -170,8 +173,8 @@ func (rcv *CalcStepCfg) ParameterLength() int {
 func CalcStepCfgStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }
-func CalcStepCfgAddStepID(builder *flatbuffers.Builder, stepID uint32) {
-	builder.PrependUint32Slot(0, stepID, 0)
+func CalcStepCfgAddStepId(builder *flatbuffers.Builder, stepId uint32) {
+	builder.PrependUint32Slot(0, stepId, 0)
 }
 func CalcStepCfgAddType(builder *flatbuffers.Builder, type_ flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(type_), 0)

@@ -7,8 +7,8 @@ import (
 )
 
 type EthercatMemoryInfoT struct {
-	Offset uint32
-	Size uint32
+	Offset uint32 `json:"offset"`
+	Size uint32 `json:"size"`
 }
 
 func (t *EthercatMemoryInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

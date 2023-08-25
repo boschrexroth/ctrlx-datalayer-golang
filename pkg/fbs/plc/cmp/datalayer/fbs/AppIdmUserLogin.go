@@ -7,14 +7,20 @@ import (
 )
 
 type AppIdmUserLoginT struct {
-	User string
-	Password string
+	User string `json:"user"`
+	Password string `json:"password"`
 }
 
 func (t *AppIdmUserLoginT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	userOffset := builder.CreateString(t.User)
-	passwordOffset := builder.CreateString(t.Password)
+	userOffset := flatbuffers.UOffsetT(0)
+	if t.User != "" {
+		userOffset = builder.CreateString(t.User)
+	}
+	passwordOffset := flatbuffers.UOffsetT(0)
+	if t.Password != "" {
+		passwordOffset = builder.CreateString(t.Password)
+	}
 	AppIdmUserLoginStart(builder)
 	AppIdmUserLoginAddUser(builder, userOffset)
 	AppIdmUserLoginAddPassword(builder, passwordOffset)

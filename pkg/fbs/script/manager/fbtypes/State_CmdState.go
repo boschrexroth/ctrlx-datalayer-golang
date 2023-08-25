@@ -7,22 +7,25 @@ import (
 )
 
 type State_CmdStateT struct {
-	ObjName string
-	CmdID uint64
+	ObjName string `json:"objName"`
+	CmdId uint64 `json:"cmdID"`
 }
 
 func (t *State_CmdStateT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objNameOffset := builder.CreateString(t.ObjName)
+	objNameOffset := flatbuffers.UOffsetT(0)
+	if t.ObjName != "" {
+		objNameOffset = builder.CreateString(t.ObjName)
+	}
 	State_CmdStateStart(builder)
 	State_CmdStateAddObjName(builder, objNameOffset)
-	State_CmdStateAddCmdID(builder, t.CmdID)
+	State_CmdStateAddCmdId(builder, t.CmdId)
 	return State_CmdStateEnd(builder)
 }
 
 func (rcv *State_CmdState) UnPackTo(t *State_CmdStateT) {
 	t.ObjName = string(rcv.ObjName())
-	t.CmdID = rcv.CmdID()
+	t.CmdId = rcv.CmdId()
 }
 
 func (rcv *State_CmdState) UnPack() *State_CmdStateT {
@@ -67,7 +70,7 @@ func (rcv *State_CmdState) ObjName() []byte {
 	return nil
 }
 
-func (rcv *State_CmdState) CmdID() uint64 {
+func (rcv *State_CmdState) CmdId() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetUint64(o + rcv._tab.Pos)
@@ -75,7 +78,7 @@ func (rcv *State_CmdState) CmdID() uint64 {
 	return 0
 }
 
-func (rcv *State_CmdState) MutateCmdID(n uint64) bool {
+func (rcv *State_CmdState) MutateCmdId(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }
 
@@ -85,8 +88,8 @@ func State_CmdStateStart(builder *flatbuffers.Builder) {
 func State_CmdStateAddObjName(builder *flatbuffers.Builder, objName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(objName), 0)
 }
-func State_CmdStateAddCmdID(builder *flatbuffers.Builder, cmdID uint64) {
-	builder.PrependUint64Slot(1, cmdID, 0)
+func State_CmdStateAddCmdId(builder *flatbuffers.Builder, cmdId uint64) {
+	builder.PrependUint64Slot(1, cmdId, 0)
 }
 func State_CmdStateEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -7,14 +7,17 @@ import (
 )
 
 type CmdOpt_KinSetSafeAreaT struct {
-	Base *CmdOpt_BaseT
-	SafeArea string
+	Base *CmdOpt_BaseT `json:"base"`
+	SafeArea string `json:"safeArea"`
 }
 
 func (t *CmdOpt_KinSetSafeAreaT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	safeAreaOffset := builder.CreateString(t.SafeArea)
+	safeAreaOffset := flatbuffers.UOffsetT(0)
+	if t.SafeArea != "" {
+		safeAreaOffset = builder.CreateString(t.SafeArea)
+	}
 	CmdOpt_KinSetSafeAreaStart(builder)
 	CmdOpt_KinSetSafeAreaAddBase(builder, baseOffset)
 	CmdOpt_KinSetSafeAreaAddSafeArea(builder, safeAreaOffset)

@@ -7,17 +7,20 @@ import (
 )
 
 type Cmd_KinAbortT struct {
-	Base *Cmd_BaseT
-	Type string
+	Base *Cmd_BaseT `json:"base"`
+	Type string `json:"type"`
 }
 
 func (t *Cmd_KinAbortT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	typeOffset := builder.CreateString(t.Type)
+	type_Offset := flatbuffers.UOffsetT(0)
+	if t.Type != "" {
+		type_Offset = builder.CreateString(t.Type)
+	}
 	Cmd_KinAbortStart(builder)
 	Cmd_KinAbortAddBase(builder, baseOffset)
-	Cmd_KinAbortAddType(builder, typeOffset)
+	Cmd_KinAbortAddType(builder, type_Offset)
 	return Cmd_KinAbortEnd(builder)
 }
 

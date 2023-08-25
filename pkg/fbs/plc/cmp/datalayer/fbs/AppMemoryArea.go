@@ -7,7 +7,7 @@ import (
 )
 
 type AppMemoryAreaT struct {
-	Area Area
+	Area Area `json:"area"`
 }
 
 func (t *AppMemoryAreaT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,8 +8,8 @@ import (
 
 /// parameters of the axis abort command
 type AxsCmdAbortDataT struct {
-	Dec float64
-	JrkDec float64
+	Dec float64 `json:"dec"`
+	JrkDec float64 `json:"jrkDec"`
 }
 
 func (t *AxsCmdAbortDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -65,7 +65,7 @@ func (rcv *AxsCmdAbortData) Dec() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// commanded deceleration limit (must be a positive value)
@@ -91,7 +91,7 @@ func AxsCmdAbortDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
 func AxsCmdAbortDataAddDec(builder *flatbuffers.Builder, dec float64) {
-	builder.PrependFloat64Slot(0, dec, 0.0)
+	builder.PrependFloat64Slot(0, dec, 1.0)
 }
 func AxsCmdAbortDataAddJrkDec(builder *flatbuffers.Builder, jrkDec float64) {
 	builder.PrependFloat64Slot(1, jrkDec, 0.0)

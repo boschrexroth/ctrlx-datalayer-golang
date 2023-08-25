@@ -3,17 +3,21 @@
 package fbs
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ChecksumElementT struct {
-	Id string
-	Checksum []byte
+	Id string `json:"id"`
+	Checksum []byte `json:"checksum"`
 }
 
 func (t *ChecksumElementT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
 	checksumOffset := flatbuffers.UOffsetT(0)
 	if t.Checksum != nil {
 		checksumOffset = builder.CreateByteString(t.Checksum)
@@ -69,6 +73,38 @@ func (rcv *ChecksumElement) Id() []byte {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
 	return nil
+}
+
+func ChecksumElementKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &ChecksumElement{}
+	obj2 := &ChecksumElement{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Id()) < string(obj2.Id())
+}
+
+func (rcv *ChecksumElement) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &ChecksumElement{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Id(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func (rcv *ChecksumElement) Checksum(j int) byte {

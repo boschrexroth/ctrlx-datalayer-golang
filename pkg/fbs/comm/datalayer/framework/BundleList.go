@@ -7,7 +7,7 @@ import (
 )
 
 type BundleListT struct {
-	Bundles []*BundleT
+	Bundles []*BundleT `json:"bundles"`
 }
 
 func (t *BundleListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

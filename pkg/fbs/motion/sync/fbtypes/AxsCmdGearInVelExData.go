@@ -8,16 +8,19 @@ import (
 
 /// parameters of the axis GearInVelEx command
 type AxsCmdGearInVelExDataT struct {
-	Master string
-	SyncSource SyncSource
-	Parameters *AxsCmdGearInVelParamsT
-	DlParameters *AxsCmdGearInVelDlParamsT
-	Buffered bool
+	Master string `json:"master"`
+	SyncSource SyncSource `json:"syncSource"`
+	Parameters *AxsCmdGearInVelParamsT `json:"parameters"`
+	DlParameters *AxsCmdGearInVelDlParamsT `json:"dlParameters"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdGearInVelExDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterOffset := builder.CreateString(t.Master)
+	masterOffset := flatbuffers.UOffsetT(0)
+	if t.Master != "" {
+		masterOffset = builder.CreateString(t.Master)
+	}
 	parametersOffset := t.Parameters.Pack(builder)
 	dlParametersOffset := t.DlParameters.Pack(builder)
 	AxsCmdGearInVelExDataStart(builder)

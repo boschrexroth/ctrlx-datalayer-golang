@@ -7,14 +7,17 @@ import (
 )
 
 type Misc_SetErrLevelT struct {
-	Base *Cmd_BaseT
-	ErrLvl string
+	Base *Cmd_BaseT `json:"base"`
+	ErrLvl string `json:"errLvl"`
 }
 
 func (t *Misc_SetErrLevelT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	baseOffset := t.Base.Pack(builder)
-	errLvlOffset := builder.CreateString(t.ErrLvl)
+	errLvlOffset := flatbuffers.UOffsetT(0)
+	if t.ErrLvl != "" {
+		errLvlOffset = builder.CreateString(t.ErrLvl)
+	}
 	Misc_SetErrLevelStart(builder)
 	Misc_SetErrLevelAddBase(builder, baseOffset)
 	Misc_SetErrLevelAddErrLvl(builder, errLvlOffset)

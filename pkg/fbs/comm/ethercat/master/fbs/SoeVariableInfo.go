@@ -7,8 +7,8 @@ import (
 )
 
 type SoeVariableInfoT struct {
-	ConfigurationListIdn uint16
-	Idn uint16
+	ConfigurationListIdn uint16 `json:"configurationListIdn"`
+	Idn uint16 `json:"idn"`
 }
 
 func (t *SoeVariableInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,15 +8,21 @@ import (
 
 /// parameters of the axis command for generic synchronized motion
 type AxsCmdSyncGenericDataT struct {
-	Master string
-	Pipeline string
-	Buffered bool
+	Master string `json:"master"`
+	Pipeline string `json:"pipeline"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdSyncGenericDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterOffset := builder.CreateString(t.Master)
-	pipelineOffset := builder.CreateString(t.Pipeline)
+	masterOffset := flatbuffers.UOffsetT(0)
+	if t.Master != "" {
+		masterOffset = builder.CreateString(t.Master)
+	}
+	pipelineOffset := flatbuffers.UOffsetT(0)
+	if t.Pipeline != "" {
+		pipelineOffset = builder.CreateString(t.Pipeline)
+	}
 	AxsCmdSyncGenericDataStart(builder)
 	AxsCmdSyncGenericDataAddMaster(builder, masterOffset)
 	AxsCmdSyncGenericDataAddPipeline(builder, pipelineOffset)

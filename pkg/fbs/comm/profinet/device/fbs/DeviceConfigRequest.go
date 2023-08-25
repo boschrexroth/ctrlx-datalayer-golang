@@ -7,13 +7,16 @@ import (
 )
 
 type DeviceConfigRequestT struct {
-	Name string
-	Configuration []byte
+	Name string `json:"name"`
+	Configuration []byte `json:"configuration"`
 }
 
 func (t *DeviceConfigRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	configurationOffset := flatbuffers.UOffsetT(0)
 	if t.Configuration != nil {
 		configurationOffset = builder.CreateByteString(t.Configuration)

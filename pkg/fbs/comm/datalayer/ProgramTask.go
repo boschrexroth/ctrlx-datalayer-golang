@@ -3,28 +3,50 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ProgramTaskT struct {
-	Id string
-	State ProgramTaskState
-	Progress uint32
-	Result *DiagnosisT
-	ProgressInfo string
+	Id string `json:"id"`
+	State ProgramTaskState `json:"state"`
+	Progress uint32 `json:"progress"`
+	Result *DiagnosisT `json:"result"`
+	ProgressInfo string `json:"progressInfo"`
+	ProgressData []*ProgressDataT `json:"progressData"`
 }
 
 func (t *ProgramTaskT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	idOffset := builder.CreateString(t.Id)
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
 	resultOffset := t.Result.Pack(builder)
-	progressInfoOffset := builder.CreateString(t.ProgressInfo)
+	progressInfoOffset := flatbuffers.UOffsetT(0)
+	if t.ProgressInfo != "" {
+		progressInfoOffset = builder.CreateString(t.ProgressInfo)
+	}
+	progressDataOffset := flatbuffers.UOffsetT(0)
+	if t.ProgressData != nil {
+		progressDataLength := len(t.ProgressData)
+		progressDataOffsets := make([]flatbuffers.UOffsetT, progressDataLength)
+		for j := 0; j < progressDataLength; j++ {
+			progressDataOffsets[j] = t.ProgressData[j].Pack(builder)
+		}
+		ProgramTaskStartProgressDataVector(builder, progressDataLength)
+		for j := progressDataLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(progressDataOffsets[j])
+		}
+		progressDataOffset = builder.EndVector(progressDataLength)
+	}
 	ProgramTaskStart(builder)
 	ProgramTaskAddId(builder, idOffset)
 	ProgramTaskAddState(builder, t.State)
 	ProgramTaskAddProgress(builder, t.Progress)
 	ProgramTaskAddResult(builder, resultOffset)
 	ProgramTaskAddProgressInfo(builder, progressInfoOffset)
+	ProgramTaskAddProgressData(builder, progressDataOffset)
 	return ProgramTaskEnd(builder)
 }
 
@@ -34,6 +56,13 @@ func (rcv *ProgramTask) UnPackTo(t *ProgramTaskT) {
 	t.Progress = rcv.Progress()
 	t.Result = rcv.Result(nil).UnPack()
 	t.ProgressInfo = string(rcv.ProgressInfo())
+	progressDataLength := rcv.ProgressDataLength()
+	t.ProgressData = make([]*ProgressDataT, progressDataLength)
+	for j := 0; j < progressDataLength; j++ {
+		x := ProgressData{}
+		rcv.ProgressData(&x, j)
+		t.ProgressData[j] = x.UnPack()
+	}
 }
 
 func (rcv *ProgramTask) UnPack() *ProgramTaskT {
@@ -80,6 +109,38 @@ func (rcv *ProgramTask) Id() []byte {
 }
 
 /// id of the task
+func ProgramTaskKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &ProgramTask{}
+	obj2 := &ProgramTask{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Id()) < string(obj2.Id())
+}
+
+func (rcv *ProgramTask) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &ProgramTask{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Id(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
+}
+
 /// state of the task
 func (rcv *ProgramTask) State() ProgramTaskState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
@@ -133,8 +194,39 @@ func (rcv *ProgramTask) ProgressInfo() []byte {
 }
 
 /// Additional progress information
+/// Additional progress information as key value pair
+func (rcv *ProgramTask) ProgressData(obj *ProgressData, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *ProgramTask) ProgressDataByKey(obj *ProgressData, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
+func (rcv *ProgramTask) ProgressDataLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// Additional progress information as key value pair
 func ProgramTaskStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func ProgramTaskAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -150,6 +242,12 @@ func ProgramTaskAddResult(builder *flatbuffers.Builder, result flatbuffers.UOffs
 }
 func ProgramTaskAddProgressInfo(builder *flatbuffers.Builder, progressInfo flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(progressInfo), 0)
+}
+func ProgramTaskAddProgressData(builder *flatbuffers.Builder, progressData flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(progressData), 0)
+}
+func ProgramTaskStartProgressDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func ProgramTaskEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

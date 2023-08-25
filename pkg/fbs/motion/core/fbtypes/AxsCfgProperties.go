@@ -8,16 +8,22 @@ import (
 
 /// common axis properties for a single axis
 type AxsCfgPropertiesT struct {
-	AxsType string
-	Modulo bool
-	ModuloValue float64
-	ModuloValueUnit string
+	AxsType string `json:"axsType"`
+	Modulo bool `json:"modulo"`
+	ModuloValue float64 `json:"moduloValue"`
+	ModuloValueUnit string `json:"moduloValueUnit"`
 }
 
 func (t *AxsCfgPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsTypeOffset := builder.CreateString(t.AxsType)
-	moduloValueUnitOffset := builder.CreateString(t.ModuloValueUnit)
+	axsTypeOffset := flatbuffers.UOffsetT(0)
+	if t.AxsType != "" {
+		axsTypeOffset = builder.CreateString(t.AxsType)
+	}
+	moduloValueUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ModuloValueUnit != "" {
+		moduloValueUnitOffset = builder.CreateString(t.ModuloValueUnit)
+	}
 	AxsCfgPropertiesStart(builder)
 	AxsCfgPropertiesAddAxsType(builder, axsTypeOffset)
 	AxsCfgPropertiesAddModulo(builder, t.Modulo)

@@ -10,16 +10,25 @@ import (
 /// the type inforamtion of this flatbuffer is provided under "types/datalayer/persistence-param"
 /// at implementation of "onMetadata()" return this path as create type reference
 type PersistenceParamT struct {
-	ConfigurationPath string
-	Id string
-	Phase string
+	ConfigurationPath string `json:"configurationPath"`
+	Id string `json:"id"`
+	Phase string `json:"phase"`
 }
 
 func (t *PersistenceParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	configurationPathOffset := builder.CreateString(t.ConfigurationPath)
-	idOffset := builder.CreateString(t.Id)
-	phaseOffset := builder.CreateString(t.Phase)
+	configurationPathOffset := flatbuffers.UOffsetT(0)
+	if t.ConfigurationPath != "" {
+		configurationPathOffset = builder.CreateString(t.ConfigurationPath)
+	}
+	idOffset := flatbuffers.UOffsetT(0)
+	if t.Id != "" {
+		idOffset = builder.CreateString(t.Id)
+	}
+	phaseOffset := flatbuffers.UOffsetT(0)
+	if t.Phase != "" {
+		phaseOffset = builder.CreateString(t.Phase)
+	}
 	PersistenceParamStart(builder)
 	PersistenceParamAddConfigurationPath(builder, configurationPathOffset)
 	PersistenceParamAddId(builder, idOffset)

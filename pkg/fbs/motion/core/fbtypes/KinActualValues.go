@@ -8,14 +8,14 @@ import (
 
 /// actual values of the kinematics
 type KinActualValuesT struct {
-	ActualPos []float64
-	ActualVel float64
-	ActualAcc float64
-	ActualJerk float64
-	ActualPosUnit []string
-	ActualVelUnit string
-	ActualAccUnit string
-	ActualJerkUnit string
+	ActualPos []float64 `json:"actualPos"`
+	ActualVel float64 `json:"actualVel"`
+	ActualAcc float64 `json:"actualAcc"`
+	ActualJerk float64 `json:"actualJerk"`
+	ActualPosUnit []string `json:"actualPosUnit"`
+	ActualVelUnit string `json:"actualVelUnit"`
+	ActualAccUnit string `json:"actualAccUnit"`
+	ActualJerkUnit string `json:"actualJerkUnit"`
 }
 
 func (t *KinActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -42,9 +42,18 @@ func (t *KinActualValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 		}
 		actualPosUnitOffset = builder.EndVector(actualPosUnitLength)
 	}
-	actualVelUnitOffset := builder.CreateString(t.ActualVelUnit)
-	actualAccUnitOffset := builder.CreateString(t.ActualAccUnit)
-	actualJerkUnitOffset := builder.CreateString(t.ActualJerkUnit)
+	actualVelUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualVelUnit != "" {
+		actualVelUnitOffset = builder.CreateString(t.ActualVelUnit)
+	}
+	actualAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualAccUnit != "" {
+		actualAccUnitOffset = builder.CreateString(t.ActualAccUnit)
+	}
+	actualJerkUnitOffset := flatbuffers.UOffsetT(0)
+	if t.ActualJerkUnit != "" {
+		actualJerkUnitOffset = builder.CreateString(t.ActualJerkUnit)
+	}
 	KinActualValuesStart(builder)
 	KinActualValuesAddActualPos(builder, actualPosOffset)
 	KinActualValuesAddActualVel(builder, t.ActualVel)

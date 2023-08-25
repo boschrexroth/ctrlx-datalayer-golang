@@ -8,7 +8,7 @@ import (
 
 /// configuration values of all joint transformation sets
 type KinCfgJntTrafoAllSetsT struct {
-	AxsTrafoSets []*KinCfgJntTrafoSetT
+	AxsTrafoSets []*KinCfgJntTrafoSetT `json:"axsTrafoSets"`
 }
 
 func (t *KinCfgJntTrafoAllSetsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

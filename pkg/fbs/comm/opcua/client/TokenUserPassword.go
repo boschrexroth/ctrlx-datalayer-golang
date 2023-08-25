@@ -7,14 +7,20 @@ import (
 )
 
 type TokenUserPasswordT struct {
-	Username string
-	Password string
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func (t *TokenUserPasswordT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	usernameOffset := builder.CreateString(t.Username)
-	passwordOffset := builder.CreateString(t.Password)
+	usernameOffset := flatbuffers.UOffsetT(0)
+	if t.Username != "" {
+		usernameOffset = builder.CreateString(t.Username)
+	}
+	passwordOffset := flatbuffers.UOffsetT(0)
+	if t.Password != "" {
+		passwordOffset = builder.CreateString(t.Password)
+	}
 	TokenUserPasswordStart(builder)
 	TokenUserPasswordAddUsername(builder, usernameOffset)
 	TokenUserPasswordAddPassword(builder, passwordOffset)

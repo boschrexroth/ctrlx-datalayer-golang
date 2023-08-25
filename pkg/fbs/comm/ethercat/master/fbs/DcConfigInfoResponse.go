@@ -7,12 +7,12 @@ import (
 )
 
 type DcConfigInfoResponseT struct {
-	SyncMode SyncMode
-	CycleTime uint32
-	SyncShiftTime uint32
-	SyncWindowMonitoring bool
-	DeviationLimit uint32
-	ContinuousDelayCompensation bool
+	SyncMode SyncMode `json:"syncMode"`
+	CycleTime uint32 `json:"cycleTime"`
+	SyncShiftTime uint32 `json:"syncShiftTime"`
+	SyncWindowMonitoring bool `json:"syncWindowMonitoring"`
+	DeviationLimit uint32 `json:"deviationLimit"`
+	ContinuousDelayCompensation bool `json:"continuousDelayCompensation"`
 }
 
 func (t *DcConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

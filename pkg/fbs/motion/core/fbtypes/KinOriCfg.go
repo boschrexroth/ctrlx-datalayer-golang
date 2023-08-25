@@ -8,10 +8,10 @@ import (
 
 /// common configuration of orientation
 type KinOriCfgT struct {
-	EffectiveRadius *KinOriRadiusT
-	Lim *KinCfgLimitsT
-	Units *UnitCfgObjT
-	RotToLinConversion *KinCfgRotToLinConversionT
+	EffectiveRadius *KinOriRadiusT `json:"effective_radius"`
+	Lim *KinCfgLimitsT `json:"lim"`
+	Units *UnitCfgObjT `json:"units"`
+	RotToLinConversion *KinCfgRotToLinConversionT `json:"rotToLinConversion"`
 }
 
 func (t *KinOriCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

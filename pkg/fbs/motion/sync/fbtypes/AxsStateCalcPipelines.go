@@ -8,7 +8,7 @@ import (
 
 /// all configured calculation pipelines of a single axis
 type AxsStateCalcPipelinesT struct {
-	Pipeline []*AxsStateCalcSinglePipelineT
+	Pipeline []*AxsStateCalcSinglePipelineT `json:"pipeline"`
 }
 
 func (t *AxsStateCalcPipelinesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

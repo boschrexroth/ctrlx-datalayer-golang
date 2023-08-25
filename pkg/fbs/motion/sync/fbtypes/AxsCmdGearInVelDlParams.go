@@ -8,15 +8,15 @@ import (
 
 /// GearInVel calculation pipeline parameters, that are stored in the Datalayer RT, for the axis GearInVelEx command
 type AxsCmdGearInVelDlParamsT struct {
-	SoiMasterOffsetDlIdx int32
-	SoiMasterOffsetVelDlIdx int32
-	SoiMasterOffsetAccDlIdx int32
-	FofMasterOffsetDlIdx int32
-	FofMasterOffsetTimeConstantDlIdx int32
-	SlaveVelOffsetDlIdx int32
-	FoiSlaveOffsetDlIdx int32
-	FoiSlaveOffsetAccDlIdx int32
-	FineAdjustDlIdx int32
+	SoiMasterOffsetDlIdx int32 `json:"soiMasterOffsetDlIdx"`
+	SoiMasterOffsetVelDlIdx int32 `json:"soiMasterOffsetVelDlIdx"`
+	SoiMasterOffsetAccDlIdx int32 `json:"soiMasterOffsetAccDlIdx"`
+	FofMasterOffsetDlIdx int32 `json:"fofMasterOffsetDlIdx"`
+	FofMasterOffsetTimeConstantDlIdx int32 `json:"fofMasterOffsetTimeConstantDlIdx"`
+	SlaveVelOffsetDlIdx int32 `json:"slaveVelOffsetDlIdx"`
+	FoiSlaveOffsetDlIdx int32 `json:"foiSlaveOffsetDlIdx"`
+	FoiSlaveOffsetAccDlIdx int32 `json:"foiSlaveOffsetAccDlIdx"`
+	FineAdjustDlIdx int32 `json:"fineAdjustDlIdx"`
 }
 
 func (t *AxsCmdGearInVelDlParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

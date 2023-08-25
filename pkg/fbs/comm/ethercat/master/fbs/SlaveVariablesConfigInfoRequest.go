@@ -7,14 +7,17 @@ import (
 )
 
 type SlaveVariablesConfigInfoRequestT struct {
-	AddressedRequest *AddressedRequestT
-	VarType string
+	AddressedRequest *AddressedRequestT `json:"addressedRequest"`
+	VarType string `json:"varType"`
 }
 
 func (t *SlaveVariablesConfigInfoRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	addressedRequestOffset := t.AddressedRequest.Pack(builder)
-	varTypeOffset := builder.CreateString(t.VarType)
+	varTypeOffset := flatbuffers.UOffsetT(0)
+	if t.VarType != "" {
+		varTypeOffset = builder.CreateString(t.VarType)
+	}
 	SlaveVariablesConfigInfoRequestStart(builder)
 	SlaveVariablesConfigInfoRequestAddAddressedRequest(builder, addressedRequestOffset)
 	SlaveVariablesConfigInfoRequestAddVarType(builder, varTypeOffset)

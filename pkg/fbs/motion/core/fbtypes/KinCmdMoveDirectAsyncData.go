@@ -8,10 +8,10 @@ import (
 
 /// parameters for the move direct asynchronous command for a kinematics
 type KinCmdMoveDirectAsyncDataT struct {
-	KinPos []float64
-	CoordSys string
-	DynLimFactors *DynamicLimitsT
-	Buffered bool
+	KinPos []float64 `json:"kinPos"`
+	CoordSys string `json:"coordSys"`
+	DynLimFactors *DynamicLimitsT `json:"dynLimFactors"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *KinCmdMoveDirectAsyncDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -25,7 +25,10 @@ func (t *KinCmdMoveDirectAsyncDataT) Pack(builder *flatbuffers.Builder) flatbuff
 		}
 		kinPosOffset = builder.EndVector(kinPosLength)
 	}
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	dynLimFactorsOffset := t.DynLimFactors.Pack(builder)
 	KinCmdMoveDirectAsyncDataStart(builder)
 	KinCmdMoveDirectAsyncDataAddKinPos(builder, kinPosOffset)

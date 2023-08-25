@@ -7,7 +7,7 @@ import (
 )
 
 type FoeResponseT struct {
-	Data []byte
+	Data []byte `json:"data"`
 }
 
 func (t *FoeResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

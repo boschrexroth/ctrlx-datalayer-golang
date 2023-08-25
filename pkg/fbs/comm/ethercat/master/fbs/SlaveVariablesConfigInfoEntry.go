@@ -9,9 +9,9 @@ import (
 )
 
 type SlaveVariablesConfigInfoEntryT struct {
-	VariableInfo *comm__datalayer.VariableT
-	EtgBaseType uint16
-	ProtocolInfo *VariableProtocolInfoT
+	VariableInfo *comm__datalayer.VariableT `json:"variableInfo"`
+	EtgBaseType uint16 `json:"etgBaseType"`
+	ProtocolInfo *VariableProtocolInfoT `json:"protocolInfo"`
 }
 
 func (t *SlaveVariablesConfigInfoEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -8,11 +8,11 @@ import (
 
 /// general system configuration
 type SysCfgT struct {
-	Pcs *SysCfgPcsAllT
-	Function *SysCfgFunctionT
-	Internal *SysCfgInternalT
-	SafeAreas *SysCfgSafeAreaAllT
-	RtInputs *RTInputsCfgT
+	Pcs *SysCfgPcsAllT `json:"pcs"`
+	Function *SysCfgFunctionT `json:"function"`
+	Internal *SysCfgInternalT `json:"internal"`
+	SafeAreas *SysCfgSafeAreaAllT `json:"safeAreas"`
+	RtInputs *RTInputsCfgT `json:"rtInputs"`
 }
 
 func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

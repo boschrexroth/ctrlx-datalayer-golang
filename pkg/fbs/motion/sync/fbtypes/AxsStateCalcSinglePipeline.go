@@ -8,27 +8,26 @@ import (
 
 /// current state of a single calculation pipeline of a single axis
 type AxsStateCalcSinglePipelineT struct {
-	Name string
-	State PipelineState
-	Validation *PipelineValidationT
-	IsBuiltIn bool
-	DryRunResult string
-	Steps *AxsStateCalcStepsT
+	Name string `json:"name"`
+	State PipelineState `json:"state"`
+	Validation *PipelineValidationT `json:"validation"`
+	IsBuiltIn bool `json:"isBuiltIn"`
+	RunCalculationPipeline float64 `json:"runCalculationPipeline"`
 }
 
 func (t *AxsStateCalcSinglePipelineT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	validationOffset := t.Validation.Pack(builder)
-	dryRunResultOffset := builder.CreateString(t.DryRunResult)
-	stepsOffset := t.Steps.Pack(builder)
 	AxsStateCalcSinglePipelineStart(builder)
 	AxsStateCalcSinglePipelineAddName(builder, nameOffset)
 	AxsStateCalcSinglePipelineAddState(builder, t.State)
 	AxsStateCalcSinglePipelineAddValidation(builder, validationOffset)
 	AxsStateCalcSinglePipelineAddIsBuiltIn(builder, t.IsBuiltIn)
-	AxsStateCalcSinglePipelineAddDryRunResult(builder, dryRunResultOffset)
-	AxsStateCalcSinglePipelineAddSteps(builder, stepsOffset)
+	AxsStateCalcSinglePipelineAddRunCalculationPipeline(builder, t.RunCalculationPipeline)
 	return AxsStateCalcSinglePipelineEnd(builder)
 }
 
@@ -37,8 +36,7 @@ func (rcv *AxsStateCalcSinglePipeline) UnPackTo(t *AxsStateCalcSinglePipelineT) 
 	t.State = rcv.State()
 	t.Validation = rcv.Validation(nil).UnPack()
 	t.IsBuiltIn = rcv.IsBuiltIn()
-	t.DryRunResult = string(rcv.DryRunResult())
-	t.Steps = rcv.Steps(nil).UnPack()
+	t.RunCalculationPipeline = rcv.RunCalculationPipeline()
 }
 
 func (rcv *AxsStateCalcSinglePipeline) UnPack() *AxsStateCalcSinglePipelineT {
@@ -128,33 +126,22 @@ func (rcv *AxsStateCalcSinglePipeline) MutateIsBuiltIn(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
-/// result obtained after running calculation pipeline
-func (rcv *AxsStateCalcSinglePipeline) DryRunResult() []byte {
+/// result obtained after running calculation pipeline 
+func (rcv *AxsStateCalcSinglePipeline) RunCalculationPipeline() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return nil
+	return 0.0
 }
 
-/// result obtained after running calculation pipeline
-/// all calculation steps of the calculation pipeline
-func (rcv *AxsStateCalcSinglePipeline) Steps(obj *AxsStateCalcSteps) *AxsStateCalcSteps {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
-	if o != 0 {
-		x := rcv._tab.Indirect(o + rcv._tab.Pos)
-		if obj == nil {
-			obj = new(AxsStateCalcSteps)
-		}
-		obj.Init(rcv._tab.Bytes, x)
-		return obj
-	}
-	return nil
+/// result obtained after running calculation pipeline 
+func (rcv *AxsStateCalcSinglePipeline) MutateRunCalculationPipeline(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(12, n)
 }
 
-/// all calculation steps of the calculation pipeline
 func AxsStateCalcSinglePipelineStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(5)
 }
 func AxsStateCalcSinglePipelineAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -168,11 +155,8 @@ func AxsStateCalcSinglePipelineAddValidation(builder *flatbuffers.Builder, valid
 func AxsStateCalcSinglePipelineAddIsBuiltIn(builder *flatbuffers.Builder, isBuiltIn bool) {
 	builder.PrependBoolSlot(3, isBuiltIn, false)
 }
-func AxsStateCalcSinglePipelineAddDryRunResult(builder *flatbuffers.Builder, dryRunResult flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(dryRunResult), 0)
-}
-func AxsStateCalcSinglePipelineAddSteps(builder *flatbuffers.Builder, steps flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(steps), 0)
+func AxsStateCalcSinglePipelineAddRunCalculationPipeline(builder *flatbuffers.Builder, runCalculationPipeline float64) {
+	builder.PrependFloat64Slot(4, runCalculationPipeline, 0.0)
 }
 func AxsStateCalcSinglePipelineEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

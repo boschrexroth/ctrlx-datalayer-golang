@@ -8,27 +8,42 @@ import (
 
 /// informations of a single unit, that is supported by the system
 type UnitDataSingleT struct {
-	Name string
-	UnitObjType string
-	UnitValueType string
-	Abbreviation string
-	AbbreviationURI string
-	IsDefault bool
+	Name string `json:"name"`
+	UnitObjType string `json:"unitObjType"`
+	UnitValueType string `json:"unitValueType"`
+	Abbreviation string `json:"abbreviation"`
+	AbbreviationUri string `json:"abbreviationURI"`
+	IsDefault bool `json:"isDefault"`
 }
 
 func (t *UnitDataSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	unitObjTypeOffset := builder.CreateString(t.UnitObjType)
-	unitValueTypeOffset := builder.CreateString(t.UnitValueType)
-	abbreviationOffset := builder.CreateString(t.Abbreviation)
-	abbreviationURIOffset := builder.CreateString(t.AbbreviationURI)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	unitObjTypeOffset := flatbuffers.UOffsetT(0)
+	if t.UnitObjType != "" {
+		unitObjTypeOffset = builder.CreateString(t.UnitObjType)
+	}
+	unitValueTypeOffset := flatbuffers.UOffsetT(0)
+	if t.UnitValueType != "" {
+		unitValueTypeOffset = builder.CreateString(t.UnitValueType)
+	}
+	abbreviationOffset := flatbuffers.UOffsetT(0)
+	if t.Abbreviation != "" {
+		abbreviationOffset = builder.CreateString(t.Abbreviation)
+	}
+	abbreviationUriOffset := flatbuffers.UOffsetT(0)
+	if t.AbbreviationUri != "" {
+		abbreviationUriOffset = builder.CreateString(t.AbbreviationUri)
+	}
 	UnitDataSingleStart(builder)
 	UnitDataSingleAddName(builder, nameOffset)
 	UnitDataSingleAddUnitObjType(builder, unitObjTypeOffset)
 	UnitDataSingleAddUnitValueType(builder, unitValueTypeOffset)
 	UnitDataSingleAddAbbreviation(builder, abbreviationOffset)
-	UnitDataSingleAddAbbreviationURI(builder, abbreviationURIOffset)
+	UnitDataSingleAddAbbreviationUri(builder, abbreviationUriOffset)
 	UnitDataSingleAddIsDefault(builder, t.IsDefault)
 	return UnitDataSingleEnd(builder)
 }
@@ -38,7 +53,7 @@ func (rcv *UnitDataSingle) UnPackTo(t *UnitDataSingleT) {
 	t.UnitObjType = string(rcv.UnitObjType())
 	t.UnitValueType = string(rcv.UnitValueType())
 	t.Abbreviation = string(rcv.Abbreviation())
-	t.AbbreviationURI = string(rcv.AbbreviationURI())
+	t.AbbreviationUri = string(rcv.AbbreviationUri())
 	t.IsDefault = rcv.IsDefault()
 }
 
@@ -117,7 +132,7 @@ func (rcv *UnitDataSingle) Abbreviation() []byte {
 
 /// abbreviation of the unit (as it will being used in flatbuffers and files)
 /// URI abbreviation of the unit (as it will being used in datalayer paths)
-func (rcv *UnitDataSingle) AbbreviationURI() []byte {
+func (rcv *UnitDataSingle) AbbreviationUri() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -155,8 +170,8 @@ func UnitDataSingleAddUnitValueType(builder *flatbuffers.Builder, unitValueType 
 func UnitDataSingleAddAbbreviation(builder *flatbuffers.Builder, abbreviation flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(abbreviation), 0)
 }
-func UnitDataSingleAddAbbreviationURI(builder *flatbuffers.Builder, abbreviationURI flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(abbreviationURI), 0)
+func UnitDataSingleAddAbbreviationUri(builder *flatbuffers.Builder, abbreviationUri flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(abbreviationUri), 0)
 }
 func UnitDataSingleAddIsDefault(builder *flatbuffers.Builder, isDefault bool) {
 	builder.PrependBoolSlot(5, isDefault, false)

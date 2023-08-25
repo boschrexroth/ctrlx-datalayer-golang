@@ -8,21 +8,27 @@ import (
 
 /// complete configuration of a single axis
 type AxsCfgT struct {
-	ObjectType string
-	AxisProfileName string
-	Limits *AxsCfgLimitsT
-	Functions *AxsCfgFunctionsT
-	Properties *AxsCfgPropertiesT
-	Units *UnitCfgObjT
-	KinProperties *AxsCfgKinPropertiesT
-	DevErrReaction *AxsCfgDeviceErrorReactionT
-	RtInputs *RTInputsCfgT
+	ObjectType string `json:"objectType"`
+	AxisProfileName string `json:"axisProfileName"`
+	Limits *AxsCfgLimitsT `json:"limits"`
+	Functions *AxsCfgFunctionsT `json:"functions"`
+	Properties *AxsCfgPropertiesT `json:"properties"`
+	Units *UnitCfgObjT `json:"units"`
+	KinProperties *AxsCfgKinPropertiesT `json:"kinProperties"`
+	DevErrReaction *AxsCfgDeviceErrorReactionT `json:"devErrReaction"`
+	RtInputs *RTInputsCfgT `json:"rtInputs"`
 }
 
 func (t *AxsCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	objectTypeOffset := builder.CreateString(t.ObjectType)
-	axisProfileNameOffset := builder.CreateString(t.AxisProfileName)
+	objectTypeOffset := flatbuffers.UOffsetT(0)
+	if t.ObjectType != "" {
+		objectTypeOffset = builder.CreateString(t.ObjectType)
+	}
+	axisProfileNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxisProfileName != "" {
+		axisProfileNameOffset = builder.CreateString(t.AxisProfileName)
+	}
 	limitsOffset := t.Limits.Pack(builder)
 	functionsOffset := t.Functions.Pack(builder)
 	propertiesOffset := t.Properties.Pack(builder)

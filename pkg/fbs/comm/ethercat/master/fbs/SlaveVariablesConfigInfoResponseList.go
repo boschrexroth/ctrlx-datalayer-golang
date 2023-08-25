@@ -7,7 +7,7 @@ import (
 )
 
 type SlaveVariablesConfigInfoResponseListT struct {
-	SlVarConfInfoResponseList []*SlaveVariablesConfigInfoEntryT
+	SlVarConfInfoResponseList []*SlaveVariablesConfigInfoEntryT `json:"slVarConfInfoResponseList"`
 }
 
 func (t *SlaveVariablesConfigInfoResponseListT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

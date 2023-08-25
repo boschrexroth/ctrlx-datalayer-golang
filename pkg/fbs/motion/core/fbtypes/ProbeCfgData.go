@@ -8,28 +8,40 @@ import (
 
 /// data of the axis probe 
 type ProbeCfgDataT struct {
-	MeasurSigSel string
-	MeasurType string
-	EvalEdgeType string
-	EvalDiffType string
-	ExpWindowEdgeEnable bool
-	ExpWindowStart float64
-	ExpWindowEnd float64
-	EnableMarkFailure bool
-	MaxNumOfMarkFailuer uint32
-	TimeCompEnable bool
-	TimeCompPosEdge float64
-	TimeCompNegEdge float64
-	LvlMonitorActive bool
-	IsAutoActivated bool
+	MeasurSigSel string `json:"measurSigSel"`
+	MeasurType string `json:"measurType"`
+	EvalEdgeType string `json:"evalEdgeType"`
+	EvalDiffType string `json:"evalDiffType"`
+	ExpWindowEdgeEnable bool `json:"expWindowEdgeEnable"`
+	ExpWindowStart float64 `json:"expWindowStart"`
+	ExpWindowEnd float64 `json:"expWindowEnd"`
+	EnableMarkFailure bool `json:"enableMarkFailure"`
+	MaxNumOfMarkFailuer uint32 `json:"maxNumOfMarkFailuer"`
+	TimeCompEnable bool `json:"timeCompEnable"`
+	TimeCompPosEdge float64 `json:"timeCompPosEdge"`
+	TimeCompNegEdge float64 `json:"timeCompNegEdge"`
+	LvlMonitorActive bool `json:"lvlMonitorActive"`
+	IsAutoActivated bool `json:"isAutoActivated"`
 }
 
 func (t *ProbeCfgDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	measurSigSelOffset := builder.CreateString(t.MeasurSigSel)
-	measurTypeOffset := builder.CreateString(t.MeasurType)
-	evalEdgeTypeOffset := builder.CreateString(t.EvalEdgeType)
-	evalDiffTypeOffset := builder.CreateString(t.EvalDiffType)
+	measurSigSelOffset := flatbuffers.UOffsetT(0)
+	if t.MeasurSigSel != "" {
+		measurSigSelOffset = builder.CreateString(t.MeasurSigSel)
+	}
+	measurTypeOffset := flatbuffers.UOffsetT(0)
+	if t.MeasurType != "" {
+		measurTypeOffset = builder.CreateString(t.MeasurType)
+	}
+	evalEdgeTypeOffset := flatbuffers.UOffsetT(0)
+	if t.EvalEdgeType != "" {
+		evalEdgeTypeOffset = builder.CreateString(t.EvalEdgeType)
+	}
+	evalDiffTypeOffset := flatbuffers.UOffsetT(0)
+	if t.EvalDiffType != "" {
+		evalDiffTypeOffset = builder.CreateString(t.EvalDiffType)
+	}
 	ProbeCfgDataStart(builder)
 	ProbeCfgDataAddMeasurSigSel(builder, measurSigSelOffset)
 	ProbeCfgDataAddMeasurType(builder, measurTypeOffset)

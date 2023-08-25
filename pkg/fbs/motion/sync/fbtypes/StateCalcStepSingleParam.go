@@ -8,17 +8,23 @@ import (
 
 /// a single parameter of a calculation step
 type StateCalcStepSingleParamT struct {
-	Name string
-	Description string
-	Mandatory bool
-	Type ParameterType
-	Unit UnitValueType
+	Name string `json:"name"`
+	Description string `json:"description"`
+	Mandatory bool `json:"mandatory"`
+	Type ParameterType `json:"type"`
+	Unit UnitValueType `json:"unit"`
 }
 
 func (t *StateCalcStepSingleParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
 	StateCalcStepSingleParamStart(builder)
 	StateCalcStepSingleParamAddName(builder, nameOffset)
 	StateCalcStepSingleParamAddDescription(builder, descriptionOffset)

@@ -7,10 +7,10 @@ import (
 )
 
 type Cmd_AxsPosT struct {
-	Base *Cmd_BaseT
-	Pos float64
-	Buffered bool
-	Lim *Cmd_DynLimitsT
+	Base *Cmd_BaseT `json:"base"`
+	Pos float64 `json:"pos"`
+	Buffered bool `json:"buffered"`
+	Lim *Cmd_DynLimitsT `json:"lim"`
 }
 
 func (t *Cmd_AxsPosT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

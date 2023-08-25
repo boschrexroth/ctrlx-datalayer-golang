@@ -8,16 +8,22 @@ import (
 
 /// parameters of the axis generic GearIn command
 type AxsCmdSyncGenericGearInDataT struct {
-	Master string
-	Pipeline string
-	SyncSource SyncSource
-	Buffered bool
+	Master string `json:"master"`
+	Pipeline string `json:"pipeline"`
+	SyncSource SyncSource `json:"syncSource"`
+	Buffered bool `json:"buffered"`
 }
 
 func (t *AxsCmdSyncGenericGearInDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	masterOffset := builder.CreateString(t.Master)
-	pipelineOffset := builder.CreateString(t.Pipeline)
+	masterOffset := flatbuffers.UOffsetT(0)
+	if t.Master != "" {
+		masterOffset = builder.CreateString(t.Master)
+	}
+	pipelineOffset := flatbuffers.UOffsetT(0)
+	if t.Pipeline != "" {
+		pipelineOffset = builder.CreateString(t.Pipeline)
+	}
 	AxsCmdSyncGenericGearInDataStart(builder)
 	AxsCmdSyncGenericGearInDataAddMaster(builder, masterOffset)
 	AxsCmdSyncGenericGearInDataAddPipeline(builder, pipelineOffset)

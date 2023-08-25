@@ -7,7 +7,7 @@ import (
 )
 
 type ErrorCodeMappingT struct {
-	ListDlResultToUaStatusCode []*DlResultToUaStatusCodeT
+	ListDlResultToUaStatusCode []*DlResultToUaStatusCodeT `json:"listDlResultToUaStatusCode"`
 }
 
 func (t *ErrorCodeMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

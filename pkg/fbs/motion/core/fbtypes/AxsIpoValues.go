@@ -8,22 +8,34 @@ import (
 
 /// currently interpolated values
 type AxsIpoValuesT struct {
-	IpoPos float64
-	IpoVel float64
-	IpoAcc float64
-	IpoJrk float64
-	IpoPosUnit string
-	IpoVelUnit string
-	IpoAccUnit string
-	IpoJrkUnit string
+	IpoPos float64 `json:"ipoPos"`
+	IpoVel float64 `json:"ipoVel"`
+	IpoAcc float64 `json:"ipoAcc"`
+	IpoJrk float64 `json:"ipoJrk"`
+	IpoPosUnit string `json:"ipoPosUnit"`
+	IpoVelUnit string `json:"ipoVelUnit"`
+	IpoAccUnit string `json:"ipoAccUnit"`
+	IpoJrkUnit string `json:"ipoJrkUnit"`
 }
 
 func (t *AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	ipoPosUnitOffset := builder.CreateString(t.IpoPosUnit)
-	ipoVelUnitOffset := builder.CreateString(t.IpoVelUnit)
-	ipoAccUnitOffset := builder.CreateString(t.IpoAccUnit)
-	ipoJrkUnitOffset := builder.CreateString(t.IpoJrkUnit)
+	ipoPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.IpoPosUnit != "" {
+		ipoPosUnitOffset = builder.CreateString(t.IpoPosUnit)
+	}
+	ipoVelUnitOffset := flatbuffers.UOffsetT(0)
+	if t.IpoVelUnit != "" {
+		ipoVelUnitOffset = builder.CreateString(t.IpoVelUnit)
+	}
+	ipoAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.IpoAccUnit != "" {
+		ipoAccUnitOffset = builder.CreateString(t.IpoAccUnit)
+	}
+	ipoJrkUnitOffset := flatbuffers.UOffsetT(0)
+	if t.IpoJrkUnit != "" {
+		ipoJrkUnitOffset = builder.CreateString(t.IpoJrkUnit)
+	}
 	AxsIpoValuesStart(builder)
 	AxsIpoValuesAddIpoPos(builder, t.IpoPos)
 	AxsIpoValuesAddIpoVel(builder, t.IpoVel)

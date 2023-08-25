@@ -7,9 +7,9 @@ import (
 )
 
 type ProfileChannelInfoRequestT struct {
-	AddressType Addresstype
-	Address uint16
-	Channel uint32
+	AddressType Addresstype `json:"addressType"`
+	Address uint16 `json:"address"`
+	Channel uint32 `json:"channel"`
 }
 
 func (t *ProfileChannelInfoRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,8 +7,8 @@ import (
 )
 
 type ProfileChannelInfoT struct {
-	Request *ProfileChannelInfoRequestT
-	Response *ProfileChannelInfoResponseT
+	Request *ProfileChannelInfoRequestT `json:"request"`
+	Response *ProfileChannelInfoResponseT `json:"response"`
 }
 
 func (t *ProfileChannelInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

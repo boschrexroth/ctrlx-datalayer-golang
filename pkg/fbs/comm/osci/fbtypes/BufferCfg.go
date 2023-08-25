@@ -7,9 +7,9 @@ import (
 )
 
 type BufferCfgT struct {
-	RecordingTime *TimeT
-	BufferType BufferTypeEnumFb
-	RecordingInterval *TimeT
+	RecordingTime *TimeT `json:"recordingTime"`
+	BufferType BufferTypeEnumFb `json:"bufferType"`
+	RecordingInterval *TimeT `json:"recordingInterval"`
 }
 
 func (t *BufferCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

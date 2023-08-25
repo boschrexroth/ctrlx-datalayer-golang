@@ -12,8 +12,8 @@ import (
 ///   - The names of the synchronization points of a callables have match to the Data Layer compliance guide lines meaning any alphanumeric character are allowed [a-zA-Z_][a-zA-Z0-9-._]+
 ///   - To ensure that other callable can run after or before this callable it's recommended to set at least one synchronization point in each list
 type SyncPointsT struct {
-	After []string
-	Before []string
+	After []string `json:"after"`
+	Before []string `json:"before"`
 }
 
 func (t *SyncPointsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

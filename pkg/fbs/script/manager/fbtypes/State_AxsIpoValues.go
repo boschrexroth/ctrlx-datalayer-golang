@@ -7,10 +7,10 @@ import (
 )
 
 type State_AxsIpoValuesT struct {
-	Pos float64
-	Vel float64
-	Acc float64
-	Jrk float64
+	Pos float64 `json:"pos"`
+	Vel float64 `json:"vel"`
+	Acc float64 `json:"acc"`
+	Jrk float64 `json:"jrk"`
 }
 
 func (t *State_AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

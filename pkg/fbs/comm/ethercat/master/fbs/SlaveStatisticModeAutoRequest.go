@@ -7,8 +7,8 @@ import (
 )
 
 type SlaveStatisticModeAutoRequestT struct {
-	Enable bool
-	IdleTime uint32
+	Enable bool `json:"enable"`
+	IdleTime uint32 `json:"idleTime"`
 }
 
 func (t *SlaveStatisticModeAutoRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

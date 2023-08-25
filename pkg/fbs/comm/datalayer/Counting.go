@@ -7,7 +7,7 @@ import (
 )
 
 type CountingT struct {
-	CountSubscriptions bool
+	CountSubscriptions bool `json:"countSubscriptions"`
 }
 
 func (t *CountingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

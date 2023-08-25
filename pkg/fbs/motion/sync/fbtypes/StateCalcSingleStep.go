@@ -8,20 +8,29 @@ import (
 
 /// a single supported calculation step
 type StateCalcSingleStepT struct {
-	Name string
-	Description string
-	DocuRef string
-	Inputs []DataID
-	Outputs []DataID
-	Parameter *StateCalcStepParamsT
-	MutexParameter *StateCalcStepMutexParamT
+	Name string `json:"name"`
+	Description string `json:"description"`
+	DocuRef string `json:"docuRef"`
+	Inputs []DataID `json:"inputs"`
+	Outputs []DataID `json:"outputs"`
+	Parameter *StateCalcStepParamsT `json:"parameter"`
+	MutexParameter *StateCalcStepMutexParamT `json:"mutexParameter"`
 }
 
 func (t *StateCalcSingleStepT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
-	descriptionOffset := builder.CreateString(t.Description)
-	docuRefOffset := builder.CreateString(t.DocuRef)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
+	descriptionOffset := flatbuffers.UOffsetT(0)
+	if t.Description != "" {
+		descriptionOffset = builder.CreateString(t.Description)
+	}
+	docuRefOffset := flatbuffers.UOffsetT(0)
+	if t.DocuRef != "" {
+		docuRefOffset = builder.CreateString(t.DocuRef)
+	}
 	inputsOffset := flatbuffers.UOffsetT(0)
 	if t.Inputs != nil {
 		inputsLength := len(t.Inputs)

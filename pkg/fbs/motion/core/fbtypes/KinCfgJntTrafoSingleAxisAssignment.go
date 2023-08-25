@@ -8,22 +8,25 @@ import (
 
 /// data of a single axis assignment for a joint transformation
 type KinCfgJntTrafoSingleAxisAssignmentT struct {
-	AxisName string
-	IndexACS byte
+	AxisName string `json:"axisName"`
+	IndexAcs byte `json:"indexACS"`
 }
 
 func (t *KinCfgJntTrafoSingleAxisAssignmentT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axisNameOffset := builder.CreateString(t.AxisName)
+	axisNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxisName != "" {
+		axisNameOffset = builder.CreateString(t.AxisName)
+	}
 	KinCfgJntTrafoSingleAxisAssignmentStart(builder)
 	KinCfgJntTrafoSingleAxisAssignmentAddAxisName(builder, axisNameOffset)
-	KinCfgJntTrafoSingleAxisAssignmentAddIndexACS(builder, t.IndexACS)
+	KinCfgJntTrafoSingleAxisAssignmentAddIndexAcs(builder, t.IndexAcs)
 	return KinCfgJntTrafoSingleAxisAssignmentEnd(builder)
 }
 
 func (rcv *KinCfgJntTrafoSingleAxisAssignment) UnPackTo(t *KinCfgJntTrafoSingleAxisAssignmentT) {
 	t.AxisName = string(rcv.AxisName())
-	t.IndexACS = rcv.IndexACS()
+	t.IndexAcs = rcv.IndexAcs()
 }
 
 func (rcv *KinCfgJntTrafoSingleAxisAssignment) UnPack() *KinCfgJntTrafoSingleAxisAssignmentT {
@@ -71,7 +74,7 @@ func (rcv *KinCfgJntTrafoSingleAxisAssignment) AxisName() []byte {
 
 /// axis name referring to the joint transformation
 /// index of the ACS array
-func (rcv *KinCfgJntTrafoSingleAxisAssignment) IndexACS() byte {
+func (rcv *KinCfgJntTrafoSingleAxisAssignment) IndexAcs() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetByte(o + rcv._tab.Pos)
@@ -80,7 +83,7 @@ func (rcv *KinCfgJntTrafoSingleAxisAssignment) IndexACS() byte {
 }
 
 /// index of the ACS array
-func (rcv *KinCfgJntTrafoSingleAxisAssignment) MutateIndexACS(n byte) bool {
+func (rcv *KinCfgJntTrafoSingleAxisAssignment) MutateIndexAcs(n byte) bool {
 	return rcv._tab.MutateByteSlot(6, n)
 }
 
@@ -90,8 +93,8 @@ func KinCfgJntTrafoSingleAxisAssignmentStart(builder *flatbuffers.Builder) {
 func KinCfgJntTrafoSingleAxisAssignmentAddAxisName(builder *flatbuffers.Builder, axisName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(axisName), 0)
 }
-func KinCfgJntTrafoSingleAxisAssignmentAddIndexACS(builder *flatbuffers.Builder, indexACS byte) {
-	builder.PrependByteSlot(1, indexACS, 0)
+func KinCfgJntTrafoSingleAxisAssignmentAddIndexAcs(builder *flatbuffers.Builder, indexAcs byte) {
+	builder.PrependByteSlot(1, indexAcs, 0)
 }
 func KinCfgJntTrafoSingleAxisAssignmentEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

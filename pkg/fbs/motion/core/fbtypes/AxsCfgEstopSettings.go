@@ -8,12 +8,12 @@ import (
 
 /// configuration for axis estop to device error
 type AxsCfgEstopSettingsT struct {
-	EstopToNoDevErr EstopType
-	EstopToNoDeviceInfo EstopType
-	EstopToDevLightErr EstopType
-	EstopToFieldbusErr EstopType
-	EstopToDevCriticalErr EstopType
-	EstopToDevFatalErr EstopType
+	EstopToNoDevErr EstopType `json:"estopToNoDevErr"`
+	EstopToNoDeviceInfo EstopType `json:"estopToNoDeviceInfo"`
+	EstopToDevLightErr EstopType `json:"estopToDevLightErr"`
+	EstopToFieldbusErr EstopType `json:"estopToFieldbusErr"`
+	EstopToDevCriticalErr EstopType `json:"estopToDevCriticalErr"`
+	EstopToDevFatalErr EstopType `json:"estopToDevFatalErr"`
 }
 
 func (t *AxsCfgEstopSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

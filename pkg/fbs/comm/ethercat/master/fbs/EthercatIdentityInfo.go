@@ -7,10 +7,10 @@ import (
 )
 
 type EthercatIdentityInfoT struct {
-	VendorId uint32
-	ProductCode uint32
-	RevisionNumber uint32
-	SerialNumber uint32
+	VendorId uint32 `json:"vendorId"`
+	ProductCode uint32 `json:"productCode"`
+	RevisionNumber uint32 `json:"revisionNumber"`
+	SerialNumber uint32 `json:"serialNumber"`
 }
 
 func (t *EthercatIdentityInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,8 +7,8 @@ import (
 )
 
 type ObjectDescriptionT struct {
-	Request *ObjectDescriptionRequestT
-	Response *ObjectDescriptionResponseT
+	Request *ObjectDescriptionRequestT `json:"request"`
+	Response *ObjectDescriptionResponseT `json:"response"`
 }
 
 func (t *ObjectDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

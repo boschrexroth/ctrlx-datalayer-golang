@@ -7,14 +7,14 @@ import (
 )
 
 type TimeoutConfigurationT struct {
-	BrowseCallTimeout uint32
-	DiscoveryTimeout uint32
-	PublishTimeout uint32
-	ReadCallTimeout uint32
-	SessionTimeout float64
-	WatchdogTimeout uint32
-	WriteCallTimeout uint32
-	CallCallTimeout uint32
+	BrowseCallTimeout uint32 `json:"browseCallTimeout"`
+	DiscoveryTimeout uint32 `json:"discoveryTimeout"`
+	PublishTimeout uint32 `json:"publishTimeout"`
+	ReadCallTimeout uint32 `json:"readCallTimeout"`
+	SessionTimeout float64 `json:"sessionTimeout"`
+	WatchdogTimeout uint32 `json:"watchdogTimeout"`
+	WriteCallTimeout uint32 `json:"writeCallTimeout"`
+	CallCallTimeout uint32 `json:"callCallTimeout"`
 }
 
 func (t *TimeoutConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

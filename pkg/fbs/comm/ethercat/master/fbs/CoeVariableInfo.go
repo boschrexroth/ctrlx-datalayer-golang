@@ -7,9 +7,9 @@ import (
 )
 
 type CoeVariableInfoT struct {
-	PdoIndex uint16
-	ObjectIndex uint16
-	SubIndex byte
+	PdoIndex uint16 `json:"pdoIndex"`
+	ObjectIndex uint16 `json:"objectIndex"`
+	SubIndex byte `json:"subIndex"`
 }
 
 func (t *CoeVariableInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

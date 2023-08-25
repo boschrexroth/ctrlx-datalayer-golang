@@ -7,8 +7,8 @@ import (
 )
 
 type BusLoadStatisticCountersResponseT struct {
-	TxBytesPerSecond *MinActMaxValuesT
-	TxBytesPerCycle *MinActMaxValuesT
+	TxBytesPerSecond *MinActMaxValuesT `json:"txBytesPerSecond"`
+	TxBytesPerCycle *MinActMaxValuesT `json:"txBytesPerCycle"`
 }
 
 func (t *BusLoadStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

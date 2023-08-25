@@ -8,14 +8,17 @@ import (
 
 /// parameters for the command option blending for kinematics
 type KinCmdOptBlendDataT struct {
-	PermType string
-	Dist1 float64
-	Dist2 float64
+	PermType string `json:"permType"`
+	Dist1 float64 `json:"dist1"`
+	Dist2 float64 `json:"dist2"`
 }
 
 func (t *KinCmdOptBlendDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	permTypeOffset := builder.CreateString(t.PermType)
+	permTypeOffset := flatbuffers.UOffsetT(0)
+	if t.PermType != "" {
+		permTypeOffset = builder.CreateString(t.PermType)
+	}
 	KinCmdOptBlendDataStart(builder)
 	KinCmdOptBlendDataAddPermType(builder, permTypeOffset)
 	KinCmdOptBlendDataAddDist1(builder, t.Dist1)
@@ -79,7 +82,7 @@ func (rcv *KinCmdOptBlendData) Dist1() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// distance D1 (refer to the manual, should be greater than zero)
@@ -93,7 +96,7 @@ func (rcv *KinCmdOptBlendData) Dist2() float64 {
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
 	}
-	return 0.0
+	return 1.0
 }
 
 /// distance D2 (refer to the manual, should be greater than zero)
@@ -108,10 +111,10 @@ func KinCmdOptBlendDataAddPermType(builder *flatbuffers.Builder, permType flatbu
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(permType), 0)
 }
 func KinCmdOptBlendDataAddDist1(builder *flatbuffers.Builder, dist1 float64) {
-	builder.PrependFloat64Slot(1, dist1, 0.0)
+	builder.PrependFloat64Slot(1, dist1, 1.0)
 }
 func KinCmdOptBlendDataAddDist2(builder *flatbuffers.Builder, dist2 float64) {
-	builder.PrependFloat64Slot(2, dist2, 0.0)
+	builder.PrependFloat64Slot(2, dist2, 1.0)
 }
 func KinCmdOptBlendDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

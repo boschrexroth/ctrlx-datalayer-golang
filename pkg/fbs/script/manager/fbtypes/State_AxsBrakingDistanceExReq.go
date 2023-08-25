@@ -7,13 +7,16 @@ import (
 )
 
 type State_AxsBrakingDistanceExReqT struct {
-	AxsName string
-	SelectedTypes []BrakingDistanceTypeReq
+	AxsName string `json:"axsName"`
+	SelectedTypes []BrakingDistanceTypeReq `json:"selectedTypes"`
 }
 
 func (t *State_AxsBrakingDistanceExReqT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	axsNameOffset := builder.CreateString(t.AxsName)
+	axsNameOffset := flatbuffers.UOffsetT(0)
+	if t.AxsName != "" {
+		axsNameOffset = builder.CreateString(t.AxsName)
+	}
 	selectedTypesOffset := flatbuffers.UOffsetT(0)
 	if t.SelectedTypes != nil {
 		selectedTypesLength := len(t.SelectedTypes)

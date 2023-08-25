@@ -7,8 +7,8 @@ import (
 )
 
 type UserTokenTypeT struct {
-	Type uint32
-	PolicyId uint32
+	Type uint32 `json:"type"`
+	PolicyId uint32 `json:"policyId"`
 }
 
 func (t *UserTokenTypeT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

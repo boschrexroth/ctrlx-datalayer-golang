@@ -8,16 +8,19 @@ import (
 
 /// get informations of a single active command
 type debugCmdInfoT struct {
-	CmdName string
-	JobObjects []string
-	State string
-	CmdID uint64
-	PrepLevel string
+	CmdName string `json:"cmdName"`
+	JobObjects []string `json:"jobObjects"`
+	State string `json:"state"`
+	CmdId uint64 `json:"cmdID"`
+	PrepLevel string `json:"prepLevel"`
 }
 
 func (t *debugCmdInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	cmdNameOffset := builder.CreateString(t.CmdName)
+	cmdNameOffset := flatbuffers.UOffsetT(0)
+	if t.CmdName != "" {
+		cmdNameOffset = builder.CreateString(t.CmdName)
+	}
 	jobObjectsOffset := flatbuffers.UOffsetT(0)
 	if t.JobObjects != nil {
 		jobObjectsLength := len(t.JobObjects)
@@ -31,13 +34,19 @@ func (t *debugCmdInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		}
 		jobObjectsOffset = builder.EndVector(jobObjectsLength)
 	}
-	stateOffset := builder.CreateString(t.State)
-	prepLevelOffset := builder.CreateString(t.PrepLevel)
+	stateOffset := flatbuffers.UOffsetT(0)
+	if t.State != "" {
+		stateOffset = builder.CreateString(t.State)
+	}
+	prepLevelOffset := flatbuffers.UOffsetT(0)
+	if t.PrepLevel != "" {
+		prepLevelOffset = builder.CreateString(t.PrepLevel)
+	}
 	debugCmdInfoStart(builder)
 	debugCmdInfoAddCmdName(builder, cmdNameOffset)
 	debugCmdInfoAddJobObjects(builder, jobObjectsOffset)
 	debugCmdInfoAddState(builder, stateOffset)
-	debugCmdInfoAddCmdID(builder, t.CmdID)
+	debugCmdInfoAddCmdId(builder, t.CmdId)
 	debugCmdInfoAddPrepLevel(builder, prepLevelOffset)
 	return debugCmdInfoEnd(builder)
 }
@@ -50,7 +59,7 @@ func (rcv *debugCmdInfo) UnPackTo(t *debugCmdInfoT) {
 		t.JobObjects[j] = string(rcv.JobObjects(j))
 	}
 	t.State = string(rcv.State())
-	t.CmdID = rcv.CmdID()
+	t.CmdId = rcv.CmdId()
 	t.PrepLevel = string(rcv.PrepLevel())
 }
 
@@ -128,7 +137,7 @@ func (rcv *debugCmdInfo) State() []byte {
 
 /// command state as string
 /// command ID
-func (rcv *debugCmdInfo) CmdID() uint64 {
+func (rcv *debugCmdInfo) CmdId() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.GetUint64(o + rcv._tab.Pos)
@@ -137,7 +146,7 @@ func (rcv *debugCmdInfo) CmdID() uint64 {
 }
 
 /// command ID
-func (rcv *debugCmdInfo) MutateCmdID(n uint64) bool {
+func (rcv *debugCmdInfo) MutateCmdId(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(10, n)
 }
 
@@ -166,8 +175,8 @@ func debugCmdInfoStartJobObjectsVector(builder *flatbuffers.Builder, numElems in
 func debugCmdInfoAddState(builder *flatbuffers.Builder, state flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(state), 0)
 }
-func debugCmdInfoAddCmdID(builder *flatbuffers.Builder, cmdID uint64) {
-	builder.PrependUint64Slot(3, cmdID, 0)
+func debugCmdInfoAddCmdId(builder *flatbuffers.Builder, cmdId uint64) {
+	builder.PrependUint64Slot(3, cmdId, 0)
 }
 func debugCmdInfoAddPrepLevel(builder *flatbuffers.Builder, prepLevel flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(prepLevel), 0)

@@ -7,7 +7,7 @@ import (
 )
 
 type LinkLayerConfigInfoT struct {
-	Response *LinkLayerConfigInfoResponseT
+	Response *LinkLayerConfigInfoResponseT `json:"response"`
 }
 
 func (t *LinkLayerConfigInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -7,16 +7,19 @@ import (
 )
 
 type OscilloscopeCfgT struct {
-	Name string
-	Channels []*ChannelCfgT
-	Buffer *BufferCfgT
-	Trigger *TriggerCfgT
-	Diagramview []*DiagramCfgT
+	Name string `json:"name"`
+	Channels []*ChannelCfgT `json:"channels"`
+	Buffer *BufferCfgT `json:"buffer"`
+	Trigger *TriggerCfgT `json:"trigger"`
+	Diagramview []*DiagramCfgT `json:"diagramview"`
 }
 
 func (t *OscilloscopeCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := builder.CreateString(t.Name)
+	nameOffset := flatbuffers.UOffsetT(0)
+	if t.Name != "" {
+		nameOffset = builder.CreateString(t.Name)
+	}
 	channelsOffset := flatbuffers.UOffsetT(0)
 	if t.Channels != nil {
 		channelsLength := len(t.Channels)

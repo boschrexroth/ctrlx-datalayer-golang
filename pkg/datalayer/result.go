@@ -179,3 +179,7 @@ func (r Result) String() string {
 	}
 	return "Result_Unknown"
 }
+
+func (r Result) Error() string {
+	return r.String()
+}

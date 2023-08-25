@@ -8,11 +8,11 @@ import (
 
 /// parameters and data of the active command
 type KinCmdValuesT struct {
-	TargetPos []float64
-	Lim *DynamicLimitsStateT
-	CoordSys string
-	CmdId uint64
-	Src *CmdSourceT
+	TargetPos []float64 `json:"targetPos"`
+	Lim *DynamicLimitsStateT `json:"lim"`
+	CoordSys string `json:"coordSys"`
+	CmdId uint64 `json:"cmdId"`
+	Src *CmdSourceT `json:"src"`
 }
 
 func (t *KinCmdValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -27,7 +27,10 @@ func (t *KinCmdValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		targetPosOffset = builder.EndVector(targetPosLength)
 	}
 	limOffset := t.Lim.Pack(builder)
-	coordSysOffset := builder.CreateString(t.CoordSys)
+	coordSysOffset := flatbuffers.UOffsetT(0)
+	if t.CoordSys != "" {
+		coordSysOffset = builder.CreateString(t.CoordSys)
+	}
 	srcOffset := t.Src.Pack(builder)
 	KinCmdValuesStart(builder)
 	KinCmdValuesAddTargetPos(builder, targetPosOffset)

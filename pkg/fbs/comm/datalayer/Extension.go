@@ -3,18 +3,25 @@
 package datalayer
 
 import (
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type ExtensionT struct {
-	Key string
-	Value string
+	Key string `json:"key"`
+	Value string `json:"value"`
 }
 
 func (t *ExtensionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	keyOffset := builder.CreateString(t.Key)
-	valueOffset := builder.CreateString(t.Value)
+	keyOffset := flatbuffers.UOffsetT(0)
+	if t.Key != "" {
+		keyOffset = builder.CreateString(t.Key)
+	}
+	valueOffset := flatbuffers.UOffsetT(0)
+	if t.Value != "" {
+		valueOffset = builder.CreateString(t.Value)
+	}
 	ExtensionStart(builder)
 	ExtensionAddKey(builder, keyOffset)
 	ExtensionAddValue(builder, valueOffset)
@@ -66,6 +73,38 @@ func (rcv *Extension) Key() []byte {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
 	return nil
+}
+
+func ExtensionKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Extension{}
+	obj2 := &Extension{}
+	obj1.Init(buf, flatbuffers.UOffsetT(len(buf)) - o1)
+	obj2.Init(buf, flatbuffers.UOffsetT(len(buf)) - o2)
+	return string(obj1.Key()) < string(obj2.Key())
+}
+
+func (rcv *Extension) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+	span := flatbuffers.GetUOffsetT(buf[vectorLocation - 4:])
+	start := flatbuffers.UOffsetT(0)
+	bKey := []byte(key)
+	for span != 0 {
+		middle := span / 2
+		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+ 4 * (start + middle))
+		obj := &Extension{}
+		obj.Init(buf, tableOffset)
+		comp := bytes.Compare(obj.Key(), bKey)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			rcv.Init(buf, tableOffset)
+			return true
+		}
+	}
+	return false
 }
 
 func (rcv *Extension) Value() []byte {

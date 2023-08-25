@@ -7,7 +7,7 @@ import (
 )
 
 type BusLoadStatisticCountersT struct {
-	Response *BusLoadStatisticCountersResponseT
+	Response *BusLoadStatisticCountersResponseT `json:"response"`
 }
 
 func (t *BusLoadStatisticCountersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
