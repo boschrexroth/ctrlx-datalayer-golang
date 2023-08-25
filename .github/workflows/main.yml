@@ -9,11 +9,11 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
       
@@ -28,9 +28,9 @@ jobs:
         sudo apt-get install -y -f ./ctrlx-datalayer-2.2.7.deb
     
     - name: Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
-        go-version: 1.18
+        go-version: 1.19
 
     - name: Test
       run: |
@@ -40,9 +40,9 @@ jobs:
         go test -race -short -count=1 -mod=vendor ./test/datalayer ./test/sseclient ./test/token
     
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
-        go-version: 1.18
+        go-version: 1.19
     - name: Run go test
       run: |
         ls -lah
