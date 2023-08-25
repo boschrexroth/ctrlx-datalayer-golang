@@ -1,6 +1,6 @@
 module github.com/boschrexroth/ctrlx-datalayer-golang
 
-go 1.20
+go 1.19
 
 require (
 	github.com/google/flatbuffers v23.5.26+incompatible
