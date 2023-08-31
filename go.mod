@@ -15,5 +15,5 @@ require (
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/loov/plot v0.0.0-20200413101321-e09a6f01d2f5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
