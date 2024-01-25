@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Response to the AoE config info Request
 type AoeConfigInfoResponseT struct {
 	NetId []byte `json:"netId"`
 }
@@ -59,6 +60,8 @@ func (rcv *AoeConfigInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///AoE Target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeConfigInfoResponse) NetId(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -84,6 +87,8 @@ func (rcv *AoeConfigInfoResponse) NetIdBytes() []byte {
 	return nil
 }
 
+///AoE Target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeConfigInfoResponse) MutateNetId(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///SDO response
 type SDOResponseT struct {
 	Data []byte `json:"data"`
 }
@@ -59,6 +60,7 @@ func (rcv *SDOResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Data buffer for read data
 func (rcv *SDOResponse) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -84,6 +86,7 @@ func (rcv *SDOResponse) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer for read data
 func (rcv *SDOResponse) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

@@ -27,8 +27,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
-	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -116,5 +116,53 @@ func TestMetadataExtensionsBuilder(t *testing.T) {
 		fmt.Println(i, s, string(e.Key()), string(e.Value()))
 		assert.Equal(t, string(e.Key()), s)
 		assert.Equal(t, string(e.Value()), "value_"+s)
+	}
+}
+
+func TestMetadataDescriptionsBuilder(t *testing.T) {
+	m := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead|datalayer.AllowedOperationBrowse, "test", "test_url")
+	lst := []string{"1key", "2key", "3key", "4key"}
+	m.AddLocalizationDescription(lst[2], "value_"+lst[2])
+	m.AddLocalizationDescription(lst[1], "value_"+lst[1])
+	m.AddLocalizationDescription(lst[3], "value_"+lst[3])
+	m.AddLocalizationDescription(lst[0], "value_"+lst[0])
+	v := m.Build()
+	defer datalayer.DeleteVariant(v)
+	assert.NotNil(t, v)
+	d := fbs.GetRootAsMetadata(v.GetFlatbuffers(), 0)
+	assert.NotNil(t, d)
+	assert.Equal(t, d.DescriptionsLength(), len(lst))
+	for i, s := range lst {
+		e := &fbs.LocaleText{}
+		b := d.Descriptions(e, i)
+		assert.True(t, b)
+		assert.NotNil(t, e)
+		fmt.Println(i, s, string(e.Id()), string(e.Text()))
+		assert.Equal(t, string(e.Id()), s)
+		assert.Equal(t, string(e.Text()), "value_"+s)
+	}
+}
+
+func TestMetadataDisplayNamesBuilder(t *testing.T) {
+	m := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead|datalayer.AllowedOperationBrowse, "test", "test_url")
+	lst := []string{"1key", "2key", "3key", "4key"}
+	m.AddLocalizationDisplayName(lst[2], "value_"+lst[2])
+	m.AddLocalizationDisplayName(lst[1], "value_"+lst[1])
+	m.AddLocalizationDisplayName(lst[3], "value_"+lst[3])
+	m.AddLocalizationDisplayName(lst[0], "value_"+lst[0])
+	v := m.Build()
+	defer datalayer.DeleteVariant(v)
+	assert.NotNil(t, v)
+	d := fbs.GetRootAsMetadata(v.GetFlatbuffers(), 0)
+	assert.NotNil(t, d)
+	assert.Equal(t, d.DisplayNamesLength(), len(lst))
+	for i, s := range lst {
+		e := &fbs.LocaleText{}
+		b := d.DisplayNames(e, i)
+		assert.True(t, b)
+		assert.NotNil(t, e)
+		fmt.Println(i, s, string(e.Id()), string(e.Text()))
+		assert.Equal(t, string(e.Id()), s)
+		assert.Equal(t, string(e.Text()), "value_"+s)
 	}
 }

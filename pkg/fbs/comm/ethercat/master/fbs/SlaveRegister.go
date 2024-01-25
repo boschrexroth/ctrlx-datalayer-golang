@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads/writes data from/to the EtherCAT Slave Controller (ESC) memory of a specific slave device
 type SlaveRegisterT struct {
 	Request *SlaveRegisterRequestT `json:"request"`
 	Response *SlaveRegisterResponseT `json:"response"`

@@ -9,19 +9,23 @@ type SyncSource int8
 
 const (
 	/// master interpolated value
-	SyncSourceSYNC_SETPOINT SyncSource = 0
+	SyncSourceSYNC_SETPOINT            SyncSource = 0
 	/// master actual value
-	SyncSourceSYNC_ACTUAL   SyncSource = 1
+	SyncSourceSYNC_ACTUAL              SyncSource = 1
+	/// master actual extrapolated value
+	SyncSourceSYNC_ACTUAL_EXTRAPOLATED SyncSource = 2
 )
 
 var EnumNamesSyncSource = map[SyncSource]string{
-	SyncSourceSYNC_SETPOINT: "SYNC_SETPOINT",
-	SyncSourceSYNC_ACTUAL:   "SYNC_ACTUAL",
+	SyncSourceSYNC_SETPOINT:            "SYNC_SETPOINT",
+	SyncSourceSYNC_ACTUAL:              "SYNC_ACTUAL",
+	SyncSourceSYNC_ACTUAL_EXTRAPOLATED: "SYNC_ACTUAL_EXTRAPOLATED",
 }
 
 var EnumValuesSyncSource = map[string]SyncSource{
-	"SYNC_SETPOINT": SyncSourceSYNC_SETPOINT,
-	"SYNC_ACTUAL":   SyncSourceSYNC_ACTUAL,
+	"SYNC_SETPOINT":            SyncSourceSYNC_SETPOINT,
+	"SYNC_ACTUAL":              SyncSourceSYNC_ACTUAL,
+	"SYNC_ACTUAL_EXTRAPOLATED": SyncSourceSYNC_ACTUAL_EXTRAPOLATED,
 }
 
 func (v SyncSource) String() string {

@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///It is always recommended to address the slave with its “fixedphysical” addressType. 
+///Using “autoincrement” could lead to problems if the bus is not configured properly or a configured slave is removed/deactivated on the bus, leading to wrong results. 
+///Requesting the SlaveStatus for an offline slave over “autoincrement” will return an error.
 type SlaveStatusResponseT struct {
 	Status uint32 `json:"status"`
 }
@@ -55,6 +58,14 @@ func (rcv *SlaveStatusResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Bit 0: Slave is not connected to the bus
+///Bit 1: Slave is not in state "Operational
+///Bit 2: Slave indicates error, see "AL Status Code"
+///Bit 3: Reserved
+///Bit 4: Slave is in state "Init" (Init & PreOp = Bootstrap)
+///Bit 5: Slave is in state "Pre-Operational" (Init & PreOp = Bootstrap)
+///Bit 6: Slave is in state "Safe-Operational"
+///Bit 7 to 31 reserved
 func (rcv *SlaveStatusResponse) Status() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +74,14 @@ func (rcv *SlaveStatusResponse) Status() uint32 {
 	return 0
 }
 
+///Bit 0: Slave is not connected to the bus
+///Bit 1: Slave is not in state "Operational
+///Bit 2: Slave indicates error, see "AL Status Code"
+///Bit 3: Reserved
+///Bit 4: Slave is in state "Init" (Init & PreOp = Bootstrap)
+///Bit 5: Slave is in state "Pre-Operational" (Init & PreOp = Bootstrap)
+///Bit 6: Slave is in state "Safe-Operational"
+///Bit 7 to 31 reserved
 func (rcv *SlaveStatusResponse) MutateStatus(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

@@ -6,6 +6,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave state response
+///If current and requested state are equal, the state change has been completed
 type SlaveStateResponseT struct {
 	CurrentState EthercatState `json:"currentState"`
 	RequestedState EthercatState `json:"requestedState"`
@@ -58,6 +60,7 @@ func (rcv *SlaveStateResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Current EtherCAT slave state
 func (rcv *SlaveStateResponse) CurrentState() EthercatState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +69,12 @@ func (rcv *SlaveStateResponse) CurrentState() EthercatState {
 	return 0
 }
 
+///Current EtherCAT slave state
 func (rcv *SlaveStateResponse) MutateCurrentState(n EthercatState) bool {
 	return rcv._tab.MutateUint16Slot(4, uint16(n))
 }
 
+///Requested EtherCAT slave state
 func (rcv *SlaveStateResponse) RequestedState() EthercatState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +83,7 @@ func (rcv *SlaveStateResponse) RequestedState() EthercatState {
 	return 0
 }
 
+///Requested EtherCAT slave state
 func (rcv *SlaveStateResponse) MutateRequestedState(n EthercatState) bool {
 	return rcv._tab.MutateUint16Slot(6, uint16(n))
 }

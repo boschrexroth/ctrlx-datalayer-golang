@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Topology status response
 type TopologyStatusResponseT struct {
 	State TopologyState `json:"state"`
 	NumChanges uint32 `json:"numChanges"`
@@ -58,6 +59,10 @@ func (rcv *TopologyStatusResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Topology state:
+///unknown: State is unknown
+///valid: State is valid
+///pending: State is pending
 func (rcv *TopologyStatusResponse) State() TopologyState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +71,15 @@ func (rcv *TopologyStatusResponse) State() TopologyState {
 	return 0
 }
 
+///Topology state:
+///unknown: State is unknown
+///valid: State is valid
+///pending: State is pending
 func (rcv *TopologyStatusResponse) MutateState(n TopologyState) bool {
 	return rcv._tab.MutateUint32Slot(4, uint32(n))
 }
 
+///Number of topology changes (incremented each time a topology change event occurs)
 func (rcv *TopologyStatusResponse) NumChanges() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +88,7 @@ func (rcv *TopologyStatusResponse) NumChanges() uint32 {
 	return 0
 }
 
+///Number of topology changes (incremented each time a topology change event occurs)
 func (rcv *TopologyStatusResponse) MutateNumChanges(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }

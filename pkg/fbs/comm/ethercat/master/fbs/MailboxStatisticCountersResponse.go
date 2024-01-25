@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Mailbox statistic counters response
 type MailboxStatisticCountersResponseT struct {
 	Aoe *ProtocolStatisticT `json:"aoe"`
 	Coe *ProtocolStatisticT `json:"coe"`
@@ -80,6 +81,7 @@ func (rcv *MailboxStatisticCountersResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///AoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Aoe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -93,6 +95,8 @@ func (rcv *MailboxStatisticCountersResponse) Aoe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///AoE protocol statistic
+///CoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Coe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -106,6 +110,8 @@ func (rcv *MailboxStatisticCountersResponse) Coe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///CoE protocol statistic
+///EoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Eoe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -119,6 +125,8 @@ func (rcv *MailboxStatisticCountersResponse) Eoe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///EoE protocol statistic
+///FoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Foe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -132,6 +140,8 @@ func (rcv *MailboxStatisticCountersResponse) Foe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///FoE protocol statistic
+///SoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Soe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -145,6 +155,8 @@ func (rcv *MailboxStatisticCountersResponse) Soe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///SoE protocol statistic
+///VoE protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Voe(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -158,6 +170,8 @@ func (rcv *MailboxStatisticCountersResponse) Voe(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///VoE protocol statistic
+///Raw protocol statistic
 func (rcv *MailboxStatisticCountersResponse) Raw(obj *ProtocolStatistic) *ProtocolStatistic {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -171,6 +185,7 @@ func (rcv *MailboxStatisticCountersResponse) Raw(obj *ProtocolStatistic) *Protoc
 	return nil
 }
 
+///Raw protocol statistic
 func MailboxStatisticCountersResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

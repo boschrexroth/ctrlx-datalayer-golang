@@ -7,6 +7,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Checksum element
 type ChecksumElementT struct {
 	Id string `json:"id"`
 	Checksum []byte `json:"checksum"`
@@ -67,6 +68,7 @@ func (rcv *ChecksumElement) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Id, what the checksum relates to
 func (rcv *ChecksumElement) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -75,6 +77,7 @@ func (rcv *ChecksumElement) Id() []byte {
 	return nil
 }
 
+///Id, what the checksum relates to
 func ChecksumElementKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj1 := &ChecksumElement{}
 	obj2 := &ChecksumElement{}
@@ -107,6 +110,7 @@ func (rcv *ChecksumElement) LookupByKey(key string, vectorLocation flatbuffers.U
 	return false
 }
 
+///Checksum as array of bytes
 func (rcv *ChecksumElement) Checksum(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -132,6 +136,7 @@ func (rcv *ChecksumElement) ChecksumBytes() []byte {
 	return nil
 }
 
+///Checksum as array of bytes
 func (rcv *ChecksumElement) MutateChecksum(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

@@ -5,7 +5,7 @@ package fbtypes
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/sync/fbtypes"
+	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/motion/sync/fbtypes"
 )
 
 /// configuration for coupling functions for a single axis

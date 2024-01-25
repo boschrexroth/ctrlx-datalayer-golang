@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers the EtherCAT addresses of the configured slave devices from the EtherCAT Master.
+///Find slave name by address or find address by slave name
+///Leave request empty to get a response of all configured slaves
 type SlaveAddressMappingT struct {
 	Request *SlaveAddressMappingRequestT `json:"request"`
 	Response *SlaveAddressMappingResponseT `json:"response"`

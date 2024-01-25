@@ -4,12 +4,21 @@ package fbs
 
 import "strconv"
 
+///Link status
+///undefined: Undefined - do not use
+///ok: Link exists
+///disconnected: Disconnected - link down
+///halfduplex: Half-duplex mode
 type LinkStatus uint32
 
 const (
+	///Undefined - do not use
 	LinkStatusundefined    LinkStatus = 0
+	///Link exists
 	LinkStatusok           LinkStatus = 1
+	///Disconnected - link down
 	LinkStatusdisconnected LinkStatus = 2
+	///Half-duplex mode
 	LinkStatushalfduplex   LinkStatus = 3
 )
 

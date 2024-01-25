@@ -4,11 +4,18 @@ package fbs
 
 import "strconv"
 
+///Link mode
+///undefined: Undefined - do not use
+///interrupt: Interrupt based
+///polling: Polling based
 type LinkMode uint32
 
 const (
+	///Undefined - do not use
 	LinkModeundefined LinkMode = 0
+	///Interrupt based
 	LinkModeinterrupt LinkMode = 1
+	///Polling based
 	LinkModepolling   LinkMode = 2
 )
 

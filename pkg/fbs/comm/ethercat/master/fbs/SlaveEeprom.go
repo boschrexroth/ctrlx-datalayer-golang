@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads/writes data from/to the EEPROM of a specific device
 type SlaveEepromT struct {
 	Request *SlaveEepromRequestT `json:"request"`
 	Response *SlaveEepromResponseT `json:"response"`

@@ -4,15 +4,30 @@ package fbs
 
 import "strconv"
 
+///Sync mode of Distributed Clock (DC)
+///freerun: slaves are not synchronized
+///dcmAuto: DC configuration automatic
+///dcmEnabled: DC enabled
+///dcmBusShift: DC bus shift
+///dcmMasterShift: DC master shift
+///dcmLinkLayerRefClock: DC link layer reference clock
+///unknown: Sync mode unknown
 type SyncMode uint32
 
 const (
+	///Freerun, slaves are not synchronized
 	SyncModefreerun              SyncMode = 0
+	///Distributed Clocks, configuration automatic
 	SyncModedcmAuto              SyncMode = 1
+	///Distributed Clocks, enabled
 	SyncModedcEnable             SyncMode = 2
+	///Distributed Clocks, bus shift
 	SyncModedcmBusShift          SyncMode = 3
+	///Distributed Clocks, master shift
 	SyncModedcmMasterShift       SyncMode = 4
+	///Distributed Clocks, link layer reference clock
 	SyncModedcmLinkLayerRefClock SyncMode = 5
+	///Sync mode unknown
 	SyncModeunknown              SyncMode = 4294967295
 )
 

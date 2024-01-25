@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Object description request
 type ObjectDescriptionRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -64,6 +65,10 @@ func (rcv *ObjectDescriptionRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ObjectDescriptionRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +77,15 @@ func (rcv *ObjectDescriptionRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ObjectDescriptionRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *ObjectDescriptionRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +94,12 @@ func (rcv *ObjectDescriptionRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *ObjectDescriptionRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Object index
 func (rcv *ObjectDescriptionRequest) ObjectIndex() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +108,12 @@ func (rcv *ObjectDescriptionRequest) ObjectIndex() uint16 {
 	return 0
 }
 
+///Object index
 func (rcv *ObjectDescriptionRequest) MutateObjectIndex(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(8, n)
 }
 
+///Maximal length of response data in bytes
 func (rcv *ObjectDescriptionRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,6 +122,7 @@ func (rcv *ObjectDescriptionRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Maximal length of response data in bytes
 func (rcv *ObjectDescriptionRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }

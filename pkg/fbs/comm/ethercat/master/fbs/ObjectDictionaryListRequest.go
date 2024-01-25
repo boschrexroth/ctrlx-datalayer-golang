@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Object dictionary request
 type ObjectDictionaryListRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -64,6 +65,10 @@ func (rcv *ObjectDictionaryListRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ObjectDictionaryListRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,10 +77,15 @@ func (rcv *ObjectDictionaryListRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ObjectDictionaryListRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *ObjectDictionaryListRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,10 +94,18 @@ func (rcv *ObjectDictionaryListRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *ObjectDictionaryListRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Object dictionary list type
+///length: lengths of each list type
+///all: all objects
+///rxPDOMap: only pdo mappable objects
+///txPDOMap: only pdo mappable objects that can be changed
+///storeForeReplacement: only stored for a device replacement object
+///startupParam: only startup parameter objects
 func (rcv *ObjectDictionaryListRequest) ListType() ObjectDictionaryListType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -96,10 +114,18 @@ func (rcv *ObjectDictionaryListRequest) ListType() ObjectDictionaryListType {
 	return 0
 }
 
+///Object dictionary list type
+///length: lengths of each list type
+///all: all objects
+///rxPDOMap: only pdo mappable objects
+///txPDOMap: only pdo mappable objects that can be changed
+///storeForeReplacement: only stored for a device replacement object
+///startupParam: only startup parameter objects
 func (rcv *ObjectDictionaryListRequest) MutateListType(n ObjectDictionaryListType) bool {
 	return rcv._tab.MutateByteSlot(8, byte(n))
 }
 
+///Max number of elements returned by the request
 func (rcv *ObjectDictionaryListRequest) MaxElements() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -108,6 +134,7 @@ func (rcv *ObjectDictionaryListRequest) MaxElements() uint32 {
 	return 0
 }
 
+///Max number of elements returned by the request
 func (rcv *ObjectDictionaryListRequest) MutateMaxElements(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }

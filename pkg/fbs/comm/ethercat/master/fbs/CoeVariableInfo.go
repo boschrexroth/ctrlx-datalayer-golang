@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///CoE variable info
 type CoeVariableInfoT struct {
 	PdoIndex uint16 `json:"pdoIndex"`
 	ObjectIndex uint16 `json:"objectIndex"`
@@ -61,6 +62,7 @@ func (rcv *CoeVariableInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///PDO index, e.g. 0x1A00
 func (rcv *CoeVariableInfo) PdoIndex() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,10 +71,12 @@ func (rcv *CoeVariableInfo) PdoIndex() uint16 {
 	return 0
 }
 
+///PDO index, e.g. 0x1A00
 func (rcv *CoeVariableInfo) MutatePdoIndex(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }
 
+///Object index, e.g. 0x3000
 func (rcv *CoeVariableInfo) ObjectIndex() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +85,12 @@ func (rcv *CoeVariableInfo) ObjectIndex() uint16 {
 	return 0
 }
 
+///Object index, e.g. 0x3000
 func (rcv *CoeVariableInfo) MutateObjectIndex(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Sub index, e.g. 0x01
 func (rcv *CoeVariableInfo) SubIndex() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,6 +99,7 @@ func (rcv *CoeVariableInfo) SubIndex() byte {
 	return 0
 }
 
+///Sub index, e.g. 0x01
 func (rcv *CoeVariableInfo) MutateSubIndex(n byte) bool {
 	return rcv._tab.MutateByteSlot(8, n)
 }

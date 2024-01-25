@@ -6,6 +6,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Variable protocol info
+///Only the protocol which is supported by the slave is present 
 type VariableProtocolInfoT struct {
 	Coe *CoeVariableInfoT `json:"coe"`
 	Soe *SoeVariableInfoT `json:"soe"`
@@ -60,6 +62,7 @@ func (rcv *VariableProtocolInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///CoE variable info
 func (rcv *VariableProtocolInfo) Coe(obj *CoeVariableInfo) *CoeVariableInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,6 +76,8 @@ func (rcv *VariableProtocolInfo) Coe(obj *CoeVariableInfo) *CoeVariableInfo {
 	return nil
 }
 
+///CoE variable info
+///SoE variable info
 func (rcv *VariableProtocolInfo) Soe(obj *SoeVariableInfo) *SoeVariableInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -86,6 +91,7 @@ func (rcv *VariableProtocolInfo) Soe(obj *SoeVariableInfo) *SoeVariableInfo {
 	return nil
 }
 
+///SoE variable info
 func VariableProtocolInfoStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

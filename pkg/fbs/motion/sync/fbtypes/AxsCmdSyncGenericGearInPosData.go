@@ -12,7 +12,7 @@ type AxsCmdSyncGenericGearInPosDataT struct {
 	Pipeline string `json:"pipeline"`
 	SyncSource SyncSource `json:"syncSource"`
 	SyncMode SyncMode `json:"syncMode"`
-	SyncDirection SyncDirection `json:"syncDirection"`
+	DynSyncDirection DynSyncDirection `json:"dynSyncDirection"`
 	Buffered bool `json:"buffered"`
 }
 
@@ -31,7 +31,7 @@ func (t *AxsCmdSyncGenericGearInPosDataT) Pack(builder *flatbuffers.Builder) fla
 	AxsCmdSyncGenericGearInPosDataAddPipeline(builder, pipelineOffset)
 	AxsCmdSyncGenericGearInPosDataAddSyncSource(builder, t.SyncSource)
 	AxsCmdSyncGenericGearInPosDataAddSyncMode(builder, t.SyncMode)
-	AxsCmdSyncGenericGearInPosDataAddSyncDirection(builder, t.SyncDirection)
+	AxsCmdSyncGenericGearInPosDataAddDynSyncDirection(builder, t.DynSyncDirection)
 	AxsCmdSyncGenericGearInPosDataAddBuffered(builder, t.Buffered)
 	return AxsCmdSyncGenericGearInPosDataEnd(builder)
 }
@@ -41,7 +41,7 @@ func (rcv *AxsCmdSyncGenericGearInPosData) UnPackTo(t *AxsCmdSyncGenericGearInPo
 	t.Pipeline = string(rcv.Pipeline())
 	t.SyncSource = rcv.SyncSource()
 	t.SyncMode = rcv.SyncMode()
-	t.SyncDirection = rcv.SyncDirection()
+	t.DynSyncDirection = rcv.DynSyncDirection()
 	t.Buffered = rcv.Buffered()
 }
 
@@ -127,17 +127,17 @@ func (rcv *AxsCmdSyncGenericGearInPosData) MutateSyncMode(n SyncMode) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
-/// Sync direction
-func (rcv *AxsCmdSyncGenericGearInPosData) SyncDirection() SyncDirection {
+/// Dynamic Sync direction
+func (rcv *AxsCmdSyncGenericGearInPosData) DynSyncDirection() DynSyncDirection {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return SyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return DynSyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-/// Sync direction
-func (rcv *AxsCmdSyncGenericGearInPosData) MutateSyncDirection(n SyncDirection) bool {
+/// Dynamic Sync direction
+func (rcv *AxsCmdSyncGenericGearInPosData) MutateDynSyncDirection(n DynSyncDirection) bool {
 	return rcv._tab.MutateInt8Slot(12, int8(n))
 }
 
@@ -170,8 +170,8 @@ func AxsCmdSyncGenericGearInPosDataAddSyncSource(builder *flatbuffers.Builder, s
 func AxsCmdSyncGenericGearInPosDataAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
 	builder.PrependInt8Slot(3, int8(syncMode), 2)
 }
-func AxsCmdSyncGenericGearInPosDataAddSyncDirection(builder *flatbuffers.Builder, syncDirection SyncDirection) {
-	builder.PrependInt8Slot(4, int8(syncDirection), 0)
+func AxsCmdSyncGenericGearInPosDataAddDynSyncDirection(builder *flatbuffers.Builder, dynSyncDirection DynSyncDirection) {
+	builder.PrependInt8Slot(4, int8(dynSyncDirection), 0)
 }
 func AxsCmdSyncGenericGearInPosDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
 	builder.PrependBoolSlot(5, buffered, false)

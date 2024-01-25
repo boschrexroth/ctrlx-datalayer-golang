@@ -9,7 +9,7 @@ import (
 /// The table Property can be used to set additional optional properties which influence the subcription behaviour.
 /// If no Properties are given, default values will be used automatically.
 type PropertyT struct {
-	Rule *PropertiesT
+	Rule *PropertiesT `json:"rule"`
 }
 
 func (t *PropertyT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

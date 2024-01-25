@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node retrieves the slave statistic counters of one slave
 type SlaveStatisticCountersT struct {
 	Request *AddressedRequestT `json:"request"`
 	Response *SlaveStatisticCountersResponseT `json:"response"`

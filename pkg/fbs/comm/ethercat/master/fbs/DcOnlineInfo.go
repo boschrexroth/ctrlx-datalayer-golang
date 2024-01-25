@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the current online DC (Distributed Clock) information
 type DcOnlineInfoT struct {
 	Response *DcOnlineInfoResponseT `json:"response"`
 }

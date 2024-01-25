@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers a summary of diagnosis information from the EtherCAT Master.
 type MasterStateT struct {
 	Request *MasterStateRequestT `json:"request"`
 	Response *MasterStateResponseT `json:"response"`

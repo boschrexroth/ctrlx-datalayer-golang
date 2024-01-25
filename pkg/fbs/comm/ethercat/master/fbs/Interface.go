@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Interface response
 type InterfaceT struct {
 	Port string `json:"port"`
 	Device string `json:"device"`
@@ -95,6 +96,7 @@ func (rcv *Interface) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Port name, e.g. as written on device
 func (rcv *Interface) Port() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -103,6 +105,8 @@ func (rcv *Interface) Port() []byte {
 	return nil
 }
 
+///Port name, e.g. as written on device
+///Reserved for future use
 func (rcv *Interface) Device() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -111,6 +115,8 @@ func (rcv *Interface) Device() []byte {
 	return nil
 }
 
+///Reserved for future use
+///Link layer driver
 func (rcv *Interface) LinkLayer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -119,6 +125,8 @@ func (rcv *Interface) LinkLayer() []byte {
 	return nil
 }
 
+///Link layer driver
+///Reserved for future use
 func (rcv *Interface) CapabilityList(obj *Capability, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -139,6 +147,7 @@ func (rcv *Interface) CapabilityListLength() int {
 	return 0
 }
 
+///Reserved for future use
 func InterfaceStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

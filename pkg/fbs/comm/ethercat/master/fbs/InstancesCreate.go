@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node requests a new ethercat-master instance to be created
 type InstancesCreateT struct {
 	Request *InstancesCreateRequestT `json:"request"`
 }

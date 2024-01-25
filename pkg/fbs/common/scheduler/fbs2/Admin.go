@@ -5,8 +5,8 @@ package fbs2
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__controls__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/controls/fbs"
-	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/fbs"
+	common__scheduler__controls__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/controls/fbs"
+	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/fbs"
 )
 
 /// General settings of Scheduler, startup behavior, callables, tasks and timing

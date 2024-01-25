@@ -27,7 +27,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 )
 
 var goFloat float32 = 0.369

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Returns a list of capable interfaces
 type CapableInterfacesT struct {
 	InterfaceList []*InterfaceT `json:"interfaceList"`
 }

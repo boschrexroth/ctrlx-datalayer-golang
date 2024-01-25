@@ -6,6 +6,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node retrieves the config information response of a specific AoE EtherCAT device.
+///The slave must support the mailbox protocol “ADS (Automation Device Specification) over EtherCAT” (AoE).
 type AoeConfigInfoT struct {
 	Request *AddressedRequestT `json:"request"`
 	Response *AoeConfigInfoResponseT `json:"response"`

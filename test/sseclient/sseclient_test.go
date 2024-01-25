@@ -31,7 +31,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/sseclient"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/sseclient"
 	"github.com/stretchr/testify/require"
 )
 

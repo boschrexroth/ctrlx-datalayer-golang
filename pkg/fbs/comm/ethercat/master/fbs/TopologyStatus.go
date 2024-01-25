@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the status of topology detection
 type TopologyStatusT struct {
 	Response *TopologyStatusResponseT `json:"response"`
 }

@@ -4,6 +4,15 @@ package fbs
 
 import "strconv"
 
+///The SoE (Servo drive over EtherCAT) Element-Flags indicating which element of an IDN are read or written
+///dataState    Bit 0: Service channel data status
+///name         Bit 1: Name 
+///attribute    Bit 2: Attribute
+///unit         Bit 3: Unit 
+///minValue     Bit 4: Min value 
+///maxValue     Bit 5: Max value 
+///value        Bit 6: Operation data
+///defaultValue Bit 7: Default value 
 type ElementFlags byte
 
 const (

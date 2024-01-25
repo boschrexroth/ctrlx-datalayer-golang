@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Object description response
 type ObjectDescriptionResponseT struct {
 	Data []byte `json:"data"`
 }
@@ -59,6 +60,7 @@ func (rcv *ObjectDescriptionResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Data buffer
 func (rcv *ObjectDescriptionResponse) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -84,6 +86,7 @@ func (rcv *ObjectDescriptionResponse) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer
 func (rcv *ObjectDescriptionResponse) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

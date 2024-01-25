@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Fieldbus configuration in binary format
 type FieldbusConfigRequestT struct {
 	Ini []byte `json:"ini"`
 	Eni []byte `json:"eni"`
@@ -66,6 +67,7 @@ func (rcv *FieldbusConfigRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Master initialization in binary format
 func (rcv *FieldbusConfigRequest) Ini(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -91,6 +93,7 @@ func (rcv *FieldbusConfigRequest) IniBytes() []byte {
 	return nil
 }
 
+///Master initialization in binary format
 func (rcv *FieldbusConfigRequest) MutateIni(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -100,6 +103,7 @@ func (rcv *FieldbusConfigRequest) MutateIni(j int, n byte) bool {
 	return false
 }
 
+///EtherCAT network information in binary format
 func (rcv *FieldbusConfigRequest) Eni(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -125,6 +129,7 @@ func (rcv *FieldbusConfigRequest) EniBytes() []byte {
 	return nil
 }
 
+///EtherCAT network information in binary format
 func (rcv *FieldbusConfigRequest) MutateEni(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

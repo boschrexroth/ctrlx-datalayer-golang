@@ -15,6 +15,7 @@ type TimeoutConfigurationT struct {
 	WatchdogTimeout uint32 `json:"watchdogTimeout"`
 	WriteCallTimeout uint32 `json:"writeCallTimeout"`
 	CallCallTimeout uint32 `json:"callCallTimeout"`
+	ReconnectDelay uint32 `json:"reconnectDelay"`
 }
 
 func (t *TimeoutConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -28,6 +29,7 @@ func (t *TimeoutConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	TimeoutConfigurationAddWatchdogTimeout(builder, t.WatchdogTimeout)
 	TimeoutConfigurationAddWriteCallTimeout(builder, t.WriteCallTimeout)
 	TimeoutConfigurationAddCallCallTimeout(builder, t.CallCallTimeout)
+	TimeoutConfigurationAddReconnectDelay(builder, t.ReconnectDelay)
 	return TimeoutConfigurationEnd(builder)
 }
 
@@ -40,6 +42,7 @@ func (rcv *TimeoutConfiguration) UnPackTo(t *TimeoutConfigurationT) {
 	t.WatchdogTimeout = rcv.WatchdogTimeout()
 	t.WriteCallTimeout = rcv.WriteCallTimeout()
 	t.CallCallTimeout = rcv.CallCallTimeout()
+	t.ReconnectDelay = rcv.ReconnectDelay()
 }
 
 func (rcv *TimeoutConfiguration) UnPack() *TimeoutConfigurationT {
@@ -76,7 +79,7 @@ func (rcv *TimeoutConfiguration) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// The browse service timeout in ms
+/// The browse service timeout in milliseconds
 func (rcv *TimeoutConfiguration) BrowseCallTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,12 +88,12 @@ func (rcv *TimeoutConfiguration) BrowseCallTimeout() uint32 {
 	return 10000
 }
 
-/// The browse service timeout in ms
+/// The browse service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateBrowseCallTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
-/// The discovery service timeout in ms
+/// The discovery service timeout in milliseconds
 func (rcv *TimeoutConfiguration) DiscoveryTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -99,12 +102,12 @@ func (rcv *TimeoutConfiguration) DiscoveryTimeout() uint32 {
 	return 60000
 }
 
-/// The discovery service timeout in ms
+/// The discovery service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateDiscoveryTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
-/// The publish service timeout in ms
+/// The publish service timeout in milliseconds
 func (rcv *TimeoutConfiguration) PublishTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -113,12 +116,12 @@ func (rcv *TimeoutConfiguration) PublishTimeout() uint32 {
 	return 60000
 }
 
-/// The publish service timeout in ms
+/// The publish service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutatePublishTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
-/// The read service timeout in ms
+/// The read service timeout in milliseconds
 func (rcv *TimeoutConfiguration) ReadCallTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -127,12 +130,12 @@ func (rcv *TimeoutConfiguration) ReadCallTimeout() uint32 {
 	return 10000
 }
 
-/// The read service timeout in ms
+/// The read service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateReadCallTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
-/// The requested session timeout in ms
+/// The requested session timeout in milliseconds
 func (rcv *TimeoutConfiguration) SessionTimeout() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -141,12 +144,12 @@ func (rcv *TimeoutConfiguration) SessionTimeout() float64 {
 	return 1200000.0
 }
 
-/// The requested session timeout in ms
+/// The requested session timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateSessionTimeout(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(12, n)
 }
 
-/// The discovery service timeout in ms
+/// The discovery service timeout in milliseconds
 /// If the response of the “Watchdog-Read” does not return within the watchdog-timeout,
 /// the client assumes that the connection to the server was interrupted or closed
 func (rcv *TimeoutConfiguration) WatchdogTimeout() uint32 {
@@ -157,14 +160,14 @@ func (rcv *TimeoutConfiguration) WatchdogTimeout() uint32 {
 	return 5000
 }
 
-/// The discovery service timeout in ms
+/// The discovery service timeout in milliseconds
 /// If the response of the “Watchdog-Read” does not return within the watchdog-timeout,
 /// the client assumes that the connection to the server was interrupted or closed
 func (rcv *TimeoutConfiguration) MutateWatchdogTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
-/// the write service timeout in ms
+/// the write service timeout in milliseconds
 func (rcv *TimeoutConfiguration) WriteCallTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -173,12 +176,12 @@ func (rcv *TimeoutConfiguration) WriteCallTimeout() uint32 {
 	return 10000
 }
 
-/// the write service timeout in ms
+/// the write service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateWriteCallTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
-/// The call service timeout in ms
+/// The call service timeout in milliseconds
 func (rcv *TimeoutConfiguration) CallCallTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -187,13 +190,27 @@ func (rcv *TimeoutConfiguration) CallCallTimeout() uint32 {
 	return 10000
 }
 
-/// The call service timeout in ms
+/// The call service timeout in milliseconds
 func (rcv *TimeoutConfiguration) MutateCallCallTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(18, n)
 }
 
+/// The delay between automatic reconnects in milliseconds
+func (rcv *TimeoutConfiguration) ReconnectDelay() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 5000
+}
+
+/// The delay between automatic reconnects in milliseconds
+func (rcv *TimeoutConfiguration) MutateReconnectDelay(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(20, n)
+}
+
 func TimeoutConfigurationStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(9)
 }
 func TimeoutConfigurationAddBrowseCallTimeout(builder *flatbuffers.Builder, browseCallTimeout uint32) {
 	builder.PrependUint32Slot(0, browseCallTimeout, 10000)
@@ -218,6 +235,9 @@ func TimeoutConfigurationAddWriteCallTimeout(builder *flatbuffers.Builder, write
 }
 func TimeoutConfigurationAddCallCallTimeout(builder *flatbuffers.Builder, callCallTimeout uint32) {
 	builder.PrependUint32Slot(7, callCallTimeout, 10000)
+}
+func TimeoutConfigurationAddReconnectDelay(builder *flatbuffers.Builder, reconnectDelay uint32) {
+	builder.PrependUint32Slot(8, reconnectDelay, 5000)
 }
 func TimeoutConfigurationEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

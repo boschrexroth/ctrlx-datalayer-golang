@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Request a new EtherCAT-Master instance
 type InstancesCreateRequestT struct {
 	InstanceName string `json:"instanceName"`
 	Port string `json:"port"`
@@ -80,6 +81,11 @@ func (rcv *InstancesCreateRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Name of EtherCAT-Master instance 
+///Must be unique, non case sensitive
+///Must start with a letter, may contain numbers
+///May contain underscore (_), but not in sequence
+///May have up to 15 characters
 func (rcv *InstancesCreateRequest) InstanceName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -88,6 +94,12 @@ func (rcv *InstancesCreateRequest) InstanceName() []byte {
 	return nil
 }
 
+///Name of EtherCAT-Master instance 
+///Must be unique, non case sensitive
+///Must start with a letter, may contain numbers
+///May contain underscore (_), but not in sequence
+///May have up to 15 characters
+///Port name
 func (rcv *InstancesCreateRequest) Port() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -96,6 +108,8 @@ func (rcv *InstancesCreateRequest) Port() []byte {
 	return nil
 }
 
+///Port name
+///Reserved for future use
 func (rcv *InstancesCreateRequest) LinkLayer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -104,6 +118,8 @@ func (rcv *InstancesCreateRequest) LinkLayer() []byte {
 	return nil
 }
 
+///Reserved for future use
+///Reserved for future use
 func (rcv *InstancesCreateRequest) Arguments() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -112,6 +128,7 @@ func (rcv *InstancesCreateRequest) Arguments() []byte {
 	return nil
 }
 
+///Reserved for future use
 func InstancesCreateRequestStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Protocol statistic counters 
 type ProtocolStatisticT struct {
 	Read *ProtocolStatisticPeriodCountersT `json:"read"`
 	Write *ProtocolStatisticPeriodCountersT `json:"write"`

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Number of connected slaves response
 type NumConnectedSlavesResponseT struct {
 	NumSlaves uint32 `json:"numSlaves"`
 }
@@ -55,6 +56,7 @@ func (rcv *NumConnectedSlavesResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Number of currently connected slaves on the EtherCAT Master
 func (rcv *NumConnectedSlavesResponse) NumSlaves() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *NumConnectedSlavesResponse) NumSlaves() uint32 {
 	return 0
 }
 
+///Number of currently connected slaves on the EtherCAT Master
 func (rcv *NumConnectedSlavesResponse) MutateNumSlaves(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

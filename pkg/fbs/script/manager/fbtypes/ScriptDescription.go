@@ -13,6 +13,7 @@ type ScriptDescriptionT struct {
 	FileEnding []string `json:"fileEnding"`
 	License string `json:"license"`
 	LicenseVersion string `json:"licenseVersion"`
+	LifeCycle string `json:"lifeCycle"`
 }
 
 func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -50,6 +51,10 @@ func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 	if t.LicenseVersion != "" {
 		licenseVersionOffset = builder.CreateString(t.LicenseVersion)
 	}
+	lifeCycleOffset := flatbuffers.UOffsetT(0)
+	if t.LifeCycle != "" {
+		lifeCycleOffset = builder.CreateString(t.LifeCycle)
+	}
 	ScriptDescriptionStart(builder)
 	ScriptDescriptionAddLanguage(builder, languageOffset)
 	ScriptDescriptionAddVersion(builder, versionOffset)
@@ -57,6 +62,7 @@ func (t *ScriptDescriptionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 	ScriptDescriptionAddFileEnding(builder, fileEndingOffset)
 	ScriptDescriptionAddLicense(builder, licenseOffset)
 	ScriptDescriptionAddLicenseVersion(builder, licenseVersionOffset)
+	ScriptDescriptionAddLifeCycle(builder, lifeCycleOffset)
 	return ScriptDescriptionEnd(builder)
 }
 
@@ -71,6 +77,7 @@ func (rcv *ScriptDescription) UnPackTo(t *ScriptDescriptionT) {
 	}
 	t.License = string(rcv.License())
 	t.LicenseVersion = string(rcv.LicenseVersion())
+	t.LifeCycle = string(rcv.LifeCycle())
 }
 
 func (rcv *ScriptDescription) UnPack() *ScriptDescriptionT {
@@ -164,8 +171,16 @@ func (rcv *ScriptDescription) LicenseVersion() []byte {
 	return nil
 }
 
+func (rcv *ScriptDescription) LifeCycle() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func ScriptDescriptionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func ScriptDescriptionAddLanguage(builder *flatbuffers.Builder, language flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(language), 0)
@@ -187,6 +202,9 @@ func ScriptDescriptionAddLicense(builder *flatbuffers.Builder, license flatbuffe
 }
 func ScriptDescriptionAddLicenseVersion(builder *flatbuffers.Builder, licenseVersion flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(licenseVersion), 0)
+}
+func ScriptDescriptionAddLifeCycle(builder *flatbuffers.Builder, lifeCycle flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(lifeCycle), 0)
 }
 func ScriptDescriptionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

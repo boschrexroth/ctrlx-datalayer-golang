@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Bus load statistic counters
 type BusLoadStatisticCountersResponseT struct {
 	TxBytesPerSecond *MinActMaxValuesT `json:"txBytesPerSecond"`
 	TxBytesPerCycle *MinActMaxValuesT `json:"txBytesPerCycle"`
@@ -60,6 +61,7 @@ func (rcv *BusLoadStatisticCountersResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Transmitted bytes per second
 func (rcv *BusLoadStatisticCountersResponse) TxBytesPerSecond(obj *MinActMaxValues) *MinActMaxValues {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,6 +75,8 @@ func (rcv *BusLoadStatisticCountersResponse) TxBytesPerSecond(obj *MinActMaxValu
 	return nil
 }
 
+///Transmitted bytes per second
+///Transmitted bytes per cycle
 func (rcv *BusLoadStatisticCountersResponse) TxBytesPerCycle(obj *MinActMaxValues) *MinActMaxValues {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -86,6 +90,7 @@ func (rcv *BusLoadStatisticCountersResponse) TxBytesPerCycle(obj *MinActMaxValue
 	return nil
 }
 
+///Transmitted bytes per cycle
 func BusLoadStatisticCountersResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

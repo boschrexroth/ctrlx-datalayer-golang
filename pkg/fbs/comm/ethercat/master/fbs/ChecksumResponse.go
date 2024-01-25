@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Checksum response 
 type ChecksumResponseT struct {
 	Checksums []*ChecksumElementT `json:"checksums"`
 }

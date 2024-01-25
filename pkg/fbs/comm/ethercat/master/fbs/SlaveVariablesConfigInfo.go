@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the configuration information of slave variables 
 type SlaveVariablesConfigInfoT struct {
 	Request *SlaveVariablesConfigInfoRequestT `json:"request"`
 	Response *SlaveVariablesConfigInfoResponseListT `json:"response"`

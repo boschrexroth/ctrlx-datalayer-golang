@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave register request 
 type SlaveRegisterRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -71,6 +72,10 @@ func (rcv *SlaveRegisterRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveRegisterRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -79,10 +84,15 @@ func (rcv *SlaveRegisterRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveRegisterRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType.
 func (rcv *SlaveRegisterRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -91,10 +101,12 @@ func (rcv *SlaveRegisterRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType.
 func (rcv *SlaveRegisterRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Register offset in bytes e.g. 0x0120 for AL Control register 
 func (rcv *SlaveRegisterRequest) RegisterOffset() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -103,10 +115,12 @@ func (rcv *SlaveRegisterRequest) RegisterOffset() uint16 {
 	return 0
 }
 
+///Register offset in bytes e.g. 0x0120 for AL Control register 
 func (rcv *SlaveRegisterRequest) MutateRegisterOffset(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(8, n)
 }
 
+///Data buffer
 func (rcv *SlaveRegisterRequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -132,6 +146,7 @@ func (rcv *SlaveRegisterRequest) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer
 func (rcv *SlaveRegisterRequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -141,6 +156,7 @@ func (rcv *SlaveRegisterRequest) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Max length of data in bytes
 func (rcv *SlaveRegisterRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -149,6 +165,7 @@ func (rcv *SlaveRegisterRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Max length of data in bytes
 func (rcv *SlaveRegisterRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }

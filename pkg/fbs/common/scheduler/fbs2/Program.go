@@ -5,8 +5,8 @@ package fbs2
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/fbs"
-	common__scheduler__watchdog__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/watchdog/fbs"
+	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/fbs"
+	common__scheduler__watchdog__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/watchdog/fbs"
 )
 
 /// Composition of callables executed by the task in given sequence

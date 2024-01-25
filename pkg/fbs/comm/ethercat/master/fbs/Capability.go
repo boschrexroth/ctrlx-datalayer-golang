@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Reserved for future use
 type CapabilityT struct {
 	Name string `json:"name"`
 	Value string `json:"value"`

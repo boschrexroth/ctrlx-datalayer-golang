@@ -80,7 +80,7 @@ func (rcv *AxsCmdGearInVelData) Master() []byte {
 }
 
 /// name of the master axis
-/// sync source (Actual/Setpoint)
+/// sync source (Actual/Setpoint/Actual-extrapolated)
 func (rcv *AxsCmdGearInVelData) SyncSource() SyncSource {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -89,7 +89,7 @@ func (rcv *AxsCmdGearInVelData) SyncSource() SyncSource {
 	return 0
 }
 
-/// sync source (Actual/Setpoint)
+/// sync source (Actual/Setpoint/Actual-extrapolated)
 func (rcv *AxsCmdGearInVelData) MutateSyncSource(n SyncSource) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }

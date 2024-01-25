@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Link layer online info response
 type LinkLayerOnlineInfoResponseT struct {
 	Port string `json:"port"`
 	LinkLayer string `json:"linkLayer"`
@@ -111,6 +112,7 @@ func (rcv *LinkLayerOnlineInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Port name
 func (rcv *LinkLayerOnlineInfoResponse) Port() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -119,6 +121,8 @@ func (rcv *LinkLayerOnlineInfoResponse) Port() []byte {
 	return nil
 }
 
+///Port name
+///Link layer driver
 func (rcv *LinkLayerOnlineInfoResponse) LinkLayer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -127,6 +131,8 @@ func (rcv *LinkLayerOnlineInfoResponse) LinkLayer() []byte {
 	return nil
 }
 
+///Link layer driver
+///Arguments for link layer driver
 func (rcv *LinkLayerOnlineInfoResponse) Arguments() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -135,6 +141,8 @@ func (rcv *LinkLayerOnlineInfoResponse) Arguments() []byte {
 	return nil
 }
 
+///Arguments for link layer driver
+///Status message
 func (rcv *LinkLayerOnlineInfoResponse) Message() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -143,6 +151,9 @@ func (rcv *LinkLayerOnlineInfoResponse) Message() []byte {
 	return nil
 }
 
+///Status message
+///Mac Address
+///e.g. [ 2, 1, 5, 16, 3, 233] (dec) equals IEEE 802 notation: 02-01-05-10-03-E9 
 func (rcv *LinkLayerOnlineInfoResponse) MacAddress(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -168,6 +179,8 @@ func (rcv *LinkLayerOnlineInfoResponse) MacAddressBytes() []byte {
 	return nil
 }
 
+///Mac Address
+///e.g. [ 2, 1, 5, 16, 3, 233] (dec) equals IEEE 802 notation: 02-01-05-10-03-E9 
 func (rcv *LinkLayerOnlineInfoResponse) MutateMacAddress(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -177,6 +190,7 @@ func (rcv *LinkLayerOnlineInfoResponse) MutateMacAddress(j int, n byte) bool {
 	return false
 }
 
+///Frame repeat supported by link layer
 func (rcv *LinkLayerOnlineInfoResponse) FrameRepeatCntSupport() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -185,10 +199,12 @@ func (rcv *LinkLayerOnlineInfoResponse) FrameRepeatCntSupport() bool {
 	return false
 }
 
+///Frame repeat supported by link layer
 func (rcv *LinkLayerOnlineInfoResponse) MutateFrameRepeatCntSupport(n bool) bool {
 	return rcv._tab.MutateBoolSlot(14, n)
 }
 
+///Link speed in unit of MBaud (MBit/s)
 func (rcv *LinkLayerOnlineInfoResponse) LinkSpeed() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -197,10 +213,15 @@ func (rcv *LinkLayerOnlineInfoResponse) LinkSpeed() uint32 {
 	return 0
 }
 
+///Link speed in unit of MBaud (MBit/s)
 func (rcv *LinkLayerOnlineInfoResponse) MutateLinkSpeed(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
+///Link mode
+///undefined: Undefined - do not use
+///interrupt: Interrupt based
+///polling: Polling based
 func (rcv *LinkLayerOnlineInfoResponse) LinkMode() LinkMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -209,10 +230,19 @@ func (rcv *LinkLayerOnlineInfoResponse) LinkMode() LinkMode {
 	return 0
 }
 
+///Link mode
+///undefined: Undefined - do not use
+///interrupt: Interrupt based
+///polling: Polling based
 func (rcv *LinkLayerOnlineInfoResponse) MutateLinkMode(n LinkMode) bool {
 	return rcv._tab.MutateUint32Slot(18, uint32(n))
 }
 
+///Link status
+///undefined: Undefined - do not use
+///ok: Link exists
+///disconnected: Disconnected - link down
+///halfduplex: Half-duplex mode
 func (rcv *LinkLayerOnlineInfoResponse) LinkStatus() LinkStatus {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -221,10 +251,16 @@ func (rcv *LinkLayerOnlineInfoResponse) LinkStatus() LinkStatus {
 	return 0
 }
 
+///Link status
+///undefined: Undefined - do not use
+///ok: Link exists
+///disconnected: Disconnected - link down
+///halfduplex: Half-duplex mode
 func (rcv *LinkLayerOnlineInfoResponse) MutateLinkStatus(n LinkStatus) bool {
 	return rcv._tab.MutateUint32Slot(20, uint32(n))
 }
 
+///Width of reference clock in bits
 func (rcv *LinkLayerOnlineInfoResponse) RefClockWidth() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -233,10 +269,12 @@ func (rcv *LinkLayerOnlineInfoResponse) RefClockWidth() uint32 {
 	return 0
 }
 
+///Width of reference clock in bits
 func (rcv *LinkLayerOnlineInfoResponse) MutateRefClockWidth(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(22, n)
 }
 
+///System time in nanoseconds
 func (rcv *LinkLayerOnlineInfoResponse) SystemTime() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -245,10 +283,12 @@ func (rcv *LinkLayerOnlineInfoResponse) SystemTime() uint64 {
 	return 0
 }
 
+///System time in nanoseconds
 func (rcv *LinkLayerOnlineInfoResponse) MutateSystemTime(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(24, n)
 }
 
+///Physical error counter
 func (rcv *LinkLayerOnlineInfoResponse) PhysicalErrorCnt() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
@@ -257,10 +297,12 @@ func (rcv *LinkLayerOnlineInfoResponse) PhysicalErrorCnt() uint32 {
 	return 0
 }
 
+///Physical error counter
 func (rcv *LinkLayerOnlineInfoResponse) MutatePhysicalErrorCnt(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(26, n)
 }
 
+///Telegram error counter
 func (rcv *LinkLayerOnlineInfoResponse) TelegramErrorCnt() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
 	if o != 0 {
@@ -269,6 +311,7 @@ func (rcv *LinkLayerOnlineInfoResponse) TelegramErrorCnt() uint32 {
 	return 0
 }
 
+///Telegram error counter
 func (rcv *LinkLayerOnlineInfoResponse) MutateTelegramErrorCnt(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(28, n)
 }

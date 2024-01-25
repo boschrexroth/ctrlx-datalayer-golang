@@ -4,7 +4,7 @@ package fbtypes
 
 import "strconv"
 
-/// stop at stoped position or reference mark when reference end
+/// stop at stopped position or reference mark when reference end
 type RefType int8
 
 const (

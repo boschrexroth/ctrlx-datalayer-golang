@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Frame statistic counters
 type FrameStatisticCountersResponseT struct {
 	NumTxFrames uint32 `json:"numTxFrames"`
 	NumRxFrames uint32 `json:"numRxFrames"`
@@ -79,6 +80,7 @@ func (rcv *FrameStatisticCountersResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Number of total transmitted frames
 func (rcv *FrameStatisticCountersResponse) NumTxFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -87,10 +89,12 @@ func (rcv *FrameStatisticCountersResponse) NumTxFrames() uint32 {
 	return 0
 }
 
+///Number of total transmitted frames
 func (rcv *FrameStatisticCountersResponse) MutateNumTxFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+///Number of total received frames
 func (rcv *FrameStatisticCountersResponse) NumRxFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -99,10 +103,12 @@ func (rcv *FrameStatisticCountersResponse) NumRxFrames() uint32 {
 	return 0
 }
 
+///Number of total received frames
 func (rcv *FrameStatisticCountersResponse) MutateNumRxFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+///Number of cyclic frames
 func (rcv *FrameStatisticCountersResponse) NumCyclicFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -111,10 +117,12 @@ func (rcv *FrameStatisticCountersResponse) NumCyclicFrames() uint32 {
 	return 0
 }
 
+///Number of cyclic frames
 func (rcv *FrameStatisticCountersResponse) MutateNumCyclicFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+///Number of cyclic datagrams
 func (rcv *FrameStatisticCountersResponse) NumCyclicDatagrams() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -123,10 +131,12 @@ func (rcv *FrameStatisticCountersResponse) NumCyclicDatagrams() uint32 {
 	return 0
 }
 
+///Number of cyclic datagrams
 func (rcv *FrameStatisticCountersResponse) MutateNumCyclicDatagrams(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+///Number of acyclic frames
 func (rcv *FrameStatisticCountersResponse) NumAcyclicFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -135,10 +145,12 @@ func (rcv *FrameStatisticCountersResponse) NumAcyclicFrames() uint32 {
 	return 0
 }
 
+///Number of acyclic frames
 func (rcv *FrameStatisticCountersResponse) MutateNumAcyclicFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+///Number of acyclic datagrams
 func (rcv *FrameStatisticCountersResponse) NumAcyclicDatagrams() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -147,10 +159,12 @@ func (rcv *FrameStatisticCountersResponse) NumAcyclicDatagrams() uint32 {
 	return 0
 }
 
+///Number of acyclic datagrams
 func (rcv *FrameStatisticCountersResponse) MutateNumAcyclicDatagrams(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+///Number of total lost frames
 func (rcv *FrameStatisticCountersResponse) NumLostFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -159,10 +173,12 @@ func (rcv *FrameStatisticCountersResponse) NumLostFrames() uint32 {
 	return 0
 }
 
+///Number of total lost frames
 func (rcv *FrameStatisticCountersResponse) MutateNumLostFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
+///Number of lost cyclic frames
 func (rcv *FrameStatisticCountersResponse) NumLostCyclicFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -171,10 +187,12 @@ func (rcv *FrameStatisticCountersResponse) NumLostCyclicFrames() uint32 {
 	return 0
 }
 
+///Number of lost cyclic frames
 func (rcv *FrameStatisticCountersResponse) MutateNumLostCyclicFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(18, n)
 }
 
+///Number of lost acyclic frames
 func (rcv *FrameStatisticCountersResponse) NumLostAcyclicFrames() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -183,6 +201,7 @@ func (rcv *FrameStatisticCountersResponse) NumLostAcyclicFrames() uint32 {
 	return 0
 }
 
+///Number of lost acyclic frames
 func (rcv *FrameStatisticCountersResponse) MutateNumLostAcyclicFrames(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(20, n)
 }

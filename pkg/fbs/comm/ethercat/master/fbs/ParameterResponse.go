@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Parameter response
 type ParameterResponseT struct {
 	ElementFlags ElementFlags `json:"elementFlags"`
 	Data []byte `json:"data"`
@@ -62,6 +63,15 @@ func (rcv *ParameterResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///The SoE (Servo drive over EtherCAT) Element-Flags indicating which element of an IDN are read or written
+///dataState    Bit 0: Service channel data status
+///name         Bit 1: Name 
+///attribute    Bit 2: Attribute
+///unit         Bit 3: Unit 
+///minValue     Bit 4: Min value 
+///maxValue     Bit 5: Max value 
+///value        Bit 6: Operation data
+///defaultValue Bit 7: Default value 
 func (rcv *ParameterResponse) ElementFlags() ElementFlags {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -70,10 +80,21 @@ func (rcv *ParameterResponse) ElementFlags() ElementFlags {
 	return 0
 }
 
+///The SoE (Servo drive over EtherCAT) Element-Flags indicating which element of an IDN are read or written
+///dataState    Bit 0: Service channel data status
+///name         Bit 1: Name 
+///attribute    Bit 2: Attribute
+///unit         Bit 3: Unit 
+///minValue     Bit 4: Min value 
+///maxValue     Bit 5: Max value 
+///value        Bit 6: Operation data
+///defaultValue Bit 7: Default value 
 func (rcv *ParameterResponse) MutateElementFlags(n ElementFlags) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Data buffer
+///Note: In case of list parameters, Byte 0-1 of the data is the actual length, Byte 2-3 is the maximum length and the data starts at Byte 4.
 func (rcv *ParameterResponse) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -99,6 +120,8 @@ func (rcv *ParameterResponse) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer
+///Note: In case of list parameters, Byte 0-1 of the data is the actual length, Byte 2-3 is the maximum length and the data starts at Byte 4.
 func (rcv *ParameterResponse) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {

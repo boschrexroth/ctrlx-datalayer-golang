@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers bus statistic data from the EtherCAT Master.
 type FrameStatisticCountersT struct {
 	Response *FrameStatisticCountersResponseT `json:"response"`
 }

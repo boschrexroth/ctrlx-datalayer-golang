@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Protocol statistic counters
 type ProtocolStatisticCountersT struct {
 	NumRequests uint32 `json:"numRequests"`
 	NumBytes uint32 `json:"numBytes"`
@@ -40,16 +41,20 @@ func (rcv *ProtocolStatisticCounters) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///Number of requests
 func (rcv *ProtocolStatisticCounters) NumRequests() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///Number of requests
 func (rcv *ProtocolStatisticCounters) MutateNumRequests(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///Number of bytes send or received
 func (rcv *ProtocolStatisticCounters) NumBytes() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(4))
 }
+///Number of bytes send or received
 func (rcv *ProtocolStatisticCounters) MutateNumBytes(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(4), n)
 }

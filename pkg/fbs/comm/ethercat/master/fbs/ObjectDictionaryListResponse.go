@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Object dictionary response list
 type ObjectDictionaryListResponseT struct {
 	Indices []uint16 `json:"indices"`
 }
@@ -68,6 +69,8 @@ func (rcv *ObjectDictionaryListResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Data buffer for object list
+///One element is 1 WORD
 func (rcv *ObjectDictionaryListResponse) Indices(j int) uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,6 +88,8 @@ func (rcv *ObjectDictionaryListResponse) IndicesLength() int {
 	return 0
 }
 
+///Data buffer for object list
+///One element is 1 WORD
 func (rcv *ObjectDictionaryListResponse) MutateIndices(j int, n uint16) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

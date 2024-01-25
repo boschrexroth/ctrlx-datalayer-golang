@@ -7,11 +7,17 @@ import "strconv"
 type variableType int8
 
 const (
+	/// unknown type
 	variableTypeUNKNOWN      variableType = -1
+	/// base type
 	variableTypeBASE         variableType = 0
+	/// velocity type
 	variableTypeVELOCITY     variableType = 1
+	/// homing type
 	variableTypeHOMING       variableType = 2
+	/// probe type
 	variableTypePROBE        variableType = 3
+	/// torque/force type
 	variableTypeTORQUE_FORCE variableType = 4
 )
 

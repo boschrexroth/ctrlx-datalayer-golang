@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node return the loaded EoE (Ethernet over EtherCAT) configuration 
 type EoeConfigInfoT struct {
 	Request *AddressedRequestT `json:"request"`
 	Response *EoeConfigInfoResponseT `json:"response"`

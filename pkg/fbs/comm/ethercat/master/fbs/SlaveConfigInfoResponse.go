@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave configuration response
 type SlaveConfigInfoResponseT struct {
 	AutoIncAddr uint16 `json:"autoIncAddr"`
 	EthercatAddr uint16 `json:"ethercatAddr"`
@@ -207,6 +208,7 @@ func (rcv *SlaveConfigInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Auto increment address
 func (rcv *SlaveConfigInfoResponse) AutoIncAddr() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -215,10 +217,12 @@ func (rcv *SlaveConfigInfoResponse) AutoIncAddr() uint16 {
 	return 0
 }
 
+///Auto increment address
 func (rcv *SlaveConfigInfoResponse) MutateAutoIncAddr(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }
 
+///EtherCAT address, fixed physical
 func (rcv *SlaveConfigInfoResponse) EthercatAddr() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -227,10 +231,12 @@ func (rcv *SlaveConfigInfoResponse) EthercatAddr() uint16 {
 	return 0
 }
 
+///EtherCAT address, fixed physical
 func (rcv *SlaveConfigInfoResponse) MutateEthercatAddr(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Address offset (ADO) for identification command
 func (rcv *SlaveConfigInfoResponse) IdentifyAdo() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -239,10 +245,12 @@ func (rcv *SlaveConfigInfoResponse) IdentifyAdo() uint16 {
 	return 0
 }
 
+///Address offset (ADO) for identification command
 func (rcv *SlaveConfigInfoResponse) MutateIdentifyAdo(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(8, n)
 }
 
+///Identification value to be validated (identifyAdo value)
 func (rcv *SlaveConfigInfoResponse) IdentifyValue() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -251,10 +259,12 @@ func (rcv *SlaveConfigInfoResponse) IdentifyValue() uint16 {
 	return 0
 }
 
+///Identification value to be validated (identifyAdo value)
 func (rcv *SlaveConfigInfoResponse) MutateIdentifyValue(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(10, n)
 }
 
+///Internal slave id (internal use)
 func (rcv *SlaveConfigInfoResponse) SlaveHandle() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -263,10 +273,12 @@ func (rcv *SlaveConfigInfoResponse) SlaveHandle() uint32 {
 	return 0
 }
 
+///Internal slave id (internal use)
 func (rcv *SlaveConfigInfoResponse) MutateSlaveHandle(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+///Index of the hot connect group (0 = mandatory)
 func (rcv *SlaveConfigInfoResponse) HcGroupIdx() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -275,10 +287,12 @@ func (rcv *SlaveConfigInfoResponse) HcGroupIdx() uint32 {
 	return 0
 }
 
+///Index of the hot connect group (0 = mandatory)
 func (rcv *SlaveConfigInfoResponse) MutateHcGroupIdx(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+///EtherCAT address of the previous slave
 func (rcv *SlaveConfigInfoResponse) PreviousEthercatAddr() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -287,10 +301,12 @@ func (rcv *SlaveConfigInfoResponse) PreviousEthercatAddr() uint16 {
 	return 0
 }
 
+///EtherCAT address of the previous slave
 func (rcv *SlaveConfigInfoResponse) MutatePreviousEthercatAddr(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(16, n)
 }
 
+///Connected port of the previous slave
 func (rcv *SlaveConfigInfoResponse) PreviousPort() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -299,10 +315,12 @@ func (rcv *SlaveConfigInfoResponse) PreviousPort() uint16 {
 	return 0
 }
 
+///Connected port of the previous slave
 func (rcv *SlaveConfigInfoResponse) MutatePreviousPort(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(18, n)
 }
 
+///Slave identity info
 func (rcv *SlaveConfigInfoResponse) SlaveIdentity(obj *EthercatIdentityInfo) *EthercatIdentityInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -316,6 +334,8 @@ func (rcv *SlaveConfigInfoResponse) SlaveIdentity(obj *EthercatIdentityInfo) *Et
 	return nil
 }
 
+///Slave identity info
+///configured device name
 func (rcv *SlaveConfigInfoResponse) SlaveName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -324,6 +344,15 @@ func (rcv *SlaveConfigInfoResponse) SlaveName() []byte {
 	return nil
 }
 
+///configured device name
+///Mailbox supported Protocols (config data)
+///Bit 0: AoE (ADS over EtherCAT) (ADS: Automation Device Specification)
+///Bit 1: EoE (Ethernet over EtherCAT)
+///Bit 2: CoE (CAN application protocol over EtherCAT)
+///Bit 3: FoE (File access over EtherCAT)
+///Bit 4: SoE (Servo drive over EtherCAT)
+///Bit 5: VoE (Vendor specific protocol over EtherCAT)
+///Bit 6 to 31: Reserved
 func (rcv *SlaveConfigInfoResponse) MbxProtocols() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -332,10 +361,19 @@ func (rcv *SlaveConfigInfoResponse) MbxProtocols() uint32 {
 	return 0
 }
 
+///Mailbox supported Protocols (config data)
+///Bit 0: AoE (ADS over EtherCAT) (ADS: Automation Device Specification)
+///Bit 1: EoE (Ethernet over EtherCAT)
+///Bit 2: CoE (CAN application protocol over EtherCAT)
+///Bit 3: FoE (File access over EtherCAT)
+///Bit 4: SoE (Servo drive over EtherCAT)
+///Bit 5: VoE (Vendor specific protocol over EtherCAT)
+///Bit 6 to 31: Reserved
 func (rcv *SlaveConfigInfoResponse) MutateMbxProtocols(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(24, n)
 }
 
+///Mailbox standard size
 func (rcv *SlaveConfigInfoResponse) MbxStandard(obj *EthercatMailboxInfo) *EthercatMailboxInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
@@ -349,6 +387,8 @@ func (rcv *SlaveConfigInfoResponse) MbxStandard(obj *EthercatMailboxInfo) *Ether
 	return nil
 }
 
+///Mailbox standard size
+///Mailbox bootstrap size
 func (rcv *SlaveConfigInfoResponse) MbxBootstrap(obj *EthercatMailboxInfo) *EthercatMailboxInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
 	if o != 0 {
@@ -362,6 +402,9 @@ func (rcv *SlaveConfigInfoResponse) MbxBootstrap(obj *EthercatMailboxInfo) *Ethe
 	return nil
 }
 
+///Mailbox bootstrap size
+///Process data in size and offset
+///Offset and size both in units of bits
 func (rcv *SlaveConfigInfoResponse) ProcessDataIn(obj *EthercatMemoryInfo, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
 	if o != 0 {
@@ -381,6 +424,10 @@ func (rcv *SlaveConfigInfoResponse) ProcessDataInLength() int {
 	return 0
 }
 
+///Process data in size and offset
+///Offset and size both in units of bits
+///Process data out size and offset
+///Offset and size both in units of bits
 func (rcv *SlaveConfigInfoResponse) ProcessDataOut(obj *EthercatMemoryInfo, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(32))
 	if o != 0 {
@@ -400,6 +447,9 @@ func (rcv *SlaveConfigInfoResponse) ProcessDataOutLength() int {
 	return 0
 }
 
+///Process data out size and offset
+///Offset and size both in units of bits
+///Number of process input variables 
 func (rcv *SlaveConfigInfoResponse) NumProcessVarsIn() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(34))
 	if o != 0 {
@@ -408,10 +458,12 @@ func (rcv *SlaveConfigInfoResponse) NumProcessVarsIn() uint16 {
 	return 0
 }
 
+///Number of process input variables 
 func (rcv *SlaveConfigInfoResponse) MutateNumProcessVarsIn(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(34, n)
 }
 
+///Number of process output variables
 func (rcv *SlaveConfigInfoResponse) NumProcessVarsOut() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(36))
 	if o != 0 {
@@ -420,10 +472,12 @@ func (rcv *SlaveConfigInfoResponse) NumProcessVarsOut() uint16 {
 	return 0
 }
 
+///Number of process output variables
 func (rcv *SlaveConfigInfoResponse) MutateNumProcessVarsOut(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(36, n)
 }
 
+///Port descriptor (ESC register 0x0007) (0b10 = EBUS, 0b11 = MII/..) (Port0^Bit0:1, Port1^Bit2:3, Port2^Bit4:5, Port3^Bit6:7)
 func (rcv *SlaveConfigInfoResponse) PortDescriptor() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(38))
 	if o != 0 {
@@ -432,10 +486,12 @@ func (rcv *SlaveConfigInfoResponse) PortDescriptor() byte {
 	return 0
 }
 
+///Port descriptor (ESC register 0x0007) (0b10 = EBUS, 0b11 = MII/..) (Port0^Bit0:1, Port1^Bit2:3, Port2^Bit4:5, Port3^Bit6:7)
 func (rcv *SlaveConfigInfoResponse) MutatePortDescriptor(n byte) bool {
 	return rcv._tab.MutateByteSlot(38, n)
 }
 
+///Reserved
 func (rcv *SlaveConfigInfoResponse) Reserved01(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(40))
 	if o != 0 {
@@ -461,6 +517,7 @@ func (rcv *SlaveConfigInfoResponse) Reserved01Bytes() []byte {
 	return nil
 }
 
+///Reserved
 func (rcv *SlaveConfigInfoResponse) MutateReserved01(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(40))
 	if o != 0 {
@@ -470,6 +527,7 @@ func (rcv *SlaveConfigInfoResponse) MutateReserved01(j int, n byte) bool {
 	return false
 }
 
+///(internal - do not use)
 func (rcv *SlaveConfigInfoResponse) WkcStateDiagOffsIn(j int) uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(42))
 	if o != 0 {
@@ -487,6 +545,7 @@ func (rcv *SlaveConfigInfoResponse) WkcStateDiagOffsInLength() int {
 	return 0
 }
 
+///(internal - do not use)
 func (rcv *SlaveConfigInfoResponse) MutateWkcStateDiagOffsIn(j int, n uint16) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(42))
 	if o != 0 {
@@ -496,6 +555,7 @@ func (rcv *SlaveConfigInfoResponse) MutateWkcStateDiagOffsIn(j int, n uint16) bo
 	return false
 }
 
+///(internal - do not use)
 func (rcv *SlaveConfigInfoResponse) WkcStateDiagOffsOut(j int) uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(44))
 	if o != 0 {
@@ -513,6 +573,7 @@ func (rcv *SlaveConfigInfoResponse) WkcStateDiagOffsOutLength() int {
 	return 0
 }
 
+///(internal - do not use)
 func (rcv *SlaveConfigInfoResponse) MutateWkcStateDiagOffsOut(j int, n uint16) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(44))
 	if o != 0 {
@@ -522,6 +583,7 @@ func (rcv *SlaveConfigInfoResponse) MutateWkcStateDiagOffsOut(j int, n uint16) b
 	return false
 }
 
+///Reserved
 func (rcv *SlaveConfigInfoResponse) Reserved02(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(46))
 	if o != 0 {
@@ -539,6 +601,7 @@ func (rcv *SlaveConfigInfoResponse) Reserved02Length() int {
 	return 0
 }
 
+///Reserved
 func (rcv *SlaveConfigInfoResponse) MutateReserved02(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(46))
 	if o != 0 {
@@ -548,6 +611,7 @@ func (rcv *SlaveConfigInfoResponse) MutateReserved02(j int, n uint32) bool {
 	return false
 }
 
+///Slave is present connected and reachable over the bus (online)
 func (rcv *SlaveConfigInfoResponse) IsPresent() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(48))
 	if o != 0 {
@@ -556,10 +620,12 @@ func (rcv *SlaveConfigInfoResponse) IsPresent() bool {
 	return false
 }
 
+///Slave is present connected and reachable over the bus (online)
 func (rcv *SlaveConfigInfoResponse) MutateIsPresent(n bool) bool {
 	return rcv._tab.MutateBoolSlot(48, n)
 }
 
+///The Hot Connect Group of the slave is present
 func (rcv *SlaveConfigInfoResponse) IsHcGroupPresent() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(50))
 	if o != 0 {
@@ -568,10 +634,12 @@ func (rcv *SlaveConfigInfoResponse) IsHcGroupPresent() bool {
 	return false
 }
 
+///The Hot Connect Group of the slave is present
 func (rcv *SlaveConfigInfoResponse) MutateIsHcGroupPresent(n bool) bool {
 	return rcv._tab.MutateBoolSlot(50, n)
 }
 
+///Slave supports DC (Distributed Clock)
 func (rcv *SlaveConfigInfoResponse) DcSupport() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(52))
 	if o != 0 {
@@ -580,6 +648,7 @@ func (rcv *SlaveConfigInfoResponse) DcSupport() bool {
 	return false
 }
 
+///Slave supports DC (Distributed Clock)
 func (rcv *SlaveConfigInfoResponse) MutateDcSupport(n bool) bool {
 	return rcv._tab.MutateBoolSlot(52, n)
 }

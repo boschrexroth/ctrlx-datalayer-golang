@@ -27,7 +27,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/token"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/token"
 	"github.com/stretchr/testify/require"
 )
 

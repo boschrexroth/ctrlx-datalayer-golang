@@ -4,6 +4,13 @@ package fbs
 
 import "strconv"
 
+///Object dictionary list type
+///length: lengths of each list type
+///all: all objects
+///rxPDOMap: only pdo mappable objects
+///txPDOMap: only pdo mappable objects that can be changed
+///storeForeReplacement: only stored for a device replacement object
+///startupParam: only startup parameter objects
 type ObjectDictionaryListType byte
 
 const (

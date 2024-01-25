@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave state request
 type SlaveStateRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -61,6 +62,10 @@ func (rcv *SlaveStateRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveStateRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,10 +74,15 @@ func (rcv *SlaveStateRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveStateRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType.
 func (rcv *SlaveStateRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +91,12 @@ func (rcv *SlaveStateRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType.
 func (rcv *SlaveStateRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Request slave state.
 func (rcv *SlaveStateRequest) NewState() EthercatState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,6 +105,7 @@ func (rcv *SlaveStateRequest) NewState() EthercatState {
 	return 0
 }
 
+///Request slave state.
 func (rcv *SlaveStateRequest) MutateNewState(n EthercatState) bool {
 	return rcv._tab.MutateUint16Slot(8, uint16(n))
 }

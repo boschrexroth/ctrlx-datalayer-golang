@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This write only node resets the bus frame statistic counters of the EtherCAT Master
 type FrameStatisticResetT struct {
 	Request *FrameStatisticResetRequestT `json:"request"`
 }

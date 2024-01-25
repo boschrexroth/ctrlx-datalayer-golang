@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///EtherCAT memory info
 type EthercatMemoryInfoT struct {
 	Offset uint32 `json:"offset"`
 	Size uint32 `json:"size"`
@@ -40,16 +41,20 @@ func (rcv *EthercatMemoryInfo) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///Memory offset
 func (rcv *EthercatMemoryInfo) Offset() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///Memory offset
 func (rcv *EthercatMemoryInfo) MutateOffset(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///Memory size
 func (rcv *EthercatMemoryInfo) Size() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(4))
 }
+///Memory size
 func (rcv *EthercatMemoryInfo) MutateSize(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(4), n)
 }

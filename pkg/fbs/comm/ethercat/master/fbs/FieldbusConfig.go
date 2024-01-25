@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node provide an interface to read and write the EtherCAT fieldbus configuration to the EtherCAT master
 type FieldbusConfigT struct {
 	Request *FieldbusConfigRequestT `json:"request"`
 	Response *FieldbusConfigResponseT `json:"response"`

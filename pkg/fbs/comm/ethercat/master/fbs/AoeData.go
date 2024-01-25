@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads and writes data from an EtherCAT AoE slave device.
 type AoeDataT struct {
 	Request *AoeDataRequestT `json:"request"`
 	Response *AoeDataResponseT `json:"response"`

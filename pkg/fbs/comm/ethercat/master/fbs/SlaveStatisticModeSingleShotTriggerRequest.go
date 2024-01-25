@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave statistic mode single shot trigger request
 type SlaveStatisticModeSingleShotTriggerRequestT struct {
 	Force bool `json:"force"`
 }
@@ -55,6 +56,7 @@ func (rcv *SlaveStatisticModeSingleShotTriggerRequest) Table() flatbuffers.Table
 	return rcv._tab
 }
 
+///Forced, update is forced immediately
 func (rcv *SlaveStatisticModeSingleShotTriggerRequest) Force() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *SlaveStatisticModeSingleShotTriggerRequest) Force() bool {
 	return false
 }
 
+///Forced, update is forced immediately
 func (rcv *SlaveStatisticModeSingleShotTriggerRequest) MutateForce(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }

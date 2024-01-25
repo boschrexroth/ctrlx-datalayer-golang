@@ -10,6 +10,7 @@ import (
 type AxsCfgCalcStepParamT struct {
 	Name string `json:"name"`
 	Value string `json:"value"`
+	Unit string `json:"unit"`
 }
 
 func (t *AxsCfgCalcStepParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -22,15 +23,21 @@ func (t *AxsCfgCalcStepParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UO
 	if t.Value != "" {
 		valueOffset = builder.CreateString(t.Value)
 	}
+	unitOffset := flatbuffers.UOffsetT(0)
+	if t.Unit != "" {
+		unitOffset = builder.CreateString(t.Unit)
+	}
 	AxsCfgCalcStepParamStart(builder)
 	AxsCfgCalcStepParamAddName(builder, nameOffset)
 	AxsCfgCalcStepParamAddValue(builder, valueOffset)
+	AxsCfgCalcStepParamAddUnit(builder, unitOffset)
 	return AxsCfgCalcStepParamEnd(builder)
 }
 
 func (rcv *AxsCfgCalcStepParam) UnPackTo(t *AxsCfgCalcStepParamT) {
 	t.Name = string(rcv.Name())
 	t.Value = string(rcv.Value())
+	t.Unit = string(rcv.Unit())
 }
 
 func (rcv *AxsCfgCalcStepParam) UnPack() *AxsCfgCalcStepParamT {
@@ -87,14 +94,27 @@ func (rcv *AxsCfgCalcStepParam) Value() []byte {
 }
 
 /// value of the parameter
+/// unit of the parameter
+func (rcv *AxsCfgCalcStepParam) Unit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of the parameter
 func AxsCfgCalcStepParamStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func AxsCfgCalcStepParamAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
 }
 func AxsCfgCalcStepParamAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(value), 0)
+}
+func AxsCfgCalcStepParamAddUnit(builder *flatbuffers.Builder, unit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(unit), 0)
 }
 func AxsCfgCalcStepParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

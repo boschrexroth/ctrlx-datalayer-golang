@@ -4,14 +4,27 @@ package fbs
 
 import "strconv"
 
+///EtherCAT
+///Unknown
+///Init
+///Pre-Operational
+///Bootstrap
+///Safe-Operational
+///Operational
 type EthercatState uint16
 
 const (
+	///Unknown
 	EthercatStateunknown   EthercatState = 0
+	///Init
 	EthercatStateinit      EthercatState = 1
+	///Pre-Operational
 	EthercatStatepreop     EthercatState = 2
+	///Bootstrap
 	EthercatStatebootstrap EthercatState = 3
+	///Safe-Operational
 	EthercatStatesafeop    EthercatState = 4
+	///Operational
 	EthercatStateop        EthercatState = 8
 )
 

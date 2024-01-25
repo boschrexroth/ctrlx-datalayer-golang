@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Returns the bus statistic counters
 type BusLoadStatisticCountersT struct {
 	Response *BusLoadStatisticCountersResponseT `json:"response"`
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node return the loaded DC (Distributed Clock) configuration
 type DcConfigInfoT struct {
 	Response *DcConfigInfoResponseT `json:"response"`
 }

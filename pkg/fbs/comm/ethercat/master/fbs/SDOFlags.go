@@ -4,6 +4,11 @@ package fbs
 
 import "strconv"
 
+///With completeAccess all subindices of the object can be read in one upload call. 
+///Hereby the subindex input is the start subindex:
+///noFlags = all subindices including subindex 0 (start subindex 0)
+///completeAccess = all subindices without subindex 0 (start subindex 1)
+///Note: completeAccess is not supported by all slaves or can also be object-specific.
 type SDOFlags uint32
 
 const (

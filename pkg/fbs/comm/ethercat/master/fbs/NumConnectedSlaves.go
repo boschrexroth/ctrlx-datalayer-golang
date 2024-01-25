@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers the number of currently connected slaves on the EtherCAT Master.
 type NumConnectedSlavesT struct {
 	Response *NumConnectedSlavesResponseT `json:"response"`
 }

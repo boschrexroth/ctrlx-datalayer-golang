@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers the number of online DC (Distributed Clock) slaves on the EtherCAT Master
 type NumConnectedDcSlavesT struct {
 	Response *NumConnectedDcSlavesResponseT `json:"response"`
 }

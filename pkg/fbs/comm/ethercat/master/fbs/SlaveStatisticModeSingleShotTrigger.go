@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave statistic mode single shot trigger
 type SlaveStatisticModeSingleShotTriggerT struct {
 	Request *SlaveStatisticModeSingleShotTriggerRequestT `json:"request"`
 	Response *SlaveStatisticModeSingleShotTriggerResponseT `json:"response"`

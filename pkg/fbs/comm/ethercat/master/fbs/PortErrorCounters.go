@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Port error counters
 type PortErrorCountersT struct {
 	InvalidFrameCounter byte `json:"invalidFrameCounter"`
 	RxErrorCounter byte `json:"rxErrorCounter"`
@@ -44,30 +45,38 @@ func (rcv *PortErrorCounters) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///Invalid Frame Counter (ESC register 0x0300 / 0x0302 / 0x0304 / 0x0306)
 func (rcv *PortErrorCounters) InvalidFrameCounter() byte {
 	return rcv._tab.GetByte(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///Invalid Frame Counter (ESC register 0x0300 / 0x0302 / 0x0304 / 0x0306)
 func (rcv *PortErrorCounters) MutateInvalidFrameCounter(n byte) bool {
 	return rcv._tab.MutateByte(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///RX Error Counter (MII/EBUS) (ESC register 0x0301 / 0x0303 / 0x0305 / 0x0307)
 func (rcv *PortErrorCounters) RxErrorCounter() byte {
 	return rcv._tab.GetByte(rcv._tab.Pos + flatbuffers.UOffsetT(1))
 }
+///RX Error Counter (MII/EBUS) (ESC register 0x0301 / 0x0303 / 0x0305 / 0x0307)
 func (rcv *PortErrorCounters) MutateRxErrorCounter(n byte) bool {
 	return rcv._tab.MutateByte(rcv._tab.Pos+flatbuffers.UOffsetT(1), n)
 }
 
+///Forwarded RX Error Counter (ESC register 0x0308 : 0x030B)
 func (rcv *PortErrorCounters) FwdRxErrorCounter() byte {
 	return rcv._tab.GetByte(rcv._tab.Pos + flatbuffers.UOffsetT(2))
 }
+///Forwarded RX Error Counter (ESC register 0x0308 : 0x030B)
 func (rcv *PortErrorCounters) MutateFwdRxErrorCounter(n byte) bool {
 	return rcv._tab.MutateByte(rcv._tab.Pos+flatbuffers.UOffsetT(2), n)
 }
 
+///Lost Link Counter (ESC register 0x0310 : 0x0313)
 func (rcv *PortErrorCounters) LostLinkCounter() byte {
 	return rcv._tab.GetByte(rcv._tab.Pos + flatbuffers.UOffsetT(3))
 }
+///Lost Link Counter (ESC register 0x0310 : 0x0313)
 func (rcv *PortErrorCounters) MutateLostLinkCounter(n byte) bool {
 	return rcv._tab.MutateByte(rcv._tab.Pos+flatbuffers.UOffsetT(3), n)
 }

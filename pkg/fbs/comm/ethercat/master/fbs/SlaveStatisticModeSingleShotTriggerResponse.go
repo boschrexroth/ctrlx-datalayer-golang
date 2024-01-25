@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave statistic mode single shot trigger response
 type SlaveStatisticModeSingleShotTriggerResponseT struct {
 	Forced bool `json:"forced"`
 	Discarded bool `json:"discarded"`
@@ -58,6 +59,7 @@ func (rcv *SlaveStatisticModeSingleShotTriggerResponse) Table() flatbuffers.Tabl
 	return rcv._tab
 }
 
+///Update has been forced
 func (rcv *SlaveStatisticModeSingleShotTriggerResponse) Forced() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *SlaveStatisticModeSingleShotTriggerResponse) Forced() bool {
 	return false
 }
 
+///Update has been forced
 func (rcv *SlaveStatisticModeSingleShotTriggerResponse) MutateForced(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }
 
+///Request has been discarded because of active inhibit time 
 func (rcv *SlaveStatisticModeSingleShotTriggerResponse) Discarded() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *SlaveStatisticModeSingleShotTriggerResponse) Discarded() bool {
 	return false
 }
 
+///Request has been discarded because of active inhibit time 
 func (rcv *SlaveStatisticModeSingleShotTriggerResponse) MutateDiscarded(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
