@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -35,7 +34,7 @@ func main() {
 	var auth string
 	var g github
 
-	b, err := ioutil.ReadFile(".github")
+	b, err := os.ReadFile(".github")
 	if err == nil {
 		if err := yaml.Unmarshal(b, &g); err == nil {
 			if g.Github.User != "" && g.Github.Token != "" {
@@ -54,7 +53,7 @@ func main() {
 		println(resp.Status)
 		return
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		println(err)
 		return
@@ -77,7 +76,7 @@ func main() {
 		println(resp.Status)
 		return
 	}
-	b, err = ioutil.ReadAll(resp.Body)
+	b, err = io.ReadAll(resp.Body)
 	if err != nil {
 		println(err)
 		return
