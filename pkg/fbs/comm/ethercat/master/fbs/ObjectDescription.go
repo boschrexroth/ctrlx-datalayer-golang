@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the CoE (CANopen over EtherCAT) object description for a specific object (SDO) from a slave
 type ObjectDescriptionT struct {
 	Request *ObjectDescriptionRequestT `json:"request"`
 	Response *ObjectDescriptionResponseT `json:"response"`

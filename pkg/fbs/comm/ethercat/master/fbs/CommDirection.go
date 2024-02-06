@@ -4,11 +4,15 @@ package fbs
 
 import "strconv"
 
+///Communication direction
 type CommDirection byte
 
 const (
+	///Transmit
 	CommDirectiontx    CommDirection = 0
+	///Receive
 	CommDirectionrx    CommDirection = 1
+	///Transmit and receive
 	CommDirectiontx_rx CommDirection = 2
 )
 

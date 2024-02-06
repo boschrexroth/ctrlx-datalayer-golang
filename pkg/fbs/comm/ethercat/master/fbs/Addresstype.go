@@ -4,11 +4,18 @@ package fbs
 
 import "strconv"
 
+///This enumeration specifies the mode of addressing
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 type Addresstype byte
 
 const (
+	///Undefined - do not use
 	Addresstypeundefined     Addresstype = 0
+	///Auto increment address
 	Addresstypeautoincrement Addresstype = 1
+	///EtherCAT address (fixed physical address)
 	Addresstypefixedphysical Addresstype = 2
 )
 

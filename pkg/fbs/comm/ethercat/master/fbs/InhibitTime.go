@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This read only node returns the inhibit time of the slave statistic single shot update mode
 type InhibitTimeT struct {
 	Response *InhibitTimeResponseT `json:"response"`
 }

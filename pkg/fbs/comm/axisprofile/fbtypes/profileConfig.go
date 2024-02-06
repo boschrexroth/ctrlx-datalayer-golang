@@ -15,6 +15,8 @@ type profileConfigT struct {
 	OutputMapping *valueMappingT `json:"outputMapping"`
 	ScalingInfo *profileScalingCfgT `json:"scalingInfo"`
 	DeviceName string `json:"deviceName"`
+	DriveNumber byte `json:"driveNumber"`
+	Category *ProfileCategoryT `json:"category"`
 }
 
 func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -35,6 +37,7 @@ func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 	if t.DeviceName != "" {
 		deviceNameOffset = builder.CreateString(t.DeviceName)
 	}
+	categoryOffset := t.Category.Pack(builder)
 	profileConfigStart(builder)
 	profileConfigAddDeviceAddress(builder, t.DeviceAddress)
 	profileConfigAddInputBuffer(builder, inputBufferOffset)
@@ -44,6 +47,8 @@ func (t *profileConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 	profileConfigAddOutputMapping(builder, outputMappingOffset)
 	profileConfigAddScalingInfo(builder, scalingInfoOffset)
 	profileConfigAddDeviceName(builder, deviceNameOffset)
+	profileConfigAddDriveNumber(builder, t.DriveNumber)
+	profileConfigAddCategory(builder, categoryOffset)
 	return profileConfigEnd(builder)
 }
 
@@ -56,6 +61,8 @@ func (rcv *profileConfig) UnPackTo(t *profileConfigT) {
 	t.OutputMapping = rcv.OutputMapping(nil).UnPack()
 	t.ScalingInfo = rcv.ScalingInfo(nil).UnPack()
 	t.DeviceName = string(rcv.DeviceName())
+	t.DriveNumber = rcv.DriveNumber()
+	t.Category = rcv.Category(nil).UnPack()
 }
 
 func (rcv *profileConfig) UnPack() *profileConfigT {
@@ -92,6 +99,7 @@ func (rcv *profileConfig) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Address of the device
 func (rcv *profileConfig) DeviceAddress() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -100,10 +108,12 @@ func (rcv *profileConfig) DeviceAddress() uint32 {
 	return 0
 }
 
+/// Address of the device
 func (rcv *profileConfig) MutateDeviceAddress(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// Datalayer address of the input telegram
 func (rcv *profileConfig) InputBuffer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -112,6 +122,8 @@ func (rcv *profileConfig) InputBuffer() []byte {
 	return nil
 }
 
+/// Datalayer address of the input telegram
+/// Datalayer address of the output telegram
 func (rcv *profileConfig) OutputBuffer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -120,6 +132,8 @@ func (rcv *profileConfig) OutputBuffer() []byte {
 	return nil
 }
 
+/// Datalayer address of the output telegram
+/// Flatbuffer: Basic profile data (name, type)
 func (rcv *profileConfig) ProfileBasicData(obj *profile) *profile {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -133,6 +147,8 @@ func (rcv *profileConfig) ProfileBasicData(obj *profile) *profile {
 	return nil
 }
 
+/// Flatbuffer: Basic profile data (name, type)
+/// Flatbuffer: Complete input value mapping
 func (rcv *profileConfig) InputMapping(obj *valueMapping) *valueMapping {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -146,6 +162,8 @@ func (rcv *profileConfig) InputMapping(obj *valueMapping) *valueMapping {
 	return nil
 }
 
+/// Flatbuffer: Complete input value mapping
+/// Flatbuffer: Complete output value mapping
 func (rcv *profileConfig) OutputMapping(obj *valueMapping) *valueMapping {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -159,6 +177,8 @@ func (rcv *profileConfig) OutputMapping(obj *valueMapping) *valueMapping {
 	return nil
 }
 
+/// Flatbuffer: Complete output value mapping
+/// scaling information for profile
 func (rcv *profileConfig) ScalingInfo(obj *profileScalingCfg) *profileScalingCfg {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -172,6 +192,8 @@ func (rcv *profileConfig) ScalingInfo(obj *profileScalingCfg) *profileScalingCfg
 	return nil
 }
 
+/// scaling information for profile
+/// name of device
 func (rcv *profileConfig) DeviceName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -180,8 +202,38 @@ func (rcv *profileConfig) DeviceName() []byte {
 	return nil
 }
 
+/// name of device
+/// drive number
+func (rcv *profileConfig) DriveNumber() byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetByte(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// drive number
+func (rcv *profileConfig) MutateDriveNumber(n byte) bool {
+	return rcv._tab.MutateByteSlot(20, n)
+}
+
+/// category of current profile
+func (rcv *profileConfig) Category(obj *ProfileCategory) *ProfileCategory {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(ProfileCategory)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// category of current profile
 func profileConfigStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(10)
 }
 func profileConfigAddDeviceAddress(builder *flatbuffers.Builder, deviceAddress uint32) {
 	builder.PrependUint32Slot(0, deviceAddress, 0)
@@ -206,6 +258,12 @@ func profileConfigAddScalingInfo(builder *flatbuffers.Builder, scalingInfo flatb
 }
 func profileConfigAddDeviceName(builder *flatbuffers.Builder, deviceName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(deviceName), 0)
+}
+func profileConfigAddDriveNumber(builder *flatbuffers.Builder, driveNumber byte) {
+	builder.PrependByteSlot(8, driveNumber, 0)
+}
+func profileConfigAddCategory(builder *flatbuffers.Builder, category flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(category), 0)
 }
 func profileConfigEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

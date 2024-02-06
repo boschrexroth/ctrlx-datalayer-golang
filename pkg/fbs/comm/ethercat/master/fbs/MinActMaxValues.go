@@ -6,6 +6,10 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Minimum, actual and maximum values
+///Minimum value
+///Current value
+///Maximum value
 type MinActMaxValuesT struct {
 	Minimum uint32 `json:"minimum"`
 	Actual uint32 `json:"actual"`
@@ -42,23 +46,29 @@ func (rcv *MinActMaxValues) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///Minimum value
 func (rcv *MinActMaxValues) Minimum() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///Minimum value
 func (rcv *MinActMaxValues) MutateMinimum(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///Current value
 func (rcv *MinActMaxValues) Actual() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(4))
 }
+///Current value
 func (rcv *MinActMaxValues) MutateActual(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(4), n)
 }
 
+///Maximum value
 func (rcv *MinActMaxValues) Maximum() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(8))
 }
+///Maximum value
 func (rcv *MinActMaxValues) MutateMaximum(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(8), n)
 }

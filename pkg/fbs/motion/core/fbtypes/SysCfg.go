@@ -13,6 +13,7 @@ type SysCfgT struct {
 	Internal *SysCfgInternalT `json:"internal"`
 	SafeAreas *SysCfgSafeAreaAllT `json:"safeAreas"`
 	RtInputs *RTInputsCfgT `json:"rtInputs"`
+	ToolData *SysCfgToolDataAllT `json:"toolData"`
 }
 
 func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -22,12 +23,14 @@ func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	internalOffset := t.Internal.Pack(builder)
 	safeAreasOffset := t.SafeAreas.Pack(builder)
 	rtInputsOffset := t.RtInputs.Pack(builder)
+	toolDataOffset := t.ToolData.Pack(builder)
 	SysCfgStart(builder)
 	SysCfgAddPcs(builder, pcsOffset)
 	SysCfgAddFunction(builder, functionOffset)
 	SysCfgAddInternal(builder, internalOffset)
 	SysCfgAddSafeAreas(builder, safeAreasOffset)
 	SysCfgAddRtInputs(builder, rtInputsOffset)
+	SysCfgAddToolData(builder, toolDataOffset)
 	return SysCfgEnd(builder)
 }
 
@@ -37,6 +40,7 @@ func (rcv *SysCfg) UnPackTo(t *SysCfgT) {
 	t.Internal = rcv.Internal(nil).UnPack()
 	t.SafeAreas = rcv.SafeAreas(nil).UnPack()
 	t.RtInputs = rcv.RtInputs(nil).UnPack()
+	t.ToolData = rcv.ToolData(nil).UnPack()
 }
 
 func (rcv *SysCfg) UnPack() *SysCfgT {
@@ -148,8 +152,23 @@ func (rcv *SysCfg) RtInputs(obj *RTInputsCfg) *RTInputsCfg {
 }
 
 /// configuration of the real-time inputs of the kinematics
+/// configuration of the tool data
+func (rcv *SysCfg) ToolData(obj *SysCfgToolDataAll) *SysCfgToolDataAll {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(SysCfgToolDataAll)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the tool data
 func SysCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func SysCfgAddPcs(builder *flatbuffers.Builder, pcs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(pcs), 0)
@@ -165,6 +184,9 @@ func SysCfgAddSafeAreas(builder *flatbuffers.Builder, safeAreas flatbuffers.UOff
 }
 func SysCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(rtInputs), 0)
+}
+func SysCfgAddToolData(builder *flatbuffers.Builder, toolData flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(toolData), 0)
 }
 func SysCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

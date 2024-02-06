@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node performs a AoE write control
 type AoeControlT struct {
 	Request *AoeControlRequestT `json:"request"`
 	Response *AoeControlResponseT `json:"response"`

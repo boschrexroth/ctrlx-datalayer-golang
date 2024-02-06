@@ -6,6 +6,10 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads/writes a Service-Data-Object (SDO) from an EtherCAT slave device. 
+///The slave must support the mailbox protocol “CAN application protocol over EtherCAT” (CoE). 
+///Note: the Slave must be in EtherCAT state PreOP, SafeOP or OP for mailbox communication.
+///The object is addressed with index and subindex. 
 type SDORequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -77,6 +81,10 @@ func (rcv *SDORequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SDORequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,10 +93,15 @@ func (rcv *SDORequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SDORequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType.
 func (rcv *SDORequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -97,10 +110,12 @@ func (rcv *SDORequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType.
 func (rcv *SDORequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Object index
 func (rcv *SDORequest) ObjectIndex() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -109,10 +124,12 @@ func (rcv *SDORequest) ObjectIndex() uint16 {
 	return 0
 }
 
+///Object index
 func (rcv *SDORequest) MutateObjectIndex(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(8, n)
 }
 
+///Sub-Index of the object
 func (rcv *SDORequest) SubIndex() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -121,10 +138,16 @@ func (rcv *SDORequest) SubIndex() byte {
 	return 0
 }
 
+///Sub-Index of the object
 func (rcv *SDORequest) MutateSubIndex(n byte) bool {
 	return rcv._tab.MutateByteSlot(10, n)
 }
 
+///With completeAccess all subindices of the object can be read in one upload call. 
+///Hereby the subindex input is the start subindex:
+///noFlags = all subindices including subindex 0 (start subindex 0)
+///completeAccess = all subindices without subindex 0 (start subindex 1)
+///Note: completeAccess is not supported by all slaves or can also be object-specific.
 func (rcv *SDORequest) Flags() SDOFlags {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -133,10 +156,16 @@ func (rcv *SDORequest) Flags() SDOFlags {
 	return 0
 }
 
+///With completeAccess all subindices of the object can be read in one upload call. 
+///Hereby the subindex input is the start subindex:
+///noFlags = all subindices including subindex 0 (start subindex 0)
+///completeAccess = all subindices without subindex 0 (start subindex 1)
+///Note: completeAccess is not supported by all slaves or can also be object-specific.
 func (rcv *SDORequest) MutateFlags(n SDOFlags) bool {
 	return rcv._tab.MutateUint32Slot(12, uint32(n))
 }
 
+///Data buffer for writing data
 func (rcv *SDORequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -162,6 +191,7 @@ func (rcv *SDORequest) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer for writing data
 func (rcv *SDORequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -171,6 +201,7 @@ func (rcv *SDORequest) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Size in Bytes of buffer or variable provided for data reception
 func (rcv *SDORequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -179,6 +210,7 @@ func (rcv *SDORequest) MaxLength() uint32 {
 	return 0
 }
 
+///Size in Bytes of buffer or variable provided for data reception
 func (rcv *SDORequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }

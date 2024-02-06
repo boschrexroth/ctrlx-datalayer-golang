@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///EtherCAT Identity Info
 type EthercatIdentityInfoT struct {
 	VendorId uint32 `json:"vendorId"`
 	ProductCode uint32 `json:"productCode"`
@@ -44,30 +45,38 @@ func (rcv *EthercatIdentityInfo) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///EtherCAT-Vendor identification
 func (rcv *EthercatIdentityInfo) VendorId() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///EtherCAT-Vendor identification
 func (rcv *EthercatIdentityInfo) MutateVendorId(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///Product Code
 func (rcv *EthercatIdentityInfo) ProductCode() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(4))
 }
+///Product Code
 func (rcv *EthercatIdentityInfo) MutateProductCode(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(4), n)
 }
 
+///Revision Number
 func (rcv *EthercatIdentityInfo) RevisionNumber() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(8))
 }
+///Revision Number
 func (rcv *EthercatIdentityInfo) MutateRevisionNumber(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(8), n)
 }
 
+///Serial Number
 func (rcv *EthercatIdentityInfo) SerialNumber() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(12))
 }
+///Serial Number
 func (rcv *EthercatIdentityInfo) MutateSerialNumber(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(12), n)
 }

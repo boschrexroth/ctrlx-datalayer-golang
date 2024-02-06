@@ -25,7 +25,7 @@ package datalayer
 import (
 	"encoding/json"
 
-	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 )
 
 // SubscriptionProperties struct

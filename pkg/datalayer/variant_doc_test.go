@@ -3,7 +3,7 @@ package datalayer_test
 import (
 	"fmt"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 )
 
 func ExampleVariant_CheckConvert() {

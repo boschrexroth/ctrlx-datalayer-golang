@@ -5,7 +5,7 @@ package fbtypes
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	motion__core__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/core/fbtypes"
+	motion__core__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/motion/core/fbtypes"
 )
 
 /// just for test of additional bundle (motion extension API)

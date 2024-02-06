@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers the number of slaves in the EtherCAT Master, which support EtherCAT mailbox communication.
 type NumConfiguredMailboxSlavesT struct {
 	Response *NumConfiguredMailboxSlavesResponseT `json:"response"`
 }

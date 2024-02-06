@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///FoE Request
 type FoeRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -81,6 +82,10 @@ func (rcv *FoeRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *FoeRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -89,10 +94,15 @@ func (rcv *FoeRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *FoeRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *FoeRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -101,10 +111,12 @@ func (rcv *FoeRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *FoeRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Data in binary format
 func (rcv *FoeRequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -130,6 +142,7 @@ func (rcv *FoeRequest) DataBytes() []byte {
 	return nil
 }
 
+///Data in binary format
 func (rcv *FoeRequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -139,6 +152,7 @@ func (rcv *FoeRequest) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Max length of data buffer in bytes
 func (rcv *FoeRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -147,10 +161,12 @@ func (rcv *FoeRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Max length of data buffer in bytes
 func (rcv *FoeRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+///Filename
 func (rcv *FoeRequest) Filename() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -159,6 +175,8 @@ func (rcv *FoeRequest) Filename() []byte {
 	return nil
 }
 
+///Filename
+///Password
 func (rcv *FoeRequest) Password() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -167,10 +185,12 @@ func (rcv *FoeRequest) Password() uint32 {
 	return 0
 }
 
+///Password
 func (rcv *FoeRequest) MutatePassword(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+///Timeout in milliseconds
 func (rcv *FoeRequest) Timeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -179,6 +199,7 @@ func (rcv *FoeRequest) Timeout() uint32 {
 	return 0
 }
 
+///Timeout in milliseconds
 func (rcv *FoeRequest) MutateTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }

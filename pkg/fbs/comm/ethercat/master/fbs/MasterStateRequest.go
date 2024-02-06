@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Request for EtherCAT master state change
 type MasterStateRequestT struct {
 	NewState EthercatState `json:"newState"`
 }
@@ -55,6 +56,7 @@ func (rcv *MasterStateRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Request master state
 func (rcv *MasterStateRequest) NewState() EthercatState {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *MasterStateRequest) NewState() EthercatState {
 	return 0
 }
 
+///Request master state
 func (rcv *MasterStateRequest) MutateNewState(n EthercatState) bool {
 	return rcv._tab.MutateUint16Slot(4, uint16(n))
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave statistic counters response
 type SlaveStatisticCountersResponseT struct {
 	AlStatusCode uint16 `json:"alStatusCode"`
 	ProcUnitErrorCounter byte `json:"procUnitErrorCounter"`
@@ -79,6 +80,7 @@ func (rcv *SlaveStatisticCountersResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Application layer status code (ESC register 0x0134)
 func (rcv *SlaveStatisticCountersResponse) AlStatusCode() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -87,10 +89,12 @@ func (rcv *SlaveStatisticCountersResponse) AlStatusCode() uint16 {
 	return 0
 }
 
+///Application layer status code (ESC register 0x0134)
 func (rcv *SlaveStatisticCountersResponse) MutateAlStatusCode(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }
 
+///Error Counter ‘Processing Unit’ (ESC register 0x030C)
 func (rcv *SlaveStatisticCountersResponse) ProcUnitErrorCounter() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -99,10 +103,12 @@ func (rcv *SlaveStatisticCountersResponse) ProcUnitErrorCounter() byte {
 	return 0
 }
 
+///Error Counter ‘Processing Unit’ (ESC register 0x030C)
 func (rcv *SlaveStatisticCountersResponse) MutateProcUnitErrorCounter(n byte) bool {
 	return rcv._tab.MutateByteSlot(6, n)
 }
 
+///Error Counter ‘Process Data Interface’ (ESC register 0x030D)
 func (rcv *SlaveStatisticCountersResponse) PdiErrorCounter() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -111,10 +117,12 @@ func (rcv *SlaveStatisticCountersResponse) PdiErrorCounter() byte {
 	return 0
 }
 
+///Error Counter ‘Process Data Interface’ (ESC register 0x030D)
 func (rcv *SlaveStatisticCountersResponse) MutatePdiErrorCounter(n byte) bool {
 	return rcv._tab.MutateByteSlot(8, n)
 }
 
+///Port related error counters
 func (rcv *SlaveStatisticCountersResponse) PortErrorCounters(obj *PortErrorCounters, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -134,6 +142,7 @@ func (rcv *SlaveStatisticCountersResponse) PortErrorCountersLength() int {
 	return 0
 }
 
+///Port related error counters
 func SlaveStatisticCountersResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }

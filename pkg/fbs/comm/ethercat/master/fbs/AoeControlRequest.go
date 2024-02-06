@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///AoE control request
 type AoeControlRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -81,6 +82,10 @@ func (rcv *AoeControlRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *AoeControlRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -89,10 +94,15 @@ func (rcv *AoeControlRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *AoeControlRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *AoeControlRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -101,10 +111,13 @@ func (rcv *AoeControlRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *AoeControlRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///AoE target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeControlRequest) TargetNetId(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -130,6 +143,8 @@ func (rcv *AoeControlRequest) TargetNetIdBytes() []byte {
 	return nil
 }
 
+///AoE target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeControlRequest) MutateTargetNetId(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -139,6 +154,7 @@ func (rcv *AoeControlRequest) MutateTargetNetId(j int, n byte) bool {
 	return false
 }
 
+///Target port number  
 func (rcv *AoeControlRequest) TargetPort() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -147,10 +163,12 @@ func (rcv *AoeControlRequest) TargetPort() uint16 {
 	return 0
 }
 
+///Target port number  
 func (rcv *AoeControlRequest) MutateTargetPort(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(10, n)
 }
 
+///AoE state
 func (rcv *AoeControlRequest) AoeState() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -159,10 +177,12 @@ func (rcv *AoeControlRequest) AoeState() uint16 {
 	return 0
 }
 
+///AoE state
 func (rcv *AoeControlRequest) MutateAoeState(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(12, n)
 }
 
+///Device specific state
 func (rcv *AoeControlRequest) DeviceState() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -171,10 +191,12 @@ func (rcv *AoeControlRequest) DeviceState() uint16 {
 	return 0
 }
 
+///Device specific state
 func (rcv *AoeControlRequest) MutateDeviceState(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(14, n)
 }
 
+///Data buffer
 func (rcv *AoeControlRequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -200,6 +222,7 @@ func (rcv *AoeControlRequest) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer
 func (rcv *AoeControlRequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {

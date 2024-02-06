@@ -8,8 +8,8 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-DATALAYER_DEB_VERSION      := 2.2.0
-DATALAYER_DEB_FILE_VERSION := 2.2.7
+DATALAYER_DEB_VERSION      := 2.4.0
+DATALAYER_DEB_FILE_VERSION := 2.4.5
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 
@@ -37,15 +37,18 @@ test: ## Run unittests
 
 memprofile: ## Run memory profiler
 	@go test -race -short -count=1 -mod=vendor $(TST_LIST) -memprofile mem.pprof -memprofilerate 1
-	@go tool pprof -http=:8080 mem.pprof 
+	@go tool pprof -http=:8080 mem.pprof
 
 cpuprofile: ## Run cpu profiler
-	@go test -race -short -count=1 -mod=vendor $(TST_LIST) -cpuprofile cpu.pprof 
-	@go tool pprof -http=:8080 cpu.pprof 
+	@go test -race -short -count=1 -mod=vendor $(TST_LIST) -cpuprofile cpu.pprof
+	@go tool pprof -http=:8080 cpu.pprof
 
 testcover: ## Run unittests with coverage 'go tool cover -html=coverage.out -o coverage.html'
 	@go test -race -short -count=1 -mod=vendor -coverpkg=$(COV_PKG_LIST) -coverprofile=coverage.out -covermode=atomic $(TST_LIST)
-	
+
+testreport: ## Run unittests with coverage 'go tool cover -html=coverage.out -o coverage.html' and junit report
+	@go test  -v 2>&1 -race -short -count=1 -mod=vendor -coverpkg=$(COV_PKG_LIST) -coverprofile=coverage.out -covermode=atomic $(TST_LIST) | go-junit-report -set-exit-code > test-results.junit.xml
+
 build: go-dep ## Build the samples
 	@CGO_ENABLED=1 go build -mod=vendor -o $(BUILD)/datalayer ./cmd/datalayer
 	@CGO_ENABLED=1 go build -mod=vendor -o $(BUILD)/benchmark ./cmd/benchmark

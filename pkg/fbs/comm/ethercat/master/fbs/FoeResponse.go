@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///FoE response
 type FoeResponseT struct {
 	Data []byte `json:"data"`
 }
@@ -59,6 +60,7 @@ func (rcv *FoeResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Data in binary format
 func (rcv *FoeResponse) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -84,6 +86,7 @@ func (rcv *FoeResponse) DataBytes() []byte {
 	return nil
 }
 
+///Data in binary format
 func (rcv *FoeResponse) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

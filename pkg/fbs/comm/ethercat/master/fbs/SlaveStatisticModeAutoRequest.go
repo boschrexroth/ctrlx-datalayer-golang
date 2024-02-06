@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node sets the auto mode configuration of the slave statistic functionality
 type SlaveStatisticModeAutoRequestT struct {
 	Enable bool `json:"enable"`
 	IdleTime uint32 `json:"idleTime"`
@@ -58,6 +59,7 @@ func (rcv *SlaveStatisticModeAutoRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Enable slave statistic
 func (rcv *SlaveStatisticModeAutoRequest) Enable() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *SlaveStatisticModeAutoRequest) Enable() bool {
 	return false
 }
 
+///Enable slave statistic
 func (rcv *SlaveStatisticModeAutoRequest) MutateEnable(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }
 
+///Set idle time in milliseconds
 func (rcv *SlaveStatisticModeAutoRequest) IdleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *SlaveStatisticModeAutoRequest) IdleTime() uint32 {
 	return 0
 }
 
+///Set idle time in milliseconds
 func (rcv *SlaveStatisticModeAutoRequest) MutateIdleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }

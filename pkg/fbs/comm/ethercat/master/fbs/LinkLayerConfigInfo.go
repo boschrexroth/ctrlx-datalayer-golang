@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This read only node returns the link layer configuration information
 type LinkLayerConfigInfoT struct {
 	Response *LinkLayerConfigInfoResponseT `json:"response"`
 }

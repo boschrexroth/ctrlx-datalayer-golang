@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the CoE (CAN application protocol over EtherCAT) channel info of an EtherCAT slave device
 type ProfileChannelInfoT struct {
 	Request *ProfileChannelInfoRequestT `json:"request"`
 	Response *ProfileChannelInfoResponseT `json:"response"`

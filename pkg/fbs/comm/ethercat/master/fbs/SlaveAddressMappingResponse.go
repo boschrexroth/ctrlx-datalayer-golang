@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave Address Mapping Response
 type SlaveAddressMappingResponseT struct {
 	AddressMappingEntryList []*AddressMappingEntryT `json:"AddressMappingEntryList"`
 }
@@ -74,6 +75,7 @@ func (rcv *SlaveAddressMappingResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///List of found Slaves
 func (rcv *SlaveAddressMappingResponse) AddressMappingEntryList(obj *AddressMappingEntry, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -94,6 +96,7 @@ func (rcv *SlaveAddressMappingResponse) AddressMappingEntryListLength() int {
 	return 0
 }
 
+///List of found Slaves
 func SlaveAddressMappingResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

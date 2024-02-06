@@ -4,11 +4,18 @@ package fbs
 
 import "strconv"
 
+///Topology state:
+///unknown: State is unknown
+///valid: State is valid
+///pending: State is pending
 type TopologyState uint32
 
 const (
+	///State is unknown
 	TopologyStateunknown TopologyState = 0
+	///State is valid
 	TopologyStatevalid   TopologyState = 1
+	///State is pending
 	TopologyStatepending TopologyState = 2
 )
 

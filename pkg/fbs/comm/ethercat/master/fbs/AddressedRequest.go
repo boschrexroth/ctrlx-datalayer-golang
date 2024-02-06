@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Type and value to address a specific slave
 type AddressedRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -58,6 +59,7 @@ func (rcv *AddressedRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: Auto increment address or EtherCAT address 
 func (rcv *AddressedRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *AddressedRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: Auto increment address or EtherCAT address 
 func (rcv *AddressedRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *AddressedRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *AddressedRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *AddressedRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }

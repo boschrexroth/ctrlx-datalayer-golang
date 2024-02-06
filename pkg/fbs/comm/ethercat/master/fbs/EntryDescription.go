@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the CoE Entry description
 type EntryDescriptionT struct {
 	Request *EntryDescriptionRequestT `json:"request"`
 	Response *EntryDescriptionResponseT `json:"response"`

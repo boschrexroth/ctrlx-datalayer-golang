@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave variables config info request
 type SlaveVariablesConfigInfoRequestT struct {
 	AddressedRequest *AddressedRequestT `json:"addressedRequest"`
 	VarType string `json:"varType"`
@@ -63,6 +64,7 @@ func (rcv *SlaveVariablesConfigInfoRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Type and value to address a specific slave
 func (rcv *SlaveVariablesConfigInfoRequest) AddressedRequest(obj *AddressedRequest) *AddressedRequest {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,6 +78,9 @@ func (rcv *SlaveVariablesConfigInfoRequest) AddressedRequest(obj *AddressedReque
 	return nil
 }
 
+///Type and value to address a specific slave
+///Variable type
+///e.g. "input" or "output"
 func (rcv *SlaveVariablesConfigInfoRequest) VarType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,6 +89,8 @@ func (rcv *SlaveVariablesConfigInfoRequest) VarType() []byte {
 	return nil
 }
 
+///Variable type
+///e.g. "input" or "output"
 func SlaveVariablesConfigInfoRequestStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

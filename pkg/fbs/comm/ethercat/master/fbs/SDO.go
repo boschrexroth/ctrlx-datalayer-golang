@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads/writes a Service-Data-Object (SDO) from/to an EtherCAT CoE slave device
 type SDOT struct {
 	Request *SDORequestT `json:"request"`
 	Response *SDOResponseT `json:"response"`

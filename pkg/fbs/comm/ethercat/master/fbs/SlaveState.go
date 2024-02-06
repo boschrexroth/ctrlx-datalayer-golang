@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node sets or gets the EtherCAT state of a slave
 type SlaveStateT struct {
 	Request *SlaveStateRequestT `json:"request"`
 	Response *SlaveStateResponseT `json:"response"`

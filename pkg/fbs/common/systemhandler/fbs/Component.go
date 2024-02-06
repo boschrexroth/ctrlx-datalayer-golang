@@ -5,7 +5,7 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	comm__datalayer "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	comm__datalayer "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 )
 
 /// Information about the component

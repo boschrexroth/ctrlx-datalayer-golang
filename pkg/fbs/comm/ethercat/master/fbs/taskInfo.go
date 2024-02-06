@@ -5,9 +5,10 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/fbs"
+	common__scheduler__fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/fbs"
 )
 
+///Task info
 type taskInfoT struct {
 	Task *common__scheduler__fbs.TaskT `json:"task"`
 	Counter uint64 `json:"counter"`
@@ -61,6 +62,7 @@ func (rcv *taskInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Task from within the EtherCAT master callable will be called
 func (rcv *taskInfo) Task(obj *common__scheduler__fbs.Task) *common__scheduler__fbs.Task {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -74,6 +76,8 @@ func (rcv *taskInfo) Task(obj *common__scheduler__fbs.Task) *common__scheduler__
 	return nil
 }
 
+///Task from within the EtherCAT master callable will be called
+///Life sign counter
 func (rcv *taskInfo) Counter() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,6 +86,7 @@ func (rcv *taskInfo) Counter() uint64 {
 	return 0
 }
 
+///Life sign counter
 func (rcv *taskInfo) MutateCounter(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }

@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave statistic mode auto
+///If the input AutoModeEnable is true, the slave statistic functionality will be enabled. 
+///The idleTime is the time in milliseconds, in which the master does not reads the registers from the slaves
 type SlaveStatisticModeAutoT struct {
 	Request *SlaveStatisticModeAutoRequestT `json:"request"`
 	Response *SlaveStatisticModeAutoResponseT `json:"response"`

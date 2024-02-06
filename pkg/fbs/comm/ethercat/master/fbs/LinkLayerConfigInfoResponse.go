@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Link layer configuration info response
 type LinkLayerConfigInfoResponseT struct {
 	Port string `json:"port"`
 	LinkLayer string `json:"linkLayer"`
@@ -73,6 +74,7 @@ func (rcv *LinkLayerConfigInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Port name
 func (rcv *LinkLayerConfigInfoResponse) Port() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -81,6 +83,8 @@ func (rcv *LinkLayerConfigInfoResponse) Port() []byte {
 	return nil
 }
 
+///Port name
+///Link layer driver
 func (rcv *LinkLayerConfigInfoResponse) LinkLayer() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -89,6 +93,8 @@ func (rcv *LinkLayerConfigInfoResponse) LinkLayer() []byte {
 	return nil
 }
 
+///Link layer driver
+///Arguments for link layer driver
 func (rcv *LinkLayerConfigInfoResponse) Arguments() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -97,6 +103,7 @@ func (rcv *LinkLayerConfigInfoResponse) Arguments() []byte {
 	return nil
 }
 
+///Arguments for link layer driver
 func LinkLayerConfigInfoResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave variable config info response list
 type SlaveVariablesConfigInfoResponseListT struct {
 	SlVarConfInfoResponseList []*SlaveVariablesConfigInfoEntryT `json:"slVarConfInfoResponseList"`
 }

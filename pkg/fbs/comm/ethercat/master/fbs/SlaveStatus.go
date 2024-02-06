@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers the RemoteSlaveStatus value of an EtherCAT slave.
 type SlaveStatusT struct {
 	Request *AddressedRequestT `json:"request"`
 	Response *SlaveStatusResponseT `json:"response"`

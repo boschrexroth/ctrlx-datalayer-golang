@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Set fields to true to reset specific counters
 type FrameStatisticResetRequestT struct {
 	NumTxFrames bool `json:"numTxFrames"`
 	NumRxFrames bool `json:"numRxFrames"`
@@ -79,6 +80,7 @@ func (rcv *FrameStatisticResetRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Reset number of transmitted frames
 func (rcv *FrameStatisticResetRequest) NumTxFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -87,10 +89,12 @@ func (rcv *FrameStatisticResetRequest) NumTxFrames() bool {
 	return false
 }
 
+///Reset number of transmitted frames
 func (rcv *FrameStatisticResetRequest) MutateNumTxFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(4, n)
 }
 
+///Reset number of received frames
 func (rcv *FrameStatisticResetRequest) NumRxFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -99,10 +103,12 @@ func (rcv *FrameStatisticResetRequest) NumRxFrames() bool {
 	return false
 }
 
+///Reset number of received frames
 func (rcv *FrameStatisticResetRequest) MutateNumRxFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
+///Reset number of cyclic frames
 func (rcv *FrameStatisticResetRequest) NumCyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -111,10 +117,12 @@ func (rcv *FrameStatisticResetRequest) NumCyclicFrames() bool {
 	return false
 }
 
+///Reset number of cyclic frames
 func (rcv *FrameStatisticResetRequest) MutateNumCyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+///Reset number of cyclic datagrams
 func (rcv *FrameStatisticResetRequest) NumCyclicDatagrams() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -123,10 +131,12 @@ func (rcv *FrameStatisticResetRequest) NumCyclicDatagrams() bool {
 	return false
 }
 
+///Reset number of cyclic datagrams
 func (rcv *FrameStatisticResetRequest) MutateNumCyclicDatagrams(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
+///Reset number of acyclic frames
 func (rcv *FrameStatisticResetRequest) NumAcyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -135,10 +145,12 @@ func (rcv *FrameStatisticResetRequest) NumAcyclicFrames() bool {
 	return false
 }
 
+///Reset number of acyclic frames
 func (rcv *FrameStatisticResetRequest) MutateNumAcyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }
 
+///Reset number of acyclic datagrams
 func (rcv *FrameStatisticResetRequest) NumAcyclicDatagrams() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -147,10 +159,12 @@ func (rcv *FrameStatisticResetRequest) NumAcyclicDatagrams() bool {
 	return false
 }
 
+///Reset number of acyclic datagrams
 func (rcv *FrameStatisticResetRequest) MutateNumAcyclicDatagrams(n bool) bool {
 	return rcv._tab.MutateBoolSlot(14, n)
 }
 
+///Reset number of total lost frames
 func (rcv *FrameStatisticResetRequest) NumLostFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -159,10 +173,12 @@ func (rcv *FrameStatisticResetRequest) NumLostFrames() bool {
 	return false
 }
 
+///Reset number of total lost frames
 func (rcv *FrameStatisticResetRequest) MutateNumLostFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(16, n)
 }
 
+///Reset number of lost cyclic frames
 func (rcv *FrameStatisticResetRequest) NumLostCyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -171,10 +187,12 @@ func (rcv *FrameStatisticResetRequest) NumLostCyclicFrames() bool {
 	return false
 }
 
+///Reset number of lost cyclic frames
 func (rcv *FrameStatisticResetRequest) MutateNumLostCyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(18, n)
 }
 
+///Reset number of lost acyclic frames
 func (rcv *FrameStatisticResetRequest) NumLostAcyclicFrames() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -183,6 +201,7 @@ func (rcv *FrameStatisticResetRequest) NumLostAcyclicFrames() bool {
 	return false
 }
 
+///Reset number of lost acyclic frames
 func (rcv *FrameStatisticResetRequest) MutateNumLostAcyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(20, n)
 }

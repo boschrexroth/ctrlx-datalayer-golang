@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave address mapping request
+///Only one or no fields required
+///Leave request empty to get a response of all configured slaves
 type SlaveAddressMappingRequestT struct {
 	Address *AddressedRequestT `json:"address"`
 	SlaveName string `json:"slaveName"`
@@ -63,6 +66,7 @@ func (rcv *SlaveAddressMappingRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Type and value to address a specific slave
 func (rcv *SlaveAddressMappingRequest) Address(obj *AddressedRequest) *AddressedRequest {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,6 +80,8 @@ func (rcv *SlaveAddressMappingRequest) Address(obj *AddressedRequest) *Addressed
 	return nil
 }
 
+///Type and value to address a specific slave
+///Slave name as written in configuration
 func (rcv *SlaveAddressMappingRequest) SlaveName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,6 +90,7 @@ func (rcv *SlaveAddressMappingRequest) SlaveName() []byte {
 	return nil
 }
 
+///Slave name as written in configuration
 func SlaveAddressMappingRequestStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

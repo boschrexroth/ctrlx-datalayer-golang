@@ -28,7 +28,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 	a "github.com/stretchr/testify/assert"
 )
 

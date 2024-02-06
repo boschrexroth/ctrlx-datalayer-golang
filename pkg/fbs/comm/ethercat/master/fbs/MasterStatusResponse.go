@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///EtherCAT status
 type MasterStatusResponseT struct {
 	Status uint32 `json:"status"`
 }
@@ -55,6 +56,25 @@ func (rcv *MasterStatusResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Is 0 if master and all slaves are in state "Operational" without any errors
+///Bit 0: No master ethernet link
+///Bit 1: Master not in state "Operational"
+///Bit 2: Master not in requested state
+///Bit 3: Reserved
+///Bit 4: Master in state "Init"
+///Bit 5: Master in state "Pre-Operational"
+///Bit 6: Master in state "Safe-Operational"
+///Bit 7: Reserved
+///Bit 8: Topology not OK (the configured slaves do not match to the online slaves)
+///Bit 9: One or more slaves not in master state
+///Bit 10: One or more slaves indicate error
+///Bit 11: Reserved
+///Bit 12: Distributed Clock (DC) is not within configured limits (only when DC is enabled)
+///Bit 13: Reserved
+///Bit 14: Invalid or inconsistent settings
+///Bit 15: Port not found
+///Bit 16: No license available
+///Bit 17 - 31: Reserved
 func (rcv *MasterStatusResponse) Status() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +83,25 @@ func (rcv *MasterStatusResponse) Status() uint32 {
 	return 0
 }
 
+///Is 0 if master and all slaves are in state "Operational" without any errors
+///Bit 0: No master ethernet link
+///Bit 1: Master not in state "Operational"
+///Bit 2: Master not in requested state
+///Bit 3: Reserved
+///Bit 4: Master in state "Init"
+///Bit 5: Master in state "Pre-Operational"
+///Bit 6: Master in state "Safe-Operational"
+///Bit 7: Reserved
+///Bit 8: Topology not OK (the configured slaves do not match to the online slaves)
+///Bit 9: One or more slaves not in master state
+///Bit 10: One or more slaves indicate error
+///Bit 11: Reserved
+///Bit 12: Distributed Clock (DC) is not within configured limits (only when DC is enabled)
+///Bit 13: Reserved
+///Bit 14: Invalid or inconsistent settings
+///Bit 15: Port not found
+///Bit 16: No license available
+///Bit 17 - 31: Reserved
 func (rcv *MasterStatusResponse) MutateStatus(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

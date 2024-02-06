@@ -1,7 +1,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2021-2022 Bosch Rexroth AG
+ * Copyright (c) 2021-2023 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package datalayer
 import (
 	"sort"
 
-	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -84,6 +84,8 @@ type MetaDataBuilder struct {
 	displayformat  fbs.DisplayFormat
 	refers         map[string]string
 	extensions     map[string]string
+	descriptions   map[string]string
+	displaynames   map[string]string
 }
 
 // NewMetaDataBuilder generates MetaDataBuilder instance
@@ -95,13 +97,21 @@ func NewMetaDataBuilder(a AllowedOperation, desc string, descurl string) *MetaDa
 	m.displayformat = fbs.DisplayFormatAuto
 	m.refers = make(map[string]string)
 	m.extensions = make(map[string]string)
+	m.descriptions = make(map[string]string)
+	m.displaynames = make(map[string]string)
 	m.Operations(a)
 	return m
 }
 
 // Build this instance
 func (m *MetaDataBuilder) Build() *Variant {
-	builder := flatbuffers.NewBuilder(1024)
+	builder := flatbuffers.NewBuilder(4096)
+
+	//Serialize Descriptions data
+	descriptions := m.builddescriptions()
+
+	//Serialize DisplayNames data
+	displaynames := m.builddisplaynames()
 
 	//Serialize References data
 	references := m.buildreferences()
@@ -123,6 +133,8 @@ func (m *MetaDataBuilder) Build() *Variant {
 	meta.Operations = operations
 	meta.References = references
 	meta.Extensions = extensions
+	meta.Descriptions = descriptions
+	meta.DisplayNames = displaynames
 	mi := meta.Pack(builder)
 	builder.Finish(mi)
 	v := NewVariant()
@@ -236,4 +248,41 @@ func ref2name(r ReferenceType) string {
 		return s
 	}
 	return ""
+}
+
+func (m *MetaDataBuilder) builddescriptions() []*fbs.LocaleTextT {
+	return m.buildLocalText(m.descriptions)
+}
+
+func (m *MetaDataBuilder) builddisplaynames() []*fbs.LocaleTextT {
+	return m.buildLocalText(m.displaynames)
+}
+
+func (m *MetaDataBuilder) buildLocalText(l map[string]string) []*fbs.LocaleTextT {
+	texts := []*fbs.LocaleTextT{}
+	keys := sortkeys(l)
+
+	for _, k := range keys {
+		re := m.addLocalText(k, l[k])
+		texts = append(texts, re)
+	}
+
+	return texts
+}
+
+func (m *MetaDataBuilder) addLocalText(key, val string) *fbs.LocaleTextT {
+	lt := &fbs.LocaleTextT{Id: key, Text: val}
+	return lt
+}
+
+// AddLocalizationDescription adds localization of description
+func (m *MetaDataBuilder) AddLocalizationDescription(id, txt string) *MetaDataBuilder {
+	m.descriptions[id] = txt
+	return m
+}
+
+// AddLocalizationDisplayName adds localization of display name
+func (m *MetaDataBuilder) AddLocalizationDisplayName(id, txt string) *MetaDataBuilder {
+	m.displaynames[id] = txt
+	return m
 }

@@ -5,7 +5,7 @@ package fbtypes
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	motion__core__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/core/fbtypes"
+	motion__core__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/motion/core/fbtypes"
 )
 
 /// parameters of the axis position commands

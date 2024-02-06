@@ -12,6 +12,7 @@ type AxsCfgPropertiesT struct {
 	Modulo bool `json:"modulo"`
 	ModuloValue float64 `json:"moduloValue"`
 	ModuloValueUnit string `json:"moduloValueUnit"`
+	AxsCategory *AxsCategoryT `json:"axsCategory"`
 }
 
 func (t *AxsCfgPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,11 +25,13 @@ func (t *AxsCfgPropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffs
 	if t.ModuloValueUnit != "" {
 		moduloValueUnitOffset = builder.CreateString(t.ModuloValueUnit)
 	}
+	axsCategoryOffset := t.AxsCategory.Pack(builder)
 	AxsCfgPropertiesStart(builder)
 	AxsCfgPropertiesAddAxsType(builder, axsTypeOffset)
 	AxsCfgPropertiesAddModulo(builder, t.Modulo)
 	AxsCfgPropertiesAddModuloValue(builder, t.ModuloValue)
 	AxsCfgPropertiesAddModuloValueUnit(builder, moduloValueUnitOffset)
+	AxsCfgPropertiesAddAxsCategory(builder, axsCategoryOffset)
 	return AxsCfgPropertiesEnd(builder)
 }
 
@@ -37,6 +40,7 @@ func (rcv *AxsCfgProperties) UnPackTo(t *AxsCfgPropertiesT) {
 	t.Modulo = rcv.Modulo()
 	t.ModuloValue = rcv.ModuloValue()
 	t.ModuloValueUnit = string(rcv.ModuloValueUnit())
+	t.AxsCategory = rcv.AxsCategory(nil).UnPack()
 }
 
 func (rcv *AxsCfgProperties) UnPack() *AxsCfgPropertiesT {
@@ -121,8 +125,23 @@ func (rcv *AxsCfgProperties) ModuloValueUnit() []byte {
 }
 
 /// unit of moduloValue
+/// axis category (e.g. "ENCODERAXS")
+func (rcv *AxsCfgProperties) AxsCategory(obj *AxsCategory) *AxsCategory {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCategory)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// axis category (e.g. "ENCODERAXS")
 func AxsCfgPropertiesStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func AxsCfgPropertiesAddAxsType(builder *flatbuffers.Builder, axsType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(axsType), 0)
@@ -135,6 +154,9 @@ func AxsCfgPropertiesAddModuloValue(builder *flatbuffers.Builder, moduloValue fl
 }
 func AxsCfgPropertiesAddModuloValueUnit(builder *flatbuffers.Builder, moduloValueUnit flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(moduloValueUnit), 0)
+}
+func AxsCfgPropertiesAddAxsCategory(builder *flatbuffers.Builder, axsCategory flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(axsCategory), 0)
 }
 func AxsCfgPropertiesEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

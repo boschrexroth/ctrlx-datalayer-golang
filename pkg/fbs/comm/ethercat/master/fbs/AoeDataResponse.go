@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Response to AoE data Request
 type AoeDataResponseT struct {
 	Data []byte `json:"data"`
 	ErrorCode uint32 `json:"errorCode"`
@@ -99,6 +100,7 @@ func (rcv *AoeDataResponse) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Error code from AoE header
 func (rcv *AoeDataResponse) ErrorCode() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -107,10 +109,12 @@ func (rcv *AoeDataResponse) ErrorCode() uint32 {
 	return 0
 }
 
+///Error code from AoE header
 func (rcv *AoeDataResponse) MutateErrorCode(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+///Command response from AoE header
 func (rcv *AoeDataResponse) CmdResult() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -119,6 +123,7 @@ func (rcv *AoeDataResponse) CmdResult() uint32 {
 	return 0
 }
 
+///Command response from AoE header
 func (rcv *AoeDataResponse) MutateCmdResult(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }

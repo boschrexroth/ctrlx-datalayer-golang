@@ -66,7 +66,7 @@ func (rcv *RealtimeConfig) DefaultInputAcessType() AccessType {
 	if o != 0 {
 		return AccessType(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 2
+	return 3
 }
 
 /// default buffer type used for Data Layer RT input
@@ -93,7 +93,7 @@ func RealtimeConfigStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
 func RealtimeConfigAddDefaultInputAcessType(builder *flatbuffers.Builder, defaultInputAcessType AccessType) {
-	builder.PrependInt8Slot(0, int8(defaultInputAcessType), 2)
+	builder.PrependInt8Slot(0, int8(defaultInputAcessType), 3)
 }
 func RealtimeConfigAddNTelBufConfig(builder *flatbuffers.Builder, nTelBufConfig flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(nTelBufConfig), 0)

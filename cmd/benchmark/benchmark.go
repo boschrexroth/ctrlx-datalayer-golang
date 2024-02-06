@@ -33,7 +33,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 	"github.com/loov/hrtime/hrplot"
 	"github.com/loov/hrtime/hrtesting"
 )

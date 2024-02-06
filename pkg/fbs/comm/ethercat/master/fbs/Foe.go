@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node up-/downloads files to/from an EtherCAT slave
 type FoeT struct {
 	Request *FoeRequestT `json:"request"`
 	Response *FoeResponseT `json:"response"`

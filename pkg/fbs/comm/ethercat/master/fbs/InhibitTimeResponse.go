@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Inhibit time response
 type InhibitTimeResponseT struct {
 	Time uint32 `json:"time"`
 }
@@ -55,6 +56,7 @@ func (rcv *InhibitTimeResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Inhibit time in milliseconds
 func (rcv *InhibitTimeResponse) Time() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *InhibitTimeResponse) Time() uint32 {
 	return 0
 }
 
+///Inhibit time in milliseconds
 func (rcv *InhibitTimeResponse) MutateTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

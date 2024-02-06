@@ -4,37 +4,39 @@ package datalayer
 
 import (
 	"strconv"
-
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type Properties byte
 
 const (
-	PropertiesNONE             Properties = 0
-	PropertiesSampling         Properties = 1
-	PropertiesQueueing         Properties = 2
-	PropertiesDataChangeFilter Properties = 3
-	PropertiesChangeEvents     Properties = 4
-	PropertiesCounting         Properties = 5
+	PropertiesNONE              Properties = 0
+	PropertiesSampling          Properties = 1
+	PropertiesQueueing          Properties = 2
+	PropertiesDataChangeFilter  Properties = 3
+	PropertiesChangeEvents      Properties = 4
+	PropertiesCounting          Properties = 5
+	PropertiesLosslessRateLimit Properties = 6
 )
 
 var EnumNamesProperties = map[Properties]string{
-	PropertiesNONE:             "NONE",
-	PropertiesSampling:         "Sampling",
-	PropertiesQueueing:         "Queueing",
-	PropertiesDataChangeFilter: "DataChangeFilter",
-	PropertiesChangeEvents:     "ChangeEvents",
-	PropertiesCounting:         "Counting",
+	PropertiesNONE:              "NONE",
+	PropertiesSampling:          "Sampling",
+	PropertiesQueueing:          "Queueing",
+	PropertiesDataChangeFilter:  "DataChangeFilter",
+	PropertiesChangeEvents:      "ChangeEvents",
+	PropertiesCounting:          "Counting",
+	PropertiesLosslessRateLimit: "LosslessRateLimit",
 }
 
 var EnumValuesProperties = map[string]Properties{
-	"NONE":             PropertiesNONE,
-	"Sampling":         PropertiesSampling,
-	"Queueing":         PropertiesQueueing,
-	"DataChangeFilter": PropertiesDataChangeFilter,
-	"ChangeEvents":     PropertiesChangeEvents,
-	"Counting":         PropertiesCounting,
+	"NONE":              PropertiesNONE,
+	"Sampling":          PropertiesSampling,
+	"Queueing":          PropertiesQueueing,
+	"DataChangeFilter":  PropertiesDataChangeFilter,
+	"ChangeEvents":      PropertiesChangeEvents,
+	"Counting":          PropertiesCounting,
+	"LosslessRateLimit": PropertiesLosslessRateLimit,
 }
 
 func (v Properties) String() string {
@@ -64,6 +66,8 @@ func (t *PropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		return t.Value.(*ChangeEventsT).Pack(builder)
 	case PropertiesCounting:
 		return t.Value.(*CountingT).Pack(builder)
+	case PropertiesLosslessRateLimit:
+		return t.Value.(*LosslessRateLimitT).Pack(builder)
 	}
 	return 0
 }
@@ -71,20 +75,29 @@ func (t *PropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 func (rcv Properties) UnPack(table flatbuffers.Table) *PropertiesT {
 	switch rcv {
 	case PropertiesSampling:
-		x := Sampling{_tab: table}
+		var x Sampling
+		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesSampling, Value: x.UnPack() }
 	case PropertiesQueueing:
-		x := Queueing{_tab: table}
+		var x Queueing
+		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesQueueing, Value: x.UnPack() }
 	case PropertiesDataChangeFilter:
-		x := DataChangeFilter{_tab: table}
+		var x DataChangeFilter
+		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesDataChangeFilter, Value: x.UnPack() }
 	case PropertiesChangeEvents:
-		x := ChangeEvents{_tab: table}
+		var x ChangeEvents
+		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesChangeEvents, Value: x.UnPack() }
 	case PropertiesCounting:
-		x := Counting{_tab: table}
+		var x Counting
+		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesCounting, Value: x.UnPack() }
+	case PropertiesLosslessRateLimit:
+		var x LosslessRateLimit
+		x.Init(table.Bytes, table.Pos)
+		return &PropertiesT{ Type: PropertiesLosslessRateLimit, Value: x.UnPack() }
 	}
 	return nil
 }

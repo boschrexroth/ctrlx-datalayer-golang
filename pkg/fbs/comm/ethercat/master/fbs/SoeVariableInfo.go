@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///SoE variable info
 type SoeVariableInfoT struct {
 	ConfigurationListIdn uint16 `json:"configurationListIdn"`
 	Idn uint16 `json:"idn"`
@@ -58,6 +59,7 @@ func (rcv *SoeVariableInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///IDN of configuration list, e.g. (dec) (S-0-0016) 16 
 func (rcv *SoeVariableInfo) ConfigurationListIdn() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -66,10 +68,12 @@ func (rcv *SoeVariableInfo) ConfigurationListIdn() uint16 {
 	return 0
 }
 
+///IDN of configuration list, e.g. (dec) (S-0-0016) 16 
 func (rcv *SoeVariableInfo) MutateConfigurationListIdn(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }
 
+///IDN, e.g. (dec) (S-0-0051) 0051 
 func (rcv *SoeVariableInfo) Idn() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *SoeVariableInfo) Idn() uint16 {
 	return 0
 }
 
+///IDN, e.g. (dec) (S-0-0051) 0051 
 func (rcv *SoeVariableInfo) MutateIdn(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }

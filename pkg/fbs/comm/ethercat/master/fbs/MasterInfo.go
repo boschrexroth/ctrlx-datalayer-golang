@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This read only node returns information about the EtherCAT master
 type MasterInfoT struct {
 	Response *MasterInfoResponseT `json:"response"`
 }

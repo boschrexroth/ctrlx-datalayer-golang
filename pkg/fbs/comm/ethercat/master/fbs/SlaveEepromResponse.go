@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave EEPROM responde
 type SlaveEepromResponseT struct {
 	Data []uint16 `json:"data"`
 }
@@ -68,6 +69,7 @@ func (rcv *SlaveEepromResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Word response data
 func (rcv *SlaveEepromResponse) Data(j int) uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,6 +87,7 @@ func (rcv *SlaveEepromResponse) DataLength() int {
 	return 0
 }
 
+///Word response data
 func (rcv *SlaveEepromResponse) MutateData(j int, n uint16) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {

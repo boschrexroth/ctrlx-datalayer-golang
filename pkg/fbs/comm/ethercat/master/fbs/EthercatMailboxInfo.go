@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///EtherCAT mailbox size info
 type EthercatMailboxInfoT struct {
 	SizeIn uint32 `json:"sizeIn"`
 	SizeOut uint32 `json:"sizeOut"`
@@ -40,16 +41,20 @@ func (rcv *EthercatMailboxInfo) Table() flatbuffers.Table {
 	return rcv._tab.Table
 }
 
+///Mailbox input size in unit of bytes (e.g. ENI: Mailbox/Recv)
 func (rcv *EthercatMailboxInfo) SizeIn() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(0))
 }
+///Mailbox input size in unit of bytes (e.g. ENI: Mailbox/Recv)
 func (rcv *EthercatMailboxInfo) MutateSizeIn(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(0), n)
 }
 
+///Mailbox output size in unit of bytes (e.g. ENI: Mailbox/Send)
 func (rcv *EthercatMailboxInfo) SizeOut() uint32 {
 	return rcv._tab.GetUint32(rcv._tab.Pos + flatbuffers.UOffsetT(4))
 }
+///Mailbox output size in unit of bytes (e.g. ENI: Mailbox/Send)
 func (rcv *EthercatMailboxInfo) MutateSizeOut(n uint32) bool {
 	return rcv._tab.MutateUint32(rcv._tab.Pos+flatbuffers.UOffsetT(4), n)
 }

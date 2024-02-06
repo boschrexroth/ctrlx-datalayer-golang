@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Address mapping entry
 type AddressMappingEntryT struct {
 	Address *AddressedRequestT `json:"address"`
 	SlaveName string `json:"slaveName"`
@@ -63,6 +64,7 @@ func (rcv *AddressMappingEntry) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Type and value to address a specific slave
 func (rcv *AddressMappingEntry) Address(obj *AddressedRequest) *AddressedRequest {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,6 +78,8 @@ func (rcv *AddressMappingEntry) Address(obj *AddressedRequest) *AddressedRequest
 	return nil
 }
 
+///Type and value to address a specific slave
+///Slave name as written in configuration
 func (rcv *AddressMappingEntry) SlaveName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -84,6 +88,7 @@ func (rcv *AddressMappingEntry) SlaveName() []byte {
 	return nil
 }
 
+///Slave name as written in configuration
 func AddressMappingEntryStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

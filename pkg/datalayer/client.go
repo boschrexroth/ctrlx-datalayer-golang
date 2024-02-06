@@ -38,8 +38,8 @@ import (
 	"unsafe"
 
 	// import of c-headers
-	_ "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer/headers"
-	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	_ "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer/headers"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 )
 
 // TimeoutSetting gets the settings of the different timeout values.

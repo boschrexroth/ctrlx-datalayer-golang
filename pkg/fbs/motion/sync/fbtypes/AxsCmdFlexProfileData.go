@@ -10,7 +10,7 @@ import (
 type AxsCmdFlexProfileDataT struct {
 	Master string `json:"master"`
 	SyncSource SyncSource `json:"syncSource"`
-	SyncDirection SyncDirection `json:"syncDirection"`
+	DynSyncDirection DynSyncDirection `json:"dynSyncDirection"`
 	Parameters *AxsCmdFlexProfileParamsT `json:"parameters"`
 	Buffered bool `json:"buffered"`
 }
@@ -25,7 +25,7 @@ func (t *AxsCmdFlexProfileDataT) Pack(builder *flatbuffers.Builder) flatbuffers.
 	AxsCmdFlexProfileDataStart(builder)
 	AxsCmdFlexProfileDataAddMaster(builder, masterOffset)
 	AxsCmdFlexProfileDataAddSyncSource(builder, t.SyncSource)
-	AxsCmdFlexProfileDataAddSyncDirection(builder, t.SyncDirection)
+	AxsCmdFlexProfileDataAddDynSyncDirection(builder, t.DynSyncDirection)
 	AxsCmdFlexProfileDataAddParameters(builder, parametersOffset)
 	AxsCmdFlexProfileDataAddBuffered(builder, t.Buffered)
 	return AxsCmdFlexProfileDataEnd(builder)
@@ -34,7 +34,7 @@ func (t *AxsCmdFlexProfileDataT) Pack(builder *flatbuffers.Builder) flatbuffers.
 func (rcv *AxsCmdFlexProfileData) UnPackTo(t *AxsCmdFlexProfileDataT) {
 	t.Master = string(rcv.Master())
 	t.SyncSource = rcv.SyncSource()
-	t.SyncDirection = rcv.SyncDirection()
+	t.DynSyncDirection = rcv.DynSyncDirection()
 	t.Parameters = rcv.Parameters(nil).UnPack()
 	t.Buffered = rcv.Buffered()
 }
@@ -97,17 +97,17 @@ func (rcv *AxsCmdFlexProfileData) MutateSyncSource(n SyncSource) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
-/// sync direction (ShortestPath)
-func (rcv *AxsCmdFlexProfileData) SyncDirection() SyncDirection {
+/// dynamic sync direction (ShortestWay)
+func (rcv *AxsCmdFlexProfileData) DynSyncDirection() DynSyncDirection {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return SyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return DynSyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-/// sync direction (ShortestPath)
-func (rcv *AxsCmdFlexProfileData) MutateSyncDirection(n SyncDirection) bool {
+/// dynamic sync direction (ShortestWay)
+func (rcv *AxsCmdFlexProfileData) MutateDynSyncDirection(n DynSyncDirection) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
@@ -149,8 +149,8 @@ func AxsCmdFlexProfileDataAddMaster(builder *flatbuffers.Builder, master flatbuf
 func AxsCmdFlexProfileDataAddSyncSource(builder *flatbuffers.Builder, syncSource SyncSource) {
 	builder.PrependInt8Slot(1, int8(syncSource), 0)
 }
-func AxsCmdFlexProfileDataAddSyncDirection(builder *flatbuffers.Builder, syncDirection SyncDirection) {
-	builder.PrependInt8Slot(2, int8(syncDirection), 0)
+func AxsCmdFlexProfileDataAddDynSyncDirection(builder *flatbuffers.Builder, dynSyncDirection DynSyncDirection) {
+	builder.PrependInt8Slot(2, int8(dynSyncDirection), 0)
 }
 func AxsCmdFlexProfileDataAddParameters(builder *flatbuffers.Builder, parameters flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(parameters), 0)

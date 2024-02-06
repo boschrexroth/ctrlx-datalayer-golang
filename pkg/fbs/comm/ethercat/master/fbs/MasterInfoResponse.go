@@ -5,9 +5,10 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	common__scheduler__fbs2 "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/common/scheduler/fbs2"
+	common__scheduler__fbs2 "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/common/scheduler/fbs2"
 )
 
+///Master info response
 type MasterInfoResponseT struct {
 	MasterState *MasterStateResponseT `json:"masterState"`
 	MasterStatus uint32 `json:"masterStatus"`
@@ -116,6 +117,8 @@ func (rcv *MasterInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Returns the current and requested EtherCAT master state.
+///If both are equal, the master is done switching states.
 func (rcv *MasterInfoResponse) MasterState(obj *MasterStateResponse) *MasterStateResponse {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -129,6 +132,9 @@ func (rcv *MasterInfoResponse) MasterState(obj *MasterStateResponse) *MasterStat
 	return nil
 }
 
+///Returns the current and requested EtherCAT master state.
+///If both are equal, the master is done switching states.
+///Master status, 0 = master and all slaves are in Op, no errors or inconsistencies are present
 func (rcv *MasterInfoResponse) MasterStatus() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -137,10 +143,12 @@ func (rcv *MasterInfoResponse) MasterStatus() uint32 {
 	return 0
 }
 
+///Master status, 0 = master and all slaves are in Op, no errors or inconsistencies are present
 func (rcv *MasterInfoResponse) MutateMasterStatus(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+///Checksum elements
 func (rcv *MasterInfoResponse) Checksums(obj *ChecksumElement, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -170,6 +178,8 @@ func (rcv *MasterInfoResponse) ChecksumsLength() int {
 	return 0
 }
 
+///Checksum elements
+///Topology status
 func (rcv *MasterInfoResponse) TopologyStatus(obj *TopologyStatusResponse) *TopologyStatusResponse {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -183,6 +193,8 @@ func (rcv *MasterInfoResponse) TopologyStatus(obj *TopologyStatusResponse) *Topo
 	return nil
 }
 
+///Topology status
+///System time in nanoseconds since 2000-01-01
 func (rcv *MasterInfoResponse) SystemTime() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -191,10 +203,12 @@ func (rcv *MasterInfoResponse) SystemTime() uint64 {
 	return 0
 }
 
+///System time in nanoseconds since 2000-01-01
 func (rcv *MasterInfoResponse) MutateSystemTime(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(12, n)
 }
 
+///Task info
 func (rcv *MasterInfoResponse) TaskInfos(obj *taskInfo, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -215,6 +229,8 @@ func (rcv *MasterInfoResponse) TaskInfosLength() int {
 	return 0
 }
 
+///Task info
+///EtherCAT master component state
 func (rcv *MasterInfoResponse) ComponentState(obj *common__scheduler__fbs2.State) *common__scheduler__fbs2.State {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -228,6 +244,7 @@ func (rcv *MasterInfoResponse) ComponentState(obj *common__scheduler__fbs2.State
 	return nil
 }
 
+///EtherCAT master component state
 func MasterInfoResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

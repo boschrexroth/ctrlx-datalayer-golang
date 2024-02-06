@@ -11,6 +11,7 @@ type TaskSpecsT struct {
 	Name string `json:"name"`
 	Priority string `json:"priority"`
 	Type string `json:"type"`
+	CpuIndex string `json:"cpuIndex"`
 }
 
 func (t *TaskSpecsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -27,10 +28,15 @@ func (t *TaskSpecsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t.Type != "" {
 		type_Offset = builder.CreateString(t.Type)
 	}
+	cpuIndexOffset := flatbuffers.UOffsetT(0)
+	if t.CpuIndex != "" {
+		cpuIndexOffset = builder.CreateString(t.CpuIndex)
+	}
 	TaskSpecsStart(builder)
 	TaskSpecsAddName(builder, nameOffset)
 	TaskSpecsAddPriority(builder, priorityOffset)
 	TaskSpecsAddType(builder, type_Offset)
+	TaskSpecsAddCpuIndex(builder, cpuIndexOffset)
 	return TaskSpecsEnd(builder)
 }
 
@@ -38,6 +44,7 @@ func (rcv *TaskSpecs) UnPackTo(t *TaskSpecsT) {
 	t.Name = string(rcv.Name())
 	t.Priority = string(rcv.Priority())
 	t.Type = string(rcv.Type())
+	t.CpuIndex = string(rcv.CpuIndex())
 }
 
 func (rcv *TaskSpecs) UnPack() *TaskSpecsT {
@@ -154,8 +161,42 @@ func (rcv *TaskSpecs) Type() []byte {
 ///   event           : Execution event of the task ["cyclic"]
 ///   cycle time unit : Supported units are millisecond ["ms"] and microsecond ["µs"]
 ///   digit           : Any digit [0-9]+
+/// Preferred CPU index on which the task should run
+/// Is composed of the preferred CPU type and an index.
+/// The cpu type can be 'rt' for isolated cores or 'nrt' for non-isolated cores.
+/// The index represents the element of a list sorted in ascending order.
+/// If multiple CPU indices are desired they have been separated by ','.
+/// If the desired cpu core is not available the CPU core with the highest index of that type is used.
+/// If 'rt' type is desired and no real time core is available the non-real time core with the highest index is used. At least one 'nrt' core must be available.
+/// When multiple CPU indices are set and no exact matching core is available the the CPU core with the highest index of that type is used.
+///   Allowed values:
+///     "rt" -> The real time core (isolated core) with the highest index is used. If a real time core is available.
+///     "nrt" -> The non real time core with the highest index is used.
+///     "rt/1" -> The real time core with index 1 is used if it is available.
+///     "rt/5,rt/3,rt/0,nrt/5" -> Iterating over all elements and use first matching core.
+func (rcv *TaskSpecs) CpuIndex() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Preferred CPU index on which the task should run
+/// Is composed of the preferred CPU type and an index.
+/// The cpu type can be 'rt' for isolated cores or 'nrt' for non-isolated cores.
+/// The index represents the element of a list sorted in ascending order.
+/// If multiple CPU indices are desired they have been separated by ','.
+/// If the desired cpu core is not available the CPU core with the highest index of that type is used.
+/// If 'rt' type is desired and no real time core is available the non-real time core with the highest index is used. At least one 'nrt' core must be available.
+/// When multiple CPU indices are set and no exact matching core is available the the CPU core with the highest index of that type is used.
+///   Allowed values:
+///     "rt" -> The real time core (isolated core) with the highest index is used. If a real time core is available.
+///     "nrt" -> The non real time core with the highest index is used.
+///     "rt/1" -> The real time core with index 1 is used if it is available.
+///     "rt/5,rt/3,rt/0,nrt/5" -> Iterating over all elements and use first matching core.
 func TaskSpecsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func TaskSpecsAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -165,6 +206,9 @@ func TaskSpecsAddPriority(builder *flatbuffers.Builder, priority flatbuffers.UOf
 }
 func TaskSpecsAddType(builder *flatbuffers.Builder, type_ flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(type_), 0)
+}
+func TaskSpecsAddCpuIndex(builder *flatbuffers.Builder, cpuIndex flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(cpuIndex), 0)
 }
 func TaskSpecsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

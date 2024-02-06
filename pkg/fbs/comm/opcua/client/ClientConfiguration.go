@@ -12,6 +12,7 @@ type ClientConfigurationT struct {
 	SessionConfiguration *SessionConfigurationT `json:"sessionConfiguration"`
 	TimeoutConfiguration *TimeoutConfigurationT `json:"timeoutConfiguration"`
 	Persistent bool `json:"persistent"`
+	AutoReconnect bool `json:"autoReconnect"`
 }
 
 func (t *ClientConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -32,6 +33,7 @@ func (t *ClientConfigurationT) Pack(builder *flatbuffers.Builder) flatbuffers.UO
 	ClientConfigurationAddSessionConfiguration(builder, sessionConfigurationOffset)
 	ClientConfigurationAddTimeoutConfiguration(builder, timeoutConfigurationOffset)
 	ClientConfigurationAddPersistent(builder, t.Persistent)
+	ClientConfigurationAddAutoReconnect(builder, t.AutoReconnect)
 	return ClientConfigurationEnd(builder)
 }
 
@@ -41,6 +43,7 @@ func (rcv *ClientConfiguration) UnPackTo(t *ClientConfigurationT) {
 	t.SessionConfiguration = rcv.SessionConfiguration(nil).UnPack()
 	t.TimeoutConfiguration = rcv.TimeoutConfiguration(nil).UnPack()
 	t.Persistent = rcv.Persistent()
+	t.AutoReconnect = rcv.AutoReconnect()
 }
 
 func (rcv *ClientConfiguration) UnPack() *ClientConfigurationT {
@@ -141,8 +144,22 @@ func (rcv *ClientConfiguration) MutatePersistent(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }
 
+/// If true, the corresponding client session try to connect automatically within the reconnect delay interval in the case the client session is disconnected
+func (rcv *ClientConfiguration) AutoReconnect() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// If true, the corresponding client session try to connect automatically within the reconnect delay interval in the case the client session is disconnected
+func (rcv *ClientConfiguration) MutateAutoReconnect(n bool) bool {
+	return rcv._tab.MutateBoolSlot(14, n)
+}
+
 func ClientConfigurationStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func ClientConfigurationAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -158,6 +175,9 @@ func ClientConfigurationAddTimeoutConfiguration(builder *flatbuffers.Builder, ti
 }
 func ClientConfigurationAddPersistent(builder *flatbuffers.Builder, persistent bool) {
 	builder.PrependBoolSlot(4, persistent, false)
+}
+func ClientConfigurationAddAutoReconnect(builder *flatbuffers.Builder, autoReconnect bool) {
+	builder.PrependBoolSlot(5, autoReconnect, false)
 }
 func ClientConfigurationEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

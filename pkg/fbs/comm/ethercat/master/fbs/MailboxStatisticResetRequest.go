@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Mailbox statistic reset request
 type MailboxStatisticResetRequestT struct {
 	Aoe *ProtocolStatisticResetT `json:"aoe"`
 	Coe *ProtocolStatisticResetT `json:"coe"`
@@ -80,6 +81,7 @@ func (rcv *MailboxStatisticResetRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Reset AoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Aoe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -93,6 +95,8 @@ func (rcv *MailboxStatisticResetRequest) Aoe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset AoE protocol statistic
+///Reset CoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Coe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -106,6 +110,8 @@ func (rcv *MailboxStatisticResetRequest) Coe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset CoE protocol statistic
+///Reset FoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Foe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -119,6 +125,8 @@ func (rcv *MailboxStatisticResetRequest) Foe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset FoE protocol statistic
+///Reset EoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Eoe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -132,6 +140,8 @@ func (rcv *MailboxStatisticResetRequest) Eoe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset EoE protocol statistic
+///Reset SoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Soe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -145,6 +155,8 @@ func (rcv *MailboxStatisticResetRequest) Soe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset SoE protocol statistic
+///Reset VoE protocol statistic
 func (rcv *MailboxStatisticResetRequest) Voe(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -158,6 +170,8 @@ func (rcv *MailboxStatisticResetRequest) Voe(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset VoE protocol statistic
+///Reset raw protocol statistic
 func (rcv *MailboxStatisticResetRequest) Raw(obj *ProtocolStatisticReset) *ProtocolStatisticReset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -171,6 +185,7 @@ func (rcv *MailboxStatisticResetRequest) Raw(obj *ProtocolStatisticReset) *Proto
 	return nil
 }
 
+///Reset raw protocol statistic
 func MailboxStatisticResetRequestStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

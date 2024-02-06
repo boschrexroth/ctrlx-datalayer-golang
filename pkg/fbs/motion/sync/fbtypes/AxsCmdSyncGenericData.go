@@ -10,6 +10,7 @@ import (
 type AxsCmdSyncGenericDataT struct {
 	Master string `json:"master"`
 	Pipeline string `json:"pipeline"`
+	SyncSource SyncSource `json:"syncSource"`
 	Buffered bool `json:"buffered"`
 }
 
@@ -26,6 +27,7 @@ func (t *AxsCmdSyncGenericDataT) Pack(builder *flatbuffers.Builder) flatbuffers.
 	AxsCmdSyncGenericDataStart(builder)
 	AxsCmdSyncGenericDataAddMaster(builder, masterOffset)
 	AxsCmdSyncGenericDataAddPipeline(builder, pipelineOffset)
+	AxsCmdSyncGenericDataAddSyncSource(builder, t.SyncSource)
 	AxsCmdSyncGenericDataAddBuffered(builder, t.Buffered)
 	return AxsCmdSyncGenericDataEnd(builder)
 }
@@ -33,6 +35,7 @@ func (t *AxsCmdSyncGenericDataT) Pack(builder *flatbuffers.Builder) flatbuffers.
 func (rcv *AxsCmdSyncGenericData) UnPackTo(t *AxsCmdSyncGenericDataT) {
 	t.Master = string(rcv.Master())
 	t.Pipeline = string(rcv.Pipeline())
+	t.SyncSource = rcv.SyncSource()
 	t.Buffered = rcv.Buffered()
 }
 
@@ -90,9 +93,23 @@ func (rcv *AxsCmdSyncGenericData) Pipeline() []byte {
 }
 
 /// name of the pipeline
+/// Sync source
+func (rcv *AxsCmdSyncGenericData) SyncSource() SyncSource {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return SyncSource(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+/// Sync source
+func (rcv *AxsCmdSyncGenericData) MutateSyncSource(n SyncSource) bool {
+	return rcv._tab.MutateInt8Slot(8, int8(n))
+}
+
 /// should this be a buffered command?
 func (rcv *AxsCmdSyncGenericData) Buffered() bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
@@ -101,11 +118,11 @@ func (rcv *AxsCmdSyncGenericData) Buffered() bool {
 
 /// should this be a buffered command?
 func (rcv *AxsCmdSyncGenericData) MutateBuffered(n bool) bool {
-	return rcv._tab.MutateBoolSlot(8, n)
+	return rcv._tab.MutateBoolSlot(10, n)
 }
 
 func AxsCmdSyncGenericDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func AxsCmdSyncGenericDataAddMaster(builder *flatbuffers.Builder, master flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(master), 0)
@@ -113,8 +130,11 @@ func AxsCmdSyncGenericDataAddMaster(builder *flatbuffers.Builder, master flatbuf
 func AxsCmdSyncGenericDataAddPipeline(builder *flatbuffers.Builder, pipeline flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(pipeline), 0)
 }
+func AxsCmdSyncGenericDataAddSyncSource(builder *flatbuffers.Builder, syncSource SyncSource) {
+	builder.PrependInt8Slot(2, int8(syncSource), 0)
+}
 func AxsCmdSyncGenericDataAddBuffered(builder *flatbuffers.Builder, buffered bool) {
-	builder.PrependBoolSlot(2, buffered, false)
+	builder.PrependBoolSlot(3, buffered, false)
 }
 func AxsCmdSyncGenericDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

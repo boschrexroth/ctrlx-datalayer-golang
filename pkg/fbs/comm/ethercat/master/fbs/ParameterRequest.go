@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///The parameter is addressed with IDN, elementFlags and driveNumber.
 type ParameterRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -77,6 +78,10 @@ func (rcv *ParameterRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ParameterRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -85,10 +90,15 @@ func (rcv *ParameterRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *ParameterRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType.
 func (rcv *ParameterRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -97,10 +107,12 @@ func (rcv *ParameterRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType.
 func (rcv *ParameterRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Number of the drive (with a single-axis DriveNo = ‘0’, etc.)
 func (rcv *ParameterRequest) DriveNumber() byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -109,10 +121,20 @@ func (rcv *ParameterRequest) DriveNumber() byte {
 	return 0
 }
 
+///Number of the drive (with a single-axis DriveNo = ‘0’, etc.)
 func (rcv *ParameterRequest) MutateDriveNumber(n byte) bool {
 	return rcv._tab.MutateByteSlot(8, n)
 }
 
+///The SoE Element-Flags indicating which element of an IDN are read or written
+///dataState    Bit 0: Service channel data status
+///name         Bit 1: Name 
+///attribute    Bit 2: Attribute
+///unit         Bit 3: Unit 
+///minValue     Bit 4: Min value 
+///maxValue     Bit 5: Max value 
+///value        Bit 6: Operation data
+///defaultValue Bit 7: Default value 
 func (rcv *ParameterRequest) ElementFlags() ElementFlags {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -121,10 +143,20 @@ func (rcv *ParameterRequest) ElementFlags() ElementFlags {
 	return 0
 }
 
+///The SoE Element-Flags indicating which element of an IDN are read or written
+///dataState    Bit 0: Service channel data status
+///name         Bit 1: Name 
+///attribute    Bit 2: Attribute
+///unit         Bit 3: Unit 
+///minValue     Bit 4: Min value 
+///maxValue     Bit 5: Max value 
+///value        Bit 6: Operation data
+///defaultValue Bit 7: Default value 
 func (rcv *ParameterRequest) MutateElementFlags(n ElementFlags) bool {
 	return rcv._tab.MutateByteSlot(10, byte(n))
 }
 
+///IDN number
 func (rcv *ParameterRequest) Idn() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -133,10 +165,13 @@ func (rcv *ParameterRequest) Idn() uint16 {
 	return 0
 }
 
+///IDN number
 func (rcv *ParameterRequest) MutateIdn(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(12, n)
 }
 
+///Data buffer
+///Note: In case of list parameters, Byte 0-1 of the data is the actual length, Byte 2-3 is the maximum length and the data starts at Byte 4.
 func (rcv *ParameterRequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -162,6 +197,8 @@ func (rcv *ParameterRequest) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer
+///Note: In case of list parameters, Byte 0-1 of the data is the actual length, Byte 2-3 is the maximum length and the data starts at Byte 4.
 func (rcv *ParameterRequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -171,6 +208,7 @@ func (rcv *ParameterRequest) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Maximal length of written data in bytes
 func (rcv *ParameterRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -179,6 +217,7 @@ func (rcv *ParameterRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Maximal length of written data in bytes
 func (rcv *ParameterRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }

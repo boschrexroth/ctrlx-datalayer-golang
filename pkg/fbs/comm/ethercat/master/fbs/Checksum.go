@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns the checksum of the configuration, e.g.checksum of eni and ini file
 type ChecksumT struct {
 	Response *ChecksumResponseT `json:"response"`
 }

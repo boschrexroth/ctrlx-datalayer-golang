@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///EoE Configuration for the requested Slave
 type EoeConfigInfoResponseT struct {
 	MacAddress []byte `json:"macAddress"`
 	IpAddress []byte `json:"ipAddress"`
@@ -94,6 +95,8 @@ func (rcv *EoeConfigInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Mac Address
+///e.g. [ 2, 1, 5, 16, 3, 233] (dec) equals IEEE 802 notation: 02-01-05-10-03-E9 
 func (rcv *EoeConfigInfoResponse) MacAddress(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -119,6 +122,8 @@ func (rcv *EoeConfigInfoResponse) MacAddressBytes() []byte {
 	return nil
 }
 
+///Mac Address
+///e.g. [ 2, 1, 5, 16, 3, 233] (dec) equals IEEE 802 notation: 02-01-05-10-03-E9 
 func (rcv *EoeConfigInfoResponse) MutateMacAddress(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -128,6 +133,8 @@ func (rcv *EoeConfigInfoResponse) MutateMacAddress(j int, n byte) bool {
 	return false
 }
 
+///IP Address
+///e.g. [1, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.1
 func (rcv *EoeConfigInfoResponse) IpAddress(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -153,6 +160,8 @@ func (rcv *EoeConfigInfoResponse) IpAddressBytes() []byte {
 	return nil
 }
 
+///IP Address
+///e.g. [1, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.1
 func (rcv *EoeConfigInfoResponse) MutateIpAddress(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -162,6 +171,7 @@ func (rcv *EoeConfigInfoResponse) MutateIpAddress(j int, n byte) bool {
 	return false
 }
 
+///Subnet Mask
 func (rcv *EoeConfigInfoResponse) SubnetMask(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -187,6 +197,7 @@ func (rcv *EoeConfigInfoResponse) SubnetMaskBytes() []byte {
 	return nil
 }
 
+///Subnet Mask
 func (rcv *EoeConfigInfoResponse) MutateSubnetMask(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -196,6 +207,8 @@ func (rcv *EoeConfigInfoResponse) MutateSubnetMask(j int, n byte) bool {
 	return false
 }
 
+///Default Gateway
+///e.g. [253, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.253
 func (rcv *EoeConfigInfoResponse) DefaultGateway(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -221,6 +234,8 @@ func (rcv *EoeConfigInfoResponse) DefaultGatewayBytes() []byte {
 	return nil
 }
 
+///Default Gateway
+///e.g. [253, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.253
 func (rcv *EoeConfigInfoResponse) MutateDefaultGateway(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -230,6 +245,8 @@ func (rcv *EoeConfigInfoResponse) MutateDefaultGateway(j int, n byte) bool {
 	return false
 }
 
+///DNS IP
+///e.g. [253, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.253
 func (rcv *EoeConfigInfoResponse) DnsIpAddress(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -255,6 +272,8 @@ func (rcv *EoeConfigInfoResponse) DnsIpAddressBytes() []byte {
 	return nil
 }
 
+///DNS IP
+///e.g. [253, 254, 31, 172] (dec) equals dot-decimal notation: 172.31.254.253
 func (rcv *EoeConfigInfoResponse) MutateDnsIpAddress(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -264,6 +283,7 @@ func (rcv *EoeConfigInfoResponse) MutateDnsIpAddress(j int, n byte) bool {
 	return false
 }
 
+///DNS name
 func (rcv *EoeConfigInfoResponse) DnsName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -272,6 +292,7 @@ func (rcv *EoeConfigInfoResponse) DnsName() []byte {
 	return nil
 }
 
+///DNS name
 func EoeConfigInfoResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(6)
 }

@@ -5,7 +5,7 @@ package fbtypes
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/motion/sync/fbtypes"
+	motion__sync__fbtypes "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/motion/sync/fbtypes"
 )
 
 /// configuration for specific functions of this axis
@@ -13,6 +13,8 @@ type AxsCfgFunctionsT struct {
 	Coupling *AxsCfgCouplingT `json:"coupling"`
 	CalculationPipelines []*motion__sync__fbtypes.CalcPipelineCfgT `json:"calculationPipelines"`
 	PosMode *AxsCfgPosModeT `json:"posMode"`
+	Extrapolation *AxsCfgExtrapolationT `json:"extrapolation"`
+	AxsEncoder *AxsCfgEncoderT `json:"axsEncoder"`
 }
 
 func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -32,10 +34,14 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 		calculationPipelinesOffset = builder.EndVector(calculationPipelinesLength)
 	}
 	posModeOffset := t.PosMode.Pack(builder)
+	extrapolationOffset := t.Extrapolation.Pack(builder)
+	axsEncoderOffset := t.AxsEncoder.Pack(builder)
 	AxsCfgFunctionsStart(builder)
 	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
 	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
 	AxsCfgFunctionsAddPosMode(builder, posModeOffset)
+	AxsCfgFunctionsAddExtrapolation(builder, extrapolationOffset)
+	AxsCfgFunctionsAddAxsEncoder(builder, axsEncoderOffset)
 	return AxsCfgFunctionsEnd(builder)
 }
 
@@ -49,6 +55,8 @@ func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
 		t.CalculationPipelines[j] = x.UnPack()
 	}
 	t.PosMode = rcv.PosMode(nil).UnPack()
+	t.Extrapolation = rcv.Extrapolation(nil).UnPack()
+	t.AxsEncoder = rcv.AxsEncoder(nil).UnPack()
 }
 
 func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
@@ -137,8 +145,38 @@ func (rcv *AxsCfgFunctions) PosMode(obj *AxsCfgPosMode) *AxsCfgPosMode {
 }
 
 /// configuration for position mode function parameters for a single axis
+/// extrapolation parameters for a single axis
+func (rcv *AxsCfgFunctions) Extrapolation(obj *AxsCfgExtrapolation) *AxsCfgExtrapolation {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgExtrapolation)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// extrapolation parameters for a single axis
+/// configuration for encoder axis
+func (rcv *AxsCfgFunctions) AxsEncoder(obj *AxsCfgEncoder) *AxsCfgEncoder {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgEncoder)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration for encoder axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(5)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
@@ -151,6 +189,12 @@ func AxsCfgFunctionsStartCalculationPipelinesVector(builder *flatbuffers.Builder
 }
 func AxsCfgFunctionsAddPosMode(builder *flatbuffers.Builder, posMode flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(posMode), 0)
+}
+func AxsCfgFunctionsAddExtrapolation(builder *flatbuffers.Builder, extrapolation flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(extrapolation), 0)
+}
+func AxsCfgFunctionsAddAxsEncoder(builder *flatbuffers.Builder, axsEncoder flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(axsEncoder), 0)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -11,7 +11,7 @@ type AxsCmdGearInPosDataT struct {
 	Master string `json:"master"`
 	SyncSource SyncSource `json:"syncSource"`
 	SyncMode SyncMode `json:"syncMode"`
-	SyncDirection SyncDirection `json:"syncDirection"`
+	DynSyncDirection DynSyncDirection `json:"dynSyncDirection"`
 	Parameters *AxsCmdGearInPosParamsT `json:"parameters"`
 	Buffered bool `json:"buffered"`
 }
@@ -27,7 +27,7 @@ func (t *AxsCmdGearInPosDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UO
 	AxsCmdGearInPosDataAddMaster(builder, masterOffset)
 	AxsCmdGearInPosDataAddSyncSource(builder, t.SyncSource)
 	AxsCmdGearInPosDataAddSyncMode(builder, t.SyncMode)
-	AxsCmdGearInPosDataAddSyncDirection(builder, t.SyncDirection)
+	AxsCmdGearInPosDataAddDynSyncDirection(builder, t.DynSyncDirection)
 	AxsCmdGearInPosDataAddParameters(builder, parametersOffset)
 	AxsCmdGearInPosDataAddBuffered(builder, t.Buffered)
 	return AxsCmdGearInPosDataEnd(builder)
@@ -37,7 +37,7 @@ func (rcv *AxsCmdGearInPosData) UnPackTo(t *AxsCmdGearInPosDataT) {
 	t.Master = string(rcv.Master())
 	t.SyncSource = rcv.SyncSource()
 	t.SyncMode = rcv.SyncMode()
-	t.SyncDirection = rcv.SyncDirection()
+	t.DynSyncDirection = rcv.DynSyncDirection()
 	t.Parameters = rcv.Parameters(nil).UnPack()
 	t.Buffered = rcv.Buffered()
 }
@@ -86,7 +86,7 @@ func (rcv *AxsCmdGearInPosData) Master() []byte {
 }
 
 /// name of the master axis
-/// sync source (Actual/Setpoint)
+/// sync source (Actual/Setpoint/Actual-extrapolated)
 func (rcv *AxsCmdGearInPosData) SyncSource() SyncSource {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -95,7 +95,7 @@ func (rcv *AxsCmdGearInPosData) SyncSource() SyncSource {
 	return 0
 }
 
-/// sync source (Actual/Setpoint)
+/// sync source (Actual/Setpoint/Actual-extrapolated)
 func (rcv *AxsCmdGearInPosData) MutateSyncSource(n SyncSource) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
@@ -114,17 +114,17 @@ func (rcv *AxsCmdGearInPosData) MutateSyncMode(n SyncMode) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
-/// sync direction (SlowDown/CatchUp/ShortestPath)
-func (rcv *AxsCmdGearInPosData) SyncDirection() SyncDirection {
+/// dynamic sync direction (Positive/Negative/ShortestWay)
+func (rcv *AxsCmdGearInPosData) DynSyncDirection() DynSyncDirection {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
-		return SyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
+		return DynSyncDirection(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-/// sync direction (SlowDown/CatchUp/ShortestPath)
-func (rcv *AxsCmdGearInPosData) MutateSyncDirection(n SyncDirection) bool {
+/// dynamic sync direction (Positive/Negative/ShortestWay)
+func (rcv *AxsCmdGearInPosData) MutateDynSyncDirection(n DynSyncDirection) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
@@ -169,8 +169,8 @@ func AxsCmdGearInPosDataAddSyncSource(builder *flatbuffers.Builder, syncSource S
 func AxsCmdGearInPosDataAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
 	builder.PrependInt8Slot(2, int8(syncMode), 0)
 }
-func AxsCmdGearInPosDataAddSyncDirection(builder *flatbuffers.Builder, syncDirection SyncDirection) {
-	builder.PrependInt8Slot(3, int8(syncDirection), 0)
+func AxsCmdGearInPosDataAddDynSyncDirection(builder *flatbuffers.Builder, dynSyncDirection DynSyncDirection) {
+	builder.PrependInt8Slot(3, int8(dynSyncDirection), 0)
 }
 func AxsCmdGearInPosDataAddParameters(builder *flatbuffers.Builder, parameters flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(parameters), 0)

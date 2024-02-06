@@ -6,6 +6,10 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads data from an AoE EtherCAT device.
+///The ADS device is addressed with target Net Id and the object with “IndexGroup”, “IndexOffset”.
+///The slave must support the mailbox protocol “ADS (Automation Device Specification) over EtherCAT” (AoE).
+///The slave must be in EtherCAT state PreOP, SafeOP or OP for mailbox communication.
 type AoeDataRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -84,6 +88,10 @@ func (rcv *AoeDataRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *AoeDataRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -92,10 +100,15 @@ func (rcv *AoeDataRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *AoeDataRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType
 func (rcv *AoeDataRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -104,10 +117,13 @@ func (rcv *AoeDataRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType
 func (rcv *AoeDataRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///AoE target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeDataRequest) TargetNetId(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -133,6 +149,8 @@ func (rcv *AoeDataRequest) TargetNetIdBytes() []byte {
 	return nil
 }
 
+///AoE target Net Id of the device
+///e.g. [172,31,254,254,0,254] (dec) equals dot-decimal notation: 172.31.254.254.0.254
 func (rcv *AoeDataRequest) MutateTargetNetId(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -142,6 +160,7 @@ func (rcv *AoeDataRequest) MutateTargetNetId(j int, n byte) bool {
 	return false
 }
 
+///Target port number  
 func (rcv *AoeDataRequest) TargetPort() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -150,10 +169,12 @@ func (rcv *AoeDataRequest) TargetPort() uint16 {
 	return 0
 }
 
+///Target port number  
 func (rcv *AoeDataRequest) MutateTargetPort(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(10, n)
 }
 
+///AoE read command index group
 func (rcv *AoeDataRequest) IndexGroup() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -162,10 +183,12 @@ func (rcv *AoeDataRequest) IndexGroup() uint32 {
 	return 0
 }
 
+///AoE read command index group
 func (rcv *AoeDataRequest) MutateIndexGroup(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+///AoE read command index offset
 func (rcv *AoeDataRequest) IndexOffset() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -174,10 +197,12 @@ func (rcv *AoeDataRequest) IndexOffset() uint32 {
 	return 0
 }
 
+///AoE read command index offset
 func (rcv *AoeDataRequest) MutateIndexOffset(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+///Data buffer to be written
 func (rcv *AoeDataRequest) Data(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -203,6 +228,7 @@ func (rcv *AoeDataRequest) DataBytes() []byte {
 	return nil
 }
 
+///Data buffer to be written
 func (rcv *AoeDataRequest) MutateData(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -212,6 +238,7 @@ func (rcv *AoeDataRequest) MutateData(j int, n byte) bool {
 	return false
 }
 
+///Size of data to be read in bytes
 func (rcv *AoeDataRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -220,6 +247,7 @@ func (rcv *AoeDataRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Size of data to be read in bytes
 func (rcv *AoeDataRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(18, n)
 }

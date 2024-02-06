@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Profile channel info response
 type ProfileChannelInfoResponseT struct {
 	ProfileNo uint16 `json:"ProfileNo"`
 	AddInfo uint16 `json:"AddInfo"`
@@ -65,6 +66,7 @@ func (rcv *ProfileChannelInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Profile number of this device, e.g. 5001 for Modular Device Profile
 func (rcv *ProfileChannelInfoResponse) ProfileNo() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,10 +75,12 @@ func (rcv *ProfileChannelInfoResponse) ProfileNo() uint16 {
 	return 0
 }
 
+///Profile number of this device, e.g. 5001 for Modular Device Profile
 func (rcv *ProfileChannelInfoResponse) MutateProfileNo(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(4, n)
 }
 
+///Additional profile info number of this channel, e.g. Channel Profile for Encoders
 func (rcv *ProfileChannelInfoResponse) AddInfo() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -85,10 +89,12 @@ func (rcv *ProfileChannelInfoResponse) AddInfo() uint16 {
 	return 0
 }
 
+///Additional profile info number of this channel, e.g. Channel Profile for Encoders
 func (rcv *ProfileChannelInfoResponse) MutateAddInfo(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Displayed name of this channel, e.g. Encoder 1
 func (rcv *ProfileChannelInfoResponse) DisplayName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -97,6 +103,7 @@ func (rcv *ProfileChannelInfoResponse) DisplayName() []byte {
 	return nil
 }
 
+///Displayed name of this channel, e.g. Encoder 1
 func ProfileChannelInfoResponseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

@@ -6,6 +6,9 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node reads/writes a parameter from/to an EtherCAT slave device. 
+///The slave must support the mailbox protocol SoE (Servo drive over EtherCAT). 
+///Note: the Slave must be in EtherCAT state PreOP, SafeOP or OP for mailbox communication.
 type ParameterT struct {
 	Request *ParameterRequestT `json:"request"`
 	Response *ParameterResponseT `json:"response"`

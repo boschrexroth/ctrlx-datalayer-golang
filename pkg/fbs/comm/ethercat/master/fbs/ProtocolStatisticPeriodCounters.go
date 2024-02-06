@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Protocol statistics period counters, since last restart/reset or last second
 type ProtocolStatisticPeriodCountersT struct {
 	Total *ProtocolStatisticCountersT `json:"total"`
 	LastSecond *ProtocolStatisticCountersT `json:"lastSecond"`

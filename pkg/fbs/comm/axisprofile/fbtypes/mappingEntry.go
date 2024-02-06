@@ -11,6 +11,7 @@ type mappingEntryT struct {
 	ValueId string `json:"valueID"`
 	DatalayerUri string `json:"datalayerURI"`
 	ProfileVar variableType `json:"profileVar"`
+	Required bool `json:"required"`
 }
 
 func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -27,6 +28,7 @@ func (t *mappingEntryT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	mappingEntryAddValueId(builder, valueIdOffset)
 	mappingEntryAddDatalayerUri(builder, datalayerUriOffset)
 	mappingEntryAddProfileVar(builder, t.ProfileVar)
+	mappingEntryAddRequired(builder, t.Required)
 	return mappingEntryEnd(builder)
 }
 
@@ -34,6 +36,7 @@ func (rcv *mappingEntry) UnPackTo(t *mappingEntryT) {
 	t.ValueId = string(rcv.ValueId())
 	t.DatalayerUri = string(rcv.DatalayerUri())
 	t.ProfileVar = rcv.ProfileVar()
+	t.Required = rcv.Required()
 }
 
 func (rcv *mappingEntry) UnPack() *mappingEntryT {
@@ -70,6 +73,7 @@ func (rcv *mappingEntry) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Id-string of the mapping entry
 func (rcv *mappingEntry) ValueId() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -78,6 +82,7 @@ func (rcv *mappingEntry) ValueId() []byte {
 	return nil
 }
 
+/// Id-string of the mapping entry
 func mappingEntryKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj1 := &mappingEntry{}
 	obj2 := &mappingEntry{}
@@ -110,6 +115,7 @@ func (rcv *mappingEntry) LookupByKey(key string, vectorLocation flatbuffers.UOff
 	return false
 }
 
+/// datalayer uri of the mapping entry
 func (rcv *mappingEntry) DatalayerUri() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -118,6 +124,8 @@ func (rcv *mappingEntry) DatalayerUri() []byte {
 	return nil
 }
 
+/// datalayer uri of the mapping entry
+/// variable type of mapped variable
 func (rcv *mappingEntry) ProfileVar() variableType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -126,12 +134,27 @@ func (rcv *mappingEntry) ProfileVar() variableType {
 	return 0
 }
 
+/// variable type of mapped variable
 func (rcv *mappingEntry) MutateProfileVar(n variableType) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
+/// is current item is required
+func (rcv *mappingEntry) Required() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// is current item is required
+func (rcv *mappingEntry) MutateRequired(n bool) bool {
+	return rcv._tab.MutateBoolSlot(10, n)
+}
+
 func mappingEntryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func mappingEntryAddValueId(builder *flatbuffers.Builder, valueId flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(valueId), 0)
@@ -141,6 +164,9 @@ func mappingEntryAddDatalayerUri(builder *flatbuffers.Builder, datalayerUri flat
 }
 func mappingEntryAddProfileVar(builder *flatbuffers.Builder, profileVar variableType) {
 	builder.PrependInt8Slot(2, int8(profileVar), 0)
+}
+func mappingEntryAddRequired(builder *flatbuffers.Builder, required bool) {
+	builder.PrependBoolSlot(3, required, false)
 }
 func mappingEntryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

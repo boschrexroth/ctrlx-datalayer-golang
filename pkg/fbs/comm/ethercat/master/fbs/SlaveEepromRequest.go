@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Slave EEPROM request
 type SlaveEepromRequestT struct {
 	AddressType Addresstype `json:"addressType"`
 	Address uint16 `json:"address"`
@@ -80,6 +81,10 @@ func (rcv *SlaveEepromRequest) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveEepromRequest) AddressType() Addresstype {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -88,10 +93,15 @@ func (rcv *SlaveEepromRequest) AddressType() Addresstype {
 	return 0
 }
 
+///Address type: 
+///undefined: Undefined - do not use
+///autoincrement: Auto increment address
+///fixedphysical: EtherCAT address (fixed physical address)
 func (rcv *SlaveEepromRequest) MutateAddressType(n Addresstype) bool {
 	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
+///Address depending on addressType.
 func (rcv *SlaveEepromRequest) Address() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -100,10 +110,12 @@ func (rcv *SlaveEepromRequest) Address() uint16 {
 	return 0
 }
 
+///Address depending on addressType.
 func (rcv *SlaveEepromRequest) MutateAddress(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///EEPROM offset, Word address to start EEPROM read/write from
 func (rcv *SlaveEepromRequest) EepromOffset() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -112,10 +124,12 @@ func (rcv *SlaveEepromRequest) EepromOffset() uint16 {
 	return 0
 }
 
+///EEPROM offset, Word address to start EEPROM read/write from
 func (rcv *SlaveEepromRequest) MutateEepromOffset(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(8, n)
 }
 
+///Data buffer for data
 func (rcv *SlaveEepromRequest) Data(j int) uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -133,6 +147,7 @@ func (rcv *SlaveEepromRequest) DataLength() int {
 	return 0
 }
 
+///Data buffer for data
 func (rcv *SlaveEepromRequest) MutateData(j int, n uint16) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -142,6 +157,7 @@ func (rcv *SlaveEepromRequest) MutateData(j int, n uint16) bool {
 	return false
 }
 
+///Max amount of elements in data buffer
 func (rcv *SlaveEepromRequest) MaxLength() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -150,6 +166,7 @@ func (rcv *SlaveEepromRequest) MaxLength() uint32 {
 	return 0
 }
 
+///Max amount of elements in data buffer
 func (rcv *SlaveEepromRequest) MutateMaxLength(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }

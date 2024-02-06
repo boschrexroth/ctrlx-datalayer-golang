@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Number of configured mailbox slaves response
 type NumConfiguredMailboxSlavesResponseT struct {
 	NumSlaves uint32 `json:"numSlaves"`
 }
@@ -55,6 +56,7 @@ func (rcv *NumConfiguredMailboxSlavesResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Number of configured mailbox slaves
 func (rcv *NumConfiguredMailboxSlavesResponse) NumSlaves() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +65,7 @@ func (rcv *NumConfiguredMailboxSlavesResponse) NumSlaves() uint32 {
 	return 0
 }
 
+///Number of configured mailbox slaves
 func (rcv *NumConfiguredMailboxSlavesResponse) MutateNumSlaves(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node delivers slave info data of currently connected slave from the EtherCAT Master.
 type SlaveOnlineInfoT struct {
 	Request *AddressedRequestT `json:"request"`
 	Response *SlaveOnlineInfoResponseT `json:"response"`

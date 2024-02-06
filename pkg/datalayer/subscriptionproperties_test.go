@@ -26,7 +26,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	fbs "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 	"github.com/oliveagle/jsonpath"
 	"github.com/stretchr/testify/assert"
 )

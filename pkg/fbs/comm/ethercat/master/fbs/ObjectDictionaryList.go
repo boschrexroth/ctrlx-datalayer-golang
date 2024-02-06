@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node returns a list of object indices which are available in an EtherCAT CoE device
 type ObjectDictionaryListT struct {
 	Request *ObjectDictionaryListRequestT `json:"request"`
 	Response *ObjectDictionaryListResponseT `json:"response"`

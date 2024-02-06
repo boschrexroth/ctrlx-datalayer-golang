@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///This node resets the mailbox statistic counters
 type MailboxStatisticResetT struct {
 	Request *MailboxStatisticResetRequestT `json:"request"`
 	Response *MailboxStatisticResetResponseT `json:"response"`

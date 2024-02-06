@@ -5,9 +5,10 @@ package fbs
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	comm__datalayer "github.com/boschrexroth/ctrlx-datalayer-golang/pkg/fbs/comm/datalayer"
+	comm__datalayer "github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/fbs/comm/datalayer"
 )
 
+///Slave variable config info entry
 type SlaveVariablesConfigInfoEntryT struct {
 	VariableInfo *comm__datalayer.VariableT `json:"variableInfo"`
 	EtgBaseType uint16 `json:"etgBaseType"`
@@ -65,6 +66,7 @@ func (rcv *SlaveVariablesConfigInfoEntry) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Variable info
 func (rcv *SlaveVariablesConfigInfoEntry) VariableInfo(obj *comm__datalayer.Variable) *comm__datalayer.Variable {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -78,6 +80,8 @@ func (rcv *SlaveVariablesConfigInfoEntry) VariableInfo(obj *comm__datalayer.Vari
 	return nil
 }
 
+///Variable info
+///Base data type according to ETG 1020
 func (rcv *SlaveVariablesConfigInfoEntry) EtgBaseType() uint16 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -86,10 +90,13 @@ func (rcv *SlaveVariablesConfigInfoEntry) EtgBaseType() uint16 {
 	return 0
 }
 
+///Base data type according to ETG 1020
 func (rcv *SlaveVariablesConfigInfoEntry) MutateEtgBaseType(n uint16) bool {
 	return rcv._tab.MutateUint16Slot(6, n)
 }
 
+///Variable protocol info
+///Only the protocol which is supported by the slave is present
 func (rcv *SlaveVariablesConfigInfoEntry) ProtocolInfo(obj *VariableProtocolInfo) *VariableProtocolInfo {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -103,6 +110,8 @@ func (rcv *SlaveVariablesConfigInfoEntry) ProtocolInfo(obj *VariableProtocolInfo
 	return nil
 }
 
+///Variable protocol info
+///Only the protocol which is supported by the slave is present
 func SlaveVariablesConfigInfoEntryStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }

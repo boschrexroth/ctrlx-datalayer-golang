@@ -1,7 +1,7 @@
 package datalayer_test
 
 import (
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 )
 
 func ExampleFactory_CreateProvider() {

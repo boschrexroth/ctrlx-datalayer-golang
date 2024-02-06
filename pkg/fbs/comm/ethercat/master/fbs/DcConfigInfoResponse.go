@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+///Distributed Clock configuration
 type DcConfigInfoResponseT struct {
 	SyncMode SyncMode `json:"syncMode"`
 	CycleTime uint32 `json:"cycleTime"`
@@ -13,6 +14,9 @@ type DcConfigInfoResponseT struct {
 	SyncWindowMonitoring bool `json:"syncWindowMonitoring"`
 	DeviationLimit uint32 `json:"deviationLimit"`
 	ContinuousDelayCompensation bool `json:"continuousDelayCompensation"`
+	SendOffset uint32 `json:"sendOffset"`
+	SyncOffset uint32 `json:"syncOffset"`
+	OutputShiftTime uint32 `json:"outputShiftTime"`
 }
 
 func (t *DcConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,6 +28,9 @@ func (t *DcConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	DcConfigInfoResponseAddSyncWindowMonitoring(builder, t.SyncWindowMonitoring)
 	DcConfigInfoResponseAddDeviationLimit(builder, t.DeviationLimit)
 	DcConfigInfoResponseAddContinuousDelayCompensation(builder, t.ContinuousDelayCompensation)
+	DcConfigInfoResponseAddSendOffset(builder, t.SendOffset)
+	DcConfigInfoResponseAddSyncOffset(builder, t.SyncOffset)
+	DcConfigInfoResponseAddOutputShiftTime(builder, t.OutputShiftTime)
 	return DcConfigInfoResponseEnd(builder)
 }
 
@@ -34,6 +41,9 @@ func (rcv *DcConfigInfoResponse) UnPackTo(t *DcConfigInfoResponseT) {
 	t.SyncWindowMonitoring = rcv.SyncWindowMonitoring()
 	t.DeviationLimit = rcv.DeviationLimit()
 	t.ContinuousDelayCompensation = rcv.ContinuousDelayCompensation()
+	t.SendOffset = rcv.SendOffset()
+	t.SyncOffset = rcv.SyncOffset()
+	t.OutputShiftTime = rcv.OutputShiftTime()
 }
 
 func (rcv *DcConfigInfoResponse) UnPack() *DcConfigInfoResponseT {
@@ -70,6 +80,14 @@ func (rcv *DcConfigInfoResponse) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+///Sync mode of Distributed Clock (DC)
+///freerun: slaves are not synchronized
+///dcmAuto: DC configuration automatic
+///dcmEnabled: DC enabled
+///dcmBusShift: DC bus shift
+///dcmMasterShift: DC master shift
+///dcmLinkLayerRefClock: DC link layer reference clock
+///unknown: Sync mode unknown
 func (rcv *DcConfigInfoResponse) SyncMode() SyncMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -78,10 +96,19 @@ func (rcv *DcConfigInfoResponse) SyncMode() SyncMode {
 	return 0
 }
 
+///Sync mode of Distributed Clock (DC)
+///freerun: slaves are not synchronized
+///dcmAuto: DC configuration automatic
+///dcmEnabled: DC enabled
+///dcmBusShift: DC bus shift
+///dcmMasterShift: DC master shift
+///dcmLinkLayerRefClock: DC link layer reference clock
+///unknown: Sync mode unknown
 func (rcv *DcConfigInfoResponse) MutateSyncMode(n SyncMode) bool {
 	return rcv._tab.MutateUint32Slot(4, uint32(n))
 }
 
+///Cycle time in microseconds
 func (rcv *DcConfigInfoResponse) CycleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -90,10 +117,12 @@ func (rcv *DcConfigInfoResponse) CycleTime() uint32 {
 	return 0
 }
 
+///Cycle time in microseconds
 func (rcv *DcConfigInfoResponse) MutateCycleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+///Sync offset in nanoseconds
 func (rcv *DcConfigInfoResponse) SyncShiftTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -102,10 +131,12 @@ func (rcv *DcConfigInfoResponse) SyncShiftTime() uint32 {
 	return 0
 }
 
+///Sync offset in nanoseconds
 func (rcv *DcConfigInfoResponse) MutateSyncShiftTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+///Sync windows monitoring
 func (rcv *DcConfigInfoResponse) SyncWindowMonitoring() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -114,10 +145,12 @@ func (rcv *DcConfigInfoResponse) SyncWindowMonitoring() bool {
 	return false
 }
 
+///Sync windows monitoring
 func (rcv *DcConfigInfoResponse) MutateSyncWindowMonitoring(n bool) bool {
 	return rcv._tab.MutateBoolSlot(10, n)
 }
 
+///DC sync window in nanoseconds
 func (rcv *DcConfigInfoResponse) DeviationLimit() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -126,10 +159,12 @@ func (rcv *DcConfigInfoResponse) DeviationLimit() uint32 {
 	return 0
 }
 
+///DC sync window in nanoseconds
 func (rcv *DcConfigInfoResponse) MutateDeviationLimit(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+///Continuous delay compensation
 func (rcv *DcConfigInfoResponse) ContinuousDelayCompensation() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -138,12 +173,55 @@ func (rcv *DcConfigInfoResponse) ContinuousDelayCompensation() bool {
 	return false
 }
 
+///Continuous delay compensation
 func (rcv *DcConfigInfoResponse) MutateContinuousDelayCompensation(n bool) bool {
 	return rcv._tab.MutateBoolSlot(14, n)
 }
 
+///Send offset in nanoseconds
+func (rcv *DcConfigInfoResponse) SendOffset() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Send offset in nanoseconds
+func (rcv *DcConfigInfoResponse) MutateSendOffset(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(16, n)
+}
+
+///Sync offset in nanoseconds
+func (rcv *DcConfigInfoResponse) SyncOffset() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Sync offset in nanoseconds
+func (rcv *DcConfigInfoResponse) MutateSyncOffset(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(18, n)
+}
+
+///Output shift time in nanoseconds
+func (rcv *DcConfigInfoResponse) OutputShiftTime() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Output shift time in nanoseconds
+func (rcv *DcConfigInfoResponse) MutateOutputShiftTime(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(20, n)
+}
+
 func DcConfigInfoResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(9)
 }
 func DcConfigInfoResponseAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
 	builder.PrependUint32Slot(0, uint32(syncMode), 0)
@@ -162,6 +240,15 @@ func DcConfigInfoResponseAddDeviationLimit(builder *flatbuffers.Builder, deviati
 }
 func DcConfigInfoResponseAddContinuousDelayCompensation(builder *flatbuffers.Builder, continuousDelayCompensation bool) {
 	builder.PrependBoolSlot(5, continuousDelayCompensation, false)
+}
+func DcConfigInfoResponseAddSendOffset(builder *flatbuffers.Builder, sendOffset uint32) {
+	builder.PrependUint32Slot(6, sendOffset, 0)
+}
+func DcConfigInfoResponseAddSyncOffset(builder *flatbuffers.Builder, syncOffset uint32) {
+	builder.PrependUint32Slot(7, syncOffset, 0)
+}
+func DcConfigInfoResponseAddOutputShiftTime(builder *flatbuffers.Builder, outputShiftTime uint32) {
+	builder.PrependUint32Slot(8, outputShiftTime, 0)
 }
 func DcConfigInfoResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

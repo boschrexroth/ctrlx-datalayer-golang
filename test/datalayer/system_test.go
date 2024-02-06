@@ -26,7 +26,7 @@ package datalayer_test
 import (
 	"testing"
 
-	"github.com/boschrexroth/ctrlx-datalayer-golang/pkg/datalayer"
+	"github.com/boschrexroth/ctrlx-datalayer-golang/v2/pkg/datalayer"
 	"github.com/stretchr/testify/assert"
 )
 
