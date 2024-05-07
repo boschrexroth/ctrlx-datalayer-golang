@@ -35,6 +35,11 @@ type SlaveOnlineInfoResponseT struct {
 	Dc64Support bool `json:"dc64Support"`
 	IsRefClock bool `json:"isRefClock"`
 	LineCrossed bool `json:"lineCrossed"`
+	LineCrossedFlags uint32 `json:"lineCrossedFlags"`
+	CyclicWkcErrorCnt uint32 `json:"cyclicWkcErrorCnt"`
+	SlaveAbsentCnt uint32 `json:"slaveAbsentCnt"`
+	UnexpectedAbsentCnt uint32 `json:"unexpectedAbsentCnt"`
+	IsDeviceEmulation bool `json:"isDeviceEmulation"`
 }
 
 func (t *SlaveOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -86,6 +91,11 @@ func (t *SlaveOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffer
 	SlaveOnlineInfoResponseAddDc64Support(builder, t.Dc64Support)
 	SlaveOnlineInfoResponseAddIsRefClock(builder, t.IsRefClock)
 	SlaveOnlineInfoResponseAddLineCrossed(builder, t.LineCrossed)
+	SlaveOnlineInfoResponseAddLineCrossedFlags(builder, t.LineCrossedFlags)
+	SlaveOnlineInfoResponseAddCyclicWkcErrorCnt(builder, t.CyclicWkcErrorCnt)
+	SlaveOnlineInfoResponseAddSlaveAbsentCnt(builder, t.SlaveAbsentCnt)
+	SlaveOnlineInfoResponseAddUnexpectedAbsentCnt(builder, t.UnexpectedAbsentCnt)
+	SlaveOnlineInfoResponseAddIsDeviceEmulation(builder, t.IsDeviceEmulation)
 	return SlaveOnlineInfoResponseEnd(builder)
 }
 
@@ -125,6 +135,11 @@ func (rcv *SlaveOnlineInfoResponse) UnPackTo(t *SlaveOnlineInfoResponseT) {
 	t.Dc64Support = rcv.Dc64Support()
 	t.IsRefClock = rcv.IsRefClock()
 	t.LineCrossed = rcv.LineCrossed()
+	t.LineCrossedFlags = rcv.LineCrossedFlags()
+	t.CyclicWkcErrorCnt = rcv.CyclicWkcErrorCnt()
+	t.SlaveAbsentCnt = rcv.SlaveAbsentCnt()
+	t.UnexpectedAbsentCnt = rcv.UnexpectedAbsentCnt()
+	t.IsDeviceEmulation = rcv.IsDeviceEmulation()
 }
 
 func (rcv *SlaveOnlineInfoResponse) UnPack() *SlaveOnlineInfoResponseT {
@@ -582,8 +597,94 @@ func (rcv *SlaveOnlineInfoResponse) MutateLineCrossed(n bool) bool {
 	return rcv._tab.MutateBoolSlot(56, n)
 }
 
+///Line crossed flags indicate in which way(s) lines have been crossed
+///Bit 0:Not connected port A
+///Bit 1:Unexpected input port
+///Bit 2:Unexpected junction port
+///Bit 3:Unresolved port connection
+///Bit 4:Hidden slave connected
+///Bit 5:Physic mismatch
+///Bit 6:Invalid port connection
+///Bit 7 to 31:Reserved   
+func (rcv *SlaveOnlineInfoResponse) LineCrossedFlags() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(58))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Line crossed flags indicate in which way(s) lines have been crossed
+///Bit 0:Not connected port A
+///Bit 1:Unexpected input port
+///Bit 2:Unexpected junction port
+///Bit 3:Unresolved port connection
+///Bit 4:Hidden slave connected
+///Bit 5:Physic mismatch
+///Bit 6:Invalid port connection
+///Bit 7 to 31:Reserved   
+func (rcv *SlaveOnlineInfoResponse) MutateLineCrossedFlags(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(58, n)
+}
+
+///Counter for Cyclic WKC Errors (over all pd sections)
+func (rcv *SlaveOnlineInfoResponse) CyclicWkcErrorCnt() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(60))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Counter for Cyclic WKC Errors (over all pd sections)
+func (rcv *SlaveOnlineInfoResponse) MutateCyclicWkcErrorCnt(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(60, n)
+}
+
+///Counter for Absent/Not Present Slaves
+func (rcv *SlaveOnlineInfoResponse) SlaveAbsentCnt() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(62))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Counter for Absent/Not Present Slaves
+func (rcv *SlaveOnlineInfoResponse) MutateSlaveAbsentCnt(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(62, n)
+}
+
+///Counter for Abnormal State Change
+func (rcv *SlaveOnlineInfoResponse) UnexpectedAbsentCnt() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(64))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Counter for Abnormal State Change
+func (rcv *SlaveOnlineInfoResponse) MutateUnexpectedAbsentCnt(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(64, n)
+}
+
+///Slave without Firmware. ESC register 0x0141, enabled by EEPROM offset 0x0000.8
+func (rcv *SlaveOnlineInfoResponse) IsDeviceEmulation() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(66))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Slave without Firmware. ESC register 0x0141, enabled by EEPROM offset 0x0000.8
+func (rcv *SlaveOnlineInfoResponse) MutateIsDeviceEmulation(n bool) bool {
+	return rcv._tab.MutateBoolSlot(66, n)
+}
+
 func SlaveOnlineInfoResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(27)
+	builder.StartObject(32)
 }
 func SlaveOnlineInfoResponseAddAutoIncAddr(builder *flatbuffers.Builder, autoIncAddr uint16) {
 	builder.PrependUint16Slot(0, autoIncAddr, 0)
@@ -671,6 +772,21 @@ func SlaveOnlineInfoResponseAddIsRefClock(builder *flatbuffers.Builder, isRefClo
 }
 func SlaveOnlineInfoResponseAddLineCrossed(builder *flatbuffers.Builder, lineCrossed bool) {
 	builder.PrependBoolSlot(26, lineCrossed, false)
+}
+func SlaveOnlineInfoResponseAddLineCrossedFlags(builder *flatbuffers.Builder, lineCrossedFlags uint32) {
+	builder.PrependUint32Slot(27, lineCrossedFlags, 0)
+}
+func SlaveOnlineInfoResponseAddCyclicWkcErrorCnt(builder *flatbuffers.Builder, cyclicWkcErrorCnt uint32) {
+	builder.PrependUint32Slot(28, cyclicWkcErrorCnt, 0)
+}
+func SlaveOnlineInfoResponseAddSlaveAbsentCnt(builder *flatbuffers.Builder, slaveAbsentCnt uint32) {
+	builder.PrependUint32Slot(29, slaveAbsentCnt, 0)
+}
+func SlaveOnlineInfoResponseAddUnexpectedAbsentCnt(builder *flatbuffers.Builder, unexpectedAbsentCnt uint32) {
+	builder.PrependUint32Slot(30, unexpectedAbsentCnt, 0)
+}
+func SlaveOnlineInfoResponseAddIsDeviceEmulation(builder *flatbuffers.Builder, isDeviceEmulation bool) {
+	builder.PrependBoolSlot(31, isDeviceEmulation, false)
 }
 func SlaveOnlineInfoResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

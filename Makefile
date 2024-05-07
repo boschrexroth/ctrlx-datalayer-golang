@@ -8,16 +8,18 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-DATALAYER_DEB_VERSION      := 2.4.0
-DATALAYER_DEB_FILE_VERSION := 2.4.5
+DATALAYER_DEB_VERSION      := 2.6.0
+DATALAYER_DEB_FILE_VERSION := 2.6.1
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 
 all: build
 
 go-dep: ## Get go dependencies
+	@go get -u ./...
 	@go mod download
 	@go mod vendor
+	@go mod tidy
 
 apt-dep: ## Get native dependencies
 	@sudo apt-get update

@@ -17,6 +17,7 @@ type DcConfigInfoResponseT struct {
 	SendOffset uint32 `json:"sendOffset"`
 	SyncOffset uint32 `json:"syncOffset"`
 	OutputShiftTime uint32 `json:"outputShiftTime"`
+	InputShiftTime int32 `json:"inputShiftTime"`
 }
 
 func (t *DcConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,6 +32,7 @@ func (t *DcConfigInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	DcConfigInfoResponseAddSendOffset(builder, t.SendOffset)
 	DcConfigInfoResponseAddSyncOffset(builder, t.SyncOffset)
 	DcConfigInfoResponseAddOutputShiftTime(builder, t.OutputShiftTime)
+	DcConfigInfoResponseAddInputShiftTime(builder, t.InputShiftTime)
 	return DcConfigInfoResponseEnd(builder)
 }
 
@@ -44,6 +46,7 @@ func (rcv *DcConfigInfoResponse) UnPackTo(t *DcConfigInfoResponseT) {
 	t.SendOffset = rcv.SendOffset()
 	t.SyncOffset = rcv.SyncOffset()
 	t.OutputShiftTime = rcv.OutputShiftTime()
+	t.InputShiftTime = rcv.InputShiftTime()
 }
 
 func (rcv *DcConfigInfoResponse) UnPack() *DcConfigInfoResponseT {
@@ -220,8 +223,22 @@ func (rcv *DcConfigInfoResponse) MutateOutputShiftTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(20, n)
 }
 
+///Input shift time in nanoseconds
+func (rcv *DcConfigInfoResponse) InputShiftTime() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Input shift time in nanoseconds
+func (rcv *DcConfigInfoResponse) MutateInputShiftTime(n int32) bool {
+	return rcv._tab.MutateInt32Slot(22, n)
+}
+
 func DcConfigInfoResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(10)
 }
 func DcConfigInfoResponseAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
 	builder.PrependUint32Slot(0, uint32(syncMode), 0)
@@ -249,6 +266,9 @@ func DcConfigInfoResponseAddSyncOffset(builder *flatbuffers.Builder, syncOffset 
 }
 func DcConfigInfoResponseAddOutputShiftTime(builder *flatbuffers.Builder, outputShiftTime uint32) {
 	builder.PrependUint32Slot(8, outputShiftTime, 0)
+}
+func DcConfigInfoResponseAddInputShiftTime(builder *flatbuffers.Builder, inputShiftTime int32) {
+	builder.PrependInt32Slot(9, inputShiftTime, 0)
 }
 func DcConfigInfoResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

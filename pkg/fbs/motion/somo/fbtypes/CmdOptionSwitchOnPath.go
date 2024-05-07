@@ -90,7 +90,7 @@ func (rcv *CmdOptionSwitchOnPath) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "Once")
+/// permanent type (e.g. "Once", "PermOn", "PermOff")
 func (rcv *CmdOptionSwitchOnPath) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -99,7 +99,8 @@ func (rcv *CmdOptionSwitchOnPath) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "Once")
+/// permanent type (e.g. "Once", "PermOn", "PermOff")
+/// switch on path mode
 func (rcv *CmdOptionSwitchOnPath) Mode() SwitchOnPathMode {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -108,11 +109,12 @@ func (rcv *CmdOptionSwitchOnPath) Mode() SwitchOnPathMode {
 	return 0
 }
 
+/// switch on path mode
 func (rcv *CmdOptionSwitchOnPath) MutateMode(n SwitchOnPathMode) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
-/// signal Id
+/// signal id
 func (rcv *CmdOptionSwitchOnPath) SignalId() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -121,11 +123,12 @@ func (rcv *CmdOptionSwitchOnPath) SignalId() uint32 {
 	return 0
 }
 
-/// signal Id
+/// signal id
 func (rcv *CmdOptionSwitchOnPath) MutateSignalId(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// switch on path action
 func (rcv *CmdOptionSwitchOnPath) Action() SwitchOnPathAction {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -134,10 +137,12 @@ func (rcv *CmdOptionSwitchOnPath) Action() SwitchOnPathAction {
 	return 0
 }
 
+/// switch on path action
 func (rcv *CmdOptionSwitchOnPath) MutateAction(n SwitchOnPathAction) bool {
 	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
+/// target position
 func (rcv *CmdOptionSwitchOnPath) TargetPosition(j int) float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -155,6 +160,7 @@ func (rcv *CmdOptionSwitchOnPath) TargetPositionLength() int {
 	return 0
 }
 
+/// target position
 func (rcv *CmdOptionSwitchOnPath) MutateTargetPosition(j int, n float64) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -164,6 +170,7 @@ func (rcv *CmdOptionSwitchOnPath) MutateTargetPosition(j int, n float64) bool {
 	return false
 }
 
+/// radius
 func (rcv *CmdOptionSwitchOnPath) Radius() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -172,10 +179,12 @@ func (rcv *CmdOptionSwitchOnPath) Radius() float64 {
 	return 0.0
 }
 
+/// radius
 func (rcv *CmdOptionSwitchOnPath) MutateRadius(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(14, n)
 }
 
+/// pre trigger time
 func (rcv *CmdOptionSwitchOnPath) PreTriggerTime() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -184,6 +193,7 @@ func (rcv *CmdOptionSwitchOnPath) PreTriggerTime() float64 {
 	return 0.0
 }
 
+/// pre trigger time
 func (rcv *CmdOptionSwitchOnPath) MutatePreTriggerTime(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(16, n)
 }

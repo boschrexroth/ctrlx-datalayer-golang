@@ -69,7 +69,7 @@ func (rcv *KinCmdOptPolyTransData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 func (rcv *KinCmdOptPolyTransData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -78,7 +78,7 @@ func (rcv *KinCmdOptPolyTransData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 /// optional distance D1 (distance to shorten the start of the precorner, must be greater than zero)
 /// when dist1 is greater then zero, also dist2 must be greater than zero; eps must not be set in this case (or equal zero)
 func (rcv *KinCmdOptPolyTransData) Dist1() float64 {

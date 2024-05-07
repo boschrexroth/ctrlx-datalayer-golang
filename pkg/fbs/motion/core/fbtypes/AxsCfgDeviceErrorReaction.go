@@ -10,21 +10,25 @@ import (
 type AxsCfgDeviceErrorReactionT struct {
 	UserEstopLim *AxsCfgEstopDynamicLimitsT `json:"userEstopLim"`
 	EstopSettings *AxsCfgEstopSettingsT `json:"estopSettings"`
+	DevNotFollowing *AxsCfgDevNotFollowingT `json:"devNotFollowing"`
 }
 
 func (t *AxsCfgDeviceErrorReactionT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	userEstopLimOffset := t.UserEstopLim.Pack(builder)
 	estopSettingsOffset := t.EstopSettings.Pack(builder)
+	devNotFollowingOffset := t.DevNotFollowing.Pack(builder)
 	AxsCfgDeviceErrorReactionStart(builder)
 	AxsCfgDeviceErrorReactionAddUserEstopLim(builder, userEstopLimOffset)
 	AxsCfgDeviceErrorReactionAddEstopSettings(builder, estopSettingsOffset)
+	AxsCfgDeviceErrorReactionAddDevNotFollowing(builder, devNotFollowingOffset)
 	return AxsCfgDeviceErrorReactionEnd(builder)
 }
 
 func (rcv *AxsCfgDeviceErrorReaction) UnPackTo(t *AxsCfgDeviceErrorReactionT) {
 	t.UserEstopLim = rcv.UserEstopLim(nil).UnPack()
 	t.EstopSettings = rcv.EstopSettings(nil).UnPack()
+	t.DevNotFollowing = rcv.DevNotFollowing(nil).UnPack()
 }
 
 func (rcv *AxsCfgDeviceErrorReaction) UnPack() *AxsCfgDeviceErrorReactionT {
@@ -91,14 +95,32 @@ func (rcv *AxsCfgDeviceErrorReaction) EstopSettings(obj *AxsCfgEstopSettings) *A
 }
 
 /// E-Stop setting to different device errors
+/// reaction if axis device does not follow command values
+func (rcv *AxsCfgDeviceErrorReaction) DevNotFollowing(obj *AxsCfgDevNotFollowing) *AxsCfgDevNotFollowing {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgDevNotFollowing)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// reaction if axis device does not follow command values
 func AxsCfgDeviceErrorReactionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func AxsCfgDeviceErrorReactionAddUserEstopLim(builder *flatbuffers.Builder, userEstopLim flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(userEstopLim), 0)
 }
 func AxsCfgDeviceErrorReactionAddEstopSettings(builder *flatbuffers.Builder, estopSettings flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(estopSettings), 0)
+}
+func AxsCfgDeviceErrorReactionAddDevNotFollowing(builder *flatbuffers.Builder, devNotFollowing flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(devNotFollowing), 0)
 }
 func AxsCfgDeviceErrorReactionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

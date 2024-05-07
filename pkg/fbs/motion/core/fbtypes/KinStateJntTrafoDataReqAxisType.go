@@ -9,7 +9,7 @@ type KinStateJntTrafoDataReqAxisType int8
 
 const (
 	/// any kind of axis is okay
-	KinStateJntTrafoDataReqAxisTypeANY        KinStateJntTrafoDataReqAxisType = 0
+	KinStateJntTrafoDataReqAxisTypeANY_TYPE   KinStateJntTrafoDataReqAxisType = 0
 	///< a linear axis is requested
 	KinStateJntTrafoDataReqAxisTypeLINEAR     KinStateJntTrafoDataReqAxisType = 1
 	/// a rotational axis is requested
@@ -17,13 +17,13 @@ const (
 )
 
 var EnumNamesKinStateJntTrafoDataReqAxisType = map[KinStateJntTrafoDataReqAxisType]string{
-	KinStateJntTrafoDataReqAxisTypeANY:        "ANY",
+	KinStateJntTrafoDataReqAxisTypeANY_TYPE:   "ANY_TYPE",
 	KinStateJntTrafoDataReqAxisTypeLINEAR:     "LINEAR",
 	KinStateJntTrafoDataReqAxisTypeROTATIONAL: "ROTATIONAL",
 }
 
 var EnumValuesKinStateJntTrafoDataReqAxisType = map[string]KinStateJntTrafoDataReqAxisType{
-	"ANY":        KinStateJntTrafoDataReqAxisTypeANY,
+	"ANY_TYPE":   KinStateJntTrafoDataReqAxisTypeANY_TYPE,
 	"LINEAR":     KinStateJntTrafoDataReqAxisTypeLINEAR,
 	"ROTATIONAL": KinStateJntTrafoDataReqAxisTypeROTATIONAL,
 }

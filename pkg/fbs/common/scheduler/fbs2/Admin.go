@@ -21,12 +21,13 @@ type AdminT struct {
 	WatchdogDefaultValue common__scheduler__fbs.CallableWdgConfig `json:"watchdogDefaultValue"`
 	Utilization *UtilizationThresholdT `json:"utilization"`
 	CallableTimeouts *CallableTimeoutsT `json:"callableTimeouts"`
+	ProgramConfigurationMode ConfigurationMode `json:"programConfigurationMode"`
 }
 
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	controlDebugOffset := t.ControlDebug.Pack(builder)
-	
+
 	cpuInfoOffset := t.CpuInfo.Pack(builder)
 	utilizationOffset := t.Utilization.Pack(builder)
 	callableTimeoutsOffset := t.CallableTimeouts.Pack(builder)
@@ -44,6 +45,7 @@ func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	AdminAddWatchdogDefaultValue(builder, t.WatchdogDefaultValue)
 	AdminAddUtilization(builder, utilizationOffset)
 	AdminAddCallableTimeouts(builder, callableTimeoutsOffset)
+	AdminAddProgramConfigurationMode(builder, t.ProgramConfigurationMode)
 	return AdminEnd(builder)
 }
 
@@ -61,6 +63,7 @@ func (rcv *Admin) UnPackTo(t *AdminT) {
 	t.WatchdogDefaultValue = rcv.WatchdogDefaultValue()
 	t.Utilization = rcv.Utilization(nil).UnPack()
 	t.CallableTimeouts = rcv.CallableTimeouts(nil).UnPack()
+	t.ProgramConfigurationMode = rcv.ProgramConfigurationMode()
 }
 
 func (rcv *Admin) UnPack() *AdminT {
@@ -249,8 +252,22 @@ func (rcv *Admin) CallableTimeouts(obj *CallableTimeouts) *CallableTimeouts {
 }
 
 /// General settings for timeouts when switching callable operation states
+/// Program configuration mode of the Scheduler
+func (rcv *Admin) ProgramConfigurationMode() ConfigurationMode {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return ConfigurationMode(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+/// Program configuration mode of the Scheduler
+func (rcv *Admin) MutateProgramConfigurationMode(n ConfigurationMode) bool {
+	return rcv._tab.MutateInt8Slot(26, int8(n))
+}
+
 func AdminStart(builder *flatbuffers.Builder) {
-	builder.StartObject(11)
+	builder.StartObject(12)
 }
 func AdminAddStartupState(builder *flatbuffers.Builder, startupState CurrentState) {
 	builder.PrependInt8Slot(0, int8(startupState), 0)
@@ -284,6 +301,9 @@ func AdminAddUtilization(builder *flatbuffers.Builder, utilization flatbuffers.U
 }
 func AdminAddCallableTimeouts(builder *flatbuffers.Builder, callableTimeouts flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(callableTimeouts), 0)
+}
+func AdminAddProgramConfigurationMode(builder *flatbuffers.Builder, programConfigurationMode ConfigurationMode) {
+	builder.PrependInt8Slot(11, int8(programConfigurationMode), 0)
 }
 func AdminEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

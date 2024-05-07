@@ -19,6 +19,10 @@ const (
 	variableTypePROBE        variableType = 3
 	/// torque/force type
 	variableTypeTORQUE_FORCE variableType = 4
+	/// safe motion
+	variableTypeSAFE_MOTION  variableType = 5
+	/// user PDO
+	variableTypeUSER_PDO     variableType = 6
 )
 
 var EnumNamesvariableType = map[variableType]string{
@@ -28,6 +32,8 @@ var EnumNamesvariableType = map[variableType]string{
 	variableTypeHOMING:       "HOMING",
 	variableTypePROBE:        "PROBE",
 	variableTypeTORQUE_FORCE: "TORQUE_FORCE",
+	variableTypeSAFE_MOTION:  "SAFE_MOTION",
+	variableTypeUSER_PDO:     "USER_PDO",
 }
 
 var EnumValuesvariableType = map[string]variableType{
@@ -37,6 +43,8 @@ var EnumValuesvariableType = map[string]variableType{
 	"HOMING":       variableTypeHOMING,
 	"PROBE":        variableTypePROBE,
 	"TORQUE_FORCE": variableTypeTORQUE_FORCE,
+	"SAFE_MOTION":  variableTypeSAFE_MOTION,
+	"USER_PDO":     variableTypeUSER_PDO,
 }
 
 func (v variableType) String() string {

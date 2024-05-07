@@ -11,6 +11,8 @@ type ProviderStatT struct {
 	Identity string `json:"identity"`
 	Nodes []string `json:"nodes"`
 	RejectedNodes []string `json:"rejectedNodes"`
+	Scopes []*ScopeT `json:"scopes"`
+	Capabilities *CapabilitiesT `json:"capabilities"`
 }
 
 func (t *ProviderStatT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -45,10 +47,26 @@ func (t *ProviderStatT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		}
 		rejectedNodesOffset = builder.EndVector(rejectedNodesLength)
 	}
+	scopesOffset := flatbuffers.UOffsetT(0)
+	if t.Scopes != nil {
+		scopesLength := len(t.Scopes)
+		scopesOffsets := make([]flatbuffers.UOffsetT, scopesLength)
+		for j := 0; j < scopesLength; j++ {
+			scopesOffsets[j] = t.Scopes[j].Pack(builder)
+		}
+		ProviderStatStartScopesVector(builder, scopesLength)
+		for j := scopesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(scopesOffsets[j])
+		}
+		scopesOffset = builder.EndVector(scopesLength)
+	}
+	capabilitiesOffset := t.Capabilities.Pack(builder)
 	ProviderStatStart(builder)
 	ProviderStatAddIdentity(builder, identityOffset)
 	ProviderStatAddNodes(builder, nodesOffset)
 	ProviderStatAddRejectedNodes(builder, rejectedNodesOffset)
+	ProviderStatAddScopes(builder, scopesOffset)
+	ProviderStatAddCapabilities(builder, capabilitiesOffset)
 	return ProviderStatEnd(builder)
 }
 
@@ -64,6 +82,14 @@ func (rcv *ProviderStat) UnPackTo(t *ProviderStatT) {
 	for j := 0; j < rejectedNodesLength; j++ {
 		t.RejectedNodes[j] = string(rcv.RejectedNodes(j))
 	}
+	scopesLength := rcv.ScopesLength()
+	t.Scopes = make([]*ScopeT, scopesLength)
+	for j := 0; j < scopesLength; j++ {
+		x := Scope{}
+		rcv.Scopes(&x, j)
+		t.Scopes[j] = x.UnPack()
+	}
+	t.Capabilities = rcv.Capabilities(nil).UnPack()
 }
 
 func (rcv *ProviderStat) UnPack() *ProviderStatT {
@@ -142,8 +168,50 @@ func (rcv *ProviderStat) RejectedNodesLength() int {
 	return 0
 }
 
+func (rcv *ProviderStat) Scopes(obj *Scope, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *ProviderStat) ScopesByKey(obj *Scope, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
+func (rcv *ProviderStat) ScopesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func (rcv *ProviderStat) Capabilities(obj *Capabilities) *Capabilities {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(Capabilities)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
 func ProviderStatStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(5)
 }
 func ProviderStatAddIdentity(builder *flatbuffers.Builder, identity flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(identity), 0)
@@ -159,6 +227,15 @@ func ProviderStatAddRejectedNodes(builder *flatbuffers.Builder, rejectedNodes fl
 }
 func ProviderStatStartRejectedNodesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func ProviderStatAddScopes(builder *flatbuffers.Builder, scopes flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(scopes), 0)
+}
+func ProviderStatStartScopesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func ProviderStatAddCapabilities(builder *flatbuffers.Builder, capabilities flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(capabilities), 0)
 }
 func ProviderStatEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

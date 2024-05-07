@@ -67,7 +67,7 @@ func (rcv *KinCmdOptPCSData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 func (rcv *KinCmdOptPCSData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,7 +76,7 @@ func (rcv *KinCmdOptPCSData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 /// name of the set/group that should become active
 func (rcv *KinCmdOptPCSData) SetName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

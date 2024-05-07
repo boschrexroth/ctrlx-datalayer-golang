@@ -10,6 +10,8 @@ type AddressPlaceholdersT struct {
 	Ns string `json:"ns"`
 	String string `json:"string"`
 	Integer string `json:"integer"`
+	Guid string `json:"guid"`
+	Opaque string `json:"opaque"`
 }
 
 func (t *AddressPlaceholdersT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -26,10 +28,20 @@ func (t *AddressPlaceholdersT) Pack(builder *flatbuffers.Builder) flatbuffers.UO
 	if t.Integer != "" {
 		integerOffset = builder.CreateString(t.Integer)
 	}
+	guidOffset := flatbuffers.UOffsetT(0)
+	if t.Guid != "" {
+		guidOffset = builder.CreateString(t.Guid)
+	}
+	opaqueOffset := flatbuffers.UOffsetT(0)
+	if t.Opaque != "" {
+		opaqueOffset = builder.CreateString(t.Opaque)
+	}
 	AddressPlaceholdersStart(builder)
 	AddressPlaceholdersAddNs(builder, nsOffset)
 	AddressPlaceholdersAddString(builder, stringOffset)
 	AddressPlaceholdersAddInteger(builder, integerOffset)
+	AddressPlaceholdersAddGuid(builder, guidOffset)
+	AddressPlaceholdersAddOpaque(builder, opaqueOffset)
 	return AddressPlaceholdersEnd(builder)
 }
 
@@ -37,6 +49,8 @@ func (rcv *AddressPlaceholders) UnPackTo(t *AddressPlaceholdersT) {
 	t.Ns = string(rcv.Ns())
 	t.String = string(rcv.String())
 	t.Integer = string(rcv.Integer())
+	t.Guid = string(rcv.Guid())
+	t.Opaque = string(rcv.Opaque())
 }
 
 func (rcv *AddressPlaceholders) UnPack() *AddressPlaceholdersT {
@@ -103,8 +117,28 @@ func (rcv *AddressPlaceholders) Integer() []byte {
 }
 
 /// Placeholder for numeric identifiers
+/// Placeholder for guid identifiers
+func (rcv *AddressPlaceholders) Guid() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Placeholder for guid identifiers
+/// Placeholder for opaque identifiers
+func (rcv *AddressPlaceholders) Opaque() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Placeholder for opaque identifiers
 func AddressPlaceholdersStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(5)
 }
 func AddressPlaceholdersAddNs(builder *flatbuffers.Builder, ns flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(ns), 0)
@@ -114,6 +148,12 @@ func AddressPlaceholdersAddString(builder *flatbuffers.Builder, string flatbuffe
 }
 func AddressPlaceholdersAddInteger(builder *flatbuffers.Builder, integer flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(integer), 0)
+}
+func AddressPlaceholdersAddGuid(builder *flatbuffers.Builder, guid flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(guid), 0)
+}
+func AddressPlaceholdersAddOpaque(builder *flatbuffers.Builder, opaque flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(opaque), 0)
 }
 func AddressPlaceholdersEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

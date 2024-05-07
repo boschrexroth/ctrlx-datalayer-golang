@@ -7,21 +7,27 @@ import "strconv"
 type CmdType_CmdOptionInfoReq int8
 
 const (
-	CmdType_CmdOptionInfoReqUNKNOWN    CmdType_CmdOptionInfoReq = 0
-	CmdType_CmdOptionInfoReqCMD        CmdType_CmdOptionInfoReq = 1
-	CmdType_CmdOptionInfoReqCMD_OPTION CmdType_CmdOptionInfoReq = 2
+	CmdType_CmdOptionInfoReqUNKNOWN              CmdType_CmdOptionInfoReq = 0
+	CmdType_CmdOptionInfoReqCMD                  CmdType_CmdOptionInfoReq = 1
+	CmdType_CmdOptionInfoReqCMD_OPTION           CmdType_CmdOptionInfoReq = 2
+	CmdType_CmdOptionInfoReqCMD_OPTION_ONCE      CmdType_CmdOptionInfoReq = 3
+	CmdType_CmdOptionInfoReqCMD_OPTION_PERMANENT CmdType_CmdOptionInfoReq = 4
 )
 
 var EnumNamesCmdType_CmdOptionInfoReq = map[CmdType_CmdOptionInfoReq]string{
-	CmdType_CmdOptionInfoReqUNKNOWN:    "UNKNOWN",
-	CmdType_CmdOptionInfoReqCMD:        "CMD",
-	CmdType_CmdOptionInfoReqCMD_OPTION: "CMD_OPTION",
+	CmdType_CmdOptionInfoReqUNKNOWN:              "UNKNOWN",
+	CmdType_CmdOptionInfoReqCMD:                  "CMD",
+	CmdType_CmdOptionInfoReqCMD_OPTION:           "CMD_OPTION",
+	CmdType_CmdOptionInfoReqCMD_OPTION_ONCE:      "CMD_OPTION_ONCE",
+	CmdType_CmdOptionInfoReqCMD_OPTION_PERMANENT: "CMD_OPTION_PERMANENT",
 }
 
 var EnumValuesCmdType_CmdOptionInfoReq = map[string]CmdType_CmdOptionInfoReq{
-	"UNKNOWN":    CmdType_CmdOptionInfoReqUNKNOWN,
-	"CMD":        CmdType_CmdOptionInfoReqCMD,
-	"CMD_OPTION": CmdType_CmdOptionInfoReqCMD_OPTION,
+	"UNKNOWN":              CmdType_CmdOptionInfoReqUNKNOWN,
+	"CMD":                  CmdType_CmdOptionInfoReqCMD,
+	"CMD_OPTION":           CmdType_CmdOptionInfoReqCMD_OPTION,
+	"CMD_OPTION_ONCE":      CmdType_CmdOptionInfoReqCMD_OPTION_ONCE,
+	"CMD_OPTION_PERMANENT": CmdType_CmdOptionInfoReqCMD_OPTION_PERMANENT,
 }
 
 func (v CmdType_CmdOptionInfoReq) String() string {

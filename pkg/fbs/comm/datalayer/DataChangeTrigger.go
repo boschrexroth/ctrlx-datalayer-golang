@@ -13,18 +13,26 @@ const (
 	DataChangeTriggerStatusValue          DataChangeTrigger = 1
 	/// Inform if Status Or Status Or Timestamp changes (inform always)
 	DataChangeTriggerStatusValueTimestamp DataChangeTrigger = 2
+	/// Inform about upcoming events
+	DataChangeTriggerEvent                DataChangeTrigger = 3
+	/// Inform about value changes and events
+	DataChangeTriggerStatusValueEvent     DataChangeTrigger = 4
 )
 
 var EnumNamesDataChangeTrigger = map[DataChangeTrigger]string{
 	DataChangeTriggerStatus:               "Status",
 	DataChangeTriggerStatusValue:          "StatusValue",
 	DataChangeTriggerStatusValueTimestamp: "StatusValueTimestamp",
+	DataChangeTriggerEvent:                "Event",
+	DataChangeTriggerStatusValueEvent:     "StatusValueEvent",
 }
 
 var EnumValuesDataChangeTrigger = map[string]DataChangeTrigger{
 	"Status":               DataChangeTriggerStatus,
 	"StatusValue":          DataChangeTriggerStatusValue,
 	"StatusValueTimestamp": DataChangeTriggerStatusValueTimestamp,
+	"Event":                DataChangeTriggerEvent,
+	"StatusValueEvent":     DataChangeTriggerStatusValueEvent,
 }
 
 func (v DataChangeTrigger) String() string {

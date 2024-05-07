@@ -6,15 +6,15 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// parameters for the move 3D circular commands for a kinematics
-type KinCmdCircleDataT struct {
+/// parameters for the move 2D circular commands for a kinematics
+type KinCmd2dCircleDataT struct {
 	CmdKinPose []*KinCmdPosePairT `json:"cmdKinPose"`
-	CmdCircleData []*KinCmdCircleDataPairT `json:"cmdCircleData"`
+	CmdCircleData []*KinCmd2dCircleDataPairT `json:"cmdCircleData"`
 	CoordSys CoordSys `json:"coordSys"`
 	Lim *DynamicLimitsT `json:"lim"`
 }
 
-func (t *KinCmdCircleDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (t *KinCmd2dCircleDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	cmdKinPoseOffset := flatbuffers.UOffsetT(0)
 	if t.CmdKinPose != nil {
@@ -23,7 +23,7 @@ func (t *KinCmdCircleDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffs
 		for j := 0; j < cmdKinPoseLength; j++ {
 			cmdKinPoseOffsets[j] = t.CmdKinPose[j].Pack(builder)
 		}
-		KinCmdCircleDataStartCmdKinPoseVector(builder, cmdKinPoseLength)
+		KinCmd2dCircleDataStartCmdKinPoseVector(builder, cmdKinPoseLength)
 		for j := cmdKinPoseLength - 1; j >= 0; j-- {
 			builder.PrependUOffsetT(cmdKinPoseOffsets[j])
 		}
@@ -36,22 +36,22 @@ func (t *KinCmdCircleDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffs
 		for j := 0; j < cmdCircleDataLength; j++ {
 			cmdCircleDataOffsets[j] = t.CmdCircleData[j].Pack(builder)
 		}
-		KinCmdCircleDataStartCmdCircleDataVector(builder, cmdCircleDataLength)
+		KinCmd2dCircleDataStartCmdCircleDataVector(builder, cmdCircleDataLength)
 		for j := cmdCircleDataLength - 1; j >= 0; j-- {
 			builder.PrependUOffsetT(cmdCircleDataOffsets[j])
 		}
 		cmdCircleDataOffset = builder.EndVector(cmdCircleDataLength)
 	}
 	limOffset := t.Lim.Pack(builder)
-	KinCmdCircleDataStart(builder)
-	KinCmdCircleDataAddCmdKinPose(builder, cmdKinPoseOffset)
-	KinCmdCircleDataAddCmdCircleData(builder, cmdCircleDataOffset)
-	KinCmdCircleDataAddCoordSys(builder, t.CoordSys)
-	KinCmdCircleDataAddLim(builder, limOffset)
-	return KinCmdCircleDataEnd(builder)
+	KinCmd2dCircleDataStart(builder)
+	KinCmd2dCircleDataAddCmdKinPose(builder, cmdKinPoseOffset)
+	KinCmd2dCircleDataAddCmdCircleData(builder, cmdCircleDataOffset)
+	KinCmd2dCircleDataAddCoordSys(builder, t.CoordSys)
+	KinCmd2dCircleDataAddLim(builder, limOffset)
+	return KinCmd2dCircleDataEnd(builder)
 }
 
-func (rcv *KinCmdCircleData) UnPackTo(t *KinCmdCircleDataT) {
+func (rcv *KinCmd2dCircleData) UnPackTo(t *KinCmd2dCircleDataT) {
 	cmdKinPoseLength := rcv.CmdKinPoseLength()
 	t.CmdKinPose = make([]*KinCmdPosePairT, cmdKinPoseLength)
 	for j := 0; j < cmdKinPoseLength; j++ {
@@ -60,9 +60,9 @@ func (rcv *KinCmdCircleData) UnPackTo(t *KinCmdCircleDataT) {
 		t.CmdKinPose[j] = x.UnPack()
 	}
 	cmdCircleDataLength := rcv.CmdCircleDataLength()
-	t.CmdCircleData = make([]*KinCmdCircleDataPairT, cmdCircleDataLength)
+	t.CmdCircleData = make([]*KinCmd2dCircleDataPairT, cmdCircleDataLength)
 	for j := 0; j < cmdCircleDataLength; j++ {
-		x := KinCmdCircleDataPair{}
+		x := KinCmd2dCircleDataPair{}
 		rcv.CmdCircleData(&x, j)
 		t.CmdCircleData[j] = x.UnPack()
 	}
@@ -70,42 +70,42 @@ func (rcv *KinCmdCircleData) UnPackTo(t *KinCmdCircleDataT) {
 	t.Lim = rcv.Lim(nil).UnPack()
 }
 
-func (rcv *KinCmdCircleData) UnPack() *KinCmdCircleDataT {
+func (rcv *KinCmd2dCircleData) UnPack() *KinCmd2dCircleDataT {
 	if rcv == nil { return nil }
-	t := &KinCmdCircleDataT{}
+	t := &KinCmd2dCircleDataT{}
 	rcv.UnPackTo(t)
 	return t
 }
 
-type KinCmdCircleData struct {
+type KinCmd2dCircleData struct {
 	_tab flatbuffers.Table
 }
 
-func GetRootAsKinCmdCircleData(buf []byte, offset flatbuffers.UOffsetT) *KinCmdCircleData {
+func GetRootAsKinCmd2dCircleData(buf []byte, offset flatbuffers.UOffsetT) *KinCmd2dCircleData {
 	n := flatbuffers.GetUOffsetT(buf[offset:])
-	x := &KinCmdCircleData{}
+	x := &KinCmd2dCircleData{}
 	x.Init(buf, n+offset)
 	return x
 }
 
-func GetSizePrefixedRootAsKinCmdCircleData(buf []byte, offset flatbuffers.UOffsetT) *KinCmdCircleData {
+func GetSizePrefixedRootAsKinCmd2dCircleData(buf []byte, offset flatbuffers.UOffsetT) *KinCmd2dCircleData {
 	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
-	x := &KinCmdCircleData{}
+	x := &KinCmd2dCircleData{}
 	x.Init(buf, n+offset+flatbuffers.SizeUint32)
 	return x
 }
 
-func (rcv *KinCmdCircleData) Init(buf []byte, i flatbuffers.UOffsetT) {
+func (rcv *KinCmd2dCircleData) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i
 }
 
-func (rcv *KinCmdCircleData) Table() flatbuffers.Table {
+func (rcv *KinCmd2dCircleData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
 /// commanded target position with meanings
-func (rcv *KinCmdCircleData) CmdKinPose(obj *KinCmdPosePair, j int) bool {
+func (rcv *KinCmd2dCircleData) CmdKinPose(obj *KinCmdPosePair, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -117,7 +117,7 @@ func (rcv *KinCmdCircleData) CmdKinPose(obj *KinCmdPosePair, j int) bool {
 	return false
 }
 
-func (rcv *KinCmdCircleData) CmdKinPoseLength() int {
+func (rcv *KinCmd2dCircleData) CmdKinPoseLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -126,8 +126,8 @@ func (rcv *KinCmdCircleData) CmdKinPoseLength() int {
 }
 
 /// commanded target position with meanings
-/// commanded circle data with circle meanings
-func (rcv *KinCmdCircleData) CmdCircleData(obj *KinCmdCircleDataPair, j int) bool {
+/// commanded circle data with 2d circle meanings
+func (rcv *KinCmd2dCircleData) CmdCircleData(obj *KinCmd2dCircleDataPair, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -139,7 +139,7 @@ func (rcv *KinCmdCircleData) CmdCircleData(obj *KinCmdCircleDataPair, j int) boo
 	return false
 }
 
-func (rcv *KinCmdCircleData) CmdCircleDataLength() int {
+func (rcv *KinCmd2dCircleData) CmdCircleDataLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -147,9 +147,9 @@ func (rcv *KinCmdCircleData) CmdCircleDataLength() int {
 	return 0
 }
 
-/// commanded circle data with circle meanings
+/// commanded circle data with 2d circle meanings
 /// coordSys for commanded target position
-func (rcv *KinCmdCircleData) CoordSys() CoordSys {
+func (rcv *KinCmd2dCircleData) CoordSys() CoordSys {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return CoordSys(rcv._tab.GetInt8(o + rcv._tab.Pos))
@@ -158,12 +158,12 @@ func (rcv *KinCmdCircleData) CoordSys() CoordSys {
 }
 
 /// coordSys for commanded target position
-func (rcv *KinCmdCircleData) MutateCoordSys(n CoordSys) bool {
+func (rcv *KinCmd2dCircleData) MutateCoordSys(n CoordSys) bool {
 	return rcv._tab.MutateInt8Slot(8, int8(n))
 }
 
 /// dynamic limits for the motion of this command
-func (rcv *KinCmdCircleData) Lim(obj *DynamicLimits) *DynamicLimits {
+func (rcv *KinCmd2dCircleData) Lim(obj *DynamicLimits) *DynamicLimits {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
@@ -177,27 +177,27 @@ func (rcv *KinCmdCircleData) Lim(obj *DynamicLimits) *DynamicLimits {
 }
 
 /// dynamic limits for the motion of this command
-func KinCmdCircleDataStart(builder *flatbuffers.Builder) {
+func KinCmd2dCircleDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }
-func KinCmdCircleDataAddCmdKinPose(builder *flatbuffers.Builder, cmdKinPose flatbuffers.UOffsetT) {
+func KinCmd2dCircleDataAddCmdKinPose(builder *flatbuffers.Builder, cmdKinPose flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(cmdKinPose), 0)
 }
-func KinCmdCircleDataStartCmdKinPoseVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func KinCmd2dCircleDataStartCmdKinPoseVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func KinCmdCircleDataAddCmdCircleData(builder *flatbuffers.Builder, cmdCircleData flatbuffers.UOffsetT) {
+func KinCmd2dCircleDataAddCmdCircleData(builder *flatbuffers.Builder, cmdCircleData flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(cmdCircleData), 0)
 }
-func KinCmdCircleDataStartCmdCircleDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func KinCmd2dCircleDataStartCmdCircleDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func KinCmdCircleDataAddCoordSys(builder *flatbuffers.Builder, coordSys CoordSys) {
+func KinCmd2dCircleDataAddCoordSys(builder *flatbuffers.Builder, coordSys CoordSys) {
 	builder.PrependInt8Slot(2, int8(coordSys), 0)
 }
-func KinCmdCircleDataAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
+func KinCmd2dCircleDataAddLim(builder *flatbuffers.Builder, lim flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(lim), 0)
 }
-func KinCmdCircleDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func KinCmd2dCircleDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
