@@ -67,7 +67,7 @@ func (rcv *KinCmdOptMCSData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 func (rcv *KinCmdOptMCSData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,7 +76,7 @@ func (rcv *KinCmdOptMCSData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 /// name of the joint transformation set that should become active
 func (rcv *KinCmdOptMCSData) SetName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

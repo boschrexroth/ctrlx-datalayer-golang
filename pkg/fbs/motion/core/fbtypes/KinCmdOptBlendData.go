@@ -66,7 +66,7 @@ func (rcv *KinCmdOptBlendData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "Once")
+/// permanent type ("Once", "PermOn" or any other string to switch the permanent command option off)
 func (rcv *KinCmdOptBlendData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -75,7 +75,7 @@ func (rcv *KinCmdOptBlendData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "Once")
+/// permanent type ("Once", "PermOn" or any other string to switch the permanent command option off)
 /// distance D1 (refer to the manual, should be greater than zero)
 func (rcv *KinCmdOptBlendData) Dist1() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

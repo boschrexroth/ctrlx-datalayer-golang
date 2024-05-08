@@ -9,7 +9,7 @@ import (
 type TriggerCfgT struct {
 	TriggerType TriggerTypeEnumFb `json:"triggerType"`
 	Name string `json:"name"`
-	Level float64 `json:"level"`
+	Level string `json:"level"`
 	PreTrigger float64 `json:"preTrigger"`
 }
 
@@ -19,10 +19,14 @@ func (t *TriggerCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t.Name != "" {
 		nameOffset = builder.CreateString(t.Name)
 	}
+	levelOffset := flatbuffers.UOffsetT(0)
+	if t.Level != "" {
+		levelOffset = builder.CreateString(t.Level)
+	}
 	TriggerCfgStart(builder)
 	TriggerCfgAddTriggerType(builder, t.TriggerType)
 	TriggerCfgAddName(builder, nameOffset)
-	TriggerCfgAddLevel(builder, t.Level)
+	TriggerCfgAddLevel(builder, levelOffset)
 	TriggerCfgAddPreTrigger(builder, t.PreTrigger)
 	return TriggerCfgEnd(builder)
 }
@@ -30,7 +34,7 @@ func (t *TriggerCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 func (rcv *TriggerCfg) UnPackTo(t *TriggerCfgT) {
 	t.TriggerType = rcv.TriggerType()
 	t.Name = string(rcv.Name())
-	t.Level = rcv.Level()
+	t.Level = string(rcv.Level())
 	t.PreTrigger = rcv.PreTrigger()
 }
 
@@ -88,16 +92,12 @@ func (rcv *TriggerCfg) Name() []byte {
 	return nil
 }
 
-func (rcv *TriggerCfg) Level() float64 {
+func (rcv *TriggerCfg) Level() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return 0.0
-}
-
-func (rcv *TriggerCfg) MutateLevel(n float64) bool {
-	return rcv._tab.MutateFloat64Slot(8, n)
+	return nil
 }
 
 func (rcv *TriggerCfg) PreTrigger() float64 {
@@ -121,8 +121,8 @@ func TriggerCfgAddTriggerType(builder *flatbuffers.Builder, triggerType TriggerT
 func TriggerCfgAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(name), 0)
 }
-func TriggerCfgAddLevel(builder *flatbuffers.Builder, level float64) {
-	builder.PrependFloat64Slot(2, level, 0.0)
+func TriggerCfgAddLevel(builder *flatbuffers.Builder, level flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(level), 0)
 }
 func TriggerCfgAddPreTrigger(builder *flatbuffers.Builder, preTrigger float64) {
 	builder.PrependFloat64Slot(3, preTrigger, 0.0)

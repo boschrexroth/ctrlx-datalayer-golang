@@ -11,6 +11,7 @@ type KinCfgJntTrafoSetT struct {
 	Name string `json:"name"`
 	JntTrafo string `json:"jntTrafo"`
 	Param *KinCfgJntTrafoAllParamT `json:"param"`
+	UiData string `json:"uiData"`
 }
 
 func (t *KinCfgJntTrafoSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,10 +25,15 @@ func (t *KinCfgJntTrafoSetT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 		jntTrafoOffset = builder.CreateString(t.JntTrafo)
 	}
 	paramOffset := t.Param.Pack(builder)
+	uiDataOffset := flatbuffers.UOffsetT(0)
+	if t.UiData != "" {
+		uiDataOffset = builder.CreateString(t.UiData)
+	}
 	KinCfgJntTrafoSetStart(builder)
 	KinCfgJntTrafoSetAddName(builder, nameOffset)
 	KinCfgJntTrafoSetAddJntTrafo(builder, jntTrafoOffset)
 	KinCfgJntTrafoSetAddParam(builder, paramOffset)
+	KinCfgJntTrafoSetAddUiData(builder, uiDataOffset)
 	return KinCfgJntTrafoSetEnd(builder)
 }
 
@@ -35,6 +41,7 @@ func (rcv *KinCfgJntTrafoSet) UnPackTo(t *KinCfgJntTrafoSetT) {
 	t.Name = string(rcv.Name())
 	t.JntTrafo = string(rcv.JntTrafo())
 	t.Param = rcv.Param(nil).UnPack()
+	t.UiData = string(rcv.UiData())
 }
 
 func (rcv *KinCfgJntTrafoSet) UnPack() *KinCfgJntTrafoSetT {
@@ -106,8 +113,18 @@ func (rcv *KinCfgJntTrafoSet) Param(obj *KinCfgJntTrafoAllParam) *KinCfgJntTrafo
 }
 
 /// configuration parameter of the joint transformation
+/// user interface data of the joint transformation
+func (rcv *KinCfgJntTrafoSet) UiData() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// user interface data of the joint transformation
 func KinCfgJntTrafoSetStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func KinCfgJntTrafoSetAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -117,6 +134,9 @@ func KinCfgJntTrafoSetAddJntTrafo(builder *flatbuffers.Builder, jntTrafo flatbuf
 }
 func KinCfgJntTrafoSetAddParam(builder *flatbuffers.Builder, param flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(param), 0)
+}
+func KinCfgJntTrafoSetAddUiData(builder *flatbuffers.Builder, uiData flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(uiData), 0)
 }
 func KinCfgJntTrafoSetEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

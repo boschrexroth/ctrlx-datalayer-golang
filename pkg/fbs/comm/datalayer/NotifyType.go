@@ -12,6 +12,7 @@ const (
 	NotifyTypeMetadata  NotifyType = 2
 	NotifyTypeKeepalive NotifyType = 3
 	NotifyTypeType      NotifyType = 4
+	NotifyTypeEvent     NotifyType = 5
 )
 
 var EnumNamesNotifyType = map[NotifyType]string{
@@ -20,6 +21,7 @@ var EnumNamesNotifyType = map[NotifyType]string{
 	NotifyTypeMetadata:  "Metadata",
 	NotifyTypeKeepalive: "Keepalive",
 	NotifyTypeType:      "Type",
+	NotifyTypeEvent:     "Event",
 }
 
 var EnumValuesNotifyType = map[string]NotifyType{
@@ -28,6 +30,7 @@ var EnumValuesNotifyType = map[string]NotifyType{
 	"Metadata":  NotifyTypeMetadata,
 	"Keepalive": NotifyTypeKeepalive,
 	"Type":      NotifyTypeType,
+	"Event":     NotifyTypeEvent,
 }
 
 func (v NotifyType) String() string {

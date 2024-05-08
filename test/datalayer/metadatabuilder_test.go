@@ -1,7 +1,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2021-2022 Bosch Rexroth AG
+ * Copyright (c) 2021-2024 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -165,4 +165,20 @@ func TestMetadataDisplayNamesBuilder(t *testing.T) {
 		assert.Equal(t, string(e.Id()), s)
 		assert.Equal(t, string(e.Text()), "value_"+s)
 	}
+}
+
+/*
+flatbuffers commit: https://github.com/google/flatbuffers/commit/96d438df47d
+Problem with displaying flatbuffers provider nodes
+*/
+func TestMetadataBuilderRequiredFieldsEmptyDescriptionUrl(t *testing.T) {
+
+	m := datalayer.NewMetaDataBuilder(datalayer.AllowedOperationRead, "", "")
+	v := m.Build()
+	defer datalayer.DeleteVariant(v)
+	assert.NotNil(t, v)
+	d := fbs.GetRootAsMetadata(v.GetFlatbuffers(), 0)
+	assert.NotNil(t, d)
+	assert.NotNil(t, d.Description())
+	assert.NotNil(t, d.DescriptionUrl())
 }

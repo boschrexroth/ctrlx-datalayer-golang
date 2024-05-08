@@ -63,7 +63,7 @@ func (rcv *KinCmdOptFeedGroupData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type ("Once", "PermOn" or any other string to switch the permanent command option off)
 func (rcv *KinCmdOptFeedGroupData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,7 +72,7 @@ func (rcv *KinCmdOptFeedGroupData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type ("Once", "PermOn" or any other string to switch the permanent command option off)
 /// name of the feedGroup that should be used to define the path parameter (default FG_XYZ)
 /// possible feedGroups are: "FG_XYZ", "FG_XYZ_O", "FG_XYZ_A", "FG_XYZ_O_A"
 func (rcv *KinCmdOptFeedGroupData) Type() FeedGroup {

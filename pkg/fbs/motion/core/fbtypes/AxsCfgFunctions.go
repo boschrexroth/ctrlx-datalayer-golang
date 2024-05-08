@@ -15,6 +15,8 @@ type AxsCfgFunctionsT struct {
 	PosMode *AxsCfgPosModeT `json:"posMode"`
 	Extrapolation *AxsCfgExtrapolationT `json:"extrapolation"`
 	AxsEncoder *AxsCfgEncoderT `json:"axsEncoder"`
+	AxsCfgDriveSls *AxsCfgDriveSLST `json:"axsCfgDriveSLS"`
+	AxsCfgCyclicStatusData *AxsCfgCyclicStatusDataT `json:"axsCfgCyclicStatusData"`
 }
 
 func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -36,12 +38,16 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	posModeOffset := t.PosMode.Pack(builder)
 	extrapolationOffset := t.Extrapolation.Pack(builder)
 	axsEncoderOffset := t.AxsEncoder.Pack(builder)
+	axsCfgDriveSlsOffset := t.AxsCfgDriveSls.Pack(builder)
+	axsCfgCyclicStatusDataOffset := t.AxsCfgCyclicStatusData.Pack(builder)
 	AxsCfgFunctionsStart(builder)
 	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
 	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
 	AxsCfgFunctionsAddPosMode(builder, posModeOffset)
 	AxsCfgFunctionsAddExtrapolation(builder, extrapolationOffset)
 	AxsCfgFunctionsAddAxsEncoder(builder, axsEncoderOffset)
+	AxsCfgFunctionsAddAxsCfgDriveSls(builder, axsCfgDriveSlsOffset)
+	AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder, axsCfgCyclicStatusDataOffset)
 	return AxsCfgFunctionsEnd(builder)
 }
 
@@ -57,6 +63,8 @@ func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
 	t.PosMode = rcv.PosMode(nil).UnPack()
 	t.Extrapolation = rcv.Extrapolation(nil).UnPack()
 	t.AxsEncoder = rcv.AxsEncoder(nil).UnPack()
+	t.AxsCfgDriveSls = rcv.AxsCfgDriveSls(nil).UnPack()
+	t.AxsCfgCyclicStatusData = rcv.AxsCfgCyclicStatusData(nil).UnPack()
 }
 
 func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
@@ -175,8 +183,38 @@ func (rcv *AxsCfgFunctions) AxsEncoder(obj *AxsCfgEncoder) *AxsCfgEncoder {
 }
 
 /// configuration for encoder axis
+/// configuration of monitoring of the safe limited speed in the drive by the motion kernel
+func (rcv *AxsCfgFunctions) AxsCfgDriveSls(obj *AxsCfgDriveSLS) *AxsCfgDriveSLS {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgDriveSLS)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of monitoring of the safe limited speed in the drive by the motion kernel
+/// configuration of cyclic status data for an axis
+func (rcv *AxsCfgFunctions) AxsCfgCyclicStatusData(obj *AxsCfgCyclicStatusData) *AxsCfgCyclicStatusData {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgCyclicStatusData)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of cyclic status data for an axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(7)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
@@ -195,6 +233,12 @@ func AxsCfgFunctionsAddExtrapolation(builder *flatbuffers.Builder, extrapolation
 }
 func AxsCfgFunctionsAddAxsEncoder(builder *flatbuffers.Builder, axsEncoder flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(axsEncoder), 0)
+}
+func AxsCfgFunctionsAddAxsCfgDriveSls(builder *flatbuffers.Builder, axsCfgDriveSls flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(axsCfgDriveSls), 0)
+}
+func AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder *flatbuffers.Builder, axsCfgCyclicStatusData flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(axsCfgCyclicStatusData), 0)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

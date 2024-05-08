@@ -67,7 +67,7 @@ func (rcv *KinCmdOptSafeAreaData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 func (rcv *KinCmdOptSafeAreaData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -76,7 +76,7 @@ func (rcv *KinCmdOptSafeAreaData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 /// name of the safe zone or work area that should become active/disabled as set in the configuration
 func (rcv *KinCmdOptSafeAreaData) SafeArea() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

@@ -12,6 +12,7 @@ type OscilloscopeCfgT struct {
 	Buffer *BufferCfgT `json:"buffer"`
 	Trigger *TriggerCfgT `json:"trigger"`
 	Diagramview []*DiagramCfgT `json:"diagramview"`
+	SignalType string `json:"signalType"`
 }
 
 func (t *OscilloscopeCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -48,12 +49,17 @@ func (t *OscilloscopeCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 		}
 		diagramviewOffset = builder.EndVector(diagramviewLength)
 	}
+	signalTypeOffset := flatbuffers.UOffsetT(0)
+	if t.SignalType != "" {
+		signalTypeOffset = builder.CreateString(t.SignalType)
+	}
 	OscilloscopeCfgStart(builder)
 	OscilloscopeCfgAddName(builder, nameOffset)
 	OscilloscopeCfgAddChannels(builder, channelsOffset)
 	OscilloscopeCfgAddBuffer(builder, bufferOffset)
 	OscilloscopeCfgAddTrigger(builder, triggerOffset)
 	OscilloscopeCfgAddDiagramview(builder, diagramviewOffset)
+	OscilloscopeCfgAddSignalType(builder, signalTypeOffset)
 	return OscilloscopeCfgEnd(builder)
 }
 
@@ -75,6 +81,7 @@ func (rcv *OscilloscopeCfg) UnPackTo(t *OscilloscopeCfgT) {
 		rcv.Diagramview(&x, j)
 		t.Diagramview[j] = x.UnPack()
 	}
+	t.SignalType = string(rcv.SignalType())
 }
 
 func (rcv *OscilloscopeCfg) UnPack() *OscilloscopeCfgT {
@@ -185,8 +192,16 @@ func (rcv *OscilloscopeCfg) DiagramviewLength() int {
 	return 0
 }
 
+func (rcv *OscilloscopeCfg) SignalType() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func OscilloscopeCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func OscilloscopeCfgAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -208,6 +223,9 @@ func OscilloscopeCfgAddDiagramview(builder *flatbuffers.Builder, diagramview fla
 }
 func OscilloscopeCfgStartDiagramviewVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func OscilloscopeCfgAddSignalType(builder *flatbuffers.Builder, signalType flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(signalType), 0)
 }
 func OscilloscopeCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

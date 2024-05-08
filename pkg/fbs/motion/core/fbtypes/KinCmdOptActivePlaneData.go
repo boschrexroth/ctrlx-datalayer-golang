@@ -63,7 +63,7 @@ func (rcv *KinCmdOptActivePlaneData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 func (rcv *KinCmdOptActivePlaneData) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -72,7 +72,7 @@ func (rcv *KinCmdOptActivePlaneData) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type (either "PermOn" or any other string to switch off)
 /// type of the new active plane
 func (rcv *KinCmdOptActivePlaneData) Plane() ActivePlaneType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))

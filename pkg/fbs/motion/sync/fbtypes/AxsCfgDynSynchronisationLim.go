@@ -14,10 +14,40 @@ type AxsCfgDynSynchronisationLimT struct {
 	JrkDec float64 `json:"jrkDec"`
 	VelNeg float64 `json:"velNeg"`
 	VelPos float64 `json:"velPos"`
+	AccUnit string `json:"accUnit"`
+	DecUnit string `json:"decUnit"`
+	JrkAccUnit string `json:"jrkAccUnit"`
+	JrkDecUnit string `json:"jrkDecUnit"`
+	VelNegUnit string `json:"velNegUnit"`
+	VelPosUnit string `json:"velPosUnit"`
 }
 
 func (t *AxsCfgDynSynchronisationLimT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
+	accUnitOffset := flatbuffers.UOffsetT(0)
+	if t.AccUnit != "" {
+		accUnitOffset = builder.CreateString(t.AccUnit)
+	}
+	decUnitOffset := flatbuffers.UOffsetT(0)
+	if t.DecUnit != "" {
+		decUnitOffset = builder.CreateString(t.DecUnit)
+	}
+	jrkAccUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkAccUnit != "" {
+		jrkAccUnitOffset = builder.CreateString(t.JrkAccUnit)
+	}
+	jrkDecUnitOffset := flatbuffers.UOffsetT(0)
+	if t.JrkDecUnit != "" {
+		jrkDecUnitOffset = builder.CreateString(t.JrkDecUnit)
+	}
+	velNegUnitOffset := flatbuffers.UOffsetT(0)
+	if t.VelNegUnit != "" {
+		velNegUnitOffset = builder.CreateString(t.VelNegUnit)
+	}
+	velPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.VelPosUnit != "" {
+		velPosUnitOffset = builder.CreateString(t.VelPosUnit)
+	}
 	AxsCfgDynSynchronisationLimStart(builder)
 	AxsCfgDynSynchronisationLimAddAcc(builder, t.Acc)
 	AxsCfgDynSynchronisationLimAddDec(builder, t.Dec)
@@ -25,6 +55,12 @@ func (t *AxsCfgDynSynchronisationLimT) Pack(builder *flatbuffers.Builder) flatbu
 	AxsCfgDynSynchronisationLimAddJrkDec(builder, t.JrkDec)
 	AxsCfgDynSynchronisationLimAddVelNeg(builder, t.VelNeg)
 	AxsCfgDynSynchronisationLimAddVelPos(builder, t.VelPos)
+	AxsCfgDynSynchronisationLimAddAccUnit(builder, accUnitOffset)
+	AxsCfgDynSynchronisationLimAddDecUnit(builder, decUnitOffset)
+	AxsCfgDynSynchronisationLimAddJrkAccUnit(builder, jrkAccUnitOffset)
+	AxsCfgDynSynchronisationLimAddJrkDecUnit(builder, jrkDecUnitOffset)
+	AxsCfgDynSynchronisationLimAddVelNegUnit(builder, velNegUnitOffset)
+	AxsCfgDynSynchronisationLimAddVelPosUnit(builder, velPosUnitOffset)
 	return AxsCfgDynSynchronisationLimEnd(builder)
 }
 
@@ -35,6 +71,12 @@ func (rcv *AxsCfgDynSynchronisationLim) UnPackTo(t *AxsCfgDynSynchronisationLimT
 	t.JrkDec = rcv.JrkDec()
 	t.VelNeg = rcv.VelNeg()
 	t.VelPos = rcv.VelPos()
+	t.AccUnit = string(rcv.AccUnit())
+	t.DecUnit = string(rcv.DecUnit())
+	t.JrkAccUnit = string(rcv.JrkAccUnit())
+	t.JrkDecUnit = string(rcv.JrkDecUnit())
+	t.VelNegUnit = string(rcv.VelNegUnit())
+	t.VelPosUnit = string(rcv.VelPosUnit())
 }
 
 func (rcv *AxsCfgDynSynchronisationLim) UnPack() *AxsCfgDynSynchronisationLimT {
@@ -155,8 +197,68 @@ func (rcv *AxsCfgDynSynchronisationLim) MutateVelPos(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(14, n)
 }
 
+/// unit of acc
+func (rcv *AxsCfgDynSynchronisationLim) AccUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of acc
+/// unit of dec
+func (rcv *AxsCfgDynSynchronisationLim) DecUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of dec
+/// unit of jrkAcc
+func (rcv *AxsCfgDynSynchronisationLim) JrkAccUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of jrkAcc
+/// unit of jrkDec
+func (rcv *AxsCfgDynSynchronisationLim) JrkDecUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of jrkDec
+/// unit of velNeg
+func (rcv *AxsCfgDynSynchronisationLim) VelNegUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of velNeg
+/// unit of velPos
+func (rcv *AxsCfgDynSynchronisationLim) VelPosUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of velPos
 func AxsCfgDynSynchronisationLimStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(12)
 }
 func AxsCfgDynSynchronisationLimAddAcc(builder *flatbuffers.Builder, acc float64) {
 	builder.PrependFloat64Slot(0, acc, 0.0)
@@ -175,6 +277,24 @@ func AxsCfgDynSynchronisationLimAddVelNeg(builder *flatbuffers.Builder, velNeg f
 }
 func AxsCfgDynSynchronisationLimAddVelPos(builder *flatbuffers.Builder, velPos float64) {
 	builder.PrependFloat64Slot(5, velPos, 0.0)
+}
+func AxsCfgDynSynchronisationLimAddAccUnit(builder *flatbuffers.Builder, accUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(accUnit), 0)
+}
+func AxsCfgDynSynchronisationLimAddDecUnit(builder *flatbuffers.Builder, decUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(decUnit), 0)
+}
+func AxsCfgDynSynchronisationLimAddJrkAccUnit(builder *flatbuffers.Builder, jrkAccUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(jrkAccUnit), 0)
+}
+func AxsCfgDynSynchronisationLimAddJrkDecUnit(builder *flatbuffers.Builder, jrkDecUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(jrkDecUnit), 0)
+}
+func AxsCfgDynSynchronisationLimAddVelNegUnit(builder *flatbuffers.Builder, velNegUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(velNegUnit), 0)
+}
+func AxsCfgDynSynchronisationLimAddVelPosUnit(builder *flatbuffers.Builder, velPosUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(velPosUnit), 0)
 }
 func AxsCfgDynSynchronisationLimEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

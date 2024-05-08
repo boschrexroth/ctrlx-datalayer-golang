@@ -14,6 +14,11 @@ type ServerSettingsT struct {
 	ServerMaxRtSize uint32 `json:"serverMaxRtSize"`
 	ServerEmulatedNvramSize uint32 `json:"serverEmulatedNvramSize"`
 	ExperimentalFeatures []string `json:"experimentalFeatures"`
+	TcpPortFrontend uint16 `json:"tcpPortFrontend"`
+	TcpPortBackend uint16 `json:"tcpPortBackend"`
+	ForceEmulatedNvram bool `json:"forceEmulatedNvram"`
+	ServerZmqHighWaterMark uint32 `json:"serverZmqHighWaterMark"`
+	MaxBulkRequest uint32 `json:"maxBulkRequest"`
 }
 
 func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -43,6 +48,11 @@ func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	ServerSettingsAddServerMaxRtSize(builder, t.ServerMaxRtSize)
 	ServerSettingsAddServerEmulatedNvramSize(builder, t.ServerEmulatedNvramSize)
 	ServerSettingsAddExperimentalFeatures(builder, experimentalFeaturesOffset)
+	ServerSettingsAddTcpPortFrontend(builder, t.TcpPortFrontend)
+	ServerSettingsAddTcpPortBackend(builder, t.TcpPortBackend)
+	ServerSettingsAddForceEmulatedNvram(builder, t.ForceEmulatedNvram)
+	ServerSettingsAddServerZmqHighWaterMark(builder, t.ServerZmqHighWaterMark)
+	ServerSettingsAddMaxBulkRequest(builder, t.MaxBulkRequest)
 	return ServerSettingsEnd(builder)
 }
 
@@ -58,6 +68,11 @@ func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
 	for j := 0; j < experimentalFeaturesLength; j++ {
 		t.ExperimentalFeatures[j] = string(rcv.ExperimentalFeatures(j))
 	}
+	t.TcpPortFrontend = rcv.TcpPortFrontend()
+	t.TcpPortBackend = rcv.TcpPortBackend()
+	t.ForceEmulatedNvram = rcv.ForceEmulatedNvram()
+	t.ServerZmqHighWaterMark = rcv.ServerZmqHighWaterMark()
+	t.MaxBulkRequest = rcv.MaxBulkRequest()
 }
 
 func (rcv *ServerSettings) UnPack() *ServerSettingsT {
@@ -114,7 +129,7 @@ func (rcv *ServerSettings) ServerWaitResponseTimeout() uint32 {
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
 	}
-	return 3000
+	return 30000
 }
 
 /// after this time a response from provider is expected - if there is no answer a provider is assumed to be dead --> kick provider out of routing
@@ -152,7 +167,7 @@ func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
 	}
-	return 1048576
+	return 2097152
 }
 
 /// Maximum size of a RT area
@@ -160,7 +175,8 @@ func (rcv *ServerSettings) MutateServerMaxRtSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
-/// Emulated NVRam size - will be active after a restart of app.automationcore
+/// Emulated NVRam size if no real NVRAM is found
+/// Changes will be active after a restart of app.automationcore
 func (rcv *ServerSettings) ServerEmulatedNvramSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -169,7 +185,8 @@ func (rcv *ServerSettings) ServerEmulatedNvramSize() uint32 {
 	return 122880
 }
 
-/// Emulated NVRam size - will be active after a restart of app.automationcore
+/// Emulated NVRam size if no real NVRAM is found
+/// Changes will be active after a restart of app.automationcore
 func (rcv *ServerSettings) MutateServerEmulatedNvramSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
@@ -193,14 +210,100 @@ func (rcv *ServerSettings) ExperimentalFeaturesLength() int {
 }
 
 /// Add the names of the experimental feature you want to enable here
+/// Used port for TCP frontend communication - Use value 0 to deactivate communication
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) TcpPortFrontend() uint16 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetUint16(o + rcv._tab.Pos)
+	}
+	return 2069
+}
+
+/// Used port for TCP frontend communication - Use value 0 to deactivate communication
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) MutateTcpPortFrontend(n uint16) bool {
+	return rcv._tab.MutateUint16Slot(18, n)
+}
+
+/// Used port for TCP backend communication - Use value 0 to deactivate communication
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) TcpPortBackend() uint16 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetUint16(o + rcv._tab.Pos)
+	}
+	return 2070
+}
+
+/// Used port for TCP backend communication - Use value 0 to deactivate communication
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) MutateTcpPortBackend(n uint16) bool {
+	return rcv._tab.MutateUint16Slot(20, n)
+}
+
+/// Force emulation of NVRam even if there is a real NVRAM
+/// Size of NVRam is serverEmulatedNvramSize
+/// Changes will be active after reboot of control
+func (rcv *ServerSettings) ForceEmulatedNvram() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// Force emulation of NVRam even if there is a real NVRAM
+/// Size of NVRam is serverEmulatedNvramSize
+/// Changes will be active after reboot of control
+func (rcv *ServerSettings) MutateForceEmulatedNvram(n bool) bool {
+	return rcv._tab.MutateBoolSlot(22, n)
+}
+
+/// High water mark of ZMQ
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) ServerZmqHighWaterMark() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 1000
+}
+
+/// High water mark of ZMQ
+/// Takes effect after reboot of control
+func (rcv *ServerSettings) MutateServerZmqHighWaterMark(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(24, n)
+}
+
+/// Number of requests per bulk
+/// If set to 0 - all requests will be single requests.
+/// If set to a value unequal to 0 - a bulk request will be
+/// splited to this count.
+func (rcv *ServerSettings) MaxBulkRequest() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 1000
+}
+
+/// Number of requests per bulk
+/// If set to 0 - all requests will be single requests.
+/// If set to a value unequal to 0 - a bulk request will be
+/// splited to this count.
+func (rcv *ServerSettings) MutateMaxBulkRequest(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(26, n)
+}
+
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(12)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
 }
 func ServerSettingsAddServerWaitResponseTimeout(builder *flatbuffers.Builder, serverWaitResponseTimeout uint32) {
-	builder.PrependUint32Slot(1, serverWaitResponseTimeout, 3000)
+	builder.PrependUint32Slot(1, serverWaitResponseTimeout, 30000)
 }
 func ServerSettingsAddServerMaxMessageSize(builder *flatbuffers.Builder, serverMaxMessageSize uint32) {
 	builder.PrependUint32Slot(2, serverMaxMessageSize, 52428800)
@@ -209,7 +312,7 @@ func ServerSettingsAddDebugAddress(builder *flatbuffers.Builder, debugAddress fl
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(debugAddress), 0)
 }
 func ServerSettingsAddServerMaxRtSize(builder *flatbuffers.Builder, serverMaxRtSize uint32) {
-	builder.PrependUint32Slot(4, serverMaxRtSize, 1048576)
+	builder.PrependUint32Slot(4, serverMaxRtSize, 2097152)
 }
 func ServerSettingsAddServerEmulatedNvramSize(builder *flatbuffers.Builder, serverEmulatedNvramSize uint32) {
 	builder.PrependUint32Slot(5, serverEmulatedNvramSize, 122880)
@@ -219,6 +322,21 @@ func ServerSettingsAddExperimentalFeatures(builder *flatbuffers.Builder, experim
 }
 func ServerSettingsStartExperimentalFeaturesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func ServerSettingsAddTcpPortFrontend(builder *flatbuffers.Builder, tcpPortFrontend uint16) {
+	builder.PrependUint16Slot(7, tcpPortFrontend, 2069)
+}
+func ServerSettingsAddTcpPortBackend(builder *flatbuffers.Builder, tcpPortBackend uint16) {
+	builder.PrependUint16Slot(8, tcpPortBackend, 2070)
+}
+func ServerSettingsAddForceEmulatedNvram(builder *flatbuffers.Builder, forceEmulatedNvram bool) {
+	builder.PrependBoolSlot(9, forceEmulatedNvram, false)
+}
+func ServerSettingsAddServerZmqHighWaterMark(builder *flatbuffers.Builder, serverZmqHighWaterMark uint32) {
+	builder.PrependUint32Slot(10, serverZmqHighWaterMark, 1000)
+}
+func ServerSettingsAddMaxBulkRequest(builder *flatbuffers.Builder, maxBulkRequest uint32) {
+	builder.PrependUint32Slot(11, maxBulkRequest, 1000)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

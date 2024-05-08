@@ -60,7 +60,7 @@ func (rcv *CmdOptNoParam) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type ("Once", "PermOn" or any other string to switch off; valid options depend on CmdOpt)
 func (rcv *CmdOptNoParam) PermType() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,7 +69,7 @@ func (rcv *CmdOptNoParam) PermType() []byte {
 	return nil
 }
 
-/// permanent type (e.g. "PermOn")
+/// permanent type ("Once", "PermOn" or any other string to switch off; valid options depend on CmdOpt)
 func CmdOptNoParamStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }

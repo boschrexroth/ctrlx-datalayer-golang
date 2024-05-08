@@ -1,7 +1,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2021-2023 Bosch Rexroth AG
+ * Copyright (c) 2021-2024 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -89,7 +89,10 @@ type MetaDataBuilder struct {
 }
 
 // NewMetaDataBuilder generates MetaDataBuilder instance
-func NewMetaDataBuilder(a AllowedOperation, desc string, descurl string) *MetaDataBuilder {
+// Parameter operations are the allowed operations of the provider node
+// Parameter desc is the description of the provider node and should not be empty ("")
+// Parameter descurl is the URL of the description and should not be empty ("")
+func NewMetaDataBuilder(operations AllowedOperation, desc string, descurl string) *MetaDataBuilder {
 	m := &MetaDataBuilder{description: desc, descriptionurl: descurl}
 	m.name = ""
 	m.unit = ""
@@ -99,7 +102,7 @@ func NewMetaDataBuilder(a AllowedOperation, desc string, descurl string) *MetaDa
 	m.extensions = make(map[string]string)
 	m.descriptions = make(map[string]string)
 	m.displaynames = make(map[string]string)
-	m.Operations(a)
+	m.Operations(operations)
 	return m
 }
 
@@ -123,8 +126,8 @@ func (m *MetaDataBuilder) Build() *Variant {
 	operations := m.operations()
 
 	meta := fbs.MetadataT{}
-	meta.Description = m.description
-	meta.DescriptionUrl = m.descriptionurl
+	meta.Description = m.fixFlatcOptimizer(m.description)
+	meta.DescriptionUrl = m.fixFlatcOptimizer(m.descriptionurl)
 	meta.DisplayName = m.name
 	meta.Unit = m.unit
 	meta.DisplayFormat = m.displayformat
@@ -285,4 +288,12 @@ func (m *MetaDataBuilder) AddLocalizationDescription(id, txt string) *MetaDataBu
 func (m *MetaDataBuilder) AddLocalizationDisplayName(id, txt string) *MetaDataBuilder {
 	m.displaynames[id] = txt
 	return m
+}
+
+// see flatbuffers commit: https://github.com/google/flatbuffers/commit/96d438df47d
+func (m *MetaDataBuilder) fixFlatcOptimizer(val string) string {
+	if val == "" {
+		return " "
+	}
+	return val
 }

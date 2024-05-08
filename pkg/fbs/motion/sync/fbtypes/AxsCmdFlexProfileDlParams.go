@@ -19,6 +19,11 @@ type AxsCmdFlexProfileDlParamsT struct {
 	FofSlaveOffsetDlIdx int32 `json:"fofSlaveOffsetDlIdx"`
 	FofSlaveOffsetTimeConstantDlIdx int32 `json:"fofSlaveOffsetTimeConstantDlIdx"`
 	FineAdjustDlIdx int32 `json:"fineAdjustDlIdx"`
+	SoiAngleAdjustDlIdx int32 `json:"soiAngleAdjustDlIdx"`
+	SoiAngleAdjustVelDlIdx int32 `json:"soiAngleAdjustVelDlIdx"`
+	SoiAngleAdjustAccDlIdx int32 `json:"soiAngleAdjustAccDlIdx"`
+	FofAngleAdjustDlIdx int32 `json:"fofAngleAdjustDlIdx"`
+	FofAngleAdjustTimeConstantDlIdx int32 `json:"fofAngleAdjustTimeConstantDlIdx"`
 }
 
 func (t *AxsCmdFlexProfileDlParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -35,6 +40,11 @@ func (t *AxsCmdFlexProfileDlParamsT) Pack(builder *flatbuffers.Builder) flatbuff
 	AxsCmdFlexProfileDlParamsAddFofSlaveOffsetDlIdx(builder, t.FofSlaveOffsetDlIdx)
 	AxsCmdFlexProfileDlParamsAddFofSlaveOffsetTimeConstantDlIdx(builder, t.FofSlaveOffsetTimeConstantDlIdx)
 	AxsCmdFlexProfileDlParamsAddFineAdjustDlIdx(builder, t.FineAdjustDlIdx)
+	AxsCmdFlexProfileDlParamsAddSoiAngleAdjustDlIdx(builder, t.SoiAngleAdjustDlIdx)
+	AxsCmdFlexProfileDlParamsAddSoiAngleAdjustVelDlIdx(builder, t.SoiAngleAdjustVelDlIdx)
+	AxsCmdFlexProfileDlParamsAddSoiAngleAdjustAccDlIdx(builder, t.SoiAngleAdjustAccDlIdx)
+	AxsCmdFlexProfileDlParamsAddFofAngleAdjustDlIdx(builder, t.FofAngleAdjustDlIdx)
+	AxsCmdFlexProfileDlParamsAddFofAngleAdjustTimeConstantDlIdx(builder, t.FofAngleAdjustTimeConstantDlIdx)
 	return AxsCmdFlexProfileDlParamsEnd(builder)
 }
 
@@ -50,6 +60,11 @@ func (rcv *AxsCmdFlexProfileDlParams) UnPackTo(t *AxsCmdFlexProfileDlParamsT) {
 	t.FofSlaveOffsetDlIdx = rcv.FofSlaveOffsetDlIdx()
 	t.FofSlaveOffsetTimeConstantDlIdx = rcv.FofSlaveOffsetTimeConstantDlIdx()
 	t.FineAdjustDlIdx = rcv.FineAdjustDlIdx()
+	t.SoiAngleAdjustDlIdx = rcv.SoiAngleAdjustDlIdx()
+	t.SoiAngleAdjustVelDlIdx = rcv.SoiAngleAdjustVelDlIdx()
+	t.SoiAngleAdjustAccDlIdx = rcv.SoiAngleAdjustAccDlIdx()
+	t.FofAngleAdjustDlIdx = rcv.FofAngleAdjustDlIdx()
+	t.FofAngleAdjustTimeConstantDlIdx = rcv.FofAngleAdjustTimeConstantDlIdx()
 }
 
 func (rcv *AxsCmdFlexProfileDlParams) UnPack() *AxsCmdFlexProfileDlParamsT {
@@ -240,8 +255,78 @@ func (rcv *AxsCmdFlexProfileDlParams) MutateFineAdjustDlIdx(n int32) bool {
 	return rcv._tab.MutateInt32Slot(24, n)
 }
 
+/// data layer index of angle adjust valaue
+func (rcv *AxsCmdFlexProfileDlParams) SoiAngleAdjustDlIdx() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return -1
+}
+
+/// data layer index of angle adjust valaue
+func (rcv *AxsCmdFlexProfileDlParams) MutateSoiAngleAdjustDlIdx(n int32) bool {
+	return rcv._tab.MutateInt32Slot(26, n)
+}
+
+/// data layer index of angle adjust velocity constraint for second order interpolation
+func (rcv *AxsCmdFlexProfileDlParams) SoiAngleAdjustVelDlIdx() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return -1
+}
+
+/// data layer index of angle adjust velocity constraint for second order interpolation
+func (rcv *AxsCmdFlexProfileDlParams) MutateSoiAngleAdjustVelDlIdx(n int32) bool {
+	return rcv._tab.MutateInt32Slot(28, n)
+}
+
+/// data layer index of angle adjust acceleration constraint for second order interpolation
+func (rcv *AxsCmdFlexProfileDlParams) SoiAngleAdjustAccDlIdx() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return -1
+}
+
+/// data layer index of angle adjust acceleration constraint for second order interpolation
+func (rcv *AxsCmdFlexProfileDlParams) MutateSoiAngleAdjustAccDlIdx(n int32) bool {
+	return rcv._tab.MutateInt32Slot(30, n)
+}
+
+/// data layer index of second angle adjust, first order filtered
+func (rcv *AxsCmdFlexProfileDlParams) FofAngleAdjustDlIdx() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(32))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return -1
+}
+
+/// data layer index of second angle adjust, first order filtered
+func (rcv *AxsCmdFlexProfileDlParams) MutateFofAngleAdjustDlIdx(n int32) bool {
+	return rcv._tab.MutateInt32Slot(32, n)
+}
+
+/// data layer index of time constant for change rate of fofAngleAdjust
+func (rcv *AxsCmdFlexProfileDlParams) FofAngleAdjustTimeConstantDlIdx() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(34))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return -1
+}
+
+/// data layer index of time constant for change rate of fofAngleAdjust
+func (rcv *AxsCmdFlexProfileDlParams) MutateFofAngleAdjustTimeConstantDlIdx(n int32) bool {
+	return rcv._tab.MutateInt32Slot(34, n)
+}
+
 func AxsCmdFlexProfileDlParamsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(11)
+	builder.StartObject(16)
 }
 func AxsCmdFlexProfileDlParamsAddSoiMasterOffsetDlIdx(builder *flatbuffers.Builder, soiMasterOffsetDlIdx int32) {
 	builder.PrependInt32Slot(0, soiMasterOffsetDlIdx, -1)
@@ -275,6 +360,21 @@ func AxsCmdFlexProfileDlParamsAddFofSlaveOffsetTimeConstantDlIdx(builder *flatbu
 }
 func AxsCmdFlexProfileDlParamsAddFineAdjustDlIdx(builder *flatbuffers.Builder, fineAdjustDlIdx int32) {
 	builder.PrependInt32Slot(10, fineAdjustDlIdx, -1)
+}
+func AxsCmdFlexProfileDlParamsAddSoiAngleAdjustDlIdx(builder *flatbuffers.Builder, soiAngleAdjustDlIdx int32) {
+	builder.PrependInt32Slot(11, soiAngleAdjustDlIdx, -1)
+}
+func AxsCmdFlexProfileDlParamsAddSoiAngleAdjustVelDlIdx(builder *flatbuffers.Builder, soiAngleAdjustVelDlIdx int32) {
+	builder.PrependInt32Slot(12, soiAngleAdjustVelDlIdx, -1)
+}
+func AxsCmdFlexProfileDlParamsAddSoiAngleAdjustAccDlIdx(builder *flatbuffers.Builder, soiAngleAdjustAccDlIdx int32) {
+	builder.PrependInt32Slot(13, soiAngleAdjustAccDlIdx, -1)
+}
+func AxsCmdFlexProfileDlParamsAddFofAngleAdjustDlIdx(builder *flatbuffers.Builder, fofAngleAdjustDlIdx int32) {
+	builder.PrependInt32Slot(14, fofAngleAdjustDlIdx, -1)
+}
+func AxsCmdFlexProfileDlParamsAddFofAngleAdjustTimeConstantDlIdx(builder *flatbuffers.Builder, fofAngleAdjustTimeConstantDlIdx int32) {
+	builder.PrependInt32Slot(15, fofAngleAdjustTimeConstantDlIdx, -1)
 }
 func AxsCmdFlexProfileDlParamsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -10,15 +10,18 @@ import (
 type AxsCfgDynSynchronisationT struct {
 	Limits *AxsCfgDynSynchronisationLimT `json:"limits"`
 	SyncWindowModulo float64 `json:"syncWindowModulo"`
+	SyncWindowModuloExtended *AxsCfgDynSynchronisationSyncWinModT `json:"syncWindowModuloExtended"`
 	Method DynSynchronisationMethod `json:"method"`
 }
 
 func (t *AxsCfgDynSynchronisationT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	limitsOffset := t.Limits.Pack(builder)
+	syncWindowModuloExtendedOffset := t.SyncWindowModuloExtended.Pack(builder)
 	AxsCfgDynSynchronisationStart(builder)
 	AxsCfgDynSynchronisationAddLimits(builder, limitsOffset)
 	AxsCfgDynSynchronisationAddSyncWindowModulo(builder, t.SyncWindowModulo)
+	AxsCfgDynSynchronisationAddSyncWindowModuloExtended(builder, syncWindowModuloExtendedOffset)
 	AxsCfgDynSynchronisationAddMethod(builder, t.Method)
 	return AxsCfgDynSynchronisationEnd(builder)
 }
@@ -26,6 +29,7 @@ func (t *AxsCfgDynSynchronisationT) Pack(builder *flatbuffers.Builder) flatbuffe
 func (rcv *AxsCfgDynSynchronisation) UnPackTo(t *AxsCfgDynSynchronisationT) {
 	t.Limits = rcv.Limits(nil).UnPack()
 	t.SyncWindowModulo = rcv.SyncWindowModulo()
+	t.SyncWindowModuloExtended = rcv.SyncWindowModuloExtended(nil).UnPack()
 	t.Method = rcv.Method()
 }
 
@@ -78,7 +82,7 @@ func (rcv *AxsCfgDynSynchronisation) Limits(obj *AxsCfgDynSynchronisationLim) *A
 }
 
 /// Reference to configuration of the dynamic synchronisation limits of the axis
-/// Dynamic synchronisation window modulo value
+/// Deprecated! It doesn't use anymore. The configuration should be set with the syncWindowModuloExtended only.
 func (rcv *AxsCfgDynSynchronisation) SyncWindowModulo() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -87,14 +91,29 @@ func (rcv *AxsCfgDynSynchronisation) SyncWindowModulo() float64 {
 	return 0.0
 }
 
-/// Dynamic synchronisation window modulo value
+/// Deprecated! It doesn't use anymore. The configuration should be set with the syncWindowModuloExtended only.
 func (rcv *AxsCfgDynSynchronisation) MutateSyncWindowModulo(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(6, n)
 }
 
+/// Dynamic synchronisation window modulo value
+func (rcv *AxsCfgDynSynchronisation) SyncWindowModuloExtended(obj *AxsCfgDynSynchronisationSyncWinMod) *AxsCfgDynSynchronisationSyncWinMod {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgDynSynchronisationSyncWinMod)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// Dynamic synchronisation window modulo value
 /// Selected dynamic synchronisation method for sync. commands
 func (rcv *AxsCfgDynSynchronisation) Method() DynSynchronisationMethod {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return DynSynchronisationMethod(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
@@ -103,11 +122,11 @@ func (rcv *AxsCfgDynSynchronisation) Method() DynSynchronisationMethod {
 
 /// Selected dynamic synchronisation method for sync. commands
 func (rcv *AxsCfgDynSynchronisation) MutateMethod(n DynSynchronisationMethod) bool {
-	return rcv._tab.MutateInt8Slot(8, int8(n))
+	return rcv._tab.MutateInt8Slot(10, int8(n))
 }
 
 func AxsCfgDynSynchronisationStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func AxsCfgDynSynchronisationAddLimits(builder *flatbuffers.Builder, limits flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(limits), 0)
@@ -115,8 +134,11 @@ func AxsCfgDynSynchronisationAddLimits(builder *flatbuffers.Builder, limits flat
 func AxsCfgDynSynchronisationAddSyncWindowModulo(builder *flatbuffers.Builder, syncWindowModulo float64) {
 	builder.PrependFloat64Slot(1, syncWindowModulo, 0.0)
 }
+func AxsCfgDynSynchronisationAddSyncWindowModuloExtended(builder *flatbuffers.Builder, syncWindowModuloExtended flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(syncWindowModuloExtended), 0)
+}
 func AxsCfgDynSynchronisationAddMethod(builder *flatbuffers.Builder, method DynSynchronisationMethod) {
-	builder.PrependInt8Slot(2, int8(method), 0)
+	builder.PrependInt8Slot(3, int8(method), 0)
 }
 func AxsCfgDynSynchronisationEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -15,6 +15,7 @@ const (
 	OscilloscopeStateEnumRECORDING_COMPLETED OscilloscopeStateEnum = 5
 	OscilloscopeStateEnumRECORDING           OscilloscopeStateEnum = 6
 	OscilloscopeStateEnumERROR               OscilloscopeStateEnum = 7
+	OscilloscopeStateEnumSAVEDATA            OscilloscopeStateEnum = 8
 )
 
 var EnumNamesOscilloscopeStateEnum = map[OscilloscopeStateEnum]string{
@@ -26,6 +27,7 @@ var EnumNamesOscilloscopeStateEnum = map[OscilloscopeStateEnum]string{
 	OscilloscopeStateEnumRECORDING_COMPLETED: "RECORDING_COMPLETED",
 	OscilloscopeStateEnumRECORDING:           "RECORDING",
 	OscilloscopeStateEnumERROR:               "ERROR",
+	OscilloscopeStateEnumSAVEDATA:            "SAVEDATA",
 }
 
 var EnumValuesOscilloscopeStateEnum = map[string]OscilloscopeStateEnum{
@@ -37,6 +39,7 @@ var EnumValuesOscilloscopeStateEnum = map[string]OscilloscopeStateEnum{
 	"RECORDING_COMPLETED": OscilloscopeStateEnumRECORDING_COMPLETED,
 	"RECORDING":           OscilloscopeStateEnumRECORDING,
 	"ERROR":               OscilloscopeStateEnumERROR,
+	"SAVEDATA":            OscilloscopeStateEnumSAVEDATA,
 }
 
 func (v OscilloscopeStateEnum) String() string {

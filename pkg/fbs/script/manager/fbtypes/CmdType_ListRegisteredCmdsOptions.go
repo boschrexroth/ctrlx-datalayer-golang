@@ -7,21 +7,27 @@ import "strconv"
 type CmdType_ListRegisteredCmdsOptions int8
 
 const (
-	CmdType_ListRegisteredCmdsOptionsUNKNOWN    CmdType_ListRegisteredCmdsOptions = 0
-	CmdType_ListRegisteredCmdsOptionsCMD        CmdType_ListRegisteredCmdsOptions = 1
-	CmdType_ListRegisteredCmdsOptionsCMD_OPTION CmdType_ListRegisteredCmdsOptions = 2
+	CmdType_ListRegisteredCmdsOptionsUNKNOWN              CmdType_ListRegisteredCmdsOptions = 0
+	CmdType_ListRegisteredCmdsOptionsCMD                  CmdType_ListRegisteredCmdsOptions = 1
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION           CmdType_ListRegisteredCmdsOptions = 2
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION_ONCE      CmdType_ListRegisteredCmdsOptions = 3
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION_PERMANENT CmdType_ListRegisteredCmdsOptions = 4
 )
 
 var EnumNamesCmdType_ListRegisteredCmdsOptions = map[CmdType_ListRegisteredCmdsOptions]string{
-	CmdType_ListRegisteredCmdsOptionsUNKNOWN:    "UNKNOWN",
-	CmdType_ListRegisteredCmdsOptionsCMD:        "CMD",
-	CmdType_ListRegisteredCmdsOptionsCMD_OPTION: "CMD_OPTION",
+	CmdType_ListRegisteredCmdsOptionsUNKNOWN:              "UNKNOWN",
+	CmdType_ListRegisteredCmdsOptionsCMD:                  "CMD",
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION:           "CMD_OPTION",
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION_ONCE:      "CMD_OPTION_ONCE",
+	CmdType_ListRegisteredCmdsOptionsCMD_OPTION_PERMANENT: "CMD_OPTION_PERMANENT",
 }
 
 var EnumValuesCmdType_ListRegisteredCmdsOptions = map[string]CmdType_ListRegisteredCmdsOptions{
-	"UNKNOWN":    CmdType_ListRegisteredCmdsOptionsUNKNOWN,
-	"CMD":        CmdType_ListRegisteredCmdsOptionsCMD,
-	"CMD_OPTION": CmdType_ListRegisteredCmdsOptionsCMD_OPTION,
+	"UNKNOWN":              CmdType_ListRegisteredCmdsOptionsUNKNOWN,
+	"CMD":                  CmdType_ListRegisteredCmdsOptionsCMD,
+	"CMD_OPTION":           CmdType_ListRegisteredCmdsOptionsCMD_OPTION,
+	"CMD_OPTION_ONCE":      CmdType_ListRegisteredCmdsOptionsCMD_OPTION_ONCE,
+	"CMD_OPTION_PERMANENT": CmdType_ListRegisteredCmdsOptionsCMD_OPTION_PERMANENT,
 }
 
 func (v CmdType_ListRegisteredCmdsOptions) String() string {

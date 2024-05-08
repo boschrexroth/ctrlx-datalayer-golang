@@ -18,10 +18,13 @@ type DcOnlineInfoResponseT struct {
 	SendOffset uint32 `json:"sendOffset"`
 	SyncOffset uint32 `json:"syncOffset"`
 	OutputShiftTime uint32 `json:"outputShiftTime"`
+	InputShiftTime int32 `json:"inputShiftTime"`
+	TimeInfo *TimeInfoT `json:"timeInfo"`
 }
 
 func (t *DcOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
+	timeInfoOffset := t.TimeInfo.Pack(builder)
 	DcOnlineInfoResponseStart(builder)
 	DcOnlineInfoResponseAddSyncMode(builder, t.SyncMode)
 	DcOnlineInfoResponseAddCycleTime(builder, t.CycleTime)
@@ -33,6 +36,8 @@ func (t *DcOnlineInfoResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	DcOnlineInfoResponseAddSendOffset(builder, t.SendOffset)
 	DcOnlineInfoResponseAddSyncOffset(builder, t.SyncOffset)
 	DcOnlineInfoResponseAddOutputShiftTime(builder, t.OutputShiftTime)
+	DcOnlineInfoResponseAddInputShiftTime(builder, t.InputShiftTime)
+	DcOnlineInfoResponseAddTimeInfo(builder, timeInfoOffset)
 	return DcOnlineInfoResponseEnd(builder)
 }
 
@@ -47,6 +52,8 @@ func (rcv *DcOnlineInfoResponse) UnPackTo(t *DcOnlineInfoResponseT) {
 	t.SendOffset = rcv.SendOffset()
 	t.SyncOffset = rcv.SyncOffset()
 	t.OutputShiftTime = rcv.OutputShiftTime()
+	t.InputShiftTime = rcv.InputShiftTime()
+	t.TimeInfo = rcv.TimeInfo(nil).UnPack()
 }
 
 func (rcv *DcOnlineInfoResponse) UnPack() *DcOnlineInfoResponseT {
@@ -235,8 +242,37 @@ func (rcv *DcOnlineInfoResponse) MutateOutputShiftTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(22, n)
 }
 
+///Input shift time in nanoseconds
+func (rcv *DcOnlineInfoResponse) InputShiftTime() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+///Input shift time in nanoseconds
+func (rcv *DcOnlineInfoResponse) MutateInputShiftTime(n int32) bool {
+	return rcv._tab.MutateInt32Slot(24, n)
+}
+
+///Operating system time information
+func (rcv *DcOnlineInfoResponse) TimeInfo(obj *TimeInfo) *TimeInfo {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TimeInfo)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Operating system time information
 func DcOnlineInfoResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(10)
+	builder.StartObject(12)
 }
 func DcOnlineInfoResponseAddSyncMode(builder *flatbuffers.Builder, syncMode SyncMode) {
 	builder.PrependUint32Slot(0, uint32(syncMode), 0)
@@ -267,6 +303,12 @@ func DcOnlineInfoResponseAddSyncOffset(builder *flatbuffers.Builder, syncOffset 
 }
 func DcOnlineInfoResponseAddOutputShiftTime(builder *flatbuffers.Builder, outputShiftTime uint32) {
 	builder.PrependUint32Slot(9, outputShiftTime, 0)
+}
+func DcOnlineInfoResponseAddInputShiftTime(builder *flatbuffers.Builder, inputShiftTime int32) {
+	builder.PrependInt32Slot(10, inputShiftTime, 0)
+}
+func DcOnlineInfoResponseAddTimeInfo(builder *flatbuffers.Builder, timeInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(timeInfo), 0)
 }
 func DcOnlineInfoResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
