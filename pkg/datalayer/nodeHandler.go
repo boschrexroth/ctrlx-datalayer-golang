@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2021-2022 Bosch Rexroth AG
+// Copyright (c) 2021-2024 Bosch Rexroth AG
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,15 +41,14 @@ typedef enum NODE_ACTION {
 	NODE_ACTION_ON_METADATA,
 }NODE_ACTION;
 
-extern void callCallbackC(TYPE_CB cb, TYPE_CBDATA cbdata, DLR_RESULT result, DLR_VARIANT data);
+extern void callCallbackC(TYPE_CB cb, uint64_t cbdata, DLR_RESULT result, DLR_VARIANT data);
 
 extern void nodeCallbackOnCreate(void* userdata, char* address, DLR_VARIANT data, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnRemove(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnBrowse(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnRead(void* userdata, char* address, DLR_VARIANT data, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnWrite(void* userdata, char* address, DLR_VARIANT data, TYPE_CB cb, TYPE_CBDATA cbdata);
-extern void nodeCallbackOnMetadata(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);
-*/
+extern void nodeCallbackOnMetadata(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);*/
 import "C"
 import (
 	"sync"
@@ -75,7 +74,7 @@ type nodeUserData struct {
 }
 
 //export nodeCallbackGo
-func nodeCallbackGo(cuserdata unsafe.Pointer, caddress *C.char, cdata C.DLR_VARIANT, cb C.TYPE_CB, cbdata C.TYPE_CBDATA, action C.int) {
+func nodeCallbackGo(cuserdata unsafe.Pointer, caddress *C.char, cdata C.DLR_VARIANT, cb C.TYPE_CB, cbdata C.ulong, action C.int) {
 	var i int = *(*int)(cuserdata)
 	var userdata *nodeUserData = nodeLookup(i)
 	address := C.GoString(caddress)
@@ -118,7 +117,7 @@ func getNodeUserdata(channels ProviderNodeChannels) unsafe.Pointer {
 }
 
 // createCallbackC closure to hide C types
-func createCallbackC(cb C.TYPE_CB, cbdata C.TYPE_CBDATA) ProviderNodeCallback {
+func createCallbackC(cb C.TYPE_CB, cbdata C.ulong) ProviderNodeCallback {
 	return func(result Result, data *Variant) {
 		if data == nil {
 			C.callCallbackC(cb, cbdata, C.DLR_RESULT(result), nil)
