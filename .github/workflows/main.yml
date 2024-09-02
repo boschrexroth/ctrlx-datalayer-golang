@@ -28,7 +28,7 @@ jobs:
         sudo apt-get install -y -f ./ctrlx-datalayer-2.7.5.deb
 
     - name: Set up Go
-      uses: actions/setup-go@5
+      uses: actions/setup-go@v5
       with:
         go-version: 1.22
         
