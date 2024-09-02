@@ -23,9 +23,9 @@
 package datalayer
 
 /*
-#cgo linux pkg-config: libsystemd libzmq ctrlx-datalayer
+#cgo linux pkg-config: libsystemd ctrlx-datalayer
 #cgo CFLAGS: -I./headers -I/usr/include/comm/datalayer/c
-#cgo linux LDFLAGS: -lcomm_datalayer -lzmq
+#cgo linux LDFLAGS: -lcomm_datalayer
 #cgo windows,amd64 LDFLAGS: -lcomm_datalayer
 #include <stdbool.h>
 #include <stdlib.h>

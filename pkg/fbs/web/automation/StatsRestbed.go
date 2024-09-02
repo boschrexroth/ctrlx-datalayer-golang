@@ -55,6 +55,7 @@ func (rcv *StatsRestbed) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// overall open sessions
 func (rcv *StatsRestbed) OpenSessions() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *StatsRestbed) OpenSessions() uint32 {
 	return 0
 }
 
+/// overall open sessions
 func (rcv *StatsRestbed) MutateOpenSessions(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

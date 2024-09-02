@@ -8,8 +8,8 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-DATALAYER_DEB_VERSION      := 2.6.0
-DATALAYER_DEB_FILE_VERSION := 2.6.1
+SDK_RELEASE_VERSION        := 3.2.0
+DATALAYER_DEB_FILE_VERSION := 2.7.5
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 
@@ -23,8 +23,8 @@ go-dep: ## Get go dependencies
 
 apt-dep: ## Get native dependencies
 	@sudo apt-get update
-	@sudo apt-get install -y libsystemd-dev libzmq3-dev
-	@wget --quiet https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/$(DATALAYER_DEB_VERSION)/ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
+	@sudo apt-get install -y libsystemd-dev
+	@wget --quiet https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/$(SDK_RELEASE_VERSION)/ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
 	@sudo apt-get install -y -f ./ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
 	@rm ctrlx-datalayer-${DATALAYER_DEB_FILE_VERSION}.deb
 

@@ -14,6 +14,7 @@ type KinStateJntTrafoDataReqAxisT struct {
 	DocRef string `json:"docRef"`
 	Type KinStateJntTrafoDataReqAxisType `json:"type"`
 	Mandatory bool `json:"mandatory"`
+	AddInfo []*KVPCfgSingleItemT `json:"addInfo"`
 }
 
 func (t *KinStateJntTrafoDataReqAxisT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -34,6 +35,19 @@ func (t *KinStateJntTrafoDataReqAxisT) Pack(builder *flatbuffers.Builder) flatbu
 	if t.DocRef != "" {
 		docRefOffset = builder.CreateString(t.DocRef)
 	}
+	addInfoOffset := flatbuffers.UOffsetT(0)
+	if t.AddInfo != nil {
+		addInfoLength := len(t.AddInfo)
+		addInfoOffsets := make([]flatbuffers.UOffsetT, addInfoLength)
+		for j := 0; j < addInfoLength; j++ {
+			addInfoOffsets[j] = t.AddInfo[j].Pack(builder)
+		}
+		KinStateJntTrafoDataReqAxisStartAddInfoVector(builder, addInfoLength)
+		for j := addInfoLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(addInfoOffsets[j])
+		}
+		addInfoOffset = builder.EndVector(addInfoLength)
+	}
 	KinStateJntTrafoDataReqAxisStart(builder)
 	KinStateJntTrafoDataReqAxisAddName(builder, nameOffset)
 	KinStateJntTrafoDataReqAxisAddDescription(builder, descriptionOffset)
@@ -41,6 +55,7 @@ func (t *KinStateJntTrafoDataReqAxisT) Pack(builder *flatbuffers.Builder) flatbu
 	KinStateJntTrafoDataReqAxisAddDocRef(builder, docRefOffset)
 	KinStateJntTrafoDataReqAxisAddType(builder, t.Type)
 	KinStateJntTrafoDataReqAxisAddMandatory(builder, t.Mandatory)
+	KinStateJntTrafoDataReqAxisAddAddInfo(builder, addInfoOffset)
 	return KinStateJntTrafoDataReqAxisEnd(builder)
 }
 
@@ -51,6 +66,13 @@ func (rcv *KinStateJntTrafoDataReqAxis) UnPackTo(t *KinStateJntTrafoDataReqAxisT
 	t.DocRef = string(rcv.DocRef())
 	t.Type = rcv.Type()
 	t.Mandatory = rcv.Mandatory()
+	addInfoLength := rcv.AddInfoLength()
+	t.AddInfo = make([]*KVPCfgSingleItemT, addInfoLength)
+	for j := 0; j < addInfoLength; j++ {
+		x := KVPCfgSingleItem{}
+		rcv.AddInfo(&x, j)
+		t.AddInfo[j] = x.UnPack()
+	}
 }
 
 func (rcv *KinStateJntTrafoDataReqAxis) UnPack() *KinStateJntTrafoDataReqAxisT {
@@ -155,8 +177,30 @@ func (rcv *KinStateJntTrafoDataReqAxis) MutateMandatory(n bool) bool {
 	return rcv._tab.MutateBoolSlot(14, n)
 }
 
+/// Additional information of the axis (as key-value-pair)
+func (rcv *KinStateJntTrafoDataReqAxis) AddInfo(obj *KVPCfgSingleItem, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *KinStateJntTrafoDataReqAxis) AddInfoLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// Additional information of the axis (as key-value-pair)
 func KinStateJntTrafoDataReqAxisStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func KinStateJntTrafoDataReqAxisAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -175,6 +219,12 @@ func KinStateJntTrafoDataReqAxisAddType(builder *flatbuffers.Builder, type_ KinS
 }
 func KinStateJntTrafoDataReqAxisAddMandatory(builder *flatbuffers.Builder, mandatory bool) {
 	builder.PrependBoolSlot(5, mandatory, false)
+}
+func KinStateJntTrafoDataReqAxisAddAddInfo(builder *flatbuffers.Builder, addInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(addInfo), 0)
+}
+func KinStateJntTrafoDataReqAxisStartAddInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func KinStateJntTrafoDataReqAxisEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

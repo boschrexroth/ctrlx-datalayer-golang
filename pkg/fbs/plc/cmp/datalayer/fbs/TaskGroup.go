@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Settings for the complete Taskgroup
 type TaskGroupT struct {
 	Name string `json:"name"`
 	Option uint32 `json:"option"`
@@ -65,6 +66,7 @@ func (rcv *TaskGroup) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// Name of the taskgroup (not changable)
 func (rcv *TaskGroup) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -73,6 +75,8 @@ func (rcv *TaskGroup) Name() []byte {
 	return nil
 }
 
+/// Name of the taskgroup (not changable)
+/// Optionflags for the taskgroup (not changable)
 func (rcv *TaskGroup) Option() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,10 +85,12 @@ func (rcv *TaskGroup) Option() uint32 {
 	return 0
 }
 
+/// Optionflags for the taskgroup (not changable)
 func (rcv *TaskGroup) MutateOption(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// The task is running on this core (changable)
 func (rcv *TaskGroup) Coreset() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -93,6 +99,7 @@ func (rcv *TaskGroup) Coreset() uint32 {
 	return 0
 }
 
+/// The task is running on this core (changable)
 func (rcv *TaskGroup) MutateCoreset(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }

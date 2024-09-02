@@ -7,6 +7,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// application task informations
 type AppTaskInfoT struct {
 	Name string `json:"name"`
 	Priority uint32 `json:"priority"`
@@ -96,6 +97,7 @@ func (rcv *AppTaskInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// name of the application as string
 func (rcv *AppTaskInfo) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -104,6 +106,7 @@ func (rcv *AppTaskInfo) Name() []byte {
 	return nil
 }
 
+/// name of the application as string
 func AppTaskInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj1 := &AppTaskInfo{}
 	obj2 := &AppTaskInfo{}
@@ -136,6 +139,7 @@ func (rcv *AppTaskInfo) LookupByKey(key string, vectorLocation flatbuffers.UOffs
 	return false
 }
 
+/// set priority
 func (rcv *AppTaskInfo) Priority() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -144,10 +148,12 @@ func (rcv *AppTaskInfo) Priority() uint32 {
 	return 0
 }
 
+/// set priority
 func (rcv *AppTaskInfo) MutatePriority(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
+/// watchdog enabled
 func (rcv *AppTaskInfo) Watchdog() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -156,10 +162,12 @@ func (rcv *AppTaskInfo) Watchdog() bool {
 	return false
 }
 
+/// watchdog enabled
 func (rcv *AppTaskInfo) MutateWatchdog(n bool) bool {
 	return rcv._tab.MutateBoolSlot(8, n)
 }
 
+/// watchdog time
 func (rcv *AppTaskInfo) WatchdogTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -168,10 +176,12 @@ func (rcv *AppTaskInfo) WatchdogTime() uint32 {
 	return 0
 }
 
+/// watchdog time
 func (rcv *AppTaskInfo) MutateWatchdogTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(10, n)
 }
 
+/// cycletime
 func (rcv *AppTaskInfo) CycleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -180,10 +190,12 @@ func (rcv *AppTaskInfo) CycleTime() uint32 {
 	return 0
 }
 
+/// cycletime
 func (rcv *AppTaskInfo) MutateCycleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
+/// average cycle time
 func (rcv *AppTaskInfo) AverageCycleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -192,10 +204,12 @@ func (rcv *AppTaskInfo) AverageCycleTime() uint32 {
 	return 0
 }
 
+/// average cycle time
 func (rcv *AppTaskInfo) MutateAverageCycleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
 }
 
+/// max cycle time
 func (rcv *AppTaskInfo) MaxCycleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -204,10 +218,12 @@ func (rcv *AppTaskInfo) MaxCycleTime() uint32 {
 	return 0
 }
 
+/// max cycle time
 func (rcv *AppTaskInfo) MutateMaxCycleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(16, n)
 }
 
+/// min cycle time
 func (rcv *AppTaskInfo) MinCycleTime() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
@@ -216,10 +232,12 @@ func (rcv *AppTaskInfo) MinCycleTime() uint32 {
 	return 0
 }
 
+/// min cycle time
 func (rcv *AppTaskInfo) MutateMinCycleTime(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(18, n)
 }
 
+/// count of cycles since start
 func (rcv *AppTaskInfo) CycleCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
@@ -228,10 +246,12 @@ func (rcv *AppTaskInfo) CycleCount() uint32 {
 	return 0
 }
 
+/// count of cycles since start
 func (rcv *AppTaskInfo) MutateCycleCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(20, n)
 }
 
+/// wathcdog sensitivity
 func (rcv *AppTaskInfo) WatchdogSensitivity() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
@@ -240,10 +260,12 @@ func (rcv *AppTaskInfo) WatchdogSensitivity() uint32 {
 	return 0
 }
 
+/// wathcdog sensitivity
 func (rcv *AppTaskInfo) MutateWatchdogSensitivity(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(22, n)
 }
 
+/// interval
 func (rcv *AppTaskInfo) Interval() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
@@ -252,10 +274,12 @@ func (rcv *AppTaskInfo) Interval() uint32 {
 	return 0
 }
 
+/// interval
 func (rcv *AppTaskInfo) MutateInterval(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(24, n)
 }
 
+/// task type
 func (rcv *AppTaskInfo) TaskType() TaskType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
@@ -264,6 +288,7 @@ func (rcv *AppTaskInfo) TaskType() TaskType {
 	return 255
 }
 
+/// task type
 func (rcv *AppTaskInfo) MutateTaskType(n TaskType) bool {
 	return rcv._tab.MutateUint32Slot(26, uint32(n))
 }

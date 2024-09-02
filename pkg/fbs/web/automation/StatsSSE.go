@@ -9,7 +9,9 @@ import (
 type StatsSSET struct {
 	OpenSubscriptions uint32 `json:"openSubscriptions"`
 	OpenSse uint32 `json:"openSSE"`
+	OpenSessions uint32 `json:"openSessions"`
 	RequestsSse uint32 `json:"requestsSSE"`
+	CollectGarbage uint32 `json:"collectGarbage"`
 }
 
 func (t *StatsSSET) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -17,14 +19,18 @@ func (t *StatsSSET) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	StatsSSEStart(builder)
 	StatsSSEAddOpenSubscriptions(builder, t.OpenSubscriptions)
 	StatsSSEAddOpenSse(builder, t.OpenSse)
+	StatsSSEAddOpenSessions(builder, t.OpenSessions)
 	StatsSSEAddRequestsSse(builder, t.RequestsSse)
+	StatsSSEAddCollectGarbage(builder, t.CollectGarbage)
 	return StatsSSEEnd(builder)
 }
 
 func (rcv *StatsSSE) UnPackTo(t *StatsSSET) {
 	t.OpenSubscriptions = rcv.OpenSubscriptions()
 	t.OpenSse = rcv.OpenSse()
+	t.OpenSessions = rcv.OpenSessions()
 	t.RequestsSse = rcv.RequestsSse()
+	t.CollectGarbage = rcv.CollectGarbage()
 }
 
 func (rcv *StatsSSE) UnPack() *StatsSSET {
@@ -61,6 +67,7 @@ func (rcv *StatsSSE) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// created subscriptions (PUT)
 func (rcv *StatsSSE) OpenSubscriptions() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -69,10 +76,12 @@ func (rcv *StatsSSE) OpenSubscriptions() uint32 {
 	return 0
 }
 
+/// created subscriptions (PUT)
 func (rcv *StatsSSE) MutateOpenSubscriptions(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
+/// open (running) SSE connections
 func (rcv *StatsSSE) OpenSse() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -81,11 +90,13 @@ func (rcv *StatsSSE) OpenSse() uint32 {
 	return 0
 }
 
+/// open (running) SSE connections
 func (rcv *StatsSSE) MutateOpenSse(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
-func (rcv *StatsSSE) RequestsSse() uint32 {
+/// open http sessions
+func (rcv *StatsSSE) OpenSessions() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -93,12 +104,41 @@ func (rcv *StatsSSE) RequestsSse() uint32 {
 	return 0
 }
 
-func (rcv *StatsSSE) MutateRequestsSse(n uint32) bool {
+/// open http sessions
+func (rcv *StatsSSE) MutateOpenSessions(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// total SSE requests
+func (rcv *StatsSSE) RequestsSse() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// total SSE requests
+func (rcv *StatsSSE) MutateRequestsSse(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(10, n)
+}
+
+/// calls to GC
+func (rcv *StatsSSE) CollectGarbage() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// calls to GC
+func (rcv *StatsSSE) MutateCollectGarbage(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(12, n)
+}
+
 func StatsSSEStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(5)
 }
 func StatsSSEAddOpenSubscriptions(builder *flatbuffers.Builder, openSubscriptions uint32) {
 	builder.PrependUint32Slot(0, openSubscriptions, 0)
@@ -106,8 +146,14 @@ func StatsSSEAddOpenSubscriptions(builder *flatbuffers.Builder, openSubscription
 func StatsSSEAddOpenSse(builder *flatbuffers.Builder, openSse uint32) {
 	builder.PrependUint32Slot(1, openSse, 0)
 }
+func StatsSSEAddOpenSessions(builder *flatbuffers.Builder, openSessions uint32) {
+	builder.PrependUint32Slot(2, openSessions, 0)
+}
 func StatsSSEAddRequestsSse(builder *flatbuffers.Builder, requestsSse uint32) {
-	builder.PrependUint32Slot(2, requestsSse, 0)
+	builder.PrependUint32Slot(3, requestsSse, 0)
+}
+func StatsSSEAddCollectGarbage(builder *flatbuffers.Builder, collectGarbage uint32) {
+	builder.PrependUint32Slot(4, collectGarbage, 0)
 }
 func StatsSSEEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

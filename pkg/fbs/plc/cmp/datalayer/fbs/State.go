@@ -4,15 +4,23 @@ package fbs
 
 import "strconv"
 
+/// different application states
 type State uint32
 
 const (
+	/// none
 	StateNONE             State = 0
+	/// running
 	StateRUN              State = 1
+	/// stopped
 	StateSTOP             State = 2
+	/// debug breakpoint
 	StateDEBUG_BREAKPOINT State = 3
+	/// debug setp
 	StateDEBUG_STEP       State = 4
+	/// single cycle
 	StateSINGLE_CYCLE     State = 5
+	/// system
 	StateSYSTEM           State = 6
 )
 

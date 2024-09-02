@@ -55,6 +55,7 @@ func (rcv *StatsDlClient) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// count of current converters
 func (rcv *StatsDlClient) Converter() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *StatsDlClient) Converter() uint32 {
 	return 0
 }
 
+/// count of current converters
 func (rcv *StatsDlClient) MutateConverter(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }

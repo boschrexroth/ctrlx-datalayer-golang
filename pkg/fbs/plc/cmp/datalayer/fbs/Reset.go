@@ -4,12 +4,17 @@ package fbs
 
 import "strconv"
 
+/// different reset types
 type Reset uint32
 
 const (
+	/// warm reset
 	ResetWARM          Reset = 0
+	/// cold reset
 	ResetCOLD          Reset = 1
+	/// reset origin
 	ResetORIGIN        Reset = 2
+	/// reset origin device
 	ResetORIGIN_DEVICE Reset = 3
 )
 

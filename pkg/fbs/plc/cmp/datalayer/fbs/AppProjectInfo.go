@@ -7,6 +7,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// project infos as set in plc engineering
 type AppProjectInfoT struct {
 	Name string `json:"name"`
 	Title string `json:"title"`
@@ -88,6 +89,7 @@ func (rcv *AppProjectInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// name of the project as string
 func (rcv *AppProjectInfo) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -96,6 +98,7 @@ func (rcv *AppProjectInfo) Name() []byte {
 	return nil
 }
 
+/// name of the project as string
 func AppProjectInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj1 := &AppProjectInfo{}
 	obj2 := &AppProjectInfo{}
@@ -136,6 +139,7 @@ func (rcv *AppProjectInfo) Title() []byte {
 	return nil
 }
 
+/// version as string
 func (rcv *AppProjectInfo) Version() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -144,6 +148,8 @@ func (rcv *AppProjectInfo) Version() []byte {
 	return nil
 }
 
+/// version as string
+/// author that created the project
 func (rcv *AppProjectInfo) Author() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -152,6 +158,8 @@ func (rcv *AppProjectInfo) Author() []byte {
 	return nil
 }
 
+/// author that created the project
+/// project description
 func (rcv *AppProjectInfo) Description() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -160,6 +168,7 @@ func (rcv *AppProjectInfo) Description() []byte {
 	return nil
 }
 
+/// project description
 func AppProjectInfoStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }

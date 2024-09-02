@@ -17,6 +17,7 @@ type AxsCfgFunctionsT struct {
 	AxsEncoder *AxsCfgEncoderT `json:"axsEncoder"`
 	AxsCfgDriveSls *AxsCfgDriveSLST `json:"axsCfgDriveSLS"`
 	AxsCfgCyclicStatusData *AxsCfgCyclicStatusDataT `json:"axsCfgCyclicStatusData"`
+	OperationModeSwitch *AxsCfgOperationModeSwitchT `json:"operationModeSwitch"`
 }
 
 func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -40,6 +41,7 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	axsEncoderOffset := t.AxsEncoder.Pack(builder)
 	axsCfgDriveSlsOffset := t.AxsCfgDriveSls.Pack(builder)
 	axsCfgCyclicStatusDataOffset := t.AxsCfgCyclicStatusData.Pack(builder)
+	operationModeSwitchOffset := t.OperationModeSwitch.Pack(builder)
 	AxsCfgFunctionsStart(builder)
 	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
 	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
@@ -48,6 +50,7 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	AxsCfgFunctionsAddAxsEncoder(builder, axsEncoderOffset)
 	AxsCfgFunctionsAddAxsCfgDriveSls(builder, axsCfgDriveSlsOffset)
 	AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder, axsCfgCyclicStatusDataOffset)
+	AxsCfgFunctionsAddOperationModeSwitch(builder, operationModeSwitchOffset)
 	return AxsCfgFunctionsEnd(builder)
 }
 
@@ -65,6 +68,7 @@ func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
 	t.AxsEncoder = rcv.AxsEncoder(nil).UnPack()
 	t.AxsCfgDriveSls = rcv.AxsCfgDriveSls(nil).UnPack()
 	t.AxsCfgCyclicStatusData = rcv.AxsCfgCyclicStatusData(nil).UnPack()
+	t.OperationModeSwitch = rcv.OperationModeSwitch(nil).UnPack()
 }
 
 func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
@@ -213,8 +217,23 @@ func (rcv *AxsCfgFunctions) AxsCfgCyclicStatusData(obj *AxsCfgCyclicStatusData) 
 }
 
 /// configuration of cyclic status data for an axis
+/// options during an operation mode switch for a single axis
+func (rcv *AxsCfgFunctions) OperationModeSwitch(obj *AxsCfgOperationModeSwitch) *AxsCfgOperationModeSwitch {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgOperationModeSwitch)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// options during an operation mode switch for a single axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
@@ -239,6 +258,9 @@ func AxsCfgFunctionsAddAxsCfgDriveSls(builder *flatbuffers.Builder, axsCfgDriveS
 }
 func AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder *flatbuffers.Builder, axsCfgCyclicStatusData flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(axsCfgCyclicStatusData), 0)
+}
+func AxsCfgFunctionsAddOperationModeSwitch(builder *flatbuffers.Builder, operationModeSwitch flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(operationModeSwitch), 0)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

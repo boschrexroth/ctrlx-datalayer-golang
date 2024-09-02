@@ -42,6 +42,7 @@ type SubscriptionProperties struct {
 	BrowseListChange      bool
 	MetaDataChange        bool
 	CountingSubscriptions bool
+	RateLimit             uint32
 }
 
 // DefaultSubscriptionProperties returns all default subscription properties.
@@ -59,6 +60,7 @@ func DefaultSubscriptionProperties() SubscriptionProperties {
 		BrowseListChange:      false,
 		MetaDataChange:        false,
 		CountingSubscriptions: false,
+		RateLimit:             0,
 	}
 }
 
@@ -122,6 +124,16 @@ func (s SubscriptionProperties) BuildJson() ([]byte, error) {
 		r := make(map[string]interface{})
 		p["rule"] = r
 		r["countSubscriptions"] = s.CountingSubscriptions
+		rs := v["rules"].([]interface{})
+		rs = append(rs, p)
+		v["rules"] = rs
+	}
+	if s.RateLimit != d.RateLimit {
+		p := make(map[string]interface{})
+		p["rule_type"] = "LosslessRateLimit"
+		r := make(map[string]interface{})
+		p["rule"] = r
+		r["rateLimit"] = s.RateLimit
 		rs := v["rules"].([]interface{})
 		rs = append(rs, p)
 		v["rules"] = rs

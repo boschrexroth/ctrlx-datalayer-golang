@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// login information for the identity management
 type AppIdmUserLoginT struct {
 	User string `json:"user"`
 	Password string `json:"password"`
@@ -74,6 +75,7 @@ func (rcv *AppIdmUserLogin) User() []byte {
 	return nil
 }
 
+/// password as string
 func (rcv *AppIdmUserLogin) Password() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,6 +84,7 @@ func (rcv *AppIdmUserLogin) Password() []byte {
 	return nil
 }
 
+/// password as string
 func AppIdmUserLoginStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
