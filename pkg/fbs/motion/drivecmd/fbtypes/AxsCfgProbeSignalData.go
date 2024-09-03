@@ -12,6 +12,7 @@ type AxsCfgProbeSignalDataT struct {
 	ShotType ShotType `json:"shotType"`
 	Source string `json:"source"`
 	SourceInfo string `json:"sourceInfo"`
+	SelectInfo string `json:"selectInfo"`
 }
 
 func (t *AxsCfgProbeSignalDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,11 +25,16 @@ func (t *AxsCfgProbeSignalDataT) Pack(builder *flatbuffers.Builder) flatbuffers.
 	if t.SourceInfo != "" {
 		sourceInfoOffset = builder.CreateString(t.SourceInfo)
 	}
+	selectInfoOffset := flatbuffers.UOffsetT(0)
+	if t.SelectInfo != "" {
+		selectInfoOffset = builder.CreateString(t.SelectInfo)
+	}
 	AxsCfgProbeSignalDataStart(builder)
 	AxsCfgProbeSignalDataAddSelect(builder, t.Select)
 	AxsCfgProbeSignalDataAddShotType(builder, t.ShotType)
 	AxsCfgProbeSignalDataAddSource(builder, sourceOffset)
 	AxsCfgProbeSignalDataAddSourceInfo(builder, sourceInfoOffset)
+	AxsCfgProbeSignalDataAddSelectInfo(builder, selectInfoOffset)
 	return AxsCfgProbeSignalDataEnd(builder)
 }
 
@@ -37,6 +43,7 @@ func (rcv *AxsCfgProbeSignalData) UnPackTo(t *AxsCfgProbeSignalDataT) {
 	t.ShotType = rcv.ShotType()
 	t.Source = string(rcv.Source())
 	t.SourceInfo = string(rcv.SourceInfo())
+	t.SelectInfo = string(rcv.SelectInfo())
 }
 
 func (rcv *AxsCfgProbeSignalData) UnPack() *AxsCfgProbeSignalDataT {
@@ -73,7 +80,7 @@ func (rcv *AxsCfgProbeSignalData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// encoder1, encoder2, fine time, ipo-pos, ipo-vel
+/// encoder1, encoder2, fine time, ipo-pos, act-pos, motion-internal-data
 func (rcv *AxsCfgProbeSignalData) Select() SignalSelect {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -82,7 +89,7 @@ func (rcv *AxsCfgProbeSignalData) Select() SignalSelect {
 	return 1
 }
 
-/// encoder1, encoder2, fine time, ipo-pos, ipo-vel
+/// encoder1, encoder2, fine time, ipo-pos, act-pos, motion-internal-data
 func (rcv *AxsCfgProbeSignalData) MutateSelect(n SignalSelect) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
@@ -101,7 +108,7 @@ func (rcv *AxsCfgProbeSignalData) MutateShotType(n ShotType) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
-/// self, axis_1, IO
+/// null, axis_name, IO
 func (rcv *AxsCfgProbeSignalData) Source() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -110,8 +117,8 @@ func (rcv *AxsCfgProbeSignalData) Source() []byte {
 	return nil
 }
 
-/// self, axis_1, IO
-/// uri and other addition information
+/// null, axis_name, IO
+/// source probe index and uri
 func (rcv *AxsCfgProbeSignalData) SourceInfo() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -120,9 +127,19 @@ func (rcv *AxsCfgProbeSignalData) SourceInfo() []byte {
 	return nil
 }
 
-/// uri and other addition information
+/// source probe index and uri
+/// information for signal select
+func (rcv *AxsCfgProbeSignalData) SelectInfo() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// information for signal select
 func AxsCfgProbeSignalDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func AxsCfgProbeSignalDataAddSelect(builder *flatbuffers.Builder, select_ SignalSelect) {
 	builder.PrependInt8Slot(0, int8(select_), 1)
@@ -135,6 +152,9 @@ func AxsCfgProbeSignalDataAddSource(builder *flatbuffers.Builder, source flatbuf
 }
 func AxsCfgProbeSignalDataAddSourceInfo(builder *flatbuffers.Builder, sourceInfo flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(sourceInfo), 0)
+}
+func AxsCfgProbeSignalDataAddSelectInfo(builder *flatbuffers.Builder, selectInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(selectInfo), 0)
 }
 func AxsCfgProbeSignalDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

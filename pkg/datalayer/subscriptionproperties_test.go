@@ -43,6 +43,7 @@ func TestConverter(t *testing.T) {
 		QueueBehaviour:        fbs.QueueBehaviourDiscardNewest,
 		DataChangeTrigger:     fbs.DataChangeTriggerStatus,
 		CountingSubscriptions: true,
+		RateLimit:             1234,
 	}
 	sc := newSubscriptionPropertiesConverter(s)
 	j, err := want.BuildJson()
@@ -71,6 +72,10 @@ func TestConverter(t *testing.T) {
 			res, err = jsonpath.JsonPathLookup(rule, "$.rule.queueSize")
 			assert.Nil(t, err)
 			assert.Equal(t, 5.0, res)
+		case "LosslessRateLimit":
+			res, err = jsonpath.JsonPathLookup(rule, "$.rule.rateLimit")
+			assert.Nil(t, err)
+			assert.Equal(t, 1234.0, res)
 		}
 	}
 }

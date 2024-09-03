@@ -6,10 +6,17 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// This table defines the unique identification of a diagnostic log in combination with the timestamp of the log.
+/// This table defines the unique identification of a diagnostic log in combination with additional information of the log.
 type DiagnosisIdentificationWithTimestampT struct {
 	DiagnosisIdentification *DiagnosisIdentificationT `json:"diagnosisIdentification"`
 	Timestamp string `json:"timestamp"`
+	UserId string `json:"userId"`
+	Origin string `json:"origin"`
+	UnitName string `json:"unitName"`
+	FileName string `json:"fileName"`
+	FunctionName string `json:"functionName"`
+	LineNumber uint32 `json:"lineNumber"`
+	DynamicDescription string `json:"dynamicDescription"`
 }
 
 func (t *DiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -19,15 +26,53 @@ func (t *DiagnosisIdentificationWithTimestampT) Pack(builder *flatbuffers.Builde
 	if t.Timestamp != "" {
 		timestampOffset = builder.CreateString(t.Timestamp)
 	}
+	userIdOffset := flatbuffers.UOffsetT(0)
+	if t.UserId != "" {
+		userIdOffset = builder.CreateString(t.UserId)
+	}
+	originOffset := flatbuffers.UOffsetT(0)
+	if t.Origin != "" {
+		originOffset = builder.CreateString(t.Origin)
+	}
+	unitNameOffset := flatbuffers.UOffsetT(0)
+	if t.UnitName != "" {
+		unitNameOffset = builder.CreateString(t.UnitName)
+	}
+	fileNameOffset := flatbuffers.UOffsetT(0)
+	if t.FileName != "" {
+		fileNameOffset = builder.CreateString(t.FileName)
+	}
+	functionNameOffset := flatbuffers.UOffsetT(0)
+	if t.FunctionName != "" {
+		functionNameOffset = builder.CreateString(t.FunctionName)
+	}
+	dynamicDescriptionOffset := flatbuffers.UOffsetT(0)
+	if t.DynamicDescription != "" {
+		dynamicDescriptionOffset = builder.CreateString(t.DynamicDescription)
+	}
 	DiagnosisIdentificationWithTimestampStart(builder)
 	DiagnosisIdentificationWithTimestampAddDiagnosisIdentification(builder, diagnosisIdentificationOffset)
 	DiagnosisIdentificationWithTimestampAddTimestamp(builder, timestampOffset)
+	DiagnosisIdentificationWithTimestampAddUserId(builder, userIdOffset)
+	DiagnosisIdentificationWithTimestampAddOrigin(builder, originOffset)
+	DiagnosisIdentificationWithTimestampAddUnitName(builder, unitNameOffset)
+	DiagnosisIdentificationWithTimestampAddFileName(builder, fileNameOffset)
+	DiagnosisIdentificationWithTimestampAddFunctionName(builder, functionNameOffset)
+	DiagnosisIdentificationWithTimestampAddLineNumber(builder, t.LineNumber)
+	DiagnosisIdentificationWithTimestampAddDynamicDescription(builder, dynamicDescriptionOffset)
 	return DiagnosisIdentificationWithTimestampEnd(builder)
 }
 
 func (rcv *DiagnosisIdentificationWithTimestamp) UnPackTo(t *DiagnosisIdentificationWithTimestampT) {
 	t.DiagnosisIdentification = rcv.DiagnosisIdentification(nil).UnPack()
 	t.Timestamp = string(rcv.Timestamp())
+	t.UserId = string(rcv.UserId())
+	t.Origin = string(rcv.Origin())
+	t.UnitName = string(rcv.UnitName())
+	t.FileName = string(rcv.FileName())
+	t.FunctionName = string(rcv.FunctionName())
+	t.LineNumber = rcv.LineNumber()
+	t.DynamicDescription = string(rcv.DynamicDescription())
 }
 
 func (rcv *DiagnosisIdentificationWithTimestamp) UnPack() *DiagnosisIdentificationWithTimestampT {
@@ -89,14 +134,109 @@ func (rcv *DiagnosisIdentificationWithTimestamp) Timestamp() []byte {
 }
 
 /// Timestamp of the diagnostic log.
+/// User id of the user who notified the log.
+func (rcv *DiagnosisIdentificationWithTimestamp) UserId() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// User id of the user who notified the log.
+/// Snap that notified the log (e.g. rexroth-automationcore).
+func (rcv *DiagnosisIdentificationWithTimestamp) Origin() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Snap that notified the log (e.g. rexroth-automationcore).
+/// Unit name of the component that notified the log (e.g. comm.datalayer).
+func (rcv *DiagnosisIdentificationWithTimestamp) UnitName() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Unit name of the component that notified the log (e.g. comm.datalayer).
+/// Name of the file from where the log was notified.
+func (rcv *DiagnosisIdentificationWithTimestamp) FileName() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Name of the file from where the log was notified.
+/// Name of the function from where the log was notified.
+func (rcv *DiagnosisIdentificationWithTimestamp) FunctionName() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Name of the function from where the log was notified.
+/// Line number from where the log was notified.
+func (rcv *DiagnosisIdentificationWithTimestamp) LineNumber() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// Line number from where the log was notified.
+func (rcv *DiagnosisIdentificationWithTimestamp) MutateLineNumber(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(18, n)
+}
+
+/// Dynamic description for additional dynamic elements.
+func (rcv *DiagnosisIdentificationWithTimestamp) DynamicDescription() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// Dynamic description for additional dynamic elements.
 func DiagnosisIdentificationWithTimestampStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(9)
 }
 func DiagnosisIdentificationWithTimestampAddDiagnosisIdentification(builder *flatbuffers.Builder, diagnosisIdentification flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(diagnosisIdentification), 0)
 }
 func DiagnosisIdentificationWithTimestampAddTimestamp(builder *flatbuffers.Builder, timestamp flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(timestamp), 0)
+}
+func DiagnosisIdentificationWithTimestampAddUserId(builder *flatbuffers.Builder, userId flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(userId), 0)
+}
+func DiagnosisIdentificationWithTimestampAddOrigin(builder *flatbuffers.Builder, origin flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(origin), 0)
+}
+func DiagnosisIdentificationWithTimestampAddUnitName(builder *flatbuffers.Builder, unitName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(unitName), 0)
+}
+func DiagnosisIdentificationWithTimestampAddFileName(builder *flatbuffers.Builder, fileName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(fileName), 0)
+}
+func DiagnosisIdentificationWithTimestampAddFunctionName(builder *flatbuffers.Builder, functionName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(functionName), 0)
+}
+func DiagnosisIdentificationWithTimestampAddLineNumber(builder *flatbuffers.Builder, lineNumber uint32) {
+	builder.PrependUint32Slot(7, lineNumber, 0)
+}
+func DiagnosisIdentificationWithTimestampAddDynamicDescription(builder *flatbuffers.Builder, dynamicDescription flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(dynamicDescription), 0)
 }
 func DiagnosisIdentificationWithTimestampEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

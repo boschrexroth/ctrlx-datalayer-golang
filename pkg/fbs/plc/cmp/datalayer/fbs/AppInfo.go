@@ -7,6 +7,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// informations of the application as set in plc engineering
 type AppInfoT struct {
 	Name string `json:"name"`
 	Author string `json:"author"`
@@ -99,6 +100,7 @@ func (rcv *AppInfo) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// name of the plc project
 func (rcv *AppInfo) Name() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -107,6 +109,7 @@ func (rcv *AppInfo) Name() []byte {
 	return nil
 }
 
+/// name of the plc project
 func AppInfoKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj1 := &AppInfo{}
 	obj2 := &AppInfo{}
@@ -139,6 +142,7 @@ func (rcv *AppInfo) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT,
 	return false
 }
 
+/// author of the application
 func (rcv *AppInfo) Author() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -147,6 +151,8 @@ func (rcv *AppInfo) Author() []byte {
 	return nil
 }
 
+/// author of the application
+/// version of the application
 func (rcv *AppInfo) Version() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -155,6 +161,8 @@ func (rcv *AppInfo) Version() []byte {
 	return nil
 }
 
+/// version of the application
+/// descpriotion of the application
 func (rcv *AppInfo) Description() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -163,6 +171,8 @@ func (rcv *AppInfo) Description() []byte {
 	return nil
 }
 
+/// descpriotion of the application
+/// PLC engineering version
 func (rcv *AppInfo) Profile() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -171,6 +181,8 @@ func (rcv *AppInfo) Profile() []byte {
 	return nil
 }
 
+/// PLC engineering version
+/// used compiler version for the loaded application
 func (rcv *AppInfo) Compiler() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -179,6 +191,8 @@ func (rcv *AppInfo) Compiler() []byte {
 	return nil
 }
 
+/// used compiler version for the loaded application
+/// last time this application was loaded
 func (rcv *AppInfo) DateAndTime(obj *AppDateAndTime) *AppDateAndTime {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
@@ -192,6 +206,7 @@ func (rcv *AppInfo) DateAndTime(obj *AppDateAndTime) *AppDateAndTime {
 	return nil
 }
 
+/// last time this application was loaded
 func AppInfoStart(builder *flatbuffers.Builder) {
 	builder.StartObject(7)
 }

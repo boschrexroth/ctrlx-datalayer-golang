@@ -100,7 +100,7 @@ func (rcv *ClientConfiguration) EndpointUrl() []byte {
 }
 
 /// Endpoint-url of the OPC UA Server to which the client should connect to (required)
-/// Session configuration for the client instance
+/// Session configuration for the client
 func (rcv *ClientConfiguration) SessionConfiguration(obj *SessionConfiguration) *SessionConfiguration {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -114,8 +114,8 @@ func (rcv *ClientConfiguration) SessionConfiguration(obj *SessionConfiguration) 
 	return nil
 }
 
-/// Session configuration for the client instance
-/// Timeout configuration for the client instance
+/// Session configuration for the client
+/// Timeout configuration for the client session
 func (rcv *ClientConfiguration) TimeoutConfiguration(obj *TimeoutConfiguration) *TimeoutConfiguration {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -129,7 +129,7 @@ func (rcv *ClientConfiguration) TimeoutConfiguration(obj *TimeoutConfiguration) 
 	return nil
 }
 
-/// Timeout configuration for the client instance
+/// Timeout configuration for the client session
 /// Determines whether configuration data of the client data is persisted and loaded upon the next start of the app or the control
 func (rcv *ClientConfiguration) Persistent() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))

@@ -21,6 +21,7 @@ type KinStateJntTrafoDataSingleT struct {
 	LicenseInstalled bool `json:"licenseInstalled"`
 	PosCapability string `json:"posCapability"`
 	OriCapability string `json:"oriCapability"`
+	AddInfo []*KVPCfgSingleItemT `json:"addInfo"`
 }
 
 func (t *KinStateJntTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -66,6 +67,19 @@ func (t *KinStateJntTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuf
 	if t.OriCapability != "" {
 		oriCapabilityOffset = builder.CreateString(t.OriCapability)
 	}
+	addInfoOffset := flatbuffers.UOffsetT(0)
+	if t.AddInfo != nil {
+		addInfoLength := len(t.AddInfo)
+		addInfoOffsets := make([]flatbuffers.UOffsetT, addInfoLength)
+		for j := 0; j < addInfoLength; j++ {
+			addInfoOffsets[j] = t.AddInfo[j].Pack(builder)
+		}
+		KinStateJntTrafoDataSingleStartAddInfoVector(builder, addInfoLength)
+		for j := addInfoLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(addInfoOffsets[j])
+		}
+		addInfoOffset = builder.EndVector(addInfoLength)
+	}
 	KinStateJntTrafoDataSingleStart(builder)
 	KinStateJntTrafoDataSingleAddId(builder, idOffset)
 	KinStateJntTrafoDataSingleAddName(builder, nameOffset)
@@ -80,6 +94,7 @@ func (t *KinStateJntTrafoDataSingleT) Pack(builder *flatbuffers.Builder) flatbuf
 	KinStateJntTrafoDataSingleAddLicenseInstalled(builder, t.LicenseInstalled)
 	KinStateJntTrafoDataSingleAddPosCapability(builder, posCapabilityOffset)
 	KinStateJntTrafoDataSingleAddOriCapability(builder, oriCapabilityOffset)
+	KinStateJntTrafoDataSingleAddAddInfo(builder, addInfoOffset)
 	return KinStateJntTrafoDataSingleEnd(builder)
 }
 
@@ -97,6 +112,13 @@ func (rcv *KinStateJntTrafoDataSingle) UnPackTo(t *KinStateJntTrafoDataSingleT) 
 	t.LicenseInstalled = rcv.LicenseInstalled()
 	t.PosCapability = string(rcv.PosCapability())
 	t.OriCapability = string(rcv.OriCapability())
+	addInfoLength := rcv.AddInfoLength()
+	t.AddInfo = make([]*KVPCfgSingleItemT, addInfoLength)
+	for j := 0; j < addInfoLength; j++ {
+		x := KVPCfgSingleItem{}
+		rcv.AddInfo(&x, j)
+		t.AddInfo[j] = x.UnPack()
+	}
 }
 
 func (rcv *KinStateJntTrafoDataSingle) UnPack() *KinStateJntTrafoDataSingleT {
@@ -276,8 +298,30 @@ func (rcv *KinStateJntTrafoDataSingle) OriCapability() []byte {
 }
 
 /// Orientation capability of this joint transformation (NO_ORI, ORI_3D, ORI_2D, ORI_1D_X, ORI_1D_Y, ORI_1D_Z)
+/// Additional information of the joint transformation (as key-value-pair)
+func (rcv *KinStateJntTrafoDataSingle) AddInfo(obj *KVPCfgSingleItem, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *KinStateJntTrafoDataSingle) AddInfoLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// Additional information of the joint transformation (as key-value-pair)
 func KinStateJntTrafoDataSingleStart(builder *flatbuffers.Builder) {
-	builder.StartObject(13)
+	builder.StartObject(14)
 }
 func KinStateJntTrafoDataSingleAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -317,6 +361,12 @@ func KinStateJntTrafoDataSingleAddPosCapability(builder *flatbuffers.Builder, po
 }
 func KinStateJntTrafoDataSingleAddOriCapability(builder *flatbuffers.Builder, oriCapability flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(oriCapability), 0)
+}
+func KinStateJntTrafoDataSingleAddAddInfo(builder *flatbuffers.Builder, addInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(13, flatbuffers.UOffsetT(addInfo), 0)
+}
+func KinStateJntTrafoDataSingleStartAddInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func KinStateJntTrafoDataSingleEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

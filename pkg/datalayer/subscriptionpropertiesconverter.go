@@ -23,7 +23,7 @@
 package datalayer
 
 import (
-	"io/ioutil"
+	"io"
 )
 
 type subscriptionPropertiesConverter struct {
@@ -34,7 +34,7 @@ type subscriptionPropertiesConverter struct {
 func newSubscriptionPropertiesConverter(system *System) *subscriptionPropertiesConverter {
 	f, _ := bfbsFS.Open("sub_properties.bfbs")
 	defer func() { _ = f.Close() }()
-	schema, _ := ioutil.ReadAll(f)
+	schema, _ := io.ReadAll(f)
 	return &subscriptionPropertiesConverter{
 		converter: system.JSONConverter(),
 		schema:    schema,

@@ -13,6 +13,7 @@ type ProviderStatT struct {
 	RejectedNodes []string `json:"rejectedNodes"`
 	Scopes []*ScopeT `json:"scopes"`
 	Capabilities *CapabilitiesT `json:"capabilities"`
+	RejectedScopes []*ScopeT `json:"rejectedScopes"`
 }
 
 func (t *ProviderStatT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -61,12 +62,26 @@ func (t *ProviderStatT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 		scopesOffset = builder.EndVector(scopesLength)
 	}
 	capabilitiesOffset := t.Capabilities.Pack(builder)
+	rejectedScopesOffset := flatbuffers.UOffsetT(0)
+	if t.RejectedScopes != nil {
+		rejectedScopesLength := len(t.RejectedScopes)
+		rejectedScopesOffsets := make([]flatbuffers.UOffsetT, rejectedScopesLength)
+		for j := 0; j < rejectedScopesLength; j++ {
+			rejectedScopesOffsets[j] = t.RejectedScopes[j].Pack(builder)
+		}
+		ProviderStatStartRejectedScopesVector(builder, rejectedScopesLength)
+		for j := rejectedScopesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(rejectedScopesOffsets[j])
+		}
+		rejectedScopesOffset = builder.EndVector(rejectedScopesLength)
+	}
 	ProviderStatStart(builder)
 	ProviderStatAddIdentity(builder, identityOffset)
 	ProviderStatAddNodes(builder, nodesOffset)
 	ProviderStatAddRejectedNodes(builder, rejectedNodesOffset)
 	ProviderStatAddScopes(builder, scopesOffset)
 	ProviderStatAddCapabilities(builder, capabilitiesOffset)
+	ProviderStatAddRejectedScopes(builder, rejectedScopesOffset)
 	return ProviderStatEnd(builder)
 }
 
@@ -90,6 +105,13 @@ func (rcv *ProviderStat) UnPackTo(t *ProviderStatT) {
 		t.Scopes[j] = x.UnPack()
 	}
 	t.Capabilities = rcv.Capabilities(nil).UnPack()
+	rejectedScopesLength := rcv.RejectedScopesLength()
+	t.RejectedScopes = make([]*ScopeT, rejectedScopesLength)
+	for j := 0; j < rejectedScopesLength; j++ {
+		x := Scope{}
+		rcv.RejectedScopes(&x, j)
+		t.RejectedScopes[j] = x.UnPack()
+	}
 }
 
 func (rcv *ProviderStat) UnPack() *ProviderStatT {
@@ -210,8 +232,37 @@ func (rcv *ProviderStat) Capabilities(obj *Capabilities) *Capabilities {
 	return nil
 }
 
+func (rcv *ProviderStat) RejectedScopes(obj *Scope, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *ProviderStat) RejectedScopesByKey(obj *Scope, key string) bool{
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		return obj.LookupByKey(key, x, rcv._tab.Bytes)
+	}
+	return false
+}
+
+func (rcv *ProviderStat) RejectedScopesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func ProviderStatStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func ProviderStatAddIdentity(builder *flatbuffers.Builder, identity flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(identity), 0)
@@ -236,6 +287,12 @@ func ProviderStatStartScopesVector(builder *flatbuffers.Builder, numElems int) f
 }
 func ProviderStatAddCapabilities(builder *flatbuffers.Builder, capabilities flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(capabilities), 0)
+}
+func ProviderStatAddRejectedScopes(builder *flatbuffers.Builder, rejectedScopes flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(rejectedScopes), 0)
+}
+func ProviderStatStartRejectedScopesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func ProviderStatEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

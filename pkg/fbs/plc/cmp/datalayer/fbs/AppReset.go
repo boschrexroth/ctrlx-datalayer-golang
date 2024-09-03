@@ -55,6 +55,7 @@ func (rcv *AppReset) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// reset, default 0 = warm reset
 func (rcv *AppReset) Reset() Reset {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *AppReset) Reset() Reset {
 	return 0
 }
 
+/// reset, default 0 = warm reset
 func (rcv *AppReset) MutateReset(n Reset) bool {
 	return rcv._tab.MutateUint32Slot(4, uint32(n))
 }

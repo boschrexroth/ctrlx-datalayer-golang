@@ -13,6 +13,7 @@ type AxsCfgSingleFlexProfileT struct {
 	Events []*CfgFlexProfileEventT `json:"events"`
 	MasterAxsRefVel float64 `json:"masterAxsRefVel"`
 	CamBuilderProfileData string `json:"camBuilderProfileData"`
+	Units *CfgFlexProfileUnitsT `json:"units"`
 }
 
 func (t *AxsCfgSingleFlexProfileT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -51,12 +52,14 @@ func (t *AxsCfgSingleFlexProfileT) Pack(builder *flatbuffers.Builder) flatbuffer
 	if t.CamBuilderProfileData != "" {
 		camBuilderProfileDataOffset = builder.CreateString(t.CamBuilderProfileData)
 	}
+	unitsOffset := t.Units.Pack(builder)
 	AxsCfgSingleFlexProfileStart(builder)
 	AxsCfgSingleFlexProfileAddName(builder, nameOffset)
 	AxsCfgSingleFlexProfileAddSegments(builder, segmentsOffset)
 	AxsCfgSingleFlexProfileAddEvents(builder, eventsOffset)
 	AxsCfgSingleFlexProfileAddMasterAxsRefVel(builder, t.MasterAxsRefVel)
 	AxsCfgSingleFlexProfileAddCamBuilderProfileData(builder, camBuilderProfileDataOffset)
+	AxsCfgSingleFlexProfileAddUnits(builder, unitsOffset)
 	return AxsCfgSingleFlexProfileEnd(builder)
 }
 
@@ -78,6 +81,7 @@ func (rcv *AxsCfgSingleFlexProfile) UnPackTo(t *AxsCfgSingleFlexProfileT) {
 	}
 	t.MasterAxsRefVel = rcv.MasterAxsRefVel()
 	t.CamBuilderProfileData = string(rcv.CamBuilderProfileData())
+	t.Units = rcv.Units(nil).UnPack()
 }
 
 func (rcv *AxsCfgSingleFlexProfile) UnPack() *AxsCfgSingleFlexProfileT {
@@ -192,8 +196,23 @@ func (rcv *AxsCfgSingleFlexProfile) CamBuilderProfileData() []byte {
 }
 
 /// cam builder data (profile specific)
+/// FlexProfile unit configuration
+func (rcv *AxsCfgSingleFlexProfile) Units(obj *CfgFlexProfileUnits) *CfgFlexProfileUnits {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(CfgFlexProfileUnits)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// FlexProfile unit configuration
 func AxsCfgSingleFlexProfileStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(6)
 }
 func AxsCfgSingleFlexProfileAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -215,6 +234,9 @@ func AxsCfgSingleFlexProfileAddMasterAxsRefVel(builder *flatbuffers.Builder, mas
 }
 func AxsCfgSingleFlexProfileAddCamBuilderProfileData(builder *flatbuffers.Builder, camBuilderProfileData flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(camBuilderProfileData), 0)
+}
+func AxsCfgSingleFlexProfileAddUnits(builder *flatbuffers.Builder, units flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(units), 0)
 }
 func AxsCfgSingleFlexProfileEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

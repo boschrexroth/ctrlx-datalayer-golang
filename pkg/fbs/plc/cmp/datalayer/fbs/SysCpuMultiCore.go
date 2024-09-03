@@ -6,6 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+/// Systemconfiguration settings for the multicore configuration of the codesys runtime
 type SysCpuMultiCoreT struct {
 	Taskgroup1 *TaskGroupT `json:"taskgroup1"`
 	Taskgroup2 *TaskGroupT `json:"taskgroup2"`
@@ -88,6 +89,7 @@ func (rcv *SysCpuMultiCore) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// "System"-Taskgroup
 func (rcv *SysCpuMultiCore) Taskgroup1(obj *TaskGroup) *TaskGroup {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -101,6 +103,8 @@ func (rcv *SysCpuMultiCore) Taskgroup1(obj *TaskGroup) *TaskGroup {
 	return nil
 }
 
+/// "System"-Taskgroup
+/// "IEC-Tasks"-Taskgroup (not changable, will be configured via PLC-Engineering)
 func (rcv *SysCpuMultiCore) Taskgroup2(obj *TaskGroup) *TaskGroup {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -114,6 +118,8 @@ func (rcv *SysCpuMultiCore) Taskgroup2(obj *TaskGroup) *TaskGroup {
 	return nil
 }
 
+/// "IEC-Tasks"-Taskgroup (not changable, will be configured via PLC-Engineering)
+/// "Communication"-Taskgroup
 func (rcv *SysCpuMultiCore) Taskgroup3(obj *TaskGroup) *TaskGroup {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -127,6 +133,8 @@ func (rcv *SysCpuMultiCore) Taskgroup3(obj *TaskGroup) *TaskGroup {
 	return nil
 }
 
+/// "Communication"-Taskgroup
+/// "Visualization"-Taskgroup
 func (rcv *SysCpuMultiCore) Taskgroup4(obj *TaskGroup) *TaskGroup {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -140,6 +148,8 @@ func (rcv *SysCpuMultiCore) Taskgroup4(obj *TaskGroup) *TaskGroup {
 	return nil
 }
 
+/// "Visualization"-Taskgroup
+/// "Asynchronous Operations"-Taskgroup
 func (rcv *SysCpuMultiCore) Taskgroup5(obj *TaskGroup) *TaskGroup {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -153,6 +163,8 @@ func (rcv *SysCpuMultiCore) Taskgroup5(obj *TaskGroup) *TaskGroup {
 	return nil
 }
 
+/// "Asynchronous Operations"-Taskgroup
+/// Description of all available cores
 func (rcv *SysCpuMultiCore) Ieccoreset(j int) uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
@@ -170,6 +182,7 @@ func (rcv *SysCpuMultiCore) IeccoresetLength() int {
 	return 0
 }
 
+/// Description of all available cores
 func (rcv *SysCpuMultiCore) MutateIeccoreset(j int, n uint32) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {

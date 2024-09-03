@@ -55,6 +55,7 @@ func (rcv *AppState) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
+/// application status
 func (rcv *AppState) State() State {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -63,6 +64,7 @@ func (rcv *AppState) State() State {
 	return 0
 }
 
+/// application status
 func (rcv *AppState) MutateState(n State) bool {
 	return rcv._tab.MutateUint32Slot(4, uint32(n))
 }

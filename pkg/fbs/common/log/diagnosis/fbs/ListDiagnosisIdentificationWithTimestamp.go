@@ -6,7 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// This table defines a list of uniquely identifiable diagnostic logs with the related timestamp (e.g. it is used for the pending diagnostics).
+/// This table defines a list of uniquely identifiable diagnostic logs with the related additional log information (e.g. it is used for the alarms).
 type ListDiagnosisIdentificationWithTimestampT struct {
 	ListDiagnosisIdentificationWithTimestamp []*DiagnosisIdentificationWithTimestampT `json:"listDiagnosisIdentificationWithTimestamp"`
 }

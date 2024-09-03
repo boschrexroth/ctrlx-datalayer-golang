@@ -27,7 +27,7 @@ type AdminT struct {
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	controlDebugOffset := t.ControlDebug.Pack(builder)
-
+	
 	cpuInfoOffset := t.CpuInfo.Pack(builder)
 	utilizationOffset := t.Utilization.Pack(builder)
 	callableTimeoutsOffset := t.CallableTimeouts.Pack(builder)

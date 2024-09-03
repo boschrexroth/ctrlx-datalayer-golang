@@ -12,6 +12,7 @@ type MetadataDBT struct {
 	Childs []*MetadataDBT `json:"childs"`
 	Asterisk *MetadataDBT `json:"asterisk"`
 	Metadata *MetadataT `json:"metadata"`
+	Scopes []string `json:"scopes"`
 }
 
 func (t *MetadataDBT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -35,11 +36,25 @@ func (t *MetadataDBT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	}
 	asteriskOffset := t.Asterisk.Pack(builder)
 	metadataOffset := t.Metadata.Pack(builder)
+	scopesOffset := flatbuffers.UOffsetT(0)
+	if t.Scopes != nil {
+		scopesLength := len(t.Scopes)
+		scopesOffsets := make([]flatbuffers.UOffsetT, scopesLength)
+		for j := 0; j < scopesLength; j++ {
+			scopesOffsets[j] = builder.CreateString(t.Scopes[j])
+		}
+		MetadataDBStartScopesVector(builder, scopesLength)
+		for j := scopesLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(scopesOffsets[j])
+		}
+		scopesOffset = builder.EndVector(scopesLength)
+	}
 	MetadataDBStart(builder)
 	MetadataDBAddAddress(builder, addressOffset)
 	MetadataDBAddChilds(builder, childsOffset)
 	MetadataDBAddAsterisk(builder, asteriskOffset)
 	MetadataDBAddMetadata(builder, metadataOffset)
+	MetadataDBAddScopes(builder, scopesOffset)
 	return MetadataDBEnd(builder)
 }
 
@@ -54,6 +69,11 @@ func (rcv *MetadataDB) UnPackTo(t *MetadataDBT) {
 	}
 	t.Asterisk = rcv.Asterisk(nil).UnPack()
 	t.Metadata = rcv.Metadata(nil).UnPack()
+	scopesLength := rcv.ScopesLength()
+	t.Scopes = make([]string, scopesLength)
+	for j := 0; j < scopesLength; j++ {
+		t.Scopes[j] = string(rcv.Scopes(j))
+	}
 }
 
 func (rcv *MetadataDB) UnPack() *MetadataDBT {
@@ -185,8 +205,25 @@ func (rcv *MetadataDB) Metadata(obj *Metadata) *Metadata {
 	return nil
 }
 
+func (rcv *MetadataDB) Scopes(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *MetadataDB) ScopesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func MetadataDBStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func MetadataDBAddAddress(builder *flatbuffers.Builder, address flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(address), 0)
@@ -202,6 +239,12 @@ func MetadataDBAddAsterisk(builder *flatbuffers.Builder, asterisk flatbuffers.UO
 }
 func MetadataDBAddMetadata(builder *flatbuffers.Builder, metadata flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(metadata), 0)
+}
+func MetadataDBAddScopes(builder *flatbuffers.Builder, scopes flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(scopes), 0)
+}
+func MetadataDBStartScopesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func MetadataDBEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -4,6 +4,7 @@ package fbs
 
 import "strconv"
 
+/// task types
 type TaskType uint32
 
 const (

@@ -9,27 +9,39 @@ type SignalSelect int8
 
 const (
 	///< probe input undefined
-	SignalSelectUNDEFINE  SignalSelect = 0
+	SignalSelectUNDEFINE             SignalSelect = 0
 	///< position encoder feedback 1
-	SignalSelectENCODER_1 SignalSelect = 1
+	SignalSelectENCODER_1            SignalSelect = 1
 	///< position encoder feedback 2
-	SignalSelectENCODER_2 SignalSelect = 2
+	SignalSelectENCODER_2            SignalSelect = 2
 	///< system fine time
-	SignalSelectFINE_TIME SignalSelect = 3
+	SignalSelectFINE_TIME            SignalSelect = 3
+	///< ipo position
+	SignalSelectIPO_POS              SignalSelect = 4
+	///< actual position
+	SignalSelectACT_POS              SignalSelect = 5
+	///< motion internal data
+	SignalSelectMOTION_INTERNAL_DATA SignalSelect = 6
 )
 
 var EnumNamesSignalSelect = map[SignalSelect]string{
-	SignalSelectUNDEFINE:  "UNDEFINE",
-	SignalSelectENCODER_1: "ENCODER_1",
-	SignalSelectENCODER_2: "ENCODER_2",
-	SignalSelectFINE_TIME: "FINE_TIME",
+	SignalSelectUNDEFINE:             "UNDEFINE",
+	SignalSelectENCODER_1:            "ENCODER_1",
+	SignalSelectENCODER_2:            "ENCODER_2",
+	SignalSelectFINE_TIME:            "FINE_TIME",
+	SignalSelectIPO_POS:              "IPO_POS",
+	SignalSelectACT_POS:              "ACT_POS",
+	SignalSelectMOTION_INTERNAL_DATA: "MOTION_INTERNAL_DATA",
 }
 
 var EnumValuesSignalSelect = map[string]SignalSelect{
-	"UNDEFINE":  SignalSelectUNDEFINE,
-	"ENCODER_1": SignalSelectENCODER_1,
-	"ENCODER_2": SignalSelectENCODER_2,
-	"FINE_TIME": SignalSelectFINE_TIME,
+	"UNDEFINE":             SignalSelectUNDEFINE,
+	"ENCODER_1":            SignalSelectENCODER_1,
+	"ENCODER_2":            SignalSelectENCODER_2,
+	"FINE_TIME":            SignalSelectFINE_TIME,
+	"IPO_POS":              SignalSelectIPO_POS,
+	"ACT_POS":              SignalSelectACT_POS,
+	"MOTION_INTERNAL_DATA": SignalSelectMOTION_INTERNAL_DATA,
 }
 
 func (v SignalSelect) String() string {

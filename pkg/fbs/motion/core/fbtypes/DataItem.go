@@ -9,8 +9,10 @@ import (
 /// information on a single data item
 type DataItemT struct {
 	Uri string `json:"uri"`
-	Value float64 `json:"value"`
+	DoubleVal float64 `json:"doubleVal"`
+	Uint64Val uint64 `json:"uint64Val"`
 	Unit string `json:"unit"`
+	Type DataItemType `json:"type"`
 	Status string `json:"status"`
 }
 
@@ -30,16 +32,20 @@ func (t *DataItemT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	}
 	DataItemStart(builder)
 	DataItemAddUri(builder, uriOffset)
-	DataItemAddValue(builder, t.Value)
+	DataItemAddDoubleVal(builder, t.DoubleVal)
+	DataItemAddUint64Val(builder, t.Uint64Val)
 	DataItemAddUnit(builder, unitOffset)
+	DataItemAddType(builder, t.Type)
 	DataItemAddStatus(builder, statusOffset)
 	return DataItemEnd(builder)
 }
 
 func (rcv *DataItem) UnPackTo(t *DataItemT) {
 	t.Uri = string(rcv.Uri())
-	t.Value = rcv.Value()
+	t.DoubleVal = rcv.DoubleVal()
+	t.Uint64Val = rcv.Uint64Val()
 	t.Unit = string(rcv.Unit())
+	t.Type = rcv.Type()
 	t.Status = string(rcv.Status())
 }
 
@@ -87,8 +93,8 @@ func (rcv *DataItem) Uri() []byte {
 }
 
 /// URI of the data item
-/// value of the data item at the time of the request
-func (rcv *DataItem) Value() float64 {
+/// value of the data item at the time of the request (when of type double)
+func (rcv *DataItem) DoubleVal() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
@@ -96,14 +102,28 @@ func (rcv *DataItem) Value() float64 {
 	return 0.0
 }
 
-/// value of the data item at the time of the request
-func (rcv *DataItem) MutateValue(n float64) bool {
+/// value of the data item at the time of the request (when of type double)
+func (rcv *DataItem) MutateDoubleVal(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(6, n)
+}
+
+/// value of the data item at the time of the request (when of type uint64)
+func (rcv *DataItem) Uint64Val() uint64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetUint64(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+/// value of the data item at the time of the request (when of type uint64)
+func (rcv *DataItem) MutateUint64Val(n uint64) bool {
+	return rcv._tab.MutateUint64Slot(8, n)
 }
 
 /// unit of the value (or empty for unit-less values)
 func (rcv *DataItem) Unit() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -111,9 +131,23 @@ func (rcv *DataItem) Unit() []byte {
 }
 
 /// unit of the value (or empty for unit-less values)
+/// type of the data item
+func (rcv *DataItem) Type() DataItemType {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return DataItemType(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+/// type of the data item
+func (rcv *DataItem) MutateType(n DataItemType) bool {
+	return rcv._tab.MutateInt8Slot(12, int8(n))
+}
+
 /// result of the read-value-call (value is only set on STS_OK)
 func (rcv *DataItem) Status() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -122,19 +156,25 @@ func (rcv *DataItem) Status() []byte {
 
 /// result of the read-value-call (value is only set on STS_OK)
 func DataItemStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(6)
 }
 func DataItemAddUri(builder *flatbuffers.Builder, uri flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(uri), 0)
 }
-func DataItemAddValue(builder *flatbuffers.Builder, value float64) {
-	builder.PrependFloat64Slot(1, value, 0.0)
+func DataItemAddDoubleVal(builder *flatbuffers.Builder, doubleVal float64) {
+	builder.PrependFloat64Slot(1, doubleVal, 0.0)
+}
+func DataItemAddUint64Val(builder *flatbuffers.Builder, uint64Val uint64) {
+	builder.PrependUint64Slot(2, uint64Val, 0)
 }
 func DataItemAddUnit(builder *flatbuffers.Builder, unit flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(unit), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(unit), 0)
+}
+func DataItemAddType(builder *flatbuffers.Builder, type_ DataItemType) {
+	builder.PrependInt8Slot(4, int8(type_), 0)
 }
 func DataItemAddStatus(builder *flatbuffers.Builder, status flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(status), 0)
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(status), 0)
 }
 func DataItemEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

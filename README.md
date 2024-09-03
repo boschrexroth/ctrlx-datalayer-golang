@@ -36,7 +36,7 @@ This project provides:
 ### Prerequisites
 
 ```bash
-sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev:arm64
+sudo apt-get install libsystemd-dev libsystemd-dev:arm64
 ```
 
 ### Download and install ctrlX Data Layer debian package
@@ -44,8 +44,8 @@ sudo apt-get install libsystemd-dev libsystemd-dev:arm64 libzmq3-dev libzmq3-dev
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/2.6.0/ctrlx-datalayer-2.6.1.deb
-sudo dpkg -i ctrlx-datalayer-2.6.1.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/3.2.0/ctrlx-datalayer-2.7.5.deb
+sudo dpkg -i ctrlx-datalayer-2.7.5.deb
 ```
 
 ### Integrate in you project
