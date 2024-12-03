@@ -24,8 +24,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libsystemd-dev
         sudo apt install pkg-config
-        wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/3.2.0/ctrlx-datalayer-2.7.5.deb
-        sudo apt-get install -y -f ./ctrlx-datalayer-2.7.5.deb
+        wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/3.4.0/ctrlx-datalayer-2.8.6.deb
+        sudo apt-get install -y -f ./ctrlx-datalayer-2.8.6.deb
 
     - name: Set up Go
       uses: actions/setup-go@v5
