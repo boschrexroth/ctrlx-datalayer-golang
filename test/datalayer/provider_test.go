@@ -135,6 +135,23 @@ func TestProviderRegisterType(t *testing.T) {
 	a.Equal(t, datalayer.Result(0), provider.UnregisterType("types/godata/test"))
 }
 
+func TestGetRegisteredType(t *testing.T) {
+	if providerAddress == "" {
+		t.Skip("ctrlX device does not exist")
+	}
+	system, provider := initProvider()
+	defer datalayer.DeleteSystem(system)
+	defer datalayer.DeleteProvider(provider)
+
+	a.Equal(t, datalayer.Result(0), provider.Start())
+	a.Equal(t, true, provider.IsConnected())
+
+	r, d := provider.GetRegisteredType("identity")
+	a.Equal(t, datalayer.ResultOk, r)
+	a.NotNil(t, d)
+	a.Equal(t, d.GetType(), datalayer.VariantTypeArrayUint8)
+}
+
 var goFloat float32 = 0.369
 
 func startTestNode(node *datalayer.ProviderNode) {

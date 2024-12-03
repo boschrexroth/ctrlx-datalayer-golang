@@ -105,14 +105,14 @@ func asyncTestTimeout() time.Duration {
 }
 
 func TestClientAddressNoTests(t *testing.T) {
-	os.Setenv("CTRLX_ADDRESS", "-")
+	t.Setenv("CTRLX_ADDRESS", "-")
 	e := ctrlxAddress()
 	assert.Equal(t, e, "")
 	resetGlobalEnvs()
 }
 
 func TestClientAddressSetEnv(t *testing.T) {
-	os.Setenv("CTRLX_ADDRESS", "10.0.2.2")
+	t.Setenv("CTRLX_ADDRESS", "10.0.2.2")
 	e := ctrlxAddress()
 	assert.True(t, e == "tcp://boschrexroth:boschrexroth@10.0.2.2" ||
 		e == "tcp://boschrexroth:boschrexroth@10.0.2.2?sslport=443" ||
@@ -121,36 +121,36 @@ func TestClientAddressSetEnv(t *testing.T) {
 }
 
 func TestClientAddressSetEnv2(t *testing.T) {
-	os.Setenv("CTRLX_ADDRESS", "10.0.2.2")
-	os.Setenv("CTRLX_SSL_PORT", "8443")
+	t.Setenv("CTRLX_ADDRESS", "10.0.2.2")
+	t.Setenv("CTRLX_SSL_PORT", "8443")
 	e := ctrlxAddress()
 	assert.Equal(t, e, "tcp://boschrexroth:boschrexroth@10.0.2.2?sslport=8443")
 	resetGlobalEnvs()
 }
 
 func TestClientTimeout(t *testing.T) {
-	os.Setenv("CTRLX_TIMEOUT", "-")
+	t.Setenv("CTRLX_TIMEOUT", "-")
 	e := ctrlxClientTimeout()
 	assert.Equal(t, e, uint(2000))
 	resetGlobalEnvs()
 }
 
 func TestClientTimeoutSetEnv(t *testing.T) {
-	os.Setenv("CTRLX_TIMEOUT", "4000")
+	t.Setenv("CTRLX_TIMEOUT", "4000")
 	e := ctrlxClientTimeout()
 	assert.Equal(t, e, uint(4000))
 	resetGlobalEnvs()
 }
 
 func TestAsyncWaitTimeout(t *testing.T) {
-	os.Setenv("CTRLX_TIMEOUT", "-")
+	t.Setenv("CTRLX_TIMEOUT", "-")
 	e := asyncTestTimeout()
 	assert.Equal(t, e, 5*time.Second)
 	resetGlobalEnvs()
 }
 
 func TestAsyncWaitTimeoutSetEnv(t *testing.T) {
-	os.Setenv("CTRLX_TIMEOUT", "4000")
+	t.Setenv("CTRLX_TIMEOUT", "4000")
 	e := asyncTestTimeout()
 	assert.Equal(t, e, (4000/1000)*2*time.Second)
 	resetGlobalEnvs()
