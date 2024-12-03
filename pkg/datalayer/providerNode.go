@@ -48,15 +48,23 @@ type ProviderNodeEventData struct {
 	Callback ProviderNodeCallback
 }
 
+// ProviderNodeSubscription event
+type ProviderNodeSubscription struct {
+	Address     string
+	Subsciption *ProviderSubscription
+}
+
 // ProviderNodeChannels sets the struct.
 type ProviderNodeChannels struct {
-	OnCreate   chan ProviderNodeEventData
-	OnRemove   chan ProviderNodeEvent
-	OnBrowse   chan ProviderNodeEvent
-	OnRead     chan ProviderNodeEventData
-	OnWrite    chan ProviderNodeEventData
-	OnMetadata chan ProviderNodeEvent
-	Done       chan bool
+	OnCreate      chan ProviderNodeEventData
+	OnRemove      chan ProviderNodeEvent
+	OnBrowse      chan ProviderNodeEvent
+	OnRead        chan ProviderNodeEventData
+	OnWrite       chan ProviderNodeEventData
+	OnMetadata    chan ProviderNodeEvent
+	OnSubscribe   chan ProviderNodeSubscription
+	OnUnsubscribe chan ProviderNodeSubscription
+	Done          chan bool
 }
 
 // ProviderNode interface for providing data to the system.
@@ -75,16 +83,40 @@ func (n *ProviderNode) Channels() *ProviderNodeChannels {
 // NewProviderNode initializes the provider node.
 func NewProviderNode() *ProviderNode {
 	channels := ProviderNodeChannels{
-		OnCreate:   make(chan ProviderNodeEventData, providerNodeChannelSize),
-		OnRemove:   make(chan ProviderNodeEvent, providerNodeChannelSize),
-		OnBrowse:   make(chan ProviderNodeEvent, providerNodeChannelSize),
-		OnRead:     make(chan ProviderNodeEventData, providerNodeChannelSize),
-		OnWrite:    make(chan ProviderNodeEventData, providerNodeChannelSize),
-		OnMetadata: make(chan ProviderNodeEvent, providerNodeChannelSize),
-		Done:       make(chan bool),
+		OnCreate:      make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnRemove:      make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnBrowse:      make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnRead:        make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnWrite:       make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnMetadata:    make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnSubscribe:   nil,
+		OnUnsubscribe: nil,
+		Done:          make(chan bool),
 	}
 	userdata := getNodeUserdata(channels)
 	ptr := C.DLR_providerNodeCreate(getNodeCallbacksC(userdata))
+	return &ProviderNode{
+		this:     ptr,
+		userdata: userdata,
+		channels: channels,
+	}
+}
+
+// NewProviderNodeSub initializes the provider node and support the OnSubscribe and OnUnsubscribe interface.
+func NewProviderNodeSub() *ProviderNode {
+	channels := ProviderNodeChannels{
+		OnCreate:      make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnRemove:      make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnBrowse:      make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnRead:        make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnWrite:       make(chan ProviderNodeEventData, providerNodeChannelSize),
+		OnMetadata:    make(chan ProviderNodeEvent, providerNodeChannelSize),
+		OnSubscribe:   make(chan ProviderNodeSubscription, providerNodeChannelSize),
+		OnUnsubscribe: make(chan ProviderNodeSubscription, providerNodeChannelSize),
+		Done:          make(chan bool),
+	}
+	userdata := getNodeUserdata(channels)
+	ptr := C.DLR_providerNodeCreate(getNodeSubCallbacksC(userdata))
 	return &ProviderNode{
 		this:     ptr,
 		userdata: userdata,
@@ -109,5 +141,11 @@ func DeleteProviderNode(n *ProviderNode) {
 	close(n.channels.OnBrowse)
 	close(n.channels.OnRead)
 	close(n.channels.OnMetadata)
+	if n.channels.OnSubscribe != nil {
+		close(n.channels.OnSubscribe)
+	}
+	if n.channels.OnUnsubscribe != nil {
+		close(n.channels.OnUnsubscribe)
+	}
 	n.this = nil
 }
