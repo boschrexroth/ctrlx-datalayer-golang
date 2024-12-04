@@ -39,6 +39,8 @@ typedef enum NODE_ACTION {
 	NODE_ACTION_ON_READ,
 	NODE_ACTION_ON_WRITE,
 	NODE_ACTION_ON_METADATA,
+	NODE_ACTION_ON_SUBSCRIPTION,
+	NODE_ACTION_ON_UNSUBSCRIPTION
 }NODE_ACTION;
 
 extern void callCallbackC(TYPE_CB cb, uint64_t cbdata, DLR_RESULT result, DLR_VARIANT data);
@@ -48,7 +50,11 @@ extern void nodeCallbackOnRemove(void* userdata, char* address, TYPE_CB cb, TYPE
 extern void nodeCallbackOnBrowse(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnRead(void* userdata, char* address, DLR_VARIANT data, TYPE_CB cb, TYPE_CBDATA cbdata);
 extern void nodeCallbackOnWrite(void* userdata, char* address, DLR_VARIANT data, TYPE_CB cb, TYPE_CBDATA cbdata);
-extern void nodeCallbackOnMetadata(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);*/
+extern void nodeCallbackOnMetadata(void* userdata, char* address, TYPE_CB cb, TYPE_CBDATA cbdata);
+extern void nodeCallbackSubscription(void *userdata, DLR_SUBSCRIPTION subscription, char *address);
+extern void nodeCallbackUnsubscription(void *userdata, DLR_SUBSCRIPTION subscription, char *address);
+
+*/
 import "C"
 import (
 	"sync"
@@ -60,12 +66,14 @@ type nodeAction C.enum_NODE_ACTION
 
 // nodeAction enum definition
 const (
-	nodeActionOnCreate   nodeAction = C.NODE_ACTION_ON_CREATE
-	nodeActionOnRemove   nodeAction = C.NODE_ACTION_ON_REMOVE
-	nodeActionOnBrowse   nodeAction = C.NODE_ACTION_ON_BROWSE
-	nodeActionOnRead     nodeAction = C.NODE_ACTION_ON_READ
-	nodeActionOnWrite    nodeAction = C.NODE_ACTION_ON_WRITE
-	nodeActionOnMetadata nodeAction = C.NODE_ACTION_ON_METADATA
+	nodeActionOnCreate        nodeAction = C.NODE_ACTION_ON_CREATE
+	nodeActionOnRemove        nodeAction = C.NODE_ACTION_ON_REMOVE
+	nodeActionOnBrowse        nodeAction = C.NODE_ACTION_ON_BROWSE
+	nodeActionOnRead          nodeAction = C.NODE_ACTION_ON_READ
+	nodeActionOnWrite         nodeAction = C.NODE_ACTION_ON_WRITE
+	nodeActionOnMetadata      nodeAction = C.NODE_ACTION_ON_METADATA
+	nodeActionOnSubsciption   nodeAction = C.NODE_ACTION_ON_SUBSCRIPTION
+	nodeActionOnUnsubsciption nodeAction = C.NODE_ACTION_ON_UNSUBSCRIPTION
 )
 
 // nodeCallbackData type
@@ -96,7 +104,22 @@ func nodeCallbackGo(cuserdata unsafe.Pointer, caddress *C.char, cdata C.DLR_VARI
 	}
 }
 
-// getNodeCallbacksC get struct with all C callbacks
+//export nodeCallbackSubGo
+func nodeCallbackSubGo(cuserdata unsafe.Pointer, sub C.DLR_SUBSCRIPTION, caddress *C.char, action C.int) {
+	var i int = *(*int)(cuserdata)
+	var userdata *nodeUserData = nodeLookup(i)
+	address := C.GoString(caddress)
+	switch nodeAction(action) {
+	case nodeActionOnSubsciption:
+		userdata.channels.OnSubscribe <- ProviderNodeSubscription{Address: address, Subsciption: &ProviderSubscription{this: sub}}
+	case nodeActionOnUnsubsciption:
+		userdata.channels.OnUnsubscribe <- ProviderNodeSubscription{Address: address, Subsciption: &ProviderSubscription{this: sub}}
+	default:
+		panic("Unknown action type in callback")
+	}
+}
+
+// getNodeCallbacksC get struct with subset of the C callbacks
 func getNodeCallbacksC(userdata unsafe.Pointer) C.DLR_PROVIDER_NODE_CALLBACKS {
 	return C.DLR_PROVIDER_NODE_CALLBACKS{
 		userData:   userdata,
@@ -106,6 +129,21 @@ func getNodeCallbacksC(userdata unsafe.Pointer) C.DLR_PROVIDER_NODE_CALLBACKS {
 		onRead:     (*[0]byte)(C.nodeCallbackOnRead),
 		onWrite:    (*[0]byte)(C.nodeCallbackOnWrite),
 		onMetadata: (*[0]byte)(C.nodeCallbackOnMetadata),
+	}
+}
+
+// getNodeSubCallbacksC get struct with all C callbacks
+func getNodeSubCallbacksC(userdata unsafe.Pointer) C.DLR_PROVIDER_NODE_CALLBACKS {
+	return C.DLR_PROVIDER_NODE_CALLBACKS{
+		userData:      userdata,
+		onCreate:      (*[0]byte)(C.nodeCallbackOnCreate),
+		onRemove:      (*[0]byte)(C.nodeCallbackOnRemove),
+		onBrowse:      (*[0]byte)(C.nodeCallbackOnBrowse),
+		onRead:        (*[0]byte)(C.nodeCallbackOnRead),
+		onWrite:       (*[0]byte)(C.nodeCallbackOnWrite),
+		onMetadata:    (*[0]byte)(C.nodeCallbackOnMetadata),
+		onSubscribe:   (*[0]byte)(C.nodeCallbackSubscription),
+		onUnsubscribe: (*[0]byte)(C.nodeCallbackUnsubscription),
 	}
 }
 

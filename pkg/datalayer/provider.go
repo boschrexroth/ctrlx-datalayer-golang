@@ -129,3 +129,47 @@ func (p *Provider) GetToken() *Variant {
 	ptr := C.DLR_providerGetToken(p.this)
 	return &Variant{this: ptr}
 }
+
+// GetRegisteredType get the variant of a registered type
+// Parameter address is address of the type to get type (no wildcards allowed).
+// It returns the status of function call and variant to stored type (Result, Variant).
+func (p *Provider) GetRegisteredType(address string) (Result, *Variant) {
+	caddress := C.CString(address)
+	defer C.free(unsafe.Pointer(caddress))
+	data := NewVariant()
+	r := Result(C.DLR_providerGetRegisteredType(p.this, caddress, data.this))
+	return r, data
+}
+
+// GetRegisteredNodePaths return the current registered node paths.
+// It returns the status of function call and  list of registered node paths.
+func (p *Provider) GetRegisteredNodePaths() (Result, []string) {
+	data := NewVariant()
+	defer DeleteVariant(data)
+	r := Result(C.DLR_providerGetRegisteredNodePaths(p.this, data.this))
+	if r != ResultOk {
+		return r, []string{}
+	}
+	return r, data.GetArrayString()
+}
+
+// GetRejectedNodePaths return the current rejected node paths.
+// It returns the status of function call and  list of rejected node paths.
+func (p *Provider) GetRejectedNodePaths() (Result, []string) {
+	data := NewVariant()
+	defer DeleteVariant(data)
+	r := Result(C.DLR_providerGetRejectedNodePaths(p.this, data.this))
+	if r != ResultOk {
+		return r, []string{}
+	}
+	return r, data.GetArrayString()
+}
+
+// PublishEvent publishes an event
+// Parameter data is the payload data of the event. Has to match the type, that is given in the notifyInfo.
+// Parameter eventtype contains additional info about the event with type event_info.fbs.
+// It returns the status of function call.
+func (p *Provider) PublishEvent(data, eventtype *Variant) Result {
+	r := Result(C.DLR_providerPublishEvent(p.this, data.this, eventtype.this))
+	return r
+}

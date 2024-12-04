@@ -68,3 +68,13 @@ void nodeCallbackOnMetadata(void *userdata, char *address, TYPE_CB cb, TYPE_CBDA
 {
 	nodeCallbackGo(userdata, address, NULL, cb, (uint64_t)cbdata, NODE_ACTION_ON_METADATA);
 }
+
+void nodeCallbackSubscription(void *userdata, DLR_SUBSCRIPTION subscription, char *address)
+{
+	nodeCallbackSubGo(userdata, subscription, address, NODE_ACTION_ON_SUBSCRIPTION);
+}
+
+void nodeCallbackUnsubscription(void *userdata, DLR_SUBSCRIPTION subscription, char *address)
+{
+	nodeCallbackSubGo(userdata, subscription, address, NODE_ACTION_ON_UNSUBSCRIPTION);
+}

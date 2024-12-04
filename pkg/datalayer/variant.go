@@ -442,9 +442,7 @@ func (v *Variant) GetTime() time.Time {
 // SetTime sets a time.Time value since January 1, 1970 UTC
 // It returns the status of function call.
 func (v *Variant) SetTime(df time.Time) {
-	ns := df.UTC().UnixNano()
-	ft := convertUnixTime2FileTime(ns)
-	v.SetTimestamp(uint64(ft))
+	v.SetTimestamp(toFiletime(df))
 }
 
 // see. https://stackoverflow.com/questions/57901280/calculate-time-time-from-timestamp-starting-from-1601-01-01-in-go
@@ -461,6 +459,13 @@ func getTime(input int64) time.Time {
 		t = t.Add(time.Duration(input * 100))
 	}
 	return t
+}
+
+// toFiletime converts a time.Time value since January 1, 1970 UTC to Filetime
+func toFiletime(df time.Time) uint64 {
+	ns := df.UTC().UnixNano()
+	ft := convertUnixTime2FileTime(ns)
+	return uint64(ft)
 }
 
 // GetArrayTime returns the value of the variant as an array of time.Time since January 1, 1970 UTC.
