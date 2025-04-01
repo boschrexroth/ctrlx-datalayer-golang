@@ -3,7 +3,7 @@ module github.com/boschrexroth/ctrlx-datalayer-golang/v2
 go 1.22
 
 require (
-	github.com/google/flatbuffers v24.3.25+incompatible
+	github.com/google/flatbuffers v25.2.10+incompatible
 	github.com/loov/hrtime v1.0.3
 	github.com/loov/hrtime/hrplot v1.0.2
 	github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852
