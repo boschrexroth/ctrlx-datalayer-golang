@@ -205,7 +205,7 @@ func (suite *ClientTestSuite) TestReadJsonSync() {
 	suite.NotNil(d)
 	suite.True(len(d) != 0)
 
-	r, d = client.ReadJsonSyncArgs(cv, addressString, 2, []byte("testdata"))
+	r, d = client.ReadJsonSyncArgs(cv, addressString, 2, []byte("{\"type\": \"string\", \"value\": \"testdata\"}"))
 	suite.Equal(datalayer.Result(0), r)
 	suite.NotNil(d)
 	suite.True(len(d) != 0)
