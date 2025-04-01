@@ -20,6 +20,7 @@ type AxsCmdFlexProfileParamsT struct {
 	SwitchProfileOnPos bool `json:"switchProfileOnPos"`
 	SwitchGearOnPos bool `json:"switchGearOnPos"`
 	AngleAdjust float64 `json:"angleAdjust"`
+	SlaveAdjust float64 `json:"slaveAdjust"`
 }
 
 func (t *AxsCmdFlexProfileParamsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -41,6 +42,7 @@ func (t *AxsCmdFlexProfileParamsT) Pack(builder *flatbuffers.Builder) flatbuffer
 	AxsCmdFlexProfileParamsAddSwitchProfileOnPos(builder, t.SwitchProfileOnPos)
 	AxsCmdFlexProfileParamsAddSwitchGearOnPos(builder, t.SwitchGearOnPos)
 	AxsCmdFlexProfileParamsAddAngleAdjust(builder, t.AngleAdjust)
+	AxsCmdFlexProfileParamsAddSlaveAdjust(builder, t.SlaveAdjust)
 	return AxsCmdFlexProfileParamsEnd(builder)
 }
 
@@ -57,6 +59,7 @@ func (rcv *AxsCmdFlexProfileParams) UnPackTo(t *AxsCmdFlexProfileParamsT) {
 	t.SwitchProfileOnPos = rcv.SwitchProfileOnPos()
 	t.SwitchGearOnPos = rcv.SwitchGearOnPos()
 	t.AngleAdjust = rcv.AngleAdjust()
+	t.SlaveAdjust = rcv.SlaveAdjust()
 }
 
 func (rcv *AxsCmdFlexProfileParams) UnPack() *AxsCmdFlexProfileParamsT {
@@ -257,8 +260,22 @@ func (rcv *AxsCmdFlexProfileParams) MutateAngleAdjust(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(26, n)
 }
 
+/// slave adjust
+func (rcv *AxsCmdFlexProfileParams) SlaveAdjust() float64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+	}
+	return 0.0
+}
+
+/// slave adjust
+func (rcv *AxsCmdFlexProfileParams) MutateSlaveAdjust(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(28, n)
+}
+
 func AxsCmdFlexProfileParamsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(12)
+	builder.StartObject(13)
 }
 func AxsCmdFlexProfileParamsAddMasterOffset(builder *flatbuffers.Builder, masterOffset float64) {
 	builder.PrependFloat64Slot(0, masterOffset, 0.0)
@@ -295,6 +312,9 @@ func AxsCmdFlexProfileParamsAddSwitchGearOnPos(builder *flatbuffers.Builder, swi
 }
 func AxsCmdFlexProfileParamsAddAngleAdjust(builder *flatbuffers.Builder, angleAdjust float64) {
 	builder.PrependFloat64Slot(11, angleAdjust, 0.0)
+}
+func AxsCmdFlexProfileParamsAddSlaveAdjust(builder *flatbuffers.Builder, slaveAdjust float64) {
+	builder.PrependFloat64Slot(12, slaveAdjust, 0.0)
 }
 func AxsCmdFlexProfileParamsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

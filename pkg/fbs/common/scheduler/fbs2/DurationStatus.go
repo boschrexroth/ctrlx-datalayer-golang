@@ -6,9 +6,10 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// Status of the duration measurements of all tasks
+/// Status of the duration measurements and recordings of all tasks and callables
 type DurationStatusT struct {
 	DurationStatus []*durationStatusOfTaskT `json:"durationStatus"`
+	Active bool `json:"active"`
 }
 
 func (t *DurationStatusT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -28,6 +29,7 @@ func (t *DurationStatusT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	}
 	DurationStatusStart(builder)
 	DurationStatusAddDurationStatus(builder, durationStatusOffset)
+	DurationStatusAddActive(builder, t.Active)
 	return DurationStatusEnd(builder)
 }
 
@@ -39,6 +41,7 @@ func (rcv *DurationStatus) UnPackTo(t *DurationStatusT) {
 		rcv.DurationStatus(&x, j)
 		t.DurationStatus[j] = x.UnPack()
 	}
+	t.Active = rcv.Active()
 }
 
 func (rcv *DurationStatus) UnPack() *DurationStatusT {
@@ -75,7 +78,7 @@ func (rcv *DurationStatus) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// Status of the duration measurements of all tasks
+/// Status of the duration measurements and recordings of all tasks and callables
 func (rcv *DurationStatus) DurationStatus(obj *durationStatusOfTask, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -96,15 +99,32 @@ func (rcv *DurationStatus) DurationStatusLength() int {
 	return 0
 }
 
-/// Status of the duration measurements of all tasks
+/// Status of the duration measurements and recordings of all tasks and callables
+/// At least one measurement resp. recording of any task or callable is active
+func (rcv *DurationStatus) Active() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// At least one measurement resp. recording of any task or callable is active
+func (rcv *DurationStatus) MutateActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(6, n)
+}
+
 func DurationStatusStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func DurationStatusAddDurationStatus(builder *flatbuffers.Builder, durationStatus flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(durationStatus), 0)
 }
 func DurationStatusStartDurationStatusVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func DurationStatusAddActive(builder *flatbuffers.Builder, active bool) {
+	builder.PrependBoolSlot(1, active, false)
 }
 func DurationStatusEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

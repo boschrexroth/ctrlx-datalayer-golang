@@ -7,19 +7,18 @@ import (
 )
 
 type DateTimeVariantT struct {
-	Value *DateTimeT `json:"value"`
+	Value uint64 `json:"value"`
 }
 
 func (t *DateTimeVariantT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	valueOffset := t.Value.Pack(builder)
 	DateTimeVariantStart(builder)
-	DateTimeVariantAddValue(builder, valueOffset)
+	DateTimeVariantAddValue(builder, t.Value)
 	return DateTimeVariantEnd(builder)
 }
 
 func (rcv *DateTimeVariant) UnPackTo(t *DateTimeVariantT) {
-	t.Value = rcv.Value(nil).UnPack()
+	t.Value = rcv.Value()
 }
 
 func (rcv *DateTimeVariant) UnPack() *DateTimeVariantT {
@@ -56,24 +55,23 @@ func (rcv *DateTimeVariant) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *DateTimeVariant) Value(obj *DateTime) *DateTime {
+func (rcv *DateTimeVariant) Value() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		x := rcv._tab.Indirect(o + rcv._tab.Pos)
-		if obj == nil {
-			obj = new(DateTime)
-		}
-		obj.Init(rcv._tab.Bytes, x)
-		return obj
+		return rcv._tab.GetUint64(o + rcv._tab.Pos)
 	}
-	return nil
+	return 0
+}
+
+func (rcv *DateTimeVariant) MutateValue(n uint64) bool {
+	return rcv._tab.MutateUint64Slot(4, n)
 }
 
 func DateTimeVariantStart(builder *flatbuffers.Builder) {
 	builder.StartObject(1)
 }
-func DateTimeVariantAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(value), 0)
+func DateTimeVariantAddValue(builder *flatbuffers.Builder, value uint64) {
+	builder.PrependUint64Slot(0, value, 0)
 }
 func DateTimeVariantEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

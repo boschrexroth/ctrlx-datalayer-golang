@@ -14,6 +14,7 @@ type AxsCfgProbeDataT struct {
 	ExpWin *AxsCfgProbeExpectWindowDataT `json:"expWin"`
 	DeadTime *AxsCfgProbeDeadTimeDataT `json:"deadTime"`
 	InterpType InterpType `json:"interpType"`
+	DeadTimeEx *AxsCfgProbeDeadTimeExDataT `json:"deadTimeEx"`
 }
 
 func (t *AxsCfgProbeDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -23,6 +24,7 @@ func (t *AxsCfgProbeDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	mkrFailOffset := t.MkrFail.Pack(builder)
 	expWinOffset := t.ExpWin.Pack(builder)
 	deadTimeOffset := t.DeadTime.Pack(builder)
+	deadTimeExOffset := t.DeadTimeEx.Pack(builder)
 	AxsCfgProbeDataStart(builder)
 	AxsCfgProbeDataAddSignal(builder, signalOffset)
 	AxsCfgProbeDataAddEdge(builder, edgeOffset)
@@ -30,6 +32,7 @@ func (t *AxsCfgProbeDataT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	AxsCfgProbeDataAddExpWin(builder, expWinOffset)
 	AxsCfgProbeDataAddDeadTime(builder, deadTimeOffset)
 	AxsCfgProbeDataAddInterpType(builder, t.InterpType)
+	AxsCfgProbeDataAddDeadTimeEx(builder, deadTimeExOffset)
 	return AxsCfgProbeDataEnd(builder)
 }
 
@@ -40,6 +43,7 @@ func (rcv *AxsCfgProbeData) UnPackTo(t *AxsCfgProbeDataT) {
 	t.ExpWin = rcv.ExpWin(nil).UnPack()
 	t.DeadTime = rcv.DeadTime(nil).UnPack()
 	t.InterpType = rcv.InterpType()
+	t.DeadTimeEx = rcv.DeadTimeEx(nil).UnPack()
 }
 
 func (rcv *AxsCfgProbeData) UnPack() *AxsCfgProbeDataT {
@@ -136,7 +140,7 @@ func (rcv *AxsCfgProbeData) ExpWin(obj *AxsCfgProbeExpectWindowData) *AxsCfgProb
 }
 
 /// expect window data
-/// dead time compensation data
+/// dead time compensation data to drive
 func (rcv *AxsCfgProbeData) DeadTime(obj *AxsCfgProbeDeadTimeData) *AxsCfgProbeDeadTimeData {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -150,7 +154,7 @@ func (rcv *AxsCfgProbeData) DeadTime(obj *AxsCfgProbeDeadTimeData) *AxsCfgProbeD
 	return nil
 }
 
-/// dead time compensation data
+/// dead time compensation data to drive
 /// interpolation type, linear, polynomial
 func (rcv *AxsCfgProbeData) InterpType() InterpType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
@@ -165,8 +169,23 @@ func (rcv *AxsCfgProbeData) MutateInterpType(n InterpType) bool {
 	return rcv._tab.MutateInt8Slot(14, int8(n))
 }
 
+/// dead time compensation data extend to control
+func (rcv *AxsCfgProbeData) DeadTimeEx(obj *AxsCfgProbeDeadTimeExData) *AxsCfgProbeDeadTimeExData {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgProbeDeadTimeExData)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// dead time compensation data extend to control
 func AxsCfgProbeDataStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func AxsCfgProbeDataAddSignal(builder *flatbuffers.Builder, signal flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(signal), 0)
@@ -185,6 +204,9 @@ func AxsCfgProbeDataAddDeadTime(builder *flatbuffers.Builder, deadTime flatbuffe
 }
 func AxsCfgProbeDataAddInterpType(builder *flatbuffers.Builder, interpType InterpType) {
 	builder.PrependInt8Slot(5, int8(interpType), 1)
+}
+func AxsCfgProbeDataAddDeadTimeEx(builder *flatbuffers.Builder, deadTimeEx flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(deadTimeEx), 0)
 }
 func AxsCfgProbeDataEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

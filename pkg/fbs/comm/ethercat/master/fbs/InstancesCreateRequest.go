@@ -12,6 +12,7 @@ type InstancesCreateRequestT struct {
 	Port string `json:"port"`
 	LinkLayer string `json:"linkLayer"`
 	Arguments string `json:"arguments"`
+	TaskConfig *TaskConfigurationT `json:"taskConfig"`
 }
 
 func (t *InstancesCreateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -32,11 +33,13 @@ func (t *InstancesCreateRequestT) Pack(builder *flatbuffers.Builder) flatbuffers
 	if t.Arguments != "" {
 		argumentsOffset = builder.CreateString(t.Arguments)
 	}
+	taskConfigOffset := t.TaskConfig.Pack(builder)
 	InstancesCreateRequestStart(builder)
 	InstancesCreateRequestAddInstanceName(builder, instanceNameOffset)
 	InstancesCreateRequestAddPort(builder, portOffset)
 	InstancesCreateRequestAddLinkLayer(builder, linkLayerOffset)
 	InstancesCreateRequestAddArguments(builder, argumentsOffset)
+	InstancesCreateRequestAddTaskConfig(builder, taskConfigOffset)
 	return InstancesCreateRequestEnd(builder)
 }
 
@@ -45,6 +48,7 @@ func (rcv *InstancesCreateRequest) UnPackTo(t *InstancesCreateRequestT) {
 	t.Port = string(rcv.Port())
 	t.LinkLayer = string(rcv.LinkLayer())
 	t.Arguments = string(rcv.Arguments())
+	t.TaskConfig = rcv.TaskConfig(nil).UnPack()
 }
 
 func (rcv *InstancesCreateRequest) UnPack() *InstancesCreateRequestT {
@@ -129,8 +133,23 @@ func (rcv *InstancesCreateRequest) Arguments() []byte {
 }
 
 ///Reserved for future use
+///Default task configuration for EtherCAT callable
+func (rcv *InstancesCreateRequest) TaskConfig(obj *TaskConfiguration) *TaskConfiguration {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TaskConfiguration)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Default task configuration for EtherCAT callable
 func InstancesCreateRequestStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func InstancesCreateRequestAddInstanceName(builder *flatbuffers.Builder, instanceName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(instanceName), 0)
@@ -143,6 +162,9 @@ func InstancesCreateRequestAddLinkLayer(builder *flatbuffers.Builder, linkLayer 
 }
 func InstancesCreateRequestAddArguments(builder *flatbuffers.Builder, arguments flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(arguments), 0)
+}
+func InstancesCreateRequestAddTaskConfig(builder *flatbuffers.Builder, taskConfig flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(taskConfig), 0)
 }
 func InstancesCreateRequestEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

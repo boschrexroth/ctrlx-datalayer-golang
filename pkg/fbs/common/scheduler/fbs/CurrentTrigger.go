@@ -8,20 +8,24 @@ import "strconv"
 type CurrentTrigger int8
 
 const (
-	/// Trigger of Scheduler is cause by a timer interrupt
-	CurrentTriggerTIMER     CurrentTrigger = 0
-	/// Trigger of Scheduler is cause by a FPGA interrupt
-	CurrentTriggerINTERRUPT CurrentTrigger = 1
+	/// Trigger of Scheduler caused by the monotonic timer (CLOCK_MONOTONIC)
+	CurrentTriggerTIMER                CurrentTrigger = 0
+	/// Trigger of Scheduler caused by the FPGA interrupt
+	CurrentTriggerINTERRUPT            CurrentTrigger = 1
+	/// Trigger of Scheduler is caused by a timer with mutable clocks (CLOCK_MONOTONIC, CLOCK_REALTIME)
+	CurrentTriggerTIMER_MUTABLE_CLOCKS CurrentTrigger = 2
 )
 
 var EnumNamesCurrentTrigger = map[CurrentTrigger]string{
-	CurrentTriggerTIMER:     "TIMER",
-	CurrentTriggerINTERRUPT: "INTERRUPT",
+	CurrentTriggerTIMER:                "TIMER",
+	CurrentTriggerINTERRUPT:            "INTERRUPT",
+	CurrentTriggerTIMER_MUTABLE_CLOCKS: "TIMER_MUTABLE_CLOCKS",
 }
 
 var EnumValuesCurrentTrigger = map[string]CurrentTrigger{
-	"TIMER":     CurrentTriggerTIMER,
-	"INTERRUPT": CurrentTriggerINTERRUPT,
+	"TIMER":                CurrentTriggerTIMER,
+	"INTERRUPT":            CurrentTriggerINTERRUPT,
+	"TIMER_MUTABLE_CLOCKS": CurrentTriggerTIMER_MUTABLE_CLOCKS,
 }
 
 func (v CurrentTrigger) String() string {

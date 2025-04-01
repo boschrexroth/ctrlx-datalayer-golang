@@ -144,7 +144,7 @@ func (rcv *DiagnosisIdentificationWithTimestamp) UserId() []byte {
 }
 
 /// User id of the user who notified the log.
-/// Snap that notified the log (e.g. rexroth-automationcore).
+/// Snap that notified the log (e.g. Automation Core).
 func (rcv *DiagnosisIdentificationWithTimestamp) Origin() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -153,7 +153,7 @@ func (rcv *DiagnosisIdentificationWithTimestamp) Origin() []byte {
 	return nil
 }
 
-/// Snap that notified the log (e.g. rexroth-automationcore).
+/// Snap that notified the log (e.g. Automation Core).
 /// Unit name of the component that notified the log (e.g. comm.datalayer).
 func (rcv *DiagnosisIdentificationWithTimestamp) UnitName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))

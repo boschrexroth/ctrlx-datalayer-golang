@@ -123,7 +123,9 @@ func (rcv *TaskConfiguration) Task() []byte {
 }
 
 /// Default task context for the callable
-/// Default CoreIndex of the task
+/// Default CPU index on which the task should run
+/// Is composed of the preferred CPU type and an index.
+/// The cpu type can be 'rt' for isolated cores or 'nrt' for non-isolated cores.
 func (rcv *TaskConfiguration) CoreIndex() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -132,7 +134,9 @@ func (rcv *TaskConfiguration) CoreIndex() []byte {
 	return nil
 }
 
-/// Default CoreIndex of the task
+/// Default CPU index on which the task should run
+/// Is composed of the preferred CPU type and an index.
+/// The cpu type can be 'rt' for isolated cores or 'nrt' for non-isolated cores.
 /// Default priority of the task e.g. high, mid, low
 func (rcv *TaskConfiguration) Priority() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))

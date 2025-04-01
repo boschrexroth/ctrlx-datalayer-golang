@@ -21,6 +21,10 @@ const (
 	MappingResultTypeMismatch            MappingResult = 5
 	/// sourceUaNodeId does not provide valid metadata
 	MappingResultSourceNodeHasNoMetadata MappingResult = 6
+	/// targetObjectUaNodeId is not present in the loaded companion models
+	MappingResultInvalidTargetObject     MappingResult = 7
+	/// Mapping was automatically generated. Just for information.
+	MappingResultAutomaticallyGenerated  MappingResult = 8
 )
 
 var EnumNamesMappingResult = map[MappingResult]string{
@@ -31,6 +35,8 @@ var EnumNamesMappingResult = map[MappingResult]string{
 	MappingResultTargetTypeUnsupported:   "TargetTypeUnsupported",
 	MappingResultTypeMismatch:            "TypeMismatch",
 	MappingResultSourceNodeHasNoMetadata: "SourceNodeHasNoMetadata",
+	MappingResultInvalidTargetObject:     "InvalidTargetObject",
+	MappingResultAutomaticallyGenerated:  "AutomaticallyGenerated",
 }
 
 var EnumValuesMappingResult = map[string]MappingResult{
@@ -41,6 +47,8 @@ var EnumValuesMappingResult = map[string]MappingResult{
 	"TargetTypeUnsupported":   MappingResultTargetTypeUnsupported,
 	"TypeMismatch":            MappingResultTypeMismatch,
 	"SourceNodeHasNoMetadata": MappingResultSourceNodeHasNoMetadata,
+	"InvalidTargetObject":     MappingResultInvalidTargetObject,
+	"AutomaticallyGenerated":  MappingResultAutomaticallyGenerated,
 }
 
 func (v MappingResult) String() string {

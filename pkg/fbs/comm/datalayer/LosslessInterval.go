@@ -59,6 +59,7 @@ func (rcv *LosslessInterval) Table() flatbuffers.Table {
 }
 
 /// Time in µs to wait for new data
+/// This feature is only implemented in lossless subscriptions
 func (rcv *LosslessInterval) SamplingInterval() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,11 +69,14 @@ func (rcv *LosslessInterval) SamplingInterval() uint64 {
 }
 
 /// Time in µs to wait for new data
+/// This feature is only implemented in lossless subscriptions
 func (rcv *LosslessInterval) MutateSamplingInterval(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(4, n)
 }
 
 /// Time in µs as tolerance for samplingInterval
+/// Data will be caputred: timstamp(newData) > timstamp(oldData) + (samplingInterval - tolerance)
+/// This feature is only implemented in lossless subscriptions
 func (rcv *LosslessInterval) Tolerance() uint64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,6 +86,8 @@ func (rcv *LosslessInterval) Tolerance() uint64 {
 }
 
 /// Time in µs as tolerance for samplingInterval
+/// Data will be caputred: timstamp(newData) > timstamp(oldData) + (samplingInterval - tolerance)
+/// This feature is only implemented in lossless subscriptions
 func (rcv *LosslessInterval) MutateTolerance(n uint64) bool {
 	return rcv._tab.MutateUint64Slot(6, n)
 }

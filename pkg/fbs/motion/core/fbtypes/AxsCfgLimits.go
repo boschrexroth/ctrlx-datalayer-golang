@@ -24,6 +24,10 @@ type AxsCfgLimitsT struct {
 	DecUnit string `json:"decUnit"`
 	JrkAccUnit string `json:"jrkAccUnit"`
 	JrkDecUnit string `json:"jrkDecUnit"`
+	TrqPosUnit string `json:"trqPosUnit"`
+	TrqNegUnit string `json:"trqNegUnit"`
+	TrqPos float64 `json:"trqPos"`
+	TrqNeg float64 `json:"trqNeg"`
 }
 
 func (t *AxsCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -60,6 +64,14 @@ func (t *AxsCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	if t.JrkDecUnit != "" {
 		jrkDecUnitOffset = builder.CreateString(t.JrkDecUnit)
 	}
+	trqPosUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TrqPosUnit != "" {
+		trqPosUnitOffset = builder.CreateString(t.TrqPosUnit)
+	}
+	trqNegUnitOffset := flatbuffers.UOffsetT(0)
+	if t.TrqNegUnit != "" {
+		trqNegUnitOffset = builder.CreateString(t.TrqNegUnit)
+	}
 	AxsCfgLimitsStart(builder)
 	AxsCfgLimitsAddPosMin(builder, t.PosMin)
 	AxsCfgLimitsAddPosMax(builder, t.PosMax)
@@ -77,6 +89,10 @@ func (t *AxsCfgLimitsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	AxsCfgLimitsAddDecUnit(builder, decUnitOffset)
 	AxsCfgLimitsAddJrkAccUnit(builder, jrkAccUnitOffset)
 	AxsCfgLimitsAddJrkDecUnit(builder, jrkDecUnitOffset)
+	AxsCfgLimitsAddTrqPosUnit(builder, trqPosUnitOffset)
+	AxsCfgLimitsAddTrqNegUnit(builder, trqNegUnitOffset)
+	AxsCfgLimitsAddTrqPos(builder, t.TrqPos)
+	AxsCfgLimitsAddTrqNeg(builder, t.TrqNeg)
 	return AxsCfgLimitsEnd(builder)
 }
 
@@ -97,6 +113,10 @@ func (rcv *AxsCfgLimits) UnPackTo(t *AxsCfgLimitsT) {
 	t.DecUnit = string(rcv.DecUnit())
 	t.JrkAccUnit = string(rcv.JrkAccUnit())
 	t.JrkDecUnit = string(rcv.JrkDecUnit())
+	t.TrqPosUnit = string(rcv.TrqPosUnit())
+	t.TrqNegUnit = string(rcv.TrqNegUnit())
+	t.TrqPos = rcv.TrqPos()
+	t.TrqNeg = rcv.TrqNeg()
 }
 
 func (rcv *AxsCfgLimits) UnPack() *AxsCfgLimitsT {
@@ -161,7 +181,7 @@ func (rcv *AxsCfgLimits) MutatePosMax(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(6, n)
 }
 
-/// absolute minimum velocity limit (should be greater than zero)
+/// absolute velocity limit, when moving into positive direction (should be greater than zero)
 func (rcv *AxsCfgLimits) VelPos() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -170,12 +190,12 @@ func (rcv *AxsCfgLimits) VelPos() float64 {
 	return 0.0
 }
 
-/// absolute minimum velocity limit (should be greater than zero)
+/// absolute velocity limit, when moving into positive direction (should be greater than zero)
 func (rcv *AxsCfgLimits) MutateVelPos(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(8, n)
 }
 
-/// absolute maximum velocity limit (should be greater than zero)
+/// absolute velocity limit, when moving into negative direction (should be greater than zero)
 func (rcv *AxsCfgLimits) VelNeg() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -184,7 +204,7 @@ func (rcv *AxsCfgLimits) VelNeg() float64 {
 	return 0.0
 }
 
-/// absolute maximum velocity limit (should be greater than zero)
+/// absolute velocity limit, when moving into negative direction (should be greater than zero)
 func (rcv *AxsCfgLimits) MutateVelNeg(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(10, n)
 }
@@ -325,8 +345,56 @@ func (rcv *AxsCfgLimits) JrkDecUnit() []byte {
 }
 
 /// unit of jrkDec
+/// unit of trqPos
+func (rcv *AxsCfgLimits) TrqPosUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(36))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of trqPos
+/// unit of trqNeg
+func (rcv *AxsCfgLimits) TrqNegUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(38))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of trqNeg
+/// absolute torque limit in positive direction (should be greater than zero)
+func (rcv *AxsCfgLimits) TrqPos() float64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(40))
+	if o != 0 {
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+	}
+	return 0.0
+}
+
+/// absolute torque limit in positive direction (should be greater than zero)
+func (rcv *AxsCfgLimits) MutateTrqPos(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(40, n)
+}
+
+/// absolute torque limit in negative direction (should be greater than zero)
+func (rcv *AxsCfgLimits) TrqNeg() float64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(42))
+	if o != 0 {
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+	}
+	return 0.0
+}
+
+/// absolute torque limit in negative direction (should be greater than zero)
+func (rcv *AxsCfgLimits) MutateTrqNeg(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(42, n)
+}
+
 func AxsCfgLimitsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(16)
+	builder.StartObject(20)
 }
 func AxsCfgLimitsAddPosMin(builder *flatbuffers.Builder, posMin float64) {
 	builder.PrependFloat64Slot(0, posMin, 0.0)
@@ -375,6 +443,18 @@ func AxsCfgLimitsAddJrkAccUnit(builder *flatbuffers.Builder, jrkAccUnit flatbuff
 }
 func AxsCfgLimitsAddJrkDecUnit(builder *flatbuffers.Builder, jrkDecUnit flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(15, flatbuffers.UOffsetT(jrkDecUnit), 0)
+}
+func AxsCfgLimitsAddTrqPosUnit(builder *flatbuffers.Builder, trqPosUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(16, flatbuffers.UOffsetT(trqPosUnit), 0)
+}
+func AxsCfgLimitsAddTrqNegUnit(builder *flatbuffers.Builder, trqNegUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(17, flatbuffers.UOffsetT(trqNegUnit), 0)
+}
+func AxsCfgLimitsAddTrqPos(builder *flatbuffers.Builder, trqPos float64) {
+	builder.PrependFloat64Slot(18, trqPos, 0.0)
+}
+func AxsCfgLimitsAddTrqNeg(builder *flatbuffers.Builder, trqNeg float64) {
+	builder.PrependFloat64Slot(19, trqNeg, 0.0)
 }
 func AxsCfgLimitsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -17,6 +17,7 @@ const (
 	PropertiesChangeEvents      Properties = 4
 	PropertiesCounting          Properties = 5
 	PropertiesLosslessRateLimit Properties = 6
+	PropertiesLosslessInterval  Properties = 7
 )
 
 var EnumNamesProperties = map[Properties]string{
@@ -27,6 +28,7 @@ var EnumNamesProperties = map[Properties]string{
 	PropertiesChangeEvents:      "ChangeEvents",
 	PropertiesCounting:          "Counting",
 	PropertiesLosslessRateLimit: "LosslessRateLimit",
+	PropertiesLosslessInterval:  "LosslessInterval",
 }
 
 var EnumValuesProperties = map[string]Properties{
@@ -37,6 +39,7 @@ var EnumValuesProperties = map[string]Properties{
 	"ChangeEvents":      PropertiesChangeEvents,
 	"Counting":          PropertiesCounting,
 	"LosslessRateLimit": PropertiesLosslessRateLimit,
+	"LosslessInterval":  PropertiesLosslessInterval,
 }
 
 func (v Properties) String() string {
@@ -68,6 +71,8 @@ func (t *PropertiesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		return t.Value.(*CountingT).Pack(builder)
 	case PropertiesLosslessRateLimit:
 		return t.Value.(*LosslessRateLimitT).Pack(builder)
+	case PropertiesLosslessInterval:
+		return t.Value.(*LosslessIntervalT).Pack(builder)
 	}
 	return 0
 }
@@ -98,6 +103,10 @@ func (rcv Properties) UnPack(table flatbuffers.Table) *PropertiesT {
 		var x LosslessRateLimit
 		x.Init(table.Bytes, table.Pos)
 		return &PropertiesT{ Type: PropertiesLosslessRateLimit, Value: x.UnPack() }
+	case PropertiesLosslessInterval:
+		var x LosslessInterval
+		x.Init(table.Bytes, table.Pos)
+		return &PropertiesT{ Type: PropertiesLosslessInterval, Value: x.UnPack() }
 	}
 	return nil
 }

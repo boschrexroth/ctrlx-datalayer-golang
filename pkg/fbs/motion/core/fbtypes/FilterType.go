@@ -9,19 +9,43 @@ type FilterType int8
 
 const (
 	/// without any filter, using raw value
-	FilterTypeNONE             FilterType = 0
+	FilterTypeNONE                                 FilterType = 0
 	/// 1st order low pass filter
-	FilterTypeLOW_PASS_ORDER_1 FilterType = 1
+	FilterTypeLOW_PASS_ORDER_1                     FilterType = 1
+	/// 2nd order low pass filter
+	FilterTypeLOW_PASS_ORDER_2                     FilterType = 2
+	/// 2nd order low pass Butterworth filter
+	FilterTypeLOW_PASS_ORDER_2_BUTTERWORTH         FilterType = 3
+	/// 2nd order low pass filter (with velocity feedforward)
+	FilterTypeLOW_PASS_ORDER_2_VEL_FEEDFORWARD     FilterType = 4
+	/// 3rd order low pass filter
+	FilterTypeLOW_PASS_ORDER_3                     FilterType = 5
+	/// 3rd order low pass Butterworth filter
+	FilterTypeLOW_PASS_ORDER_3_BUTTERWORTH         FilterType = 6
+	/// 3rd order low pass filter (with velocity and acceleration feedforward)
+	FilterTypeLOW_PASS_ORDER_3_VEL_ACC_FEEDFORWARD FilterType = 7
 )
 
 var EnumNamesFilterType = map[FilterType]string{
-	FilterTypeNONE:             "NONE",
-	FilterTypeLOW_PASS_ORDER_1: "LOW_PASS_ORDER_1",
+	FilterTypeNONE:                                 "NONE",
+	FilterTypeLOW_PASS_ORDER_1:                     "LOW_PASS_ORDER_1",
+	FilterTypeLOW_PASS_ORDER_2:                     "LOW_PASS_ORDER_2",
+	FilterTypeLOW_PASS_ORDER_2_BUTTERWORTH:         "LOW_PASS_ORDER_2_BUTTERWORTH",
+	FilterTypeLOW_PASS_ORDER_2_VEL_FEEDFORWARD:     "LOW_PASS_ORDER_2_VEL_FEEDFORWARD",
+	FilterTypeLOW_PASS_ORDER_3:                     "LOW_PASS_ORDER_3",
+	FilterTypeLOW_PASS_ORDER_3_BUTTERWORTH:         "LOW_PASS_ORDER_3_BUTTERWORTH",
+	FilterTypeLOW_PASS_ORDER_3_VEL_ACC_FEEDFORWARD: "LOW_PASS_ORDER_3_VEL_ACC_FEEDFORWARD",
 }
 
 var EnumValuesFilterType = map[string]FilterType{
-	"NONE":             FilterTypeNONE,
-	"LOW_PASS_ORDER_1": FilterTypeLOW_PASS_ORDER_1,
+	"NONE":                                 FilterTypeNONE,
+	"LOW_PASS_ORDER_1":                     FilterTypeLOW_PASS_ORDER_1,
+	"LOW_PASS_ORDER_2":                     FilterTypeLOW_PASS_ORDER_2,
+	"LOW_PASS_ORDER_2_BUTTERWORTH":         FilterTypeLOW_PASS_ORDER_2_BUTTERWORTH,
+	"LOW_PASS_ORDER_2_VEL_FEEDFORWARD":     FilterTypeLOW_PASS_ORDER_2_VEL_FEEDFORWARD,
+	"LOW_PASS_ORDER_3":                     FilterTypeLOW_PASS_ORDER_3,
+	"LOW_PASS_ORDER_3_BUTTERWORTH":         FilterTypeLOW_PASS_ORDER_3_BUTTERWORTH,
+	"LOW_PASS_ORDER_3_VEL_ACC_FEEDFORWARD": FilterTypeLOW_PASS_ORDER_3_VEL_ACC_FEEDFORWARD,
 }
 
 func (v FilterType) String() string {

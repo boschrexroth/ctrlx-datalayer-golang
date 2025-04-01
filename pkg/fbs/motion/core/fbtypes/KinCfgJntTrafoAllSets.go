@@ -9,6 +9,8 @@ import (
 /// configuration values of all joint transformation sets
 type KinCfgJntTrafoAllSetsT struct {
 	AxsTrafoSets []*KinCfgJntTrafoSetT `json:"axsTrafoSets"`
+	UseAxisTrafoFallback bool `json:"useAxisTrafoFallback"`
+	UseKinAxesFallback bool `json:"useKinAxesFallback"`
 }
 
 func (t *KinCfgJntTrafoAllSetsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -28,6 +30,8 @@ func (t *KinCfgJntTrafoAllSetsT) Pack(builder *flatbuffers.Builder) flatbuffers.
 	}
 	KinCfgJntTrafoAllSetsStart(builder)
 	KinCfgJntTrafoAllSetsAddAxsTrafoSets(builder, axsTrafoSetsOffset)
+	KinCfgJntTrafoAllSetsAddUseAxisTrafoFallback(builder, t.UseAxisTrafoFallback)
+	KinCfgJntTrafoAllSetsAddUseKinAxesFallback(builder, t.UseKinAxesFallback)
 	return KinCfgJntTrafoAllSetsEnd(builder)
 }
 
@@ -39,6 +43,8 @@ func (rcv *KinCfgJntTrafoAllSets) UnPackTo(t *KinCfgJntTrafoAllSetsT) {
 		rcv.AxsTrafoSets(&x, j)
 		t.AxsTrafoSets[j] = x.UnPack()
 	}
+	t.UseAxisTrafoFallback = rcv.UseAxisTrafoFallback()
+	t.UseKinAxesFallback = rcv.UseKinAxesFallback()
 }
 
 func (rcv *KinCfgJntTrafoAllSets) UnPack() *KinCfgJntTrafoAllSetsT {
@@ -97,14 +103,48 @@ func (rcv *KinCfgJntTrafoAllSets) AxsTrafoSetsLength() int {
 }
 
 /// configuration values of all joint transformation sets
+/// automatic usage of the axis transformation, when the configuration is unambiguous?
+func (rcv *KinCfgJntTrafoAllSets) UseAxisTrafoFallback() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+/// automatic usage of the axis transformation, when the configuration is unambiguous?
+func (rcv *KinCfgJntTrafoAllSets) MutateUseAxisTrafoFallback(n bool) bool {
+	return rcv._tab.MutateBoolSlot(6, n)
+}
+
+/// automatic usage of axis actual values in kinematics, when the configuration is unambiguous?
+func (rcv *KinCfgJntTrafoAllSets) UseKinAxesFallback() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return true
+}
+
+/// automatic usage of axis actual values in kinematics, when the configuration is unambiguous?
+func (rcv *KinCfgJntTrafoAllSets) MutateUseKinAxesFallback(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func KinCfgJntTrafoAllSetsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(3)
 }
 func KinCfgJntTrafoAllSetsAddAxsTrafoSets(builder *flatbuffers.Builder, axsTrafoSets flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(axsTrafoSets), 0)
 }
 func KinCfgJntTrafoAllSetsStartAxsTrafoSetsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func KinCfgJntTrafoAllSetsAddUseAxisTrafoFallback(builder *flatbuffers.Builder, useAxisTrafoFallback bool) {
+	builder.PrependBoolSlot(1, useAxisTrafoFallback, true)
+}
+func KinCfgJntTrafoAllSetsAddUseKinAxesFallback(builder *flatbuffers.Builder, useKinAxesFallback bool) {
+	builder.PrependBoolSlot(2, useKinAxesFallback, true)
 }
 func KinCfgJntTrafoAllSetsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

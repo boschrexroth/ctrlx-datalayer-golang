@@ -18,6 +18,11 @@ type AxsCfgFunctionsT struct {
 	AxsCfgDriveSls *AxsCfgDriveSLST `json:"axsCfgDriveSLS"`
 	AxsCfgCyclicStatusData *AxsCfgCyclicStatusDataT `json:"axsCfgCyclicStatusData"`
 	OperationModeSwitch *AxsCfgOperationModeSwitchT `json:"operationModeSwitch"`
+	MaximumValueMonitoring bool `json:"maximumValueMonitoring"`
+	IgnoreAxisProfile bool `json:"ignoreAxisProfile"`
+	OpenLoop bool `json:"openLoop"`
+	AxsCfgBelt *AxsCfgBeltT `json:"axsCfgBelt"`
+	Filter *AxsCfgFilterT `json:"filter"`
 }
 
 func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -42,6 +47,8 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	axsCfgDriveSlsOffset := t.AxsCfgDriveSls.Pack(builder)
 	axsCfgCyclicStatusDataOffset := t.AxsCfgCyclicStatusData.Pack(builder)
 	operationModeSwitchOffset := t.OperationModeSwitch.Pack(builder)
+	axsCfgBeltOffset := t.AxsCfgBelt.Pack(builder)
+	filterOffset := t.Filter.Pack(builder)
 	AxsCfgFunctionsStart(builder)
 	AxsCfgFunctionsAddCoupling(builder, couplingOffset)
 	AxsCfgFunctionsAddCalculationPipelines(builder, calculationPipelinesOffset)
@@ -51,6 +58,11 @@ func (t *AxsCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffse
 	AxsCfgFunctionsAddAxsCfgDriveSls(builder, axsCfgDriveSlsOffset)
 	AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder, axsCfgCyclicStatusDataOffset)
 	AxsCfgFunctionsAddOperationModeSwitch(builder, operationModeSwitchOffset)
+	AxsCfgFunctionsAddMaximumValueMonitoring(builder, t.MaximumValueMonitoring)
+	AxsCfgFunctionsAddIgnoreAxisProfile(builder, t.IgnoreAxisProfile)
+	AxsCfgFunctionsAddOpenLoop(builder, t.OpenLoop)
+	AxsCfgFunctionsAddAxsCfgBelt(builder, axsCfgBeltOffset)
+	AxsCfgFunctionsAddFilter(builder, filterOffset)
 	return AxsCfgFunctionsEnd(builder)
 }
 
@@ -69,6 +81,11 @@ func (rcv *AxsCfgFunctions) UnPackTo(t *AxsCfgFunctionsT) {
 	t.AxsCfgDriveSls = rcv.AxsCfgDriveSls(nil).UnPack()
 	t.AxsCfgCyclicStatusData = rcv.AxsCfgCyclicStatusData(nil).UnPack()
 	t.OperationModeSwitch = rcv.OperationModeSwitch(nil).UnPack()
+	t.MaximumValueMonitoring = rcv.MaximumValueMonitoring()
+	t.IgnoreAxisProfile = rcv.IgnoreAxisProfile()
+	t.OpenLoop = rcv.OpenLoop()
+	t.AxsCfgBelt = rcv.AxsCfgBelt(nil).UnPack()
+	t.Filter = rcv.Filter(nil).UnPack()
 }
 
 func (rcv *AxsCfgFunctions) UnPack() *AxsCfgFunctionsT {
@@ -232,8 +249,80 @@ func (rcv *AxsCfgFunctions) OperationModeSwitch(obj *AxsCfgOperationModeSwitch) 
 }
 
 /// options during an operation mode switch for a single axis
+/// flag to enable/disable maximum value monitoring
+func (rcv *AxsCfgFunctions) MaximumValueMonitoring() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// flag to enable/disable maximum value monitoring
+func (rcv *AxsCfgFunctions) MutateMaximumValueMonitoring(n bool) bool {
+	return rcv._tab.MutateBoolSlot(20, n)
+}
+
+/// flag to enable/disable using the configured axisprofile (no axisprofile results in a virtual axis); checked in booting
+func (rcv *AxsCfgFunctions) IgnoreAxisProfile() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// flag to enable/disable using the configured axisprofile (no axisprofile results in a virtual axis); checked in booting
+func (rcv *AxsCfgFunctions) MutateIgnoreAxisProfile(n bool) bool {
+	return rcv._tab.MutateBoolSlot(22, n)
+}
+
+/// flag to enable/disable open-loop for this axis
+func (rcv *AxsCfgFunctions) OpenLoop() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// flag to enable/disable open-loop for this axis
+func (rcv *AxsCfgFunctions) MutateOpenLoop(n bool) bool {
+	return rcv._tab.MutateBoolSlot(24, n)
+}
+
+/// configuration for belt axis
+func (rcv *AxsCfgFunctions) AxsCfgBelt(obj *AxsCfgBelt) *AxsCfgBelt {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgBelt)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration for belt axis
+/// filter configuration of a single axis
+func (rcv *AxsCfgFunctions) Filter(obj *AxsCfgFilter) *AxsCfgFilter {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(AxsCfgFilter)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// filter configuration of a single axis
 func AxsCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(13)
 }
 func AxsCfgFunctionsAddCoupling(builder *flatbuffers.Builder, coupling flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(coupling), 0)
@@ -261,6 +350,21 @@ func AxsCfgFunctionsAddAxsCfgCyclicStatusData(builder *flatbuffers.Builder, axsC
 }
 func AxsCfgFunctionsAddOperationModeSwitch(builder *flatbuffers.Builder, operationModeSwitch flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(operationModeSwitch), 0)
+}
+func AxsCfgFunctionsAddMaximumValueMonitoring(builder *flatbuffers.Builder, maximumValueMonitoring bool) {
+	builder.PrependBoolSlot(8, maximumValueMonitoring, false)
+}
+func AxsCfgFunctionsAddIgnoreAxisProfile(builder *flatbuffers.Builder, ignoreAxisProfile bool) {
+	builder.PrependBoolSlot(9, ignoreAxisProfile, false)
+}
+func AxsCfgFunctionsAddOpenLoop(builder *flatbuffers.Builder, openLoop bool) {
+	builder.PrependBoolSlot(10, openLoop, false)
+}
+func AxsCfgFunctionsAddAxsCfgBelt(builder *flatbuffers.Builder, axsCfgBelt flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(axsCfgBelt), 0)
+}
+func AxsCfgFunctionsAddFilter(builder *flatbuffers.Builder, filter flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(filter), 0)
 }
 func AxsCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

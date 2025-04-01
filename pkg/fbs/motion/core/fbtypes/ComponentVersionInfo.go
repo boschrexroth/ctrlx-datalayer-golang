@@ -18,6 +18,8 @@ type ComponentVersionInfoT struct {
 	Commit string `json:"commit"`
 	Type MotionComponentType `json:"type"`
 	AddInfo []string `json:"addInfo"`
+	AppName string `json:"appName"`
+	Active bool `json:"active"`
 }
 
 func (t *ComponentVersionInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -51,6 +53,10 @@ func (t *ComponentVersionInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 		}
 		addInfoOffset = builder.EndVector(addInfoLength)
 	}
+	appNameOffset := flatbuffers.UOffsetT(0)
+	if t.AppName != "" {
+		appNameOffset = builder.CreateString(t.AppName)
+	}
 	ComponentVersionInfoStart(builder)
 	ComponentVersionInfoAddName(builder, nameOffset)
 	ComponentVersionInfoAddMajorVersion(builder, t.MajorVersion)
@@ -62,6 +68,8 @@ func (t *ComponentVersionInfoT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	ComponentVersionInfoAddCommit(builder, commitOffset)
 	ComponentVersionInfoAddType(builder, t.Type)
 	ComponentVersionInfoAddAddInfo(builder, addInfoOffset)
+	ComponentVersionInfoAddAppName(builder, appNameOffset)
+	ComponentVersionInfoAddActive(builder, t.Active)
 	return ComponentVersionInfoEnd(builder)
 }
 
@@ -80,6 +88,8 @@ func (rcv *ComponentVersionInfo) UnPackTo(t *ComponentVersionInfoT) {
 	for j := 0; j < addInfoLength; j++ {
 		t.AddInfo[j] = string(rcv.AddInfo(j))
 	}
+	t.AppName = string(rcv.AppName())
+	t.Active = rcv.Active()
 }
 
 func (rcv *ComponentVersionInfo) UnPack() *ComponentVersionInfoT {
@@ -245,8 +255,32 @@ func (rcv *ComponentVersionInfo) AddInfoLength() int {
 }
 
 /// additional informations (not yet used)
+/// name of the app, that contains the motion component
+func (rcv *ComponentVersionInfo) AppName() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// name of the app, that contains the motion component
+/// is this component active (installed, loaded and running)? This might be false for components, that were uninstalled or currently updated.
+func (rcv *ComponentVersionInfo) Active() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// is this component active (installed, loaded and running)? This might be false for components, that were uninstalled or currently updated.
+func (rcv *ComponentVersionInfo) MutateActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(26, n)
+}
+
 func ComponentVersionInfoStart(builder *flatbuffers.Builder) {
-	builder.StartObject(10)
+	builder.StartObject(12)
 }
 func ComponentVersionInfoAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -280,6 +314,12 @@ func ComponentVersionInfoAddAddInfo(builder *flatbuffers.Builder, addInfo flatbu
 }
 func ComponentVersionInfoStartAddInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func ComponentVersionInfoAddAppName(builder *flatbuffers.Builder, appName flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(appName), 0)
+}
+func ComponentVersionInfoAddActive(builder *flatbuffers.Builder, active bool) {
+	builder.PrependBoolSlot(11, active, false)
 }
 func ComponentVersionInfoEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

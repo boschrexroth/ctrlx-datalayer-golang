@@ -14,6 +14,14 @@ type LinkLayerStatisticCountersResponseT struct {
 	SendOffset *MinActMaxValuesT `json:"sendOffset"`
 	NetworkDelayMeasurementActive bool `json:"networkDelayMeasurementActive"`
 	NetworkDelay *MinActMaxValuesT `json:"networkDelay"`
+	SendOffsetBeginMeasurementActive bool `json:"sendOffsetBeginMeasurementActive"`
+	SendOffsetBegin *MinActMaxValuesT `json:"sendOffsetBegin"`
+	SendOffsetEndMeasurementActive bool `json:"sendOffsetEndMeasurementActive"`
+	SendOffsetEnd *MinActMaxValuesT `json:"sendOffsetEnd"`
+	ReceiveOffsetBeginMeasurementActive bool `json:"receiveOffsetBeginMeasurementActive"`
+	ReceiveOffsetBegin *MinActMaxValuesT `json:"receiveOffsetBegin"`
+	ReceiveOffsetEndMeasurementActive bool `json:"receiveOffsetEndMeasurementActive"`
+	ReceiveOffsetEnd *MinActMaxValuesT `json:"receiveOffsetEnd"`
 }
 
 func (t *LinkLayerStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -27,6 +35,18 @@ func (t *LinkLayerStatisticCountersResponseT) Pack(builder *flatbuffers.Builder)
 	LinkLayerStatisticCountersResponseAddNetworkDelayMeasurementActive(builder, t.NetworkDelayMeasurementActive)
 	networkDelayOffset := t.NetworkDelay.Pack(builder)
 	LinkLayerStatisticCountersResponseAddNetworkDelay(builder, networkDelayOffset)
+	LinkLayerStatisticCountersResponseAddSendOffsetBeginMeasurementActive(builder, t.SendOffsetBeginMeasurementActive)
+	sendOffsetBeginOffset := t.SendOffsetBegin.Pack(builder)
+	LinkLayerStatisticCountersResponseAddSendOffsetBegin(builder, sendOffsetBeginOffset)
+	LinkLayerStatisticCountersResponseAddSendOffsetEndMeasurementActive(builder, t.SendOffsetEndMeasurementActive)
+	sendOffsetEndOffset := t.SendOffsetEnd.Pack(builder)
+	LinkLayerStatisticCountersResponseAddSendOffsetEnd(builder, sendOffsetEndOffset)
+	LinkLayerStatisticCountersResponseAddReceiveOffsetBeginMeasurementActive(builder, t.ReceiveOffsetBeginMeasurementActive)
+	receiveOffsetBeginOffset := t.ReceiveOffsetBegin.Pack(builder)
+	LinkLayerStatisticCountersResponseAddReceiveOffsetBegin(builder, receiveOffsetBeginOffset)
+	LinkLayerStatisticCountersResponseAddReceiveOffsetEndMeasurementActive(builder, t.ReceiveOffsetEndMeasurementActive)
+	receiveOffsetEndOffset := t.ReceiveOffsetEnd.Pack(builder)
+	LinkLayerStatisticCountersResponseAddReceiveOffsetEnd(builder, receiveOffsetEndOffset)
 	return LinkLayerStatisticCountersResponseEnd(builder)
 }
 
@@ -37,6 +57,14 @@ func (rcv *LinkLayerStatisticCountersResponse) UnPackTo(t *LinkLayerStatisticCou
 	t.SendOffset = rcv.SendOffset(nil).UnPack()
 	t.NetworkDelayMeasurementActive = rcv.NetworkDelayMeasurementActive()
 	t.NetworkDelay = rcv.NetworkDelay(nil).UnPack()
+	t.SendOffsetBeginMeasurementActive = rcv.SendOffsetBeginMeasurementActive()
+	t.SendOffsetBegin = rcv.SendOffsetBegin(nil).UnPack()
+	t.SendOffsetEndMeasurementActive = rcv.SendOffsetEndMeasurementActive()
+	t.SendOffsetEnd = rcv.SendOffsetEnd(nil).UnPack()
+	t.ReceiveOffsetBeginMeasurementActive = rcv.ReceiveOffsetBeginMeasurementActive()
+	t.ReceiveOffsetBegin = rcv.ReceiveOffsetBegin(nil).UnPack()
+	t.ReceiveOffsetEndMeasurementActive = rcv.ReceiveOffsetEndMeasurementActive()
+	t.ReceiveOffsetEnd = rcv.ReceiveOffsetEnd(nil).UnPack()
 }
 
 func (rcv *LinkLayerStatisticCountersResponse) UnPack() *LinkLayerStatisticCountersResponseT {
@@ -159,8 +187,124 @@ func (rcv *LinkLayerStatisticCountersResponse) NetworkDelay(obj *MinActMaxValues
 }
 
 /// Network delay values in nanoseconds
+///Measurement of send offset begin is active
+func (rcv *LinkLayerStatisticCountersResponse) SendOffsetBeginMeasurementActive() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Measurement of send offset begin is active
+func (rcv *LinkLayerStatisticCountersResponse) MutateSendOffsetBeginMeasurementActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(16, n)
+}
+
+///Send offset begin values in nanoseconds
+func (rcv *LinkLayerStatisticCountersResponse) SendOffsetBegin(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Send offset begin values in nanoseconds
+///Measurement of send offset end is active
+func (rcv *LinkLayerStatisticCountersResponse) SendOffsetEndMeasurementActive() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Measurement of send offset end is active
+func (rcv *LinkLayerStatisticCountersResponse) MutateSendOffsetEndMeasurementActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(20, n)
+}
+
+///Send offset end values in nanoseconds
+func (rcv *LinkLayerStatisticCountersResponse) SendOffsetEnd(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Send offset end values in nanoseconds
+///Measurement of receive offset begin is active
+func (rcv *LinkLayerStatisticCountersResponse) ReceiveOffsetBeginMeasurementActive() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Measurement of receive offset begin is active
+func (rcv *LinkLayerStatisticCountersResponse) MutateReceiveOffsetBeginMeasurementActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(24, n)
+}
+
+///Receive offset begin values in nanoseconds
+func (rcv *LinkLayerStatisticCountersResponse) ReceiveOffsetBegin(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Receive offset begin values in nanoseconds
+///Measurement of receive offset end is active
+func (rcv *LinkLayerStatisticCountersResponse) ReceiveOffsetEndMeasurementActive() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Measurement of receive offset end is active
+func (rcv *LinkLayerStatisticCountersResponse) MutateReceiveOffsetEndMeasurementActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(28, n)
+}
+
+///Receive offset end values in nanoseconds
+func (rcv *LinkLayerStatisticCountersResponse) ReceiveOffsetEnd(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Receive offset end values in nanoseconds
 func LinkLayerStatisticCountersResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(14)
 }
 func LinkLayerStatisticCountersResponseAddPhysicalErrorCnt(builder *flatbuffers.Builder, physicalErrorCnt uint32) {
 	builder.PrependUint32Slot(0, physicalErrorCnt, 0)
@@ -179,6 +323,30 @@ func LinkLayerStatisticCountersResponseAddNetworkDelayMeasurementActive(builder 
 }
 func LinkLayerStatisticCountersResponseAddNetworkDelay(builder *flatbuffers.Builder, networkDelay flatbuffers.UOffsetT) {
 	builder.PrependStructSlot(5, flatbuffers.UOffsetT(networkDelay), 0)
+}
+func LinkLayerStatisticCountersResponseAddSendOffsetBeginMeasurementActive(builder *flatbuffers.Builder, sendOffsetBeginMeasurementActive bool) {
+	builder.PrependBoolSlot(6, sendOffsetBeginMeasurementActive, false)
+}
+func LinkLayerStatisticCountersResponseAddSendOffsetBegin(builder *flatbuffers.Builder, sendOffsetBegin flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(7, flatbuffers.UOffsetT(sendOffsetBegin), 0)
+}
+func LinkLayerStatisticCountersResponseAddSendOffsetEndMeasurementActive(builder *flatbuffers.Builder, sendOffsetEndMeasurementActive bool) {
+	builder.PrependBoolSlot(8, sendOffsetEndMeasurementActive, false)
+}
+func LinkLayerStatisticCountersResponseAddSendOffsetEnd(builder *flatbuffers.Builder, sendOffsetEnd flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(9, flatbuffers.UOffsetT(sendOffsetEnd), 0)
+}
+func LinkLayerStatisticCountersResponseAddReceiveOffsetBeginMeasurementActive(builder *flatbuffers.Builder, receiveOffsetBeginMeasurementActive bool) {
+	builder.PrependBoolSlot(10, receiveOffsetBeginMeasurementActive, false)
+}
+func LinkLayerStatisticCountersResponseAddReceiveOffsetBegin(builder *flatbuffers.Builder, receiveOffsetBegin flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(11, flatbuffers.UOffsetT(receiveOffsetBegin), 0)
+}
+func LinkLayerStatisticCountersResponseAddReceiveOffsetEndMeasurementActive(builder *flatbuffers.Builder, receiveOffsetEndMeasurementActive bool) {
+	builder.PrependBoolSlot(12, receiveOffsetEndMeasurementActive, false)
+}
+func LinkLayerStatisticCountersResponseAddReceiveOffsetEnd(builder *flatbuffers.Builder, receiveOffsetEnd flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(13, flatbuffers.UOffsetT(receiveOffsetEnd), 0)
 }
 func LinkLayerStatisticCountersResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

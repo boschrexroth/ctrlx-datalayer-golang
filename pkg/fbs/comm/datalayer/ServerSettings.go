@@ -19,6 +19,8 @@ type ServerSettingsT struct {
 	ForceEmulatedNvram bool `json:"forceEmulatedNvram"`
 	ServerZmqHighWaterMark uint32 `json:"serverZmqHighWaterMark"`
 	MaxBulkRequest uint32 `json:"maxBulkRequest"`
+	MaxSortSize uint32 `json:"maxSortSize"`
+	MaxAliasDepth uint32 `json:"maxAliasDepth"`
 }
 
 func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -53,6 +55,8 @@ func (t *ServerSettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffset
 	ServerSettingsAddForceEmulatedNvram(builder, t.ForceEmulatedNvram)
 	ServerSettingsAddServerZmqHighWaterMark(builder, t.ServerZmqHighWaterMark)
 	ServerSettingsAddMaxBulkRequest(builder, t.MaxBulkRequest)
+	ServerSettingsAddMaxSortSize(builder, t.MaxSortSize)
+	ServerSettingsAddMaxAliasDepth(builder, t.MaxAliasDepth)
 	return ServerSettingsEnd(builder)
 }
 
@@ -73,6 +77,8 @@ func (rcv *ServerSettings) UnPackTo(t *ServerSettingsT) {
 	t.ForceEmulatedNvram = rcv.ForceEmulatedNvram()
 	t.ServerZmqHighWaterMark = rcv.ServerZmqHighWaterMark()
 	t.MaxBulkRequest = rcv.MaxBulkRequest()
+	t.MaxSortSize = rcv.MaxSortSize()
+	t.MaxAliasDepth = rcv.MaxAliasDepth()
 }
 
 func (rcv *ServerSettings) UnPack() *ServerSettingsT {
@@ -109,7 +115,8 @@ func (rcv *ServerSettings) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// after this time send a ping to not used provider is send to test if provider is still alive
+/// after this time in milliseconds the broker send a ping
+/// to not used provider is send to test if provider is still alive
 func (rcv *ServerSettings) ServerIdlePingTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -118,12 +125,14 @@ func (rcv *ServerSettings) ServerIdlePingTimeout() uint32 {
 	return 30000
 }
 
-/// after this time send a ping to not used provider is send to test if provider is still alive
+/// after this time in milliseconds the broker send a ping
+/// to not used provider is send to test if provider is still alive
 func (rcv *ServerSettings) MutateServerIdlePingTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(4, n)
 }
 
-/// after this time a response from provider is expected - if there is no answer a provider is assumed to be dead --> kick provider out of routing
+/// after this time in milliseconds a response from provider is expected
+/// if there is no answer a provider is assumed to be dead --> kick provider out of routing
 func (rcv *ServerSettings) ServerWaitResponseTimeout() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -132,12 +141,13 @@ func (rcv *ServerSettings) ServerWaitResponseTimeout() uint32 {
 	return 30000
 }
 
-/// after this time a response from provider is expected - if there is no answer a provider is assumed to be dead --> kick provider out of routing
+/// after this time in milliseconds a response from provider is expected
+/// if there is no answer a provider is assumed to be dead --> kick provider out of routing
 func (rcv *ServerSettings) MutateServerWaitResponseTimeout(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(6, n)
 }
 
-/// maximum inbound message size
+/// maximum inbound message size in bytes
 func (rcv *ServerSettings) ServerMaxMessageSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
@@ -146,7 +156,7 @@ func (rcv *ServerSettings) ServerMaxMessageSize() uint32 {
 	return 52428800
 }
 
-/// maximum inbound message size
+/// maximum inbound message size in bytes
 func (rcv *ServerSettings) MutateServerMaxMessageSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
@@ -161,7 +171,7 @@ func (rcv *ServerSettings) DebugAddress() []byte {
 }
 
 /// Address to debug disconnect
-/// Maximum size of a RT area
+/// Maximum size of a RT area in bytes
 func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -170,12 +180,12 @@ func (rcv *ServerSettings) ServerMaxRtSize() uint32 {
 	return 2097152
 }
 
-/// Maximum size of a RT area
+/// Maximum size of a RT area in bytes
 func (rcv *ServerSettings) MutateServerMaxRtSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(12, n)
 }
 
-/// Emulated NVRam size if no real NVRAM is found
+/// Emulated NVRam size in bytes if no real NVRAM is found
 /// Changes will be active after a restart of app.automationcore
 func (rcv *ServerSettings) ServerEmulatedNvramSize() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
@@ -185,7 +195,7 @@ func (rcv *ServerSettings) ServerEmulatedNvramSize() uint32 {
 	return 122880
 }
 
-/// Emulated NVRam size if no real NVRAM is found
+/// Emulated NVRam size in bytes if no real NVRAM is found
 /// Changes will be active after a restart of app.automationcore
 func (rcv *ServerSettings) MutateServerEmulatedNvramSize(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(14, n)
@@ -296,8 +306,36 @@ func (rcv *ServerSettings) MutateMaxBulkRequest(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(26, n)
 }
 
+/// Maximum browse answer in bytes that are sorted in alphanumeric way in broker
+func (rcv *ServerSettings) MaxSortSize() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 50000
+}
+
+/// Maximum browse answer in bytes that are sorted in alphanumeric way in broker
+func (rcv *ServerSettings) MutateMaxSortSize(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(28, n)
+}
+
+/// Maximum alias depth: counts how often an alias can be replaced in one request
+func (rcv *ServerSettings) MaxAliasDepth() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(30))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 8
+}
+
+/// Maximum alias depth: counts how often an alias can be replaced in one request
+func (rcv *ServerSettings) MutateMaxAliasDepth(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(30, n)
+}
+
 func ServerSettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(12)
+	builder.StartObject(14)
 }
 func ServerSettingsAddServerIdlePingTimeout(builder *flatbuffers.Builder, serverIdlePingTimeout uint32) {
 	builder.PrependUint32Slot(0, serverIdlePingTimeout, 30000)
@@ -337,6 +375,12 @@ func ServerSettingsAddServerZmqHighWaterMark(builder *flatbuffers.Builder, serve
 }
 func ServerSettingsAddMaxBulkRequest(builder *flatbuffers.Builder, maxBulkRequest uint32) {
 	builder.PrependUint32Slot(11, maxBulkRequest, 1000)
+}
+func ServerSettingsAddMaxSortSize(builder *flatbuffers.Builder, maxSortSize uint32) {
+	builder.PrependUint32Slot(12, maxSortSize, 50000)
+}
+func ServerSettingsAddMaxAliasDepth(builder *flatbuffers.Builder, maxAliasDepth uint32) {
+	builder.PrependUint32Slot(13, maxAliasDepth, 8)
 }
 func ServerSettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

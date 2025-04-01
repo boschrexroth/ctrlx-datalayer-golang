@@ -12,6 +12,8 @@ type CapabilityT struct {
 	MainDiag uint32 `json:"mainDiag"`
 	DetailDiag uint32 `json:"detailDiag"`
 	AddInfo string `json:"addInfo"`
+	Uri string `json:"uri"`
+	MoreInfo []*CapabilityT `json:"moreInfo"`
 }
 
 func (t *CapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -20,11 +22,30 @@ func (t *CapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t.AddInfo != "" {
 		addInfoOffset = builder.CreateString(t.AddInfo)
 	}
+	uriOffset := flatbuffers.UOffsetT(0)
+	if t.Uri != "" {
+		uriOffset = builder.CreateString(t.Uri)
+	}
+	moreInfoOffset := flatbuffers.UOffsetT(0)
+	if t.MoreInfo != nil {
+		moreInfoLength := len(t.MoreInfo)
+		moreInfoOffsets := make([]flatbuffers.UOffsetT, moreInfoLength)
+		for j := 0; j < moreInfoLength; j++ {
+			moreInfoOffsets[j] = t.MoreInfo[j].Pack(builder)
+		}
+		CapabilityStartMoreInfoVector(builder, moreInfoLength)
+		for j := moreInfoLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(moreInfoOffsets[j])
+		}
+		moreInfoOffset = builder.EndVector(moreInfoLength)
+	}
 	CapabilityStart(builder)
 	CapabilityAddCount(builder, t.Count)
 	CapabilityAddMainDiag(builder, t.MainDiag)
 	CapabilityAddDetailDiag(builder, t.DetailDiag)
 	CapabilityAddAddInfo(builder, addInfoOffset)
+	CapabilityAddUri(builder, uriOffset)
+	CapabilityAddMoreInfo(builder, moreInfoOffset)
 	return CapabilityEnd(builder)
 }
 
@@ -33,6 +54,14 @@ func (rcv *Capability) UnPackTo(t *CapabilityT) {
 	t.MainDiag = rcv.MainDiag()
 	t.DetailDiag = rcv.DetailDiag()
 	t.AddInfo = string(rcv.AddInfo())
+	t.Uri = string(rcv.Uri())
+	moreInfoLength := rcv.MoreInfoLength()
+	t.MoreInfo = make([]*CapabilityT, moreInfoLength)
+	for j := 0; j < moreInfoLength; j++ {
+		x := Capability{}
+		rcv.MoreInfo(&x, j)
+		t.MoreInfo[j] = x.UnPack()
+	}
 }
 
 func (rcv *Capability) UnPack() *CapabilityT {
@@ -121,8 +150,40 @@ func (rcv *Capability) AddInfo() []byte {
 }
 
 /// in case of count==0: get here additional information text, why the capability is missing
+/// in case of count==0: get here the URI (for a parameter), why the capability is missing
+func (rcv *Capability) Uri() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// in case of count==0: get here the URI (for a parameter), why the capability is missing
+/// array of underlying errors (or empty)
+func (rcv *Capability) MoreInfo(obj *Capability, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Capability) MoreInfoLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// array of underlying errors (or empty)
 func CapabilityStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(6)
 }
 func CapabilityAddCount(builder *flatbuffers.Builder, count uint32) {
 	builder.PrependUint32Slot(0, count, 0)
@@ -135,6 +196,15 @@ func CapabilityAddDetailDiag(builder *flatbuffers.Builder, detailDiag uint32) {
 }
 func CapabilityAddAddInfo(builder *flatbuffers.Builder, addInfo flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(addInfo), 0)
+}
+func CapabilityAddUri(builder *flatbuffers.Builder, uri flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(uri), 0)
+}
+func CapabilityAddMoreInfo(builder *flatbuffers.Builder, moreInfo flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(moreInfo), 0)
+}
+func CapabilityStartMoreInfoVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func CapabilityEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

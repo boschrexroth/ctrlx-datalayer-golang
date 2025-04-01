@@ -11,6 +11,7 @@ type NodeIdMappingT struct {
 	SourceUaNodeId string `json:"sourceUaNodeId"`
 	TargetUaNodeId string `json:"targetUaNodeId"`
 	MappingResult []MappingResult `json:"mappingResult"`
+	TargetObjectUaNodeId string `json:"targetObjectUaNodeId"`
 }
 
 func (t *NodeIdMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -32,10 +33,15 @@ func (t *NodeIdMappingT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT
 		}
 		mappingResultOffset = builder.EndVector(mappingResultLength)
 	}
+	targetObjectUaNodeIdOffset := flatbuffers.UOffsetT(0)
+	if t.TargetObjectUaNodeId != "" {
+		targetObjectUaNodeIdOffset = builder.CreateString(t.TargetObjectUaNodeId)
+	}
 	NodeIdMappingStart(builder)
 	NodeIdMappingAddSourceUaNodeId(builder, sourceUaNodeIdOffset)
 	NodeIdMappingAddTargetUaNodeId(builder, targetUaNodeIdOffset)
 	NodeIdMappingAddMappingResult(builder, mappingResultOffset)
+	NodeIdMappingAddTargetObjectUaNodeId(builder, targetObjectUaNodeIdOffset)
 	return NodeIdMappingEnd(builder)
 }
 
@@ -47,6 +53,7 @@ func (rcv *NodeIdMapping) UnPackTo(t *NodeIdMappingT) {
 	for j := 0; j < mappingResultLength; j++ {
 		t.MappingResult[j] = rcv.MappingResult(j)
 	}
+	t.TargetObjectUaNodeId = string(rcv.TargetObjectUaNodeId())
 }
 
 func (rcv *NodeIdMapping) UnPack() *NodeIdMappingT {
@@ -131,8 +138,22 @@ func (rcv *NodeIdMapping) MutateMappingResult(j int, n MappingResult) bool {
 	return false
 }
 
+/// The target object OPC UA NodeId in the companion model, e.g. ns=20;s=myModel.myPlcNode.
+/// Must only be specified manually for methods which must be called in context of an object,
+/// i.e., are only present as component of an ObjectType. Otherwise generated automatically.
+func (rcv *NodeIdMapping) TargetObjectUaNodeId() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// The target object OPC UA NodeId in the companion model, e.g. ns=20;s=myModel.myPlcNode.
+/// Must only be specified manually for methods which must be called in context of an object,
+/// i.e., are only present as component of an ObjectType. Otherwise generated automatically.
 func NodeIdMappingStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func NodeIdMappingAddSourceUaNodeId(builder *flatbuffers.Builder, sourceUaNodeId flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(sourceUaNodeId), 0)
@@ -145,6 +166,9 @@ func NodeIdMappingAddMappingResult(builder *flatbuffers.Builder, mappingResult f
 }
 func NodeIdMappingStartMappingResultVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(1, numElems, 1)
+}
+func NodeIdMappingAddTargetObjectUaNodeId(builder *flatbuffers.Builder, targetObjectUaNodeId flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(targetObjectUaNodeId), 0)
 }
 func NodeIdMappingEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

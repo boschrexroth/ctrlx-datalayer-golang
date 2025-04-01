@@ -17,6 +17,7 @@ type HomingParamT struct {
 	DynForward *motion__core__fbtypes.DynamicLimitsT `json:"dynForward"`
 	DynBackward *motion__core__fbtypes.DynamicLimitsT `json:"dynBackward"`
 	RefMode RefMode `json:"refMode"`
+	HomingBehavior HomingBehavior `json:"homingBehavior"`
 }
 
 func (t *HomingParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -35,6 +36,7 @@ func (t *HomingParamT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	HomingParamAddDynForward(builder, dynForwardOffset)
 	HomingParamAddDynBackward(builder, dynBackwardOffset)
 	HomingParamAddRefMode(builder, t.RefMode)
+	HomingParamAddHomingBehavior(builder, t.HomingBehavior)
 	return HomingParamEnd(builder)
 }
 
@@ -46,6 +48,7 @@ func (rcv *HomingParam) UnPackTo(t *HomingParamT) {
 	t.DynForward = rcv.DynForward(nil).UnPack()
 	t.DynBackward = rcv.DynBackward(nil).UnPack()
 	t.RefMode = rcv.RefMode()
+	t.HomingBehavior = rcv.HomingBehavior()
 }
 
 func (rcv *HomingParam) UnPack() *HomingParamT {
@@ -126,7 +129,7 @@ func (rcv *HomingParam) RefType() RefType {
 	if o != 0 {
 		return RefType(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 0
+	return 1
 }
 
 /// reference type to indicates set which position as the reference position
@@ -178,8 +181,22 @@ func (rcv *HomingParam) MutateRefMode(n RefMode) bool {
 	return rcv._tab.MutateInt8Slot(16, int8(n))
 }
 
+/// behavior of set new position
+func (rcv *HomingParam) HomingBehavior() HomingBehavior {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		return HomingBehavior(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 1
+}
+
+/// behavior of set new position
+func (rcv *HomingParam) MutateHomingBehavior(n HomingBehavior) bool {
+	return rcv._tab.MutateInt8Slot(18, int8(n))
+}
+
 func HomingParamStart(builder *flatbuffers.Builder) {
-	builder.StartObject(7)
+	builder.StartObject(8)
 }
 func HomingParamAddNewRefPos(builder *flatbuffers.Builder, newRefPos float64) {
 	builder.PrependFloat64Slot(0, newRefPos, 0.0)
@@ -191,7 +208,7 @@ func HomingParamAddHomingDir(builder *flatbuffers.Builder, homingDir flatbuffers
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(homingDir), 0)
 }
 func HomingParamAddRefType(builder *flatbuffers.Builder, refType RefType) {
-	builder.PrependInt8Slot(3, int8(refType), 0)
+	builder.PrependInt8Slot(3, int8(refType), 1)
 }
 func HomingParamAddDynForward(builder *flatbuffers.Builder, dynForward flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(dynForward), 0)
@@ -201,6 +218,9 @@ func HomingParamAddDynBackward(builder *flatbuffers.Builder, dynBackward flatbuf
 }
 func HomingParamAddRefMode(builder *flatbuffers.Builder, refMode RefMode) {
 	builder.PrependInt8Slot(6, int8(refMode), 0)
+}
+func HomingParamAddHomingBehavior(builder *flatbuffers.Builder, homingBehavior HomingBehavior) {
+	builder.PrependInt8Slot(7, int8(homingBehavior), 1)
 }
 func HomingParamEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
