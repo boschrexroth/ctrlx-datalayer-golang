@@ -43,8 +43,8 @@ sudo apt-get install libsystemd-dev libsystemd-dev:arm64
 Check the current [ctrlx Data Layer](https://github.com/boschrexroth/ctrlx-automation-sdk/releases) debian package, download and install this, see example.
 
 ```bash
-wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/3.4.0/ctrlx-datalayer-2.8.6.deb
-sudo dpkg -i ctrlx-datalayer-2.8.6.deb
+wget https://github.com/boschrexroth/ctrlx-automation-sdk/releases/download/3.6.0/ctrlx-datalayer-2.9.8.deb
+sudo dpkg -i ctrlx-datalayer-2.9.8.deb
 ```
 
 ### Integrate in you project
@@ -68,7 +68,7 @@ GERMANY
 
 MIT License
 
-Copyright (c) 2021-2024 Bosch Rexroth AG
+Copyright (c) 2021-2025 Bosch Rexroth AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

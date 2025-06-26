@@ -65,7 +65,7 @@ func (rcv *AxsCfgErrReactionSlaveLimExceeded) Type() SlaveCantFollowErrorReactio
 	if o != 0 {
 		return SlaveCantFollowErrorReaction(rcv._tab.GetInt8(o + rcv._tab.Pos))
 	}
-	return 1
+	return 2
 }
 
 /// TODO: Provide description
@@ -91,7 +91,7 @@ func AxsCfgErrReactionSlaveLimExceededStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
 func AxsCfgErrReactionSlaveLimExceededAddType(builder *flatbuffers.Builder, type_ SlaveCantFollowErrorReaction) {
-	builder.PrependInt8Slot(0, int8(type_), 1)
+	builder.PrependInt8Slot(0, int8(type_), 2)
 }
 func AxsCfgErrReactionSlaveLimExceededAddDiagnosis(builder *flatbuffers.Builder, diagnosis SlaveCantFollowMessageType) {
 	builder.PrependInt8Slot(1, int8(diagnosis), 2)

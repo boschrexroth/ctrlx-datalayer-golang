@@ -10,6 +10,7 @@ type SettingsT struct {
 	Timeout uint32 `json:"timeout"`
 	MaxJsonInput uint32 `json:"maxJsonInput"`
 	MaxFlatbufferToJson uint32 `json:"maxFlatbufferToJson"`
+	MaxBrowseSort uint32 `json:"maxBrowseSort"`
 }
 
 func (t *SettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -18,6 +19,7 @@ func (t *SettingsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	SettingsAddTimeout(builder, t.Timeout)
 	SettingsAddMaxJsonInput(builder, t.MaxJsonInput)
 	SettingsAddMaxFlatbufferToJson(builder, t.MaxFlatbufferToJson)
+	SettingsAddMaxBrowseSort(builder, t.MaxBrowseSort)
 	return SettingsEnd(builder)
 }
 
@@ -25,6 +27,7 @@ func (rcv *Settings) UnPackTo(t *SettingsT) {
 	t.Timeout = rcv.Timeout()
 	t.MaxJsonInput = rcv.MaxJsonInput()
 	t.MaxFlatbufferToJson = rcv.MaxFlatbufferToJson()
+	t.MaxBrowseSort = rcv.MaxBrowseSort()
 }
 
 func (rcv *Settings) UnPack() *SettingsT {
@@ -103,8 +106,22 @@ func (rcv *Settings) MutateMaxFlatbufferToJson(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
+/// Maximum items to sort in browse response
+func (rcv *Settings) MaxBrowseSort() uint32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+	}
+	return 10000
+}
+
+/// Maximum items to sort in browse response
+func (rcv *Settings) MutateMaxBrowseSort(n uint32) bool {
+	return rcv._tab.MutateUint32Slot(10, n)
+}
+
 func SettingsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func SettingsAddTimeout(builder *flatbuffers.Builder, timeout uint32) {
 	builder.PrependUint32Slot(0, timeout, 3000)
@@ -114,6 +131,9 @@ func SettingsAddMaxJsonInput(builder *flatbuffers.Builder, maxJsonInput uint32) 
 }
 func SettingsAddMaxFlatbufferToJson(builder *flatbuffers.Builder, maxFlatbufferToJson uint32) {
 	builder.PrependUint32Slot(2, maxFlatbufferToJson, 1048576)
+}
+func SettingsAddMaxBrowseSort(builder *flatbuffers.Builder, maxBrowseSort uint32) {
+	builder.PrependUint32Slot(3, maxBrowseSort, 10000)
 }
 func SettingsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

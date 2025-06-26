@@ -7,19 +7,14 @@ import (
 )
 
 type ByteStringT struct {
-	Value []int8 `json:"value"`
+	Value []byte `json:"value"`
 }
 
 func (t *ByteStringT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	valueOffset := flatbuffers.UOffsetT(0)
 	if t.Value != nil {
-		valueLength := len(t.Value)
-		ByteStringStartValueVector(builder, valueLength)
-		for j := valueLength - 1; j >= 0; j-- {
-			builder.PrependInt8(t.Value[j])
-		}
-		valueOffset = builder.EndVector(valueLength)
+		valueOffset = builder.CreateByteString(t.Value)
 	}
 	ByteStringStart(builder)
 	ByteStringAddValue(builder, valueOffset)
@@ -27,11 +22,7 @@ func (t *ByteStringT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 }
 
 func (rcv *ByteString) UnPackTo(t *ByteStringT) {
-	valueLength := rcv.ValueLength()
-	t.Value = make([]int8, valueLength)
-	for j := 0; j < valueLength; j++ {
-		t.Value[j] = rcv.Value(j)
-	}
+	t.Value = rcv.ValueBytes()
 }
 
 func (rcv *ByteString) UnPack() *ByteStringT {
@@ -68,11 +59,11 @@ func (rcv *ByteString) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *ByteString) Value(j int) int8 {
+func (rcv *ByteString) Value(j int) byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
-		return rcv._tab.GetInt8(a + flatbuffers.UOffsetT(j*1))
+		return rcv._tab.GetByte(a + flatbuffers.UOffsetT(j*1))
 	}
 	return 0
 }
@@ -85,11 +76,19 @@ func (rcv *ByteString) ValueLength() int {
 	return 0
 }
 
-func (rcv *ByteString) MutateValue(j int, n int8) bool {
+func (rcv *ByteString) ValueBytes() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *ByteString) MutateValue(j int, n byte) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
-		return rcv._tab.MutateInt8(a+flatbuffers.UOffsetT(j*1), n)
+		return rcv._tab.MutateByte(a+flatbuffers.UOffsetT(j*1), n)
 	}
 	return false
 }

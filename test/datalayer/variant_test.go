@@ -443,3 +443,14 @@ func TestNilVariant(t *testing.T) {
 	a.Equal(t, v.Copy(d), datalayer.ResultNotInitialized)
 	a.NotPanics(t, func() { datalayer.DeleteVariant(v) })
 }
+
+func TestRaw(t *testing.T) {
+	arr := []int8{1}
+	a.NotPanics(t, func() { vtest.SetRaw(arr) })
+	a.Equal(t, datalayer.VariantTypeRaw, vtest.GetType())
+	vals := vtest.GetData()
+	a.NotNil(t, vals)
+	a.NotPanics(t, func() { vtest.SetRaw([]int8{}) })
+	e := vtest.GetArrayInt8()
+	a.True(t, len(e) == 0)
+}

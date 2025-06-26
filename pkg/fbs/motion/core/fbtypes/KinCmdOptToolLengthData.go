@@ -6,7 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// parameters for the command option PCS (product coordinate system) for kinematics
+/// parameters for the command option ToolLengths (tool lenght correction) for kinematics
 type KinCmdOptToolLengthDataT struct {
 	PermType string `json:"permType"`
 	SetName string `json:"setName"`
@@ -77,7 +77,7 @@ func (rcv *KinCmdOptToolLengthData) PermType() []byte {
 }
 
 /// permanent type (either "PermOn" or any other string to switch off)
-/// name of the set/group that should become active
+/// name of the tool that should become active
 func (rcv *KinCmdOptToolLengthData) SetName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -86,7 +86,7 @@ func (rcv *KinCmdOptToolLengthData) SetName() []byte {
 	return nil
 }
 
-/// name of the set/group that should become active
+/// name of the tool that should become active
 func KinCmdOptToolLengthDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }

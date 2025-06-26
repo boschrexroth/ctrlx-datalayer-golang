@@ -118,7 +118,7 @@ func (rcv *AxsCfgProbeSignalData) Source() []byte {
 }
 
 /// null, axis_name, IO
-/// source probe index and uri
+/// source probe index or url of IO
 func (rcv *AxsCfgProbeSignalData) SourceInfo() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
@@ -127,8 +127,8 @@ func (rcv *AxsCfgProbeSignalData) SourceInfo() []byte {
 	return nil
 }
 
-/// source probe index and uri
-/// information for signal select
+/// source probe index or url of IO
+/// information for motion-internal-data signal, eg: url
 func (rcv *AxsCfgProbeSignalData) SelectInfo() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -137,7 +137,7 @@ func (rcv *AxsCfgProbeSignalData) SelectInfo() []byte {
 	return nil
 }
 
-/// information for signal select
+/// information for motion-internal-data signal, eg: url
 func AxsCfgProbeSignalDataStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }

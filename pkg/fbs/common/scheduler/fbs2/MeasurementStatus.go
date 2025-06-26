@@ -4,15 +4,15 @@ package fbs2
 
 import "strconv"
 
-/// The possible states of the duration measurements in a task
+/// The possible states of the duration measurements in a task resp. recording the measurement in their histogram
 type MeasurementStatus int8
 
 const (
-	/// All duration measurements are active
+	/// All possible duration measurements / recording are active
 	MeasurementStatusALL_ACTIVE    MeasurementStatus = 0
-	/// All duration measurements are stopped
+	/// All duration measurements / recording are stopped
 	MeasurementStatusALL_STOPPED   MeasurementStatus = 1
-	/// At least one duration measurements is active
+	/// At least one duration measurements / recording is active
 	MeasurementStatusPARTLY_ACTIVE MeasurementStatus = 2
 )
 

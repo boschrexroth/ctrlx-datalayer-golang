@@ -489,3 +489,12 @@ func (v *Variant) SetArrayTime(dfs []time.Time) {
 	}
 	v.SetArrayTimestamp(fts)
 }
+
+// SetRaw function
+func (v *Variant) SetRaw(data []int8) {
+	if len(data) == 0 {
+		C.DLR_variantSetRaw(v.this, nil, C.ulong(0))
+	} else {
+		C.DLR_variantSetRaw(v.this, (*C.schar)(unsafe.Pointer(&data[0])), C.ulong(len(data)))
+	}
+}

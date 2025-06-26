@@ -160,7 +160,7 @@ func (rcv *LogParameters) Entity() []byte {
 }
 
 /// Object/resource that notifies the log (e.g. motion/axs/axisY).
-/// Application that notifies the log (e.g. rexroth-automationcore).
+/// Application that notifies the log (e.g. Automation Core).
 func (rcv *LogParameters) Origin() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
@@ -169,7 +169,7 @@ func (rcv *LogParameters) Origin() []byte {
 	return nil
 }
 
-/// Application that notifies the log (e.g. rexroth-automationcore).
+/// Application that notifies the log (e.g. Automation Core).
 /// Unit name of the component that notifies the log (e.g. comm.datalayer).
 func (rcv *LogParameters) UnitName() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))

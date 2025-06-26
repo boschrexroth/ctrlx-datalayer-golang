@@ -8,58 +8,66 @@ import (
 
 type RecValueT struct {
 	Time *TimeT `json:"time"`
-	ValuesBool bool `json:"values_bool"`
-	ValuesByte int8 `json:"values_byte"`
-	ValuesShort int16 `json:"values_short"`
-	ValuesInt int32 `json:"values_int"`
-	ValuesLong int64 `json:"values_long"`
-	ValuesUbyte byte `json:"values_ubyte"`
-	ValuesUshort uint16 `json:"values_ushort"`
-	ValuesUint uint32 `json:"values_uint"`
-	ValuesUlong uint64 `json:"values_ulong"`
-	ValuesFloat float32 `json:"values_float"`
-	ValuesDouble float64 `json:"values_double"`
-	ValuesString string `json:"values_string"`
+	ValuesBool *TypeBoolT `json:"values_bool"`
+	ValuesByte *TypeByteT `json:"values_byte"`
+	ValuesUbyte *TypeUbyteT `json:"values_ubyte"`
+	ValuesShort *TypeShortT `json:"values_short"`
+	ValuesUshort *TypeUshortT `json:"values_ushort"`
+	ValuesInt *TypeIntT `json:"values_int"`
+	ValuesUint *TypeUintT `json:"values_uint"`
+	ValuesLong *TypeLongT `json:"values_long"`
+	ValuesUlong *TypeUlongT `json:"values_ulong"`
+	ValuesFloat *TypeFloatT `json:"values_float"`
+	ValuesDouble *TypeDoubleT `json:"values_double"`
+	ValuesString *TypeStringT `json:"values_string"`
 }
 
 func (t *RecValueT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	timeOffset := t.Time.Pack(builder)
-	valuesStringOffset := flatbuffers.UOffsetT(0)
-	if t.ValuesString != "" {
-		valuesStringOffset = builder.CreateString(t.ValuesString)
-	}
+	valuesBoolOffset := t.ValuesBool.Pack(builder)
+	valuesByteOffset := t.ValuesByte.Pack(builder)
+	valuesUbyteOffset := t.ValuesUbyte.Pack(builder)
+	valuesShortOffset := t.ValuesShort.Pack(builder)
+	valuesUshortOffset := t.ValuesUshort.Pack(builder)
+	valuesIntOffset := t.ValuesInt.Pack(builder)
+	valuesUintOffset := t.ValuesUint.Pack(builder)
+	valuesLongOffset := t.ValuesLong.Pack(builder)
+	valuesUlongOffset := t.ValuesUlong.Pack(builder)
+	valuesFloatOffset := t.ValuesFloat.Pack(builder)
+	valuesDoubleOffset := t.ValuesDouble.Pack(builder)
+	valuesStringOffset := t.ValuesString.Pack(builder)
 	RecValueStart(builder)
 	RecValueAddTime(builder, timeOffset)
-	RecValueAddValuesBool(builder, t.ValuesBool)
-	RecValueAddValuesByte(builder, t.ValuesByte)
-	RecValueAddValuesShort(builder, t.ValuesShort)
-	RecValueAddValuesInt(builder, t.ValuesInt)
-	RecValueAddValuesLong(builder, t.ValuesLong)
-	RecValueAddValuesUbyte(builder, t.ValuesUbyte)
-	RecValueAddValuesUshort(builder, t.ValuesUshort)
-	RecValueAddValuesUint(builder, t.ValuesUint)
-	RecValueAddValuesUlong(builder, t.ValuesUlong)
-	RecValueAddValuesFloat(builder, t.ValuesFloat)
-	RecValueAddValuesDouble(builder, t.ValuesDouble)
+	RecValueAddValuesBool(builder, valuesBoolOffset)
+	RecValueAddValuesByte(builder, valuesByteOffset)
+	RecValueAddValuesUbyte(builder, valuesUbyteOffset)
+	RecValueAddValuesShort(builder, valuesShortOffset)
+	RecValueAddValuesUshort(builder, valuesUshortOffset)
+	RecValueAddValuesInt(builder, valuesIntOffset)
+	RecValueAddValuesUint(builder, valuesUintOffset)
+	RecValueAddValuesLong(builder, valuesLongOffset)
+	RecValueAddValuesUlong(builder, valuesUlongOffset)
+	RecValueAddValuesFloat(builder, valuesFloatOffset)
+	RecValueAddValuesDouble(builder, valuesDoubleOffset)
 	RecValueAddValuesString(builder, valuesStringOffset)
 	return RecValueEnd(builder)
 }
 
 func (rcv *RecValue) UnPackTo(t *RecValueT) {
 	t.Time = rcv.Time(nil).UnPack()
-	t.ValuesBool = rcv.ValuesBool()
-	t.ValuesByte = rcv.ValuesByte()
-	t.ValuesShort = rcv.ValuesShort()
-	t.ValuesInt = rcv.ValuesInt()
-	t.ValuesLong = rcv.ValuesLong()
-	t.ValuesUbyte = rcv.ValuesUbyte()
-	t.ValuesUshort = rcv.ValuesUshort()
-	t.ValuesUint = rcv.ValuesUint()
-	t.ValuesUlong = rcv.ValuesUlong()
-	t.ValuesFloat = rcv.ValuesFloat()
-	t.ValuesDouble = rcv.ValuesDouble()
-	t.ValuesString = string(rcv.ValuesString())
+	t.ValuesBool = rcv.ValuesBool(nil).UnPack()
+	t.ValuesByte = rcv.ValuesByte(nil).UnPack()
+	t.ValuesUbyte = rcv.ValuesUbyte(nil).UnPack()
+	t.ValuesShort = rcv.ValuesShort(nil).UnPack()
+	t.ValuesUshort = rcv.ValuesUshort(nil).UnPack()
+	t.ValuesInt = rcv.ValuesInt(nil).UnPack()
+	t.ValuesUint = rcv.ValuesUint(nil).UnPack()
+	t.ValuesLong = rcv.ValuesLong(nil).UnPack()
+	t.ValuesUlong = rcv.ValuesUlong(nil).UnPack()
+	t.ValuesFloat = rcv.ValuesFloat(nil).UnPack()
+	t.ValuesDouble = rcv.ValuesDouble(nil).UnPack()
+	t.ValuesString = rcv.ValuesString(nil).UnPack()
 }
 
 func (rcv *RecValue) UnPack() *RecValueT {
@@ -109,142 +117,158 @@ func (rcv *RecValue) Time(obj *Time) *Time {
 	return nil
 }
 
-func (rcv *RecValue) ValuesBool() bool {
+func (rcv *RecValue) ValuesBool(obj *TypeBool) *TypeBool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return rcv._tab.GetBool(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeBool)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return false
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesBool(n bool) bool {
-	return rcv._tab.MutateBoolSlot(6, n)
-}
-
-func (rcv *RecValue) ValuesByte() int8 {
+func (rcv *RecValue) ValuesByte(obj *TypeByte) *TypeByte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetInt8(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeByte)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesByte(n int8) bool {
-	return rcv._tab.MutateInt8Slot(8, n)
-}
-
-func (rcv *RecValue) ValuesShort() int16 {
+func (rcv *RecValue) ValuesUbyte(obj *TypeUbyte) *TypeUbyte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
-		return rcv._tab.GetInt16(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeUbyte)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesShort(n int16) bool {
-	return rcv._tab.MutateInt16Slot(10, n)
-}
-
-func (rcv *RecValue) ValuesInt() int32 {
+func (rcv *RecValue) ValuesShort(obj *TypeShort) *TypeShort {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeShort)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesInt(n int32) bool {
-	return rcv._tab.MutateInt32Slot(12, n)
-}
-
-func (rcv *RecValue) ValuesLong() int64 {
+func (rcv *RecValue) ValuesUshort(obj *TypeUshort) *TypeUshort {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
-		return rcv._tab.GetInt64(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeUshort)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesLong(n int64) bool {
-	return rcv._tab.MutateInt64Slot(14, n)
-}
-
-func (rcv *RecValue) ValuesUbyte() byte {
+func (rcv *RecValue) ValuesInt(obj *TypeInt) *TypeInt {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeInt)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesUbyte(n byte) bool {
-	return rcv._tab.MutateByteSlot(16, n)
-}
-
-func (rcv *RecValue) ValuesUshort() uint16 {
+func (rcv *RecValue) ValuesUint(obj *TypeUint) *TypeUint {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
 	if o != 0 {
-		return rcv._tab.GetUint16(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeUint)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesUshort(n uint16) bool {
-	return rcv._tab.MutateUint16Slot(18, n)
-}
-
-func (rcv *RecValue) ValuesUint() uint32 {
+func (rcv *RecValue) ValuesLong(obj *TypeLong) *TypeLong {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
 	if o != 0 {
-		return rcv._tab.GetUint32(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeLong)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesUint(n uint32) bool {
-	return rcv._tab.MutateUint32Slot(20, n)
-}
-
-func (rcv *RecValue) ValuesUlong() uint64 {
+func (rcv *RecValue) ValuesUlong(obj *TypeUlong) *TypeUlong {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
-		return rcv._tab.GetUint64(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeUlong)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesUlong(n uint64) bool {
-	return rcv._tab.MutateUint64Slot(22, n)
-}
-
-func (rcv *RecValue) ValuesFloat() float32 {
+func (rcv *RecValue) ValuesFloat(obj *TypeFloat) *TypeFloat {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
 	if o != 0 {
-		return rcv._tab.GetFloat32(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeFloat)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0.0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesFloat(n float32) bool {
-	return rcv._tab.MutateFloat32Slot(24, n)
-}
-
-func (rcv *RecValue) ValuesDouble() float64 {
+func (rcv *RecValue) ValuesDouble(obj *TypeDouble) *TypeDouble {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
 	if o != 0 {
-		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeDouble)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
-	return 0.0
+	return nil
 }
 
-func (rcv *RecValue) MutateValuesDouble(n float64) bool {
-	return rcv._tab.MutateFloat64Slot(26, n)
-}
-
-func (rcv *RecValue) ValuesString() []byte {
+func (rcv *RecValue) ValuesString(obj *TypeString) *TypeString {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(TypeString)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
 	return nil
 }
@@ -255,38 +279,38 @@ func RecValueStart(builder *flatbuffers.Builder) {
 func RecValueAddTime(builder *flatbuffers.Builder, time flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(time), 0)
 }
-func RecValueAddValuesBool(builder *flatbuffers.Builder, valuesBool bool) {
-	builder.PrependBoolSlot(1, valuesBool, false)
+func RecValueAddValuesBool(builder *flatbuffers.Builder, valuesBool flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(valuesBool), 0)
 }
-func RecValueAddValuesByte(builder *flatbuffers.Builder, valuesByte int8) {
-	builder.PrependInt8Slot(2, valuesByte, 0)
+func RecValueAddValuesByte(builder *flatbuffers.Builder, valuesByte flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(valuesByte), 0)
 }
-func RecValueAddValuesShort(builder *flatbuffers.Builder, valuesShort int16) {
-	builder.PrependInt16Slot(3, valuesShort, 0)
+func RecValueAddValuesUbyte(builder *flatbuffers.Builder, valuesUbyte flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(valuesUbyte), 0)
 }
-func RecValueAddValuesInt(builder *flatbuffers.Builder, valuesInt int32) {
-	builder.PrependInt32Slot(4, valuesInt, 0)
+func RecValueAddValuesShort(builder *flatbuffers.Builder, valuesShort flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(valuesShort), 0)
 }
-func RecValueAddValuesLong(builder *flatbuffers.Builder, valuesLong int64) {
-	builder.PrependInt64Slot(5, valuesLong, 0)
+func RecValueAddValuesUshort(builder *flatbuffers.Builder, valuesUshort flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(valuesUshort), 0)
 }
-func RecValueAddValuesUbyte(builder *flatbuffers.Builder, valuesUbyte byte) {
-	builder.PrependByteSlot(6, valuesUbyte, 0)
+func RecValueAddValuesInt(builder *flatbuffers.Builder, valuesInt flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(valuesInt), 0)
 }
-func RecValueAddValuesUshort(builder *flatbuffers.Builder, valuesUshort uint16) {
-	builder.PrependUint16Slot(7, valuesUshort, 0)
+func RecValueAddValuesUint(builder *flatbuffers.Builder, valuesUint flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(valuesUint), 0)
 }
-func RecValueAddValuesUint(builder *flatbuffers.Builder, valuesUint uint32) {
-	builder.PrependUint32Slot(8, valuesUint, 0)
+func RecValueAddValuesLong(builder *flatbuffers.Builder, valuesLong flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(valuesLong), 0)
 }
-func RecValueAddValuesUlong(builder *flatbuffers.Builder, valuesUlong uint64) {
-	builder.PrependUint64Slot(9, valuesUlong, 0)
+func RecValueAddValuesUlong(builder *flatbuffers.Builder, valuesUlong flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(valuesUlong), 0)
 }
-func RecValueAddValuesFloat(builder *flatbuffers.Builder, valuesFloat float32) {
-	builder.PrependFloat32Slot(10, valuesFloat, 0.0)
+func RecValueAddValuesFloat(builder *flatbuffers.Builder, valuesFloat flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(10, flatbuffers.UOffsetT(valuesFloat), 0)
 }
-func RecValueAddValuesDouble(builder *flatbuffers.Builder, valuesDouble float64) {
-	builder.PrependFloat64Slot(11, valuesDouble, 0.0)
+func RecValueAddValuesDouble(builder *flatbuffers.Builder, valuesDouble flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(11, flatbuffers.UOffsetT(valuesDouble), 0)
 }
 func RecValueAddValuesString(builder *flatbuffers.Builder, valuesString flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(valuesString), 0)

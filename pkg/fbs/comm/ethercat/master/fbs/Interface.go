@@ -12,6 +12,7 @@ type InterfaceT struct {
 	Device string `json:"device"`
 	LinkLayer string `json:"linkLayer"`
 	CapabilityList []*CapabilityT `json:"capabilityList"`
+	Reference string `json:"reference"`
 }
 
 func (t *InterfaceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -41,11 +42,16 @@ func (t *InterfaceT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 		}
 		capabilityListOffset = builder.EndVector(capabilityListLength)
 	}
+	referenceOffset := flatbuffers.UOffsetT(0)
+	if t.Reference != "" {
+		referenceOffset = builder.CreateString(t.Reference)
+	}
 	InterfaceStart(builder)
 	InterfaceAddPort(builder, portOffset)
 	InterfaceAddDevice(builder, deviceOffset)
 	InterfaceAddLinkLayer(builder, linkLayerOffset)
 	InterfaceAddCapabilityList(builder, capabilityListOffset)
+	InterfaceAddReference(builder, referenceOffset)
 	return InterfaceEnd(builder)
 }
 
@@ -60,6 +66,7 @@ func (rcv *Interface) UnPackTo(t *InterfaceT) {
 		rcv.CapabilityList(&x, j)
 		t.CapabilityList[j] = x.UnPack()
 	}
+	t.Reference = string(rcv.Reference())
 }
 
 func (rcv *Interface) UnPack() *InterfaceT {
@@ -148,8 +155,24 @@ func (rcv *Interface) CapabilityListLength() int {
 }
 
 ///Reserved for future use
+///Reference to application
+///empty: not referenced
+///datalayer path: referenced by known application e.g. fieldbuses/ethercat/master/instances/ethercatmaster
+///UNKNOWN: referenced by unknown application
+func (rcv *Interface) Reference() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+///Reference to application
+///empty: not referenced
+///datalayer path: referenced by known application e.g. fieldbuses/ethercat/master/instances/ethercatmaster
+///UNKNOWN: referenced by unknown application
 func InterfaceStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func InterfaceAddPort(builder *flatbuffers.Builder, port flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(port), 0)
@@ -165,6 +188,9 @@ func InterfaceAddCapabilityList(builder *flatbuffers.Builder, capabilityList fla
 }
 func InterfaceStartCapabilityListVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
+}
+func InterfaceAddReference(builder *flatbuffers.Builder, reference flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(reference), 0)
 }
 func InterfaceEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

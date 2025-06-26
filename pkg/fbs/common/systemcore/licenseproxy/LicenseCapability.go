@@ -13,6 +13,7 @@ type LicenseCapabilityT struct {
 	IsPermanent bool `json:"isPermanent"`
 	StartDate string `json:"startDate"`
 	FinalExpirationDate string `json:"finalExpirationDate"`
+	AvailableCount int32 `json:"availableCount"`
 }
 
 func (t *LicenseCapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -40,6 +41,7 @@ func (t *LicenseCapabilityT) Pack(builder *flatbuffers.Builder) flatbuffers.UOff
 	LicenseCapabilityAddIsPermanent(builder, t.IsPermanent)
 	LicenseCapabilityAddStartDate(builder, startDateOffset)
 	LicenseCapabilityAddFinalExpirationDate(builder, finalExpirationDateOffset)
+	LicenseCapabilityAddAvailableCount(builder, t.AvailableCount)
 	return LicenseCapabilityEnd(builder)
 }
 
@@ -50,6 +52,7 @@ func (rcv *LicenseCapability) UnPackTo(t *LicenseCapabilityT) {
 	t.IsPermanent = rcv.IsPermanent()
 	t.StartDate = string(rcv.StartDate())
 	t.FinalExpirationDate = string(rcv.FinalExpirationDate())
+	t.AvailableCount = rcv.AvailableCount()
 }
 
 func (rcv *LicenseCapability) UnPack() *LicenseCapabilityT {
@@ -142,8 +145,20 @@ func (rcv *LicenseCapability) FinalExpirationDate() []byte {
 	return nil
 }
 
+func (rcv *LicenseCapability) AvailableCount() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+func (rcv *LicenseCapability) MutateAvailableCount(n int32) bool {
+	return rcv._tab.MutateInt32Slot(16, n)
+}
+
 func LicenseCapabilityStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(7)
 }
 func LicenseCapabilityAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
@@ -162,6 +177,9 @@ func LicenseCapabilityAddStartDate(builder *flatbuffers.Builder, startDate flatb
 }
 func LicenseCapabilityAddFinalExpirationDate(builder *flatbuffers.Builder, finalExpirationDate flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(finalExpirationDate), 0)
+}
+func LicenseCapabilityAddAvailableCount(builder *flatbuffers.Builder, availableCount int32) {
+	builder.PrependInt32Slot(6, availableCount, 0)
 }
 func LicenseCapabilityEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

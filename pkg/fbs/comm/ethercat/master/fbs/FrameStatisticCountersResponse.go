@@ -17,6 +17,9 @@ type FrameStatisticCountersResponseT struct {
 	NumLostFrames uint32 `json:"numLostFrames"`
 	NumLostCyclicFrames uint32 `json:"numLostCyclicFrames"`
 	NumLostAcyclicFrames uint32 `json:"numLostAcyclicFrames"`
+	NumCyclicFramesPerCycle *MinActMaxValuesT `json:"numCyclicFramesPerCycle"`
+	NumAcyclicFramesPerCycle *MinActMaxValuesT `json:"numAcyclicFramesPerCycle"`
+	NumEoeFramesPerCycle *MinActMaxValuesT `json:"numEoeFramesPerCycle"`
 }
 
 func (t *FrameStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,6 +34,12 @@ func (t *FrameStatisticCountersResponseT) Pack(builder *flatbuffers.Builder) fla
 	FrameStatisticCountersResponseAddNumLostFrames(builder, t.NumLostFrames)
 	FrameStatisticCountersResponseAddNumLostCyclicFrames(builder, t.NumLostCyclicFrames)
 	FrameStatisticCountersResponseAddNumLostAcyclicFrames(builder, t.NumLostAcyclicFrames)
+	numCyclicFramesPerCycleOffset := t.NumCyclicFramesPerCycle.Pack(builder)
+	FrameStatisticCountersResponseAddNumCyclicFramesPerCycle(builder, numCyclicFramesPerCycleOffset)
+	numAcyclicFramesPerCycleOffset := t.NumAcyclicFramesPerCycle.Pack(builder)
+	FrameStatisticCountersResponseAddNumAcyclicFramesPerCycle(builder, numAcyclicFramesPerCycleOffset)
+	numEoeFramesPerCycleOffset := t.NumEoeFramesPerCycle.Pack(builder)
+	FrameStatisticCountersResponseAddNumEoeFramesPerCycle(builder, numEoeFramesPerCycleOffset)
 	return FrameStatisticCountersResponseEnd(builder)
 }
 
@@ -44,6 +53,9 @@ func (rcv *FrameStatisticCountersResponse) UnPackTo(t *FrameStatisticCountersRes
 	t.NumLostFrames = rcv.NumLostFrames()
 	t.NumLostCyclicFrames = rcv.NumLostCyclicFrames()
 	t.NumLostAcyclicFrames = rcv.NumLostAcyclicFrames()
+	t.NumCyclicFramesPerCycle = rcv.NumCyclicFramesPerCycle(nil).UnPack()
+	t.NumAcyclicFramesPerCycle = rcv.NumAcyclicFramesPerCycle(nil).UnPack()
+	t.NumEoeFramesPerCycle = rcv.NumEoeFramesPerCycle(nil).UnPack()
 }
 
 func (rcv *FrameStatisticCountersResponse) UnPack() *FrameStatisticCountersResponseT {
@@ -206,8 +218,53 @@ func (rcv *FrameStatisticCountersResponse) MutateNumLostAcyclicFrames(n uint32) 
 	return rcv._tab.MutateUint32Slot(20, n)
 }
 
+///Number of cyclic frames sent per cylce
+func (rcv *FrameStatisticCountersResponse) NumCyclicFramesPerCycle(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Number of cyclic frames sent per cylce
+///Number of acyclic frames sent per cylce
+func (rcv *FrameStatisticCountersResponse) NumAcyclicFramesPerCycle(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Number of acyclic frames sent per cylce
+///Number of EoE frames processed (switched) per cyclie
+func (rcv *FrameStatisticCountersResponse) NumEoeFramesPerCycle(obj *MinActMaxValues) *MinActMaxValues {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		x := o + rcv._tab.Pos
+		if obj == nil {
+			obj = new(MinActMaxValues)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+///Number of EoE frames processed (switched) per cyclie
 func FrameStatisticCountersResponseStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(12)
 }
 func FrameStatisticCountersResponseAddNumTxFrames(builder *flatbuffers.Builder, numTxFrames uint32) {
 	builder.PrependUint32Slot(0, numTxFrames, 0)
@@ -235,6 +292,15 @@ func FrameStatisticCountersResponseAddNumLostCyclicFrames(builder *flatbuffers.B
 }
 func FrameStatisticCountersResponseAddNumLostAcyclicFrames(builder *flatbuffers.Builder, numLostAcyclicFrames uint32) {
 	builder.PrependUint32Slot(8, numLostAcyclicFrames, 0)
+}
+func FrameStatisticCountersResponseAddNumCyclicFramesPerCycle(builder *flatbuffers.Builder, numCyclicFramesPerCycle flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(9, flatbuffers.UOffsetT(numCyclicFramesPerCycle), 0)
+}
+func FrameStatisticCountersResponseAddNumAcyclicFramesPerCycle(builder *flatbuffers.Builder, numAcyclicFramesPerCycle flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(10, flatbuffers.UOffsetT(numAcyclicFramesPerCycle), 0)
+}
+func FrameStatisticCountersResponseAddNumEoeFramesPerCycle(builder *flatbuffers.Builder, numEoeFramesPerCycle flatbuffers.UOffsetT) {
+	builder.PrependStructSlot(11, flatbuffers.UOffsetT(numEoeFramesPerCycle), 0)
 }
 func FrameStatisticCountersResponseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

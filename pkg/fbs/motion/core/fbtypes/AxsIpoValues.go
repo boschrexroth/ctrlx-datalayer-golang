@@ -16,6 +16,8 @@ type AxsIpoValuesT struct {
 	IpoVelUnit string `json:"ipoVelUnit"`
 	IpoAccUnit string `json:"ipoAccUnit"`
 	IpoJrkUnit string `json:"ipoJrkUnit"`
+	IpoTrqUnit string `json:"ipoTrqUnit"`
+	IpoTrq float64 `json:"ipoTrq"`
 }
 
 func (t *AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -36,6 +38,10 @@ func (t *AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	if t.IpoJrkUnit != "" {
 		ipoJrkUnitOffset = builder.CreateString(t.IpoJrkUnit)
 	}
+	ipoTrqUnitOffset := flatbuffers.UOffsetT(0)
+	if t.IpoTrqUnit != "" {
+		ipoTrqUnitOffset = builder.CreateString(t.IpoTrqUnit)
+	}
 	AxsIpoValuesStart(builder)
 	AxsIpoValuesAddIpoPos(builder, t.IpoPos)
 	AxsIpoValuesAddIpoVel(builder, t.IpoVel)
@@ -45,6 +51,8 @@ func (t *AxsIpoValuesT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT 
 	AxsIpoValuesAddIpoVelUnit(builder, ipoVelUnitOffset)
 	AxsIpoValuesAddIpoAccUnit(builder, ipoAccUnitOffset)
 	AxsIpoValuesAddIpoJrkUnit(builder, ipoJrkUnitOffset)
+	AxsIpoValuesAddIpoTrqUnit(builder, ipoTrqUnitOffset)
+	AxsIpoValuesAddIpoTrq(builder, t.IpoTrq)
 	return AxsIpoValuesEnd(builder)
 }
 
@@ -57,6 +65,8 @@ func (rcv *AxsIpoValues) UnPackTo(t *AxsIpoValuesT) {
 	t.IpoVelUnit = string(rcv.IpoVelUnit())
 	t.IpoAccUnit = string(rcv.IpoAccUnit())
 	t.IpoJrkUnit = string(rcv.IpoJrkUnit())
+	t.IpoTrqUnit = string(rcv.IpoTrqUnit())
+	t.IpoTrq = rcv.IpoTrq()
 }
 
 func (rcv *AxsIpoValues) UnPack() *AxsIpoValuesT {
@@ -189,8 +199,32 @@ func (rcv *AxsIpoValues) IpoJrkUnit() []byte {
 }
 
 /// unit of currently interpolated jerk
+/// unit of currently interpolated torque
+func (rcv *AxsIpoValues) IpoTrqUnit() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// unit of currently interpolated torque
+/// currently interpolated torque
+func (rcv *AxsIpoValues) IpoTrq() float64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetFloat64(o + rcv._tab.Pos)
+	}
+	return 0.0
+}
+
+/// currently interpolated torque
+func (rcv *AxsIpoValues) MutateIpoTrq(n float64) bool {
+	return rcv._tab.MutateFloat64Slot(22, n)
+}
+
 func AxsIpoValuesStart(builder *flatbuffers.Builder) {
-	builder.StartObject(8)
+	builder.StartObject(10)
 }
 func AxsIpoValuesAddIpoPos(builder *flatbuffers.Builder, ipoPos float64) {
 	builder.PrependFloat64Slot(0, ipoPos, 0.0)
@@ -215,6 +249,12 @@ func AxsIpoValuesAddIpoAccUnit(builder *flatbuffers.Builder, ipoAccUnit flatbuff
 }
 func AxsIpoValuesAddIpoJrkUnit(builder *flatbuffers.Builder, ipoJrkUnit flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(ipoJrkUnit), 0)
+}
+func AxsIpoValuesAddIpoTrqUnit(builder *flatbuffers.Builder, ipoTrqUnit flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(ipoTrqUnit), 0)
+}
+func AxsIpoValuesAddIpoTrq(builder *flatbuffers.Builder, ipoTrq float64) {
+	builder.PrependFloat64Slot(9, ipoTrq, 0.0)
 }
 func AxsIpoValuesEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

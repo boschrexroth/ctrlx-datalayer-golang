@@ -10,6 +10,9 @@ import (
 type durationStatusOfTaskT struct {
 	TaskName string `json:"taskName"`
 	Status MeasurementStatus `json:"status"`
+	StatusTask MeasurementStatus `json:"statusTask"`
+	StatusHistogram MeasurementStatus `json:"statusHistogram"`
+	StatusCallable MeasurementStatus `json:"statusCallable"`
 }
 
 func (t *durationStatusOfTaskT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -21,12 +24,18 @@ func (t *durationStatusOfTaskT) Pack(builder *flatbuffers.Builder) flatbuffers.U
 	durationStatusOfTaskStart(builder)
 	durationStatusOfTaskAddTaskName(builder, taskNameOffset)
 	durationStatusOfTaskAddStatus(builder, t.Status)
+	durationStatusOfTaskAddStatusTask(builder, t.StatusTask)
+	durationStatusOfTaskAddStatusHistogram(builder, t.StatusHistogram)
+	durationStatusOfTaskAddStatusCallable(builder, t.StatusCallable)
 	return durationStatusOfTaskEnd(builder)
 }
 
 func (rcv *durationStatusOfTask) UnPackTo(t *durationStatusOfTaskT) {
 	t.TaskName = string(rcv.TaskName())
 	t.Status = rcv.Status()
+	t.StatusTask = rcv.StatusTask()
+	t.StatusHistogram = rcv.StatusHistogram()
+	t.StatusCallable = rcv.StatusCallable()
 }
 
 func (rcv *durationStatusOfTask) UnPack() *durationStatusOfTaskT {
@@ -73,7 +82,7 @@ func (rcv *durationStatusOfTask) TaskName() []byte {
 }
 
 /// Name of the task
-/// Status of the duration measurements
+/// Status of any duration measurement or recording of the task including their callables
 func (rcv *durationStatusOfTask) Status() MeasurementStatus {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,19 +91,70 @@ func (rcv *durationStatusOfTask) Status() MeasurementStatus {
 	return 1
 }
 
-/// Status of the duration measurements
+/// Status of any duration measurement or recording of the task including their callables
 func (rcv *durationStatusOfTask) MutateStatus(n MeasurementStatus) bool {
 	return rcv._tab.MutateInt8Slot(6, int8(n))
 }
 
+/// Status of the duration measurements of the task
+func (rcv *durationStatusOfTask) StatusTask() MeasurementStatus {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return MeasurementStatus(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 1
+}
+
+/// Status of the duration measurements of the task
+func (rcv *durationStatusOfTask) MutateStatusTask(n MeasurementStatus) bool {
+	return rcv._tab.MutateInt8Slot(8, int8(n))
+}
+
+/// Status of the recording of duration measurements of the task in their histogram
+func (rcv *durationStatusOfTask) StatusHistogram() MeasurementStatus {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return MeasurementStatus(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 1
+}
+
+/// Status of the recording of duration measurements of the task in their histogram
+func (rcv *durationStatusOfTask) MutateStatusHistogram(n MeasurementStatus) bool {
+	return rcv._tab.MutateInt8Slot(10, int8(n))
+}
+
+/// Status of the duration measurements of the callables of the tasks
+func (rcv *durationStatusOfTask) StatusCallable() MeasurementStatus {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return MeasurementStatus(rcv._tab.GetInt8(o + rcv._tab.Pos))
+	}
+	return 1
+}
+
+/// Status of the duration measurements of the callables of the tasks
+func (rcv *durationStatusOfTask) MutateStatusCallable(n MeasurementStatus) bool {
+	return rcv._tab.MutateInt8Slot(12, int8(n))
+}
+
 func durationStatusOfTaskStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(5)
 }
 func durationStatusOfTaskAddTaskName(builder *flatbuffers.Builder, taskName flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(taskName), 0)
 }
 func durationStatusOfTaskAddStatus(builder *flatbuffers.Builder, status MeasurementStatus) {
 	builder.PrependInt8Slot(1, int8(status), 1)
+}
+func durationStatusOfTaskAddStatusTask(builder *flatbuffers.Builder, statusTask MeasurementStatus) {
+	builder.PrependInt8Slot(2, int8(statusTask), 1)
+}
+func durationStatusOfTaskAddStatusHistogram(builder *flatbuffers.Builder, statusHistogram MeasurementStatus) {
+	builder.PrependInt8Slot(3, int8(statusHistogram), 1)
+}
+func durationStatusOfTaskAddStatusCallable(builder *flatbuffers.Builder, statusCallable MeasurementStatus) {
+	builder.PrependInt8Slot(4, int8(statusCallable), 1)
 }
 func durationStatusOfTaskEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

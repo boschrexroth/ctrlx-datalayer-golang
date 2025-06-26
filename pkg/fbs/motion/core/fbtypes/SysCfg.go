@@ -14,6 +14,9 @@ type SysCfgT struct {
 	SafeAreas *SysCfgSafeAreaAllT `json:"safeAreas"`
 	RtInputs *RTInputsCfgT `json:"rtInputs"`
 	ToolData *SysCfgToolDataAllT `json:"toolData"`
+	BeltCs *SysCfgBeltCsAllT `json:"beltCS"`
+	Ccs *SysCfgCcsAllT `json:"ccs"`
+	UiData string `json:"uiData"`
 }
 
 func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -24,6 +27,12 @@ func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	safeAreasOffset := t.SafeAreas.Pack(builder)
 	rtInputsOffset := t.RtInputs.Pack(builder)
 	toolDataOffset := t.ToolData.Pack(builder)
+	beltCsOffset := t.BeltCs.Pack(builder)
+	ccsOffset := t.Ccs.Pack(builder)
+	uiDataOffset := flatbuffers.UOffsetT(0)
+	if t.UiData != "" {
+		uiDataOffset = builder.CreateString(t.UiData)
+	}
 	SysCfgStart(builder)
 	SysCfgAddPcs(builder, pcsOffset)
 	SysCfgAddFunction(builder, functionOffset)
@@ -31,6 +40,9 @@ func (t *SysCfgT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	SysCfgAddSafeAreas(builder, safeAreasOffset)
 	SysCfgAddRtInputs(builder, rtInputsOffset)
 	SysCfgAddToolData(builder, toolDataOffset)
+	SysCfgAddBeltCs(builder, beltCsOffset)
+	SysCfgAddCcs(builder, ccsOffset)
+	SysCfgAddUiData(builder, uiDataOffset)
 	return SysCfgEnd(builder)
 }
 
@@ -41,6 +53,9 @@ func (rcv *SysCfg) UnPackTo(t *SysCfgT) {
 	t.SafeAreas = rcv.SafeAreas(nil).UnPack()
 	t.RtInputs = rcv.RtInputs(nil).UnPack()
 	t.ToolData = rcv.ToolData(nil).UnPack()
+	t.BeltCs = rcv.BeltCs(nil).UnPack()
+	t.Ccs = rcv.Ccs(nil).UnPack()
+	t.UiData = string(rcv.UiData())
 }
 
 func (rcv *SysCfg) UnPack() *SysCfgT {
@@ -167,8 +182,48 @@ func (rcv *SysCfg) ToolData(obj *SysCfgToolDataAll) *SysCfgToolDataAll {
 }
 
 /// configuration of the tool data
+/// configuration of the belt cs data
+func (rcv *SysCfg) BeltCs(obj *SysCfgBeltCsAll) *SysCfgBeltCsAll {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(16))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(SysCfgBeltCsAll)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the belt cs data
+/// configuration of the camera coordinate system
+func (rcv *SysCfg) Ccs(obj *SysCfgCcsAll) *SysCfgCcsAll {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(18))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(SysCfgCcsAll)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of the camera coordinate system
+/// System UI data
+func (rcv *SysCfg) UiData() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(20))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+/// System UI data
 func SysCfgStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(9)
 }
 func SysCfgAddPcs(builder *flatbuffers.Builder, pcs flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(pcs), 0)
@@ -187,6 +242,15 @@ func SysCfgAddRtInputs(builder *flatbuffers.Builder, rtInputs flatbuffers.UOffse
 }
 func SysCfgAddToolData(builder *flatbuffers.Builder, toolData flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(5, flatbuffers.UOffsetT(toolData), 0)
+}
+func SysCfgAddBeltCs(builder *flatbuffers.Builder, beltCs flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(beltCs), 0)
+}
+func SysCfgAddCcs(builder *flatbuffers.Builder, ccs flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(ccs), 0)
+}
+func SysCfgAddUiData(builder *flatbuffers.Builder, uiData flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(uiData), 0)
 }
 func SysCfgEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -9,7 +9,7 @@ import (
 type ServerDiagnosticsSummaryTypeT struct {
 	CumulatedSessionCount uint32 `json:"cumulatedSessionCount"`
 	CumulatedSubscriptionCount uint32 `json:"cumulatedSubscriptionCount"`
-	CurrentSessonCount uint32 `json:"currentSessonCount"`
+	CurrentSessionCount uint32 `json:"currentSessionCount"`
 	CurrentSubscriptionCount uint32 `json:"currentSubscriptionCount"`
 	PublishingIntervalCount uint32 `json:"publishingIntervalCount"`
 	RejectedRequestsCount uint32 `json:"rejectedRequestsCount"`
@@ -26,7 +26,7 @@ func (t *ServerDiagnosticsSummaryTypeT) Pack(builder *flatbuffers.Builder) flatb
 	ServerDiagnosticsSummaryTypeStart(builder)
 	ServerDiagnosticsSummaryTypeAddCumulatedSessionCount(builder, t.CumulatedSessionCount)
 	ServerDiagnosticsSummaryTypeAddCumulatedSubscriptionCount(builder, t.CumulatedSubscriptionCount)
-	ServerDiagnosticsSummaryTypeAddCurrentSessonCount(builder, t.CurrentSessonCount)
+	ServerDiagnosticsSummaryTypeAddCurrentSessionCount(builder, t.CurrentSessionCount)
 	ServerDiagnosticsSummaryTypeAddCurrentSubscriptionCount(builder, t.CurrentSubscriptionCount)
 	ServerDiagnosticsSummaryTypeAddPublishingIntervalCount(builder, t.PublishingIntervalCount)
 	ServerDiagnosticsSummaryTypeAddRejectedRequestsCount(builder, t.RejectedRequestsCount)
@@ -42,7 +42,7 @@ func (t *ServerDiagnosticsSummaryTypeT) Pack(builder *flatbuffers.Builder) flatb
 func (rcv *ServerDiagnosticsSummaryType) UnPackTo(t *ServerDiagnosticsSummaryTypeT) {
 	t.CumulatedSessionCount = rcv.CumulatedSessionCount()
 	t.CumulatedSubscriptionCount = rcv.CumulatedSubscriptionCount()
-	t.CurrentSessonCount = rcv.CurrentSessonCount()
+	t.CurrentSessionCount = rcv.CurrentSessionCount()
 	t.CurrentSubscriptionCount = rcv.CurrentSubscriptionCount()
 	t.PublishingIntervalCount = rcv.PublishingIntervalCount()
 	t.RejectedRequestsCount = rcv.RejectedRequestsCount()
@@ -117,7 +117,7 @@ func (rcv *ServerDiagnosticsSummaryType) MutateCumulatedSubscriptionCount(n uint
 }
 
 /// The current number of active sessions of the OPC UA Server
-func (rcv *ServerDiagnosticsSummaryType) CurrentSessonCount() uint32 {
+func (rcv *ServerDiagnosticsSummaryType) CurrentSessionCount() uint32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.GetUint32(o + rcv._tab.Pos)
@@ -126,7 +126,7 @@ func (rcv *ServerDiagnosticsSummaryType) CurrentSessonCount() uint32 {
 }
 
 /// The current number of active sessions of the OPC UA Server
-func (rcv *ServerDiagnosticsSummaryType) MutateCurrentSessonCount(n uint32) bool {
+func (rcv *ServerDiagnosticsSummaryType) MutateCurrentSessionCount(n uint32) bool {
 	return rcv._tab.MutateUint32Slot(8, n)
 }
 
@@ -269,8 +269,8 @@ func ServerDiagnosticsSummaryTypeAddCumulatedSessionCount(builder *flatbuffers.B
 func ServerDiagnosticsSummaryTypeAddCumulatedSubscriptionCount(builder *flatbuffers.Builder, cumulatedSubscriptionCount uint32) {
 	builder.PrependUint32Slot(1, cumulatedSubscriptionCount, 0)
 }
-func ServerDiagnosticsSummaryTypeAddCurrentSessonCount(builder *flatbuffers.Builder, currentSessonCount uint32) {
-	builder.PrependUint32Slot(2, currentSessonCount, 0)
+func ServerDiagnosticsSummaryTypeAddCurrentSessionCount(builder *flatbuffers.Builder, currentSessionCount uint32) {
+	builder.PrependUint32Slot(2, currentSessionCount, 0)
 }
 func ServerDiagnosticsSummaryTypeAddCurrentSubscriptionCount(builder *flatbuffers.Builder, currentSubscriptionCount uint32) {
 	builder.PrependUint32Slot(3, currentSubscriptionCount, 0)

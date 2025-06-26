@@ -39,7 +39,6 @@ package datalayer
 import "C"
 
 import (
-	"fmt"
 	"time"
 	"unsafe"
 )
@@ -127,7 +126,6 @@ func DeleteBulk(b *Bulk) {
 
 // close remove the internal bulk datas
 func (b *Bulk) close() {
-	fmt.Println("Bulk Close")
 	b.closeAsync()
 	b.closeResponses()
 	b.closeRequests()

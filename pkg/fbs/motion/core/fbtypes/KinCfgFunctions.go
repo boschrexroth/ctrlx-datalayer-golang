@@ -9,18 +9,22 @@ import (
 /// configuration for specific functions of this axis
 type KinCfgFunctionsT struct {
 	KinCfgDriveSls *KinCfgDriveSLST `json:"kinCfgDriveSLS"`
+	KinCfgBeltSyncAll *KinCfgBeltSyncAllT `json:"kinCfgBeltSyncAll"`
 }
 
 func (t *KinCfgFunctionsT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
 	kinCfgDriveSlsOffset := t.KinCfgDriveSls.Pack(builder)
+	kinCfgBeltSyncAllOffset := t.KinCfgBeltSyncAll.Pack(builder)
 	KinCfgFunctionsStart(builder)
 	KinCfgFunctionsAddKinCfgDriveSls(builder, kinCfgDriveSlsOffset)
+	KinCfgFunctionsAddKinCfgBeltSyncAll(builder, kinCfgBeltSyncAllOffset)
 	return KinCfgFunctionsEnd(builder)
 }
 
 func (rcv *KinCfgFunctions) UnPackTo(t *KinCfgFunctionsT) {
 	t.KinCfgDriveSls = rcv.KinCfgDriveSls(nil).UnPack()
+	t.KinCfgBeltSyncAll = rcv.KinCfgBeltSyncAll(nil).UnPack()
 }
 
 func (rcv *KinCfgFunctions) UnPack() *KinCfgFunctionsT {
@@ -72,11 +76,29 @@ func (rcv *KinCfgFunctions) KinCfgDriveSls(obj *KinCfgDriveSLS) *KinCfgDriveSLS 
 }
 
 /// configuration of monitoring of the safe limited speed in the drive by the motion kernel
+/// configuration of motion kernel kinematics function 'belt synchronization'
+func (rcv *KinCfgFunctions) KinCfgBeltSyncAll(obj *KinCfgBeltSyncAll) *KinCfgBeltSyncAll {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(KinCfgBeltSyncAll)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
+	}
+	return nil
+}
+
+/// configuration of motion kernel kinematics function 'belt synchronization'
 func KinCfgFunctionsStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
+	builder.StartObject(2)
 }
 func KinCfgFunctionsAddKinCfgDriveSls(builder *flatbuffers.Builder, kinCfgDriveSls flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(kinCfgDriveSls), 0)
+}
+func KinCfgFunctionsAddKinCfgBeltSyncAll(builder *flatbuffers.Builder, kinCfgBeltSyncAll flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(kinCfgBeltSyncAll), 0)
 }
 func KinCfgFunctionsEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

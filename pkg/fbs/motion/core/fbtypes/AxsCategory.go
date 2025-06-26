@@ -55,7 +55,7 @@ func (rcv *AxsCategory) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// the axis 
+/// the axis
 func (rcv *AxsCategory) AxsCategory() CategoryOfAxis {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -64,7 +64,7 @@ func (rcv *AxsCategory) AxsCategory() CategoryOfAxis {
 	return 0
 }
 
-/// the axis 
+/// the axis
 func (rcv *AxsCategory) MutateAxsCategory(n CategoryOfAxis) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }

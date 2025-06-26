@@ -17,6 +17,9 @@ type FrameStatisticResetRequestT struct {
 	NumLostFrames bool `json:"numLostFrames"`
 	NumLostCyclicFrames bool `json:"numLostCyclicFrames"`
 	NumLostAcyclicFrames bool `json:"numLostAcyclicFrames"`
+	NumCyclicFramesPerCycle bool `json:"numCyclicFramesPerCycle"`
+	NumAcyclicFramesPerCycle bool `json:"numAcyclicFramesPerCycle"`
+	NumEoeFramesPerCycle bool `json:"numEoeFramesPerCycle"`
 }
 
 func (t *FrameStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,6 +34,9 @@ func (t *FrameStatisticResetRequestT) Pack(builder *flatbuffers.Builder) flatbuf
 	FrameStatisticResetRequestAddNumLostFrames(builder, t.NumLostFrames)
 	FrameStatisticResetRequestAddNumLostCyclicFrames(builder, t.NumLostCyclicFrames)
 	FrameStatisticResetRequestAddNumLostAcyclicFrames(builder, t.NumLostAcyclicFrames)
+	FrameStatisticResetRequestAddNumCyclicFramesPerCycle(builder, t.NumCyclicFramesPerCycle)
+	FrameStatisticResetRequestAddNumAcyclicFramesPerCycle(builder, t.NumAcyclicFramesPerCycle)
+	FrameStatisticResetRequestAddNumEoeFramesPerCycle(builder, t.NumEoeFramesPerCycle)
 	return FrameStatisticResetRequestEnd(builder)
 }
 
@@ -44,6 +50,9 @@ func (rcv *FrameStatisticResetRequest) UnPackTo(t *FrameStatisticResetRequestT) 
 	t.NumLostFrames = rcv.NumLostFrames()
 	t.NumLostCyclicFrames = rcv.NumLostCyclicFrames()
 	t.NumLostAcyclicFrames = rcv.NumLostAcyclicFrames()
+	t.NumCyclicFramesPerCycle = rcv.NumCyclicFramesPerCycle()
+	t.NumAcyclicFramesPerCycle = rcv.NumAcyclicFramesPerCycle()
+	t.NumEoeFramesPerCycle = rcv.NumEoeFramesPerCycle()
 }
 
 func (rcv *FrameStatisticResetRequest) UnPack() *FrameStatisticResetRequestT {
@@ -206,8 +215,50 @@ func (rcv *FrameStatisticResetRequest) MutateNumLostAcyclicFrames(n bool) bool {
 	return rcv._tab.MutateBoolSlot(20, n)
 }
 
+///Reset number of cyclic frames per cycle
+func (rcv *FrameStatisticResetRequest) NumCyclicFramesPerCycle() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Reset number of cyclic frames per cycle
+func (rcv *FrameStatisticResetRequest) MutateNumCyclicFramesPerCycle(n bool) bool {
+	return rcv._tab.MutateBoolSlot(22, n)
+}
+
+///Reset number of acyclic frames per cycle
+func (rcv *FrameStatisticResetRequest) NumAcyclicFramesPerCycle() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(24))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Reset number of acyclic frames per cycle
+func (rcv *FrameStatisticResetRequest) MutateNumAcyclicFramesPerCycle(n bool) bool {
+	return rcv._tab.MutateBoolSlot(24, n)
+}
+
+///Reset number of EoE frames processed per cycle
+func (rcv *FrameStatisticResetRequest) NumEoeFramesPerCycle() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(26))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+///Reset number of EoE frames processed per cycle
+func (rcv *FrameStatisticResetRequest) MutateNumEoeFramesPerCycle(n bool) bool {
+	return rcv._tab.MutateBoolSlot(26, n)
+}
+
 func FrameStatisticResetRequestStart(builder *flatbuffers.Builder) {
-	builder.StartObject(9)
+	builder.StartObject(12)
 }
 func FrameStatisticResetRequestAddNumTxFrames(builder *flatbuffers.Builder, numTxFrames bool) {
 	builder.PrependBoolSlot(0, numTxFrames, false)
@@ -235,6 +286,15 @@ func FrameStatisticResetRequestAddNumLostCyclicFrames(builder *flatbuffers.Build
 }
 func FrameStatisticResetRequestAddNumLostAcyclicFrames(builder *flatbuffers.Builder, numLostAcyclicFrames bool) {
 	builder.PrependBoolSlot(8, numLostAcyclicFrames, false)
+}
+func FrameStatisticResetRequestAddNumCyclicFramesPerCycle(builder *flatbuffers.Builder, numCyclicFramesPerCycle bool) {
+	builder.PrependBoolSlot(9, numCyclicFramesPerCycle, false)
+}
+func FrameStatisticResetRequestAddNumAcyclicFramesPerCycle(builder *flatbuffers.Builder, numAcyclicFramesPerCycle bool) {
+	builder.PrependBoolSlot(10, numAcyclicFramesPerCycle, false)
+}
+func FrameStatisticResetRequestAddNumEoeFramesPerCycle(builder *flatbuffers.Builder, numEoeFramesPerCycle bool) {
+	builder.PrependBoolSlot(11, numEoeFramesPerCycle, false)
 }
 func FrameStatisticResetRequestEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

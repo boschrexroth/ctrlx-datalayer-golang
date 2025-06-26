@@ -7,29 +7,23 @@ import (
 )
 
 type DeviceConfigT struct {
-	Name string `json:"name"`
-	Description string `json:"description"`
+	Request *DeviceConfigRequestT `json:"request"`
+	Response *DeviceConfigResponseT `json:"response"`
 }
 
 func (t *DeviceConfigT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	if t == nil { return 0 }
-	nameOffset := flatbuffers.UOffsetT(0)
-	if t.Name != "" {
-		nameOffset = builder.CreateString(t.Name)
-	}
-	descriptionOffset := flatbuffers.UOffsetT(0)
-	if t.Description != "" {
-		descriptionOffset = builder.CreateString(t.Description)
-	}
+	requestOffset := t.Request.Pack(builder)
+	responseOffset := t.Response.Pack(builder)
 	DeviceConfigStart(builder)
-	DeviceConfigAddName(builder, nameOffset)
-	DeviceConfigAddDescription(builder, descriptionOffset)
+	DeviceConfigAddRequest(builder, requestOffset)
+	DeviceConfigAddResponse(builder, responseOffset)
 	return DeviceConfigEnd(builder)
 }
 
 func (rcv *DeviceConfig) UnPackTo(t *DeviceConfigT) {
-	t.Name = string(rcv.Name())
-	t.Description = string(rcv.Description())
+	t.Request = rcv.Request(nil).UnPack()
+	t.Response = rcv.Response(nil).UnPack()
 }
 
 func (rcv *DeviceConfig) UnPack() *DeviceConfigT {
@@ -66,18 +60,28 @@ func (rcv *DeviceConfig) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *DeviceConfig) Name() []byte {
+func (rcv *DeviceConfig) Request(obj *DeviceConfigRequest) *DeviceConfigRequest {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(DeviceConfigRequest)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
 	return nil
 }
 
-func (rcv *DeviceConfig) Description() []byte {
+func (rcv *DeviceConfig) Response(obj *DeviceConfigResponse) *DeviceConfigResponse {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		x := rcv._tab.Indirect(o + rcv._tab.Pos)
+		if obj == nil {
+			obj = new(DeviceConfigResponse)
+		}
+		obj.Init(rcv._tab.Bytes, x)
+		return obj
 	}
 	return nil
 }
@@ -85,11 +89,11 @@ func (rcv *DeviceConfig) Description() []byte {
 func DeviceConfigStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-func DeviceConfigAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(name), 0)
+func DeviceConfigAddRequest(builder *flatbuffers.Builder, request flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(request), 0)
 }
-func DeviceConfigAddDescription(builder *flatbuffers.Builder, description flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(description), 0)
+func DeviceConfigAddResponse(builder *flatbuffers.Builder, response flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(response), 0)
 }
 func DeviceConfigEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

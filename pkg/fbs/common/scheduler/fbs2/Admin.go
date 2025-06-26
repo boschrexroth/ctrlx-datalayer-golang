@@ -22,6 +22,7 @@ type AdminT struct {
 	Utilization *UtilizationThresholdT `json:"utilization"`
 	CallableTimeouts *CallableTimeoutsT `json:"callableTimeouts"`
 	ProgramConfigurationMode ConfigurationMode `json:"programConfigurationMode"`
+	WaitstateComponents []*WaitstateComponentT `json:"waitstateComponents"`
 }
 
 func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -31,6 +32,19 @@ func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	cpuInfoOffset := t.CpuInfo.Pack(builder)
 	utilizationOffset := t.Utilization.Pack(builder)
 	callableTimeoutsOffset := t.CallableTimeouts.Pack(builder)
+	waitstateComponentsOffset := flatbuffers.UOffsetT(0)
+	if t.WaitstateComponents != nil {
+		waitstateComponentsLength := len(t.WaitstateComponents)
+		waitstateComponentsOffsets := make([]flatbuffers.UOffsetT, waitstateComponentsLength)
+		for j := 0; j < waitstateComponentsLength; j++ {
+			waitstateComponentsOffsets[j] = t.WaitstateComponents[j].Pack(builder)
+		}
+		AdminStartWaitstateComponentsVector(builder, waitstateComponentsLength)
+		for j := waitstateComponentsLength - 1; j >= 0; j-- {
+			builder.PrependUOffsetT(waitstateComponentsOffsets[j])
+		}
+		waitstateComponentsOffset = builder.EndVector(waitstateComponentsLength)
+	}
 	AdminStart(builder)
 	AdminAddStartupState(builder, t.StartupState)
 	AdminAddStartupTimeout(builder, t.StartupTimeout)
@@ -46,6 +60,7 @@ func (t *AdminT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	AdminAddUtilization(builder, utilizationOffset)
 	AdminAddCallableTimeouts(builder, callableTimeoutsOffset)
 	AdminAddProgramConfigurationMode(builder, t.ProgramConfigurationMode)
+	AdminAddWaitstateComponents(builder, waitstateComponentsOffset)
 	return AdminEnd(builder)
 }
 
@@ -64,6 +79,13 @@ func (rcv *Admin) UnPackTo(t *AdminT) {
 	t.Utilization = rcv.Utilization(nil).UnPack()
 	t.CallableTimeouts = rcv.CallableTimeouts(nil).UnPack()
 	t.ProgramConfigurationMode = rcv.ProgramConfigurationMode()
+	waitstateComponentsLength := rcv.WaitstateComponentsLength()
+	t.WaitstateComponents = make([]*WaitstateComponentT, waitstateComponentsLength)
+	for j := 0; j < waitstateComponentsLength; j++ {
+		x := WaitstateComponent{}
+		rcv.WaitstateComponents(&x, j)
+		t.WaitstateComponents[j] = x.UnPack()
+	}
 }
 
 func (rcv *Admin) UnPack() *AdminT {
@@ -266,8 +288,30 @@ func (rcv *Admin) MutateProgramConfigurationMode(n ConfigurationMode) bool {
 	return rcv._tab.MutateInt8Slot(26, int8(n))
 }
 
+/// Configuration of waitstates on bootup states
+func (rcv *Admin) WaitstateComponents(obj *WaitstateComponent, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Admin) WaitstateComponentsLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(28))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+/// Configuration of waitstates on bootup states
 func AdminStart(builder *flatbuffers.Builder) {
-	builder.StartObject(12)
+	builder.StartObject(13)
 }
 func AdminAddStartupState(builder *flatbuffers.Builder, startupState CurrentState) {
 	builder.PrependInt8Slot(0, int8(startupState), 0)
@@ -304,6 +348,12 @@ func AdminAddCallableTimeouts(builder *flatbuffers.Builder, callableTimeouts fla
 }
 func AdminAddProgramConfigurationMode(builder *flatbuffers.Builder, programConfigurationMode ConfigurationMode) {
 	builder.PrependInt8Slot(11, int8(programConfigurationMode), 0)
+}
+func AdminAddWaitstateComponents(builder *flatbuffers.Builder, waitstateComponents flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(12, flatbuffers.UOffsetT(waitstateComponents), 0)
+}
+func AdminStartWaitstateComponentsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
 }
 func AdminEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

@@ -10,6 +10,7 @@ import (
 type HistogramT struct {
 	Scale uint64 `json:"scale"`
 	Values []uint64 `json:"values"`
+	Active bool `json:"active"`
 }
 
 func (t *HistogramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -26,6 +27,7 @@ func (t *HistogramT) Pack(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	HistogramStart(builder)
 	HistogramAddScale(builder, t.Scale)
 	HistogramAddValues(builder, valuesOffset)
+	HistogramAddActive(builder, t.Active)
 	return HistogramEnd(builder)
 }
 
@@ -36,6 +38,7 @@ func (rcv *Histogram) UnPackTo(t *HistogramT) {
 	for j := 0; j < valuesLength; j++ {
 		t.Values[j] = rcv.Values(j)
 	}
+	t.Active = rcv.Active()
 }
 
 func (rcv *Histogram) UnPack() *HistogramT {
@@ -114,8 +117,22 @@ func (rcv *Histogram) MutateValues(j int, n uint64) bool {
 	return false
 }
 
+/// Indication whether the histogram recording is active (true) or not (false)
+func (rcv *Histogram) Active() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+/// Indication whether the histogram recording is active (true) or not (false)
+func (rcv *Histogram) MutateActive(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
 func HistogramStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
 }
 func HistogramAddScale(builder *flatbuffers.Builder, scale uint64) {
 	builder.PrependUint64Slot(0, scale, 0)
@@ -125,6 +142,9 @@ func HistogramAddValues(builder *flatbuffers.Builder, values flatbuffers.UOffset
 }
 func HistogramStartValuesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(8, numElems, 8)
+}
+func HistogramAddActive(builder *flatbuffers.Builder, active bool) {
+	builder.PrependBoolSlot(2, active, false)
 }
 func HistogramEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

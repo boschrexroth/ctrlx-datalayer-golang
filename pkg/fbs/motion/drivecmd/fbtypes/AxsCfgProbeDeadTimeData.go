@@ -6,7 +6,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// parameters of single probe data
+/// parameters of dead time compensation (drive)
 type AxsCfgProbeDeadTimeDataT struct {
 	PosEdgeNs float64 `json:"posEdgeNS"`
 	NegEdgeNs float64 `json:"negEdgeNS"`
@@ -59,7 +59,7 @@ func (rcv *AxsCfgProbeDeadTimeData) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-/// dead time compensation for positive edge in Nano seconds
+/// positive edge dead time compensation to drive in Nano seconds
 func (rcv *AxsCfgProbeDeadTimeData) PosEdgeNs() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
@@ -68,12 +68,12 @@ func (rcv *AxsCfgProbeDeadTimeData) PosEdgeNs() float64 {
 	return 0.0
 }
 
-/// dead time compensation for positive edge in Nano seconds
+/// positive edge dead time compensation to drive in Nano seconds
 func (rcv *AxsCfgProbeDeadTimeData) MutatePosEdgeNs(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(4, n)
 }
 
-/// dead time compensation for negative edge in Nano seconds
+/// negative edge dead time compensation to drive in Nano seconds
 func (rcv *AxsCfgProbeDeadTimeData) NegEdgeNs() float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
@@ -82,7 +82,7 @@ func (rcv *AxsCfgProbeDeadTimeData) NegEdgeNs() float64 {
 	return 0.0
 }
 
-/// dead time compensation for negative edge in Nano seconds
+/// negative edge dead time compensation to drive in Nano seconds
 func (rcv *AxsCfgProbeDeadTimeData) MutateNegEdgeNs(n float64) bool {
 	return rcv._tab.MutateFloat64Slot(6, n)
 }

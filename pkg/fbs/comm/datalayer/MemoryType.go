@@ -20,6 +20,8 @@ const (
 	MemoryTypeTriggerInput  MemoryType = 5
 	/// trigger output
 	MemoryTypeTriggerOutput MemoryType = 6
+	/// shared ram with lock on begin/endAccess
+	MemoryTypeSharedLock    MemoryType = 7
 )
 
 var EnumNamesMemoryType = map[MemoryType]string{
@@ -30,6 +32,7 @@ var EnumNamesMemoryType = map[MemoryType]string{
 	MemoryTypeShared:        "Shared",
 	MemoryTypeTriggerInput:  "TriggerInput",
 	MemoryTypeTriggerOutput: "TriggerOutput",
+	MemoryTypeSharedLock:    "SharedLock",
 }
 
 var EnumValuesMemoryType = map[string]MemoryType{
@@ -40,6 +43,7 @@ var EnumValuesMemoryType = map[string]MemoryType{
 	"Shared":        MemoryTypeShared,
 	"TriggerInput":  MemoryTypeTriggerInput,
 	"TriggerOutput": MemoryTypeTriggerOutput,
+	"SharedLock":    MemoryTypeSharedLock,
 }
 
 func (v MemoryType) String() string {
