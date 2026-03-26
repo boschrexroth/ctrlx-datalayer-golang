@@ -41,7 +41,7 @@ func DeleteProvider(p *Provider) {
 	if p.this == nil {
 		return
 	}
-	p.Stop()
+	_ = p.Stop()
 	C.DLR_providerDelete(p.this)
 	p.this = nil
 }

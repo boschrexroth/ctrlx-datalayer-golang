@@ -8,8 +8,8 @@ GOOS := $(shell go env GOOS)
 GOARCH := $(shell go env GOARCH)
 BUILD := build/public/$(GOOS)_$(GOARCH)
 
-SDK_RELEASE_VERSION        := 3.6.0
-DATALAYER_DEB_FILE_VERSION := 2.9.8
+SDK_RELEASE_VERSION        := 4.6.0
+DATALAYER_DEB_FILE_VERSION := 3.5.2
 
 .PHONY: all go-dep apt-dep lint vet test test-coverage build clean
 

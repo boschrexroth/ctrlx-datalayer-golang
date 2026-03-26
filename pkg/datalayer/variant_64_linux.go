@@ -1,5 +1,4 @@
 //go:build linux
-// +build linux
 
 // MIT License
 //
@@ -37,6 +36,9 @@ import "unsafe"
 // GetArrayInt64 function
 func (v *Variant) GetArrayInt64() []int64 {
 	var cdata *C.long = C.DLR_variantGetArrayOfINT64(v.this)
+	if cdata == nil {
+		return []int64{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []int64{}
@@ -47,6 +49,9 @@ func (v *Variant) GetArrayInt64() []int64 {
 // GetArrayUint64 function
 func (v *Variant) GetArrayUint64() []uint64 {
 	var cdata *C.ulong = C.DLR_variantGetArrayOfUINT64(v.this)
+	if cdata == nil {
+		return []uint64{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []uint64{}

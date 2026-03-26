@@ -67,6 +67,7 @@ type Bulk struct {
 }
 
 // ResponseBulkCallback function type
+// Note: Create a copy for further processing of 'Response.Data'.
 type ResponseBulkCallback = func([]Response)
 
 // Struct for BulkReadArg
@@ -447,7 +448,7 @@ func (b *Bulk) bulkGetResponseData(bulk C.DLR_BULK, index int) *Variant {
 	val := C.DLR_bulkGetResponseData(bulk, C.size_t(index))
 	v := &Variant{this: val} //only reference
 	data := NewVariant()
-	v.Copy(data)
+	_ = v.Copy(data)
 	return data
 }
 

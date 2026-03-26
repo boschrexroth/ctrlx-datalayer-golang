@@ -33,6 +33,8 @@
 void responseBulkCallback(DLR_VEC_BULK_RESPONSE *response, void *userdata)
 {
     responseBulkCallbackGo(response->response, (uint32_t)response->count, (unsigned long long)userdata);
+    
+    DLR_deleteBulkResponse(&response);
 }
 
 // CreateBulkRequest wrapper for DLR_createBulkRequest with responseKey instead of userdata
