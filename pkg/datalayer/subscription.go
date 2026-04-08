@@ -77,7 +77,7 @@ func (s *Subscription) Subscribe(addresses ...string) Result {
 
 	defer func() {
 		C.free(unsafe.Pointer(cId))
-		for i, _ := range addresses {
+		for i := range addresses {
 			C.free(unsafe.Pointer(cAddressView[i]))
 		}
 		C.free(unsafe.Pointer(cAddresses))
@@ -109,7 +109,7 @@ func (s *Subscription) Unsubscribe(addresses ...string) Result {
 
 	defer func() {
 		C.free(unsafe.Pointer(cId))
-		for i, _ := range addresses {
+		for i := range addresses {
 			C.free(unsafe.Pointer(cAddressView[i]))
 		}
 		C.free(unsafe.Pointer(cAddresses))

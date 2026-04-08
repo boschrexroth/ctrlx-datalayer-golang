@@ -235,6 +235,9 @@ func (v *Variant) GetString() string {
 // It returns the array of bool8.
 func (v *Variant) GetArrayBool8() []bool {
 	var cdata *C.bool = C.DLR_variantGetArrayOfBOOL8(v.this)
+	if cdata == nil {
+		return []bool{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []bool{}
@@ -246,6 +249,9 @@ func (v *Variant) GetArrayBool8() []bool {
 // It returns the array of int8.
 func (v *Variant) GetArrayInt8() []int8 {
 	var cdata *C.schar = C.DLR_variantGetArrayOfINT8(v.this)
+	if cdata == nil {
+		return []int8{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []int8{}
@@ -257,6 +263,9 @@ func (v *Variant) GetArrayInt8() []int8 {
 // It returns the array of uint8.
 func (v *Variant) GetArrayUint8() []uint8 {
 	var cdata *C.uchar = C.DLR_variantGetArrayOfUINT8(v.this)
+	if cdata == nil {
+		return []uint8{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []uint8{}
@@ -268,6 +277,9 @@ func (v *Variant) GetArrayUint8() []uint8 {
 // It returns the array of int16.
 func (v *Variant) GetArrayInt16() []int16 {
 	var cdata *C.short = C.DLR_variantGetArrayOfINT16(v.this)
+	if cdata == nil {
+		return []int16{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []int16{}
@@ -279,6 +291,9 @@ func (v *Variant) GetArrayInt16() []int16 {
 // It returns the array of uint16.
 func (v *Variant) GetArrayUint16() []uint16 {
 	var cdata *C.ushort = C.DLR_variantGetArrayOfUINT16(v.this)
+	if cdata == nil {
+		return []uint16{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []uint16{}
@@ -290,6 +305,9 @@ func (v *Variant) GetArrayUint16() []uint16 {
 // It returns the array of int32.
 func (v *Variant) GetArrayInt32() []int32 {
 	var cdata *C.int = C.DLR_variantGetArrayOfINT32(v.this)
+	if cdata == nil {
+		return []int32{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []int32{}
@@ -301,6 +319,9 @@ func (v *Variant) GetArrayInt32() []int32 {
 // It returns the array of uint32.
 func (v *Variant) GetArrayUint32() []uint32 {
 	var cdata *C.uint = C.DLR_variantGetArrayOfUINT32(v.this)
+	if cdata == nil {
+		return []uint32{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []uint32{}
@@ -312,6 +333,9 @@ func (v *Variant) GetArrayUint32() []uint32 {
 // It returns the array of float32.
 func (v *Variant) GetArrayFloat32() []float32 {
 	var cdata *C.float = C.DLR_variantGetArrayOfFLOAT32(v.this)
+	if cdata == nil {
+		return []float32{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []float32{}
@@ -323,6 +347,9 @@ func (v *Variant) GetArrayFloat32() []float32 {
 // It returns the array of float64.
 func (v *Variant) GetArrayFloat64() []float64 {
 	var cdata *C.double = C.DLR_variantGetArrayOfFLOAT64(v.this)
+	if cdata == nil {
+		return []float64{}
+	}
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []float64{}
@@ -334,6 +361,10 @@ func (v *Variant) GetArrayFloat64() []float64 {
 // It returns the array of strings.
 func (v *Variant) GetArrayString() []string {
 	var cdata **C.char = C.DLR_variantGetArrayOfSTRING(v.this)
+	if cdata == nil {
+		return []string{}
+	}
+
 	length := C.DLR_variantGetCount(v.this)
 	if length == 0 {
 		return []string{}

@@ -96,7 +96,9 @@ func (m *TokenManager) CheckAuthToken() (isValid bool, err error) {
 	if err != nil {
 		return false, fmt.Errorf("failed to execute request to validate token: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -134,7 +136,9 @@ func (m *TokenManager) RequestAuthToken() (Token, error) {
 		b := r.Replace(err.Error())
 		return m.Token, fmt.Errorf("an error occured during request of authorization token: %q", b)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

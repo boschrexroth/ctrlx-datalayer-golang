@@ -4,11 +4,11 @@
 /node_modules
 /temp
 /testresults
+vendor/
+
 coverage.out
 artifact.zip
 /*.so*
 **/.idea/*
 .idea
-.github
 *-xx.zip
-vendor

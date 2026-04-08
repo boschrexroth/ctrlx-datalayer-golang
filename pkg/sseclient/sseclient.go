@@ -61,7 +61,10 @@ func NewSseClient(url string, authorization string, insecureSkipVerify bool) *Ss
 	if authorization != "" {
 		c.Headers["Authorization"] = authorization
 	}
-	c.Connection.Transport = &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify}}
+	c.Connection.Transport = &http.Transport{TLSClientConfig: &tls.Config{
+		InsecureSkipVerify: insecureSkipVerify, // #nosec G402
+	},
+	}
 	return c
 }
 
@@ -98,7 +101,9 @@ func (c *SseClient) Subscribe(ctx context.Context, receiver SseReceiverFunc) err
 	}
 
 	br := bufio.NewReader(res.Body)
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	var event, data string
 	// Endless Loop - until error occurs or server disconnects
